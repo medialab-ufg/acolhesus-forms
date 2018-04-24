@@ -67,3 +67,8 @@ if (!function_exists('load_forms_template')) {
 
     add_filter('single_template', 'load_forms_template');
 }
+
+add_action('wp_enqueue_scripts', 'load_acolhesus_assets');
+function load_acolhesus_assets() {
+    wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
+}
