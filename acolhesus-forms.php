@@ -34,6 +34,7 @@ add_filter('the_content', function ($content) {
 
     $saved_form_id = get_post_meta($post->ID, '_entry_id', true);
 
+    $form = "";
     if ($post->post_type == 'matriz_cenario') {
 
         $caldera_plugin = get_class_methods(Caldera_Forms::class );
@@ -55,17 +56,25 @@ add_action('caldera_forms_entry_saved', function ($entryid, $new_entry, $form) {
     }, 10, 3);
 
 
-if (!function_exists('load_forms_template')) {
-    function load_forms_template($template)
-    {
-        global $post;
-
-        if ($post->post_type == 'matriz_cenario') {
+if (!function_exists('acolhesus_single_page') && !function_exists('acolhesus_archive_page')) {
+    function acolhesus_single_page() {
+        if (isAcolheSus()) {
             return plugin_dir_path( __FILE__ ) . "templates/single_acolhesus.php";
         }
     }
+    add_filter('single_template', 'acolhesus_single_page');
 
-    add_filter('single_template', 'load_forms_template');
+    function acolhesus_archive_page() {
+        if (isAcolheSus()) {
+            return plugin_dir_path( __FILE__ ) . "templates/archive_acolhesus.php";
+        }
+    }
+    add_filter('archive_template', 'acolhesus_archive_page');
+
+    function isAcolheSus() {
+        global $post;
+        return $post->post_type == 'matriz_cenario';
+    }
 }
 
 add_action('wp_enqueue_scripts', 'load_acolhesus_assets');
