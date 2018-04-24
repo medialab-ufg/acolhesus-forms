@@ -53,3 +53,17 @@ add_action('caldera_forms_entry_saved', function ($entryid, $new_entry, $form) {
         global $post;
         update_post_meta($post->ID, '_entry_id', $entryid);
     }, 10, 3);
+
+
+if (!function_exists('load_forms_template')) {
+    function load_forms_template($template)
+    {
+        global $post;
+
+        if ($post->post_type == 'matriz_cenario') {
+            return plugin_dir_path( __FILE__ ) . "templates/single_acolhesus.php";
+        }
+    }
+
+    add_filter('single_template', 'load_forms_template');
+}
