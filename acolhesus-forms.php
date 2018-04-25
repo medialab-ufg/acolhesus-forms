@@ -45,6 +45,20 @@ class AcolheSUS {
         'TO'
     ];
 
+    public $fases = [
+        '|',
+        '||',
+        '|||',
+        'Macrogestão'
+    ];
+
+    public $eixos = [
+        'Diagnóstico Situacional',
+        'Elaboração do Plano de Intervenção',
+        'Monitoramento da Implementação do Plano de Intervenção',
+        'Macrogestão'
+    ];
+
     public $forms = [
         'matriz_cenario' => [
             'labels' => [
@@ -53,7 +67,9 @@ class AcolheSUS {
             ],
             'form_id' => '', // Setado via admin
             'slug' => 'matriz_cenario',
-            'uma_entrada_por_campo' => true
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => 0
         ]
     ];
     
@@ -92,7 +108,10 @@ class AcolheSUS {
                             'post_type' => $formName,
                             'post_status' => 'publish'
                         ];
-                        wp_insert_post($post);
+                        $new_id = wp_insert_post($post);
+                        add_post_meta($new_id, 'acolhesus_campo', $uf);
+                        add_post_meta($new_id, 'acolhesus_eixo', $form['eixo']);
+                        add_post_meta($new_id, 'acolhesus_fase', $form['fase']);
                     }
                 }
             }
