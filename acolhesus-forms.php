@@ -87,6 +87,10 @@ class AcolheSUS {
         add_filter('archive_template', [&$this, 'acolhesus_archive_page']);
         add_filter('single_template', [&$this, 'acolhesus_single_page']);
 
+        add_action( 'generate_rewrite_rules', array( &$this, 'rewrite_rules' ), 10, 1 );
+        add_filter( 'query_vars', array( &$this, 'rewrite_rules_query_vars' ) );
+        add_filter( 'template_include', array( &$this, 'rewrite_rule_template_include' ) );
+
     }
     
     function init_default_data() {
@@ -207,6 +211,47 @@ class AcolheSUS {
         return true;
 
     }
+
+
+
+    // REWRITE RULES
+
+    function rewrite_rules( &$wp_rewrite ) {
+        
+        $new_rules = array(
+            'formularios-acolhesus' . "/?$" => "index.php?acolhe_sus=formularios",
+        );
+        
+
+        $wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
+
+        //var_dump($wp_rewrite); die;
+    }
+
+    function rewrite_rules_query_vars( $public_query_vars ) {
+
+        $public_query_vars[] = "acolhe_sus";
+        return $public_query_vars;
+
+    }
+
+    function rewrite_rule_template_include( $template ) {
+        global $wp_query;
+
+        if ( $wp_query->get( 'acolhe_sus' ) ) {
+
+            if ( file_exists( plugin_dir_path( __FILE__ ) . '/templates/' . $wp_query->get( 'acolhe_sus' ) . '.php' ) ) {
+                return plugin_dir_path( __FILE__ ) . '/templates/' . $wp_query->get( 'acolhe_sus' ) . '.php';
+            }
+
+        }
+
+        return $template;
+
+
+    }
+
+
 
 }
 
