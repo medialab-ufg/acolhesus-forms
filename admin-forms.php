@@ -1,9 +1,9 @@
 <?php
 
-
 class AcolheSUSAdminForm {
-    
-    
+
+    const PLUGIN_OPTION_NAME = 'acolhesus';
+
     public $customCaps = [
         'view_acolhesus' => [
             'label' => 'Permissão básica que permite ver a página de formulários'
@@ -12,8 +12,7 @@ class AcolheSUSAdminForm {
             'label' => 'Membro da Equipe CGPNH'
         ],
     ];
-    
-    
+
     public function __construct() {
 
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
@@ -30,8 +29,8 @@ class AcolheSUSAdminForm {
 	public function add_admin_menu() {
 
 		add_menu_page(
-			esc_html__( 'AcolheSUS', 'text_domain' ),
-			esc_html__( 'Opções AcolheSUS', 'text_domain' ),
+			esc_html__( 'AcolheSUS', 'acolhesus-rhs' ),
+			esc_html__( 'Opções AcolheSUS', 'acolhesus-rhs' ),
 			'manage_options',
 			'test-options',
 			array( $this, 'page_layout' ),
@@ -67,9 +66,9 @@ class AcolheSUSAdminForm {
 
 	public function page_layout() {
 
-		// Check required user capability
+		// Verificar se é essa permissão mesmo
 		if ( !current_user_can( 'manage_options' ) )  {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'text_domain' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'acolhesus-rhs' ) );
 		}
 
 		// Admin Page Layout
@@ -96,7 +95,7 @@ class AcolheSUSAdminForm {
 
         $forms = $AcolheSUS->forms;
 
-        $form_ids = $this->get_option('form_ids');
+        $form_ids = $this->get_acolhesus_option('form_ids');
 
         foreach ($forms as $formName => $form) {
             
@@ -104,23 +103,22 @@ class AcolheSUSAdminForm {
         }
 
     }
-    
 
     // OPTION HELPER
-
-    function get_option($name) {
+    function get_acolhesus_option($name) {
         
         $defaults = [
             'form_ids' => []
         ];
-        
-        $options = array_merge($defaults, get_option( 'acolhesus' ));
+        $config = get_option(self::PLUGIN_OPTION_NAME);
+        if (is_array($config)) {
+            $options = array_merge($defaults, get_option( 'acolhesus' ));
+        }
         
         if (isset($options[$name]))
             return $options[$name];
         return '';
     }
-
 
     ////////////////////////// USERS ///////////////////////////////
 
@@ -142,7 +140,7 @@ class AcolheSUSAdminForm {
                 <td>
                     <div class="panel-body">
                         
-                        <h4>Permissões adicionais (custom capabilties</h4>
+                        <h4>Permissões adicionais (custom capabilities)</h4>
                         
                         <?php foreach ($this->customCaps as $cap => $props): ?>
 
@@ -208,7 +206,6 @@ class AcolheSUSAdminForm {
         }
 
     }
-
 
 }
 

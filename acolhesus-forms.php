@@ -96,7 +96,7 @@ class AcolheSUS {
     function init_default_data() {
         global $AcolheSUSAdminForm;
         // Populate form IDs
-        $form_ids = $AcolheSUSAdminForm->get_option('form_ids');
+        $form_ids = $AcolheSUSAdminForm->get_acolhesus_option('form_ids');
 
         foreach ($this->forms as $formName => $form) {
             
@@ -155,9 +155,11 @@ class AcolheSUS {
             $caldera_plugin = get_class_methods(Caldera_Forms::class );
 
             if (is_array($caldera_plugin) && in_array("render_form", $caldera_plugin)) {
+
+                $entry_id = ($saved_form_id) ? $saved_form_id : null;
                 $form = Caldera_Forms::render_form([
                     'id' => $this->forms[$post->post_type]['form_id'], 
-                ], $saved_form_id);
+                ], $entry_id);
             }
         }
 
@@ -247,8 +249,6 @@ class AcolheSUS {
         }
 
         return $template;
-
-
     }
 
 
