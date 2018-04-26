@@ -91,8 +91,9 @@ class AcolheSUS {
         add_filter( 'query_vars', array( &$this, 'rewrite_rules_query_vars' ) );
         add_filter( 'template_include', array( &$this, 'rewrite_rule_template_include' ) );
 
+        add_action('template_redirect', array(&$this, 'can_user_view_form'));
     }
-    
+
     function init_default_data() {
         global $AcolheSUSAdminForm;
         // Populate form IDs
@@ -125,8 +126,7 @@ class AcolheSUS {
 
     }
     
-    function register_post_types()
-    {
+    function register_post_types() {
         
         foreach ($this->forms as $formName => $form) {
             
@@ -223,11 +223,8 @@ class AcolheSUS {
         $new_rules = array(
             'formularios-acolhesus' . "/?$" => "index.php?acolhe_sus=formularios",
         );
-        
 
         $wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
-
-        //var_dump($wp_rewrite); die;
     }
 
     function rewrite_rules_query_vars( $public_query_vars ) {
@@ -251,7 +248,17 @@ class AcolheSUS {
         return $template;
     }
 
+    function can_user_view_form() {
+        if ($this->isAcolheSusPage()) {
+            $user_acolhesus_meta = get_user_meta(get_current_user_id(), 'acolhesus_campos');
 
+            if (is_array($user_acolhesus_meta) && !empty($user_acolhesus_meta)) {
+                // Pode ver o form
+            } else {
+                wp_redirect(home_url());
+            }
+        }
+    }
 
 }
 
