@@ -77,7 +77,7 @@ class AcolheSUS {
                 'singular_name' => 'Atuação do Grupo'
             ],
             'slug' => 'avaliacao_grupo',
-            'uma_entrada_por_campo' => true,
+            'uma_entrada_por_campo' => false,
             'fase' => 0
 
         ]
@@ -104,6 +104,8 @@ class AcolheSUS {
         add_action('template_redirect', array(&$this, 'can_user_view_form'));
 
         add_action('wp_ajax_acolhesus_save_post_campo', array(&$this, 'ajax_callback_save_post_campo'));
+
+        add_action('wp_ajax_acolhesus_add_form_entry', array(&$this, 'ajax_callback_add_form_entry'));
     }
 
     function init_default_data() {
@@ -117,25 +119,32 @@ class AcolheSUS {
             $this->forms[$formName]['form_id'] = $formID;
 
             // Cria uma entrada pra cada campo(UF) quando for o caso
-            if ($form['uma_entrada_por_campo']) {
+            if (isset($form['uma_entrada_por_campo']) && $form['uma_entrada_por_campo']) {
                 if ($this->didnt_do_yet('criar_campo_form_' . $formName)) {
                     foreach ($this->campos as $uf) {
-                        $post = [
-                            'post_title' => $form['labels']['singular_name'] . " ({$uf})",
-                            'post_type' => $formName,
-                            'post_status' => 'publish'
+                        $title = $form['labels']['singular_name'] . " ({$uf})";
+                        $metas = [
+                            'acolhesus_campo' => $uf,
+                            'acolhesus_eixo', $form['eixo'],
+                            'acolhesus_fase', $form['fase']
                         ];
-                        $new_id = wp_insert_post($post);
-                        add_post_meta($new_id, 'acolhesus_campo', $uf);
-                        add_post_meta($new_id, 'acolhesus_eixo', $form['eixo']);
-                        add_post_meta($new_id, 'acolhesus_fase', $form['fase']);
+                        $this->add_acolhesus_entry($title, $formName, 'publish', $metas);
                     }
                 }
             }
 
         }
 
+    }
 
+    private function add_acolhesus_entry($title, $type, $status, $metas = []) {
+        $post = ['post_title' => $title, 'post_type' => $type, 'post_status' => $status];
+        $new_id = wp_insert_post($post);
+        foreach ($metas as $_meta_key => $value) {
+            add_post_meta($new_id, $_meta_key, $value);
+        }
+
+        return $new_id;
     }
     
     function register_post_types() {
@@ -152,8 +161,7 @@ class AcolheSUS {
             ));
 
         }
-        
-        
+
     }
     
     function filter_the_content($content) {
@@ -211,12 +219,20 @@ class AcolheSUS {
     function ajax_callback_save_post_campo() {
         
         if (isset($_POST['acolhesus_campo']) && $_POST['post_id']) {
-
-            update_post_meta($_POST['post_id'], 'acolhesus_campo', $_POST['acolhesus_campo']); 
-
+            update_post_meta($_POST['post_id'], 'acolhesus_campo', $_POST['acolhesus_campo']);
         }
 
         die;
+    }
+
+    function ajax_callback_add_form_entry() {
+        $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'publish');
+        if ($_id) {
+            echo json_encode(['id' => $_id, 'redirect_url' => get_permalink($_id)]);
+            wp_die();
+        }
+
+        return false;
     }
 
 
@@ -224,7 +240,6 @@ class AcolheSUS {
         global $post;
         update_post_meta($post->ID, '_entry_id', $entryid);
     }
-
 
     function acolhesus_single_page() {
         if ($this->isAcolheSusPage()) {
@@ -243,15 +258,20 @@ class AcolheSUS {
         return is_object($post) && isset($post->post_type) && array_key_exists($post->post_type, $this->forms);
     }
 
-    
     function load_acolhesus_assets() {
         wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
 
-        if (is_single() && array_key_exists(get_post_type(), $this->forms)) {
-            wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js');
+        if (array_key_exists(get_post_type(), $this->forms)) {
+
+            if (is_single()) {
+                wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js');
+            } else if (is_archive()) {
+                wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/archive.js');
+            }
             wp_localize_script('rhs-acolhesus', 'acolhesus', [
                 'ajax_url' => admin_url('admin-ajax.php')
             ]);
+
         }
 
     }
@@ -274,10 +294,6 @@ class AcolheSUS {
         return true;
 
     }
-
-
-
-    // REWRITE RULES
 
     function rewrite_rules( &$wp_rewrite ) {
         
@@ -318,6 +334,10 @@ class AcolheSUS {
             }
         }
         return false;
+    }
+
+    public function get_form_names() {
+        return array_keys($this->forms);
     }
 
 }

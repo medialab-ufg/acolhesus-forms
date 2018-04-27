@@ -23,3 +23,12 @@ if ( have_posts() ) {
     <?php
     endwhile;
 }
+
+?>
+
+<div class="col-md-12">
+    <p>
+        <input type="hidden" id="new_post_type" name="new_post_type" value="<?php echo get_post_type(); ?>">
+        <button class="btn btn-info" id="add_acolhesus_entry">Nova resposta de <?php echo post_type_archive_title(); ?> </button>
+    </p>
+</div>
