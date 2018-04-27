@@ -250,14 +250,13 @@ class AcolheSUS {
 
     function can_user_view_form() {
         if ($this->isAcolheSusPage()) {
-            $user_acolhesus_meta = get_user_meta(get_current_user_id(), 'acolhesus_campos');
-
-            if (is_array($user_acolhesus_meta) && !empty($user_acolhesus_meta)) {
-                // Pode ver o form
+            if (current_user_can('acolhesus_cgpnh')) {
+                return true;
             } else {
                 wp_redirect(home_url());
             }
         }
+        return false;
     }
 
 }
