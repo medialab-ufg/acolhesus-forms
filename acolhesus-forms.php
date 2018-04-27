@@ -70,6 +70,16 @@ class AcolheSUS {
             'uma_entrada_por_campo' => true,
             'fase' => 0,
             'eixo' => 0
+        ],
+        'avaliacao_grupos' => [
+            'labels' => [
+                'name' => 'Avaliações dos Grupos',
+                'singular_name' => 'Atuação do Grupo'
+            ],
+            'slug' => 'avaliacao_grupo',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0
+
         ]
     ];
     
