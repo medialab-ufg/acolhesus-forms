@@ -24,11 +24,14 @@ if ( have_posts() ) {
     endwhile;
 }
 
+$_post_type = get_post_type();
+ if ($AcolheSUS->can_add_entry($_post_type)) { ?>
+     <div class="col-md-12">
+         <p>
+             <input type="hidden" id="new_post_type" name="new_post_type" value="<?php echo $_post_type; ?>">
+             <button class="btn btn-info" id="add_acolhesus_entry">Nova resposta de <?php echo post_type_archive_title(); ?> </button>
+         </p>
+     </div>
+     <?php
+ }
 ?>
-
-<div class="col-md-12">
-    <p>
-        <input type="hidden" id="new_post_type" name="new_post_type" value="<?php echo get_post_type(); ?>">
-        <button class="btn btn-info" id="add_acolhesus_entry">Nova resposta de <?php echo post_type_archive_title(); ?> </button>
-    </p>
-</div>

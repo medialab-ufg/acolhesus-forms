@@ -336,8 +336,16 @@ class AcolheSUS {
         return false;
     }
 
-    public function get_form_names() {
+    private function get_form_names() {
         return array_keys($this->forms);
+    }
+
+    public function can_add_entry($post_type) {
+        $_form_keys = $this->get_form_names();
+        if (in_array($post_type, $_form_keys)) {
+            return ! $this->forms[$post_type]['uma_entrada_por_campo'];
+        }
+        return false;
     }
 
 }
