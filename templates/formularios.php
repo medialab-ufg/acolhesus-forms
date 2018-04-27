@@ -1,11 +1,18 @@
 <?php include_once( get_theme_file_path('header-full.php') ); ?>
 
-
-
 <?php if (!current_user_can('view_acolhesus')): ?>
     <center> Permissão negada </center>
 <?php else: ?>
-    <h1>Formulários Acolhe SUS</h1>
+    <div class="acolhesus-form-container col-md-12">
+        <h1 style="text-align: center; color: black">Política Nacional de Humanização - Formulários Acolhe SUS </h1>
+        <hr>
+
+        <center>
+            <img width="10%" src="http://redehumanizasus.net/wp-content/uploads/2017/09/logo-humanizasus-em-alta-300x231.jpg" />
+        </center>
+
+        <hr>
+    
     <?php
     global $AcolheSUS;
     $camposDoUsuario = get_user_meta(get_current_user_id(), 'acolhesus_campos');
@@ -46,6 +53,7 @@
     endforeach;
     ?>
 
+    </div>
 <?php endif; ?>
 
 

@@ -261,7 +261,8 @@ class AcolheSUS {
     function load_acolhesus_assets() {
         wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
 
-        if (array_key_exists(get_post_type(), $this->forms)) {
+        $type = get_post_type();
+        if ($type && array_key_exists($type, $this->forms)) {
 
             if (is_single()) {
                 wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js');
