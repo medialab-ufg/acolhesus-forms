@@ -102,6 +102,8 @@ class AcolheSUS {
         add_filter( 'template_include', array( &$this, 'rewrite_rule_template_include' ) );
 
         add_action('template_redirect', array(&$this, 'can_user_view_form'));
+
+        add_action('wp_ajax_acolhesus_save_post_campo', array(&$this, 'ajax_callback_save_post_campo'));
     }
 
     function init_default_data() {
@@ -158,8 +160,17 @@ class AcolheSUS {
         global $post;
 
         $saved_form_id = get_post_meta($post->ID, '_entry_id', true);
+        $formType = get_post_type();
 
         $form = "";
+
+        if (isset($this->forms[$formType])) {
+            if ( true !== $this->forms[$formType]['uma_entrada_por_campo'] ) {
+                $form .= $this->get_basic_campo_form();
+            }
+        }
+
+        
         if (array_key_exists($post->post_type, $this->forms)) {
 
             $caldera_plugin = get_class_methods(Caldera_Forms::class );
@@ -167,13 +178,45 @@ class AcolheSUS {
             if (is_array($caldera_plugin) && in_array("render_form", $caldera_plugin)) {
 
                 $entry_id = ($saved_form_id) ? $saved_form_id : null;
-                $form = Caldera_Forms::render_form([
+                $form .= Caldera_Forms::render_form([
                     'id' => $this->forms[$post->post_type]['form_id'], 
                 ], $entry_id);
             }
         }
 
         return $content . " <br>" . $form;
+    }
+
+    private function get_basic_campo_form() {
+        global $post;
+        
+        $camposDoUsuario = get_user_meta(get_current_user_id(), 'acolhesus_campos');
+        $campoAtual = get_post_meta($post->ID, 'acolhesus_campo', true);
+
+        $options = '';
+
+        foreach ($camposDoUsuario as $campo) {
+            $options .= "<option value='$campo'";
+            $options .= selected($campoAtual, $campo, false);
+            $options .= ">$campo</option>\n";
+        }
+
+        $title = '<h2>Campo de atuação</h2>';
+
+        return "$title<select id='acolhesus_campo_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select>";
+
+
+    }
+
+    function ajax_callback_save_post_campo() {
+        
+        if (isset($_POST['acolhesus_campo']) && $_POST['post_id']) {
+
+            update_post_meta($_POST['post_id'], 'acolhesus_campo', $_POST['acolhesus_campo']); 
+
+        }
+
+        die;
     }
 
 
@@ -203,6 +246,14 @@ class AcolheSUS {
     
     function load_acolhesus_assets() {
         wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
+
+        if (is_single() && array_key_exists(get_post_type(), $this->forms)) {
+            wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js');
+            wp_localize_script('rhs-acolhesus', 'acolhesus', [
+                'ajax_url' => admin_url('admin-ajax.php')
+            ]);
+        }
+
     }
 
     function didnt_do_yet($action_name) {
