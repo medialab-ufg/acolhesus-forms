@@ -11,3 +11,12 @@
 .acolhesus-archive-title {
     color: #003c46;
 }
+
+.caldera-forms-conditional-field div,
+.caldera-forms-conditional-field div label {
+    margin-left: 20px !important;
+}
+
+.caldera-forms-conditional-field div {
+    margin-bottom: 40px !important;
+}
