@@ -32,7 +32,7 @@ class AcolheSUSAdminForm {
 			esc_html__( 'AcolheSUS', 'acolhesus-rhs' ),
 			esc_html__( 'Opções AcolheSUS', 'acolhesus-rhs' ),
 			'manage_options',
-			'test-options',
+			'acolhesus-config',
 			array( $this, 'page_layout' ),
 			'',
 			99
@@ -89,19 +89,24 @@ class AcolheSUSAdminForm {
 	function render_acolhesus_field() {
 
 		// Retrieve data from the database.
-		
-        
         global $AcolheSUS;
 
-        $forms = $AcolheSUS->forms;
-
-        $form_ids = $this->get_acolhesus_option('form_ids');
-
-        foreach ($forms as $formName => $form) {
-            
-            echo $formName, ': <input type="text" name="acolhesus[form_ids][', $formName, ']" value="', $form['form_id'], '" /><br/>';
+        $registered_forms = Caldera_Forms::get_forms();
+        foreach($registered_forms as $f) {
+            echo  '<strong>', $f['name'] . '</strong> (' . $f['ID'] . ') | ';
         }
 
+        echo "<hr/>";
+
+        if(is_array($registered_forms) && count($registered_forms) > 0 ) {
+            $forms = $AcolheSUS->forms;
+
+            $form_ids = $this->get_acolhesus_option('form_ids');
+
+            foreach ($forms as $formName => $form) {
+                echo $formName, ' <input type="text" name="acolhesus[form_ids][', $formName, ']" value="', $form['form_id'], '" /><br/><br/>';
+            }
+        }
     }
 
     // OPTION HELPER
