@@ -1,5 +1,5 @@
 <div class="acolhesus-form-container col-md-12">
-    <h1 class="acolhesus-archive-title"> <?php echo post_type_archive_title('Formulários: '); ?> </h1>
+    <h1 class="acolhesus-archive-title"> <?php echo post_type_archive_title('Formulário: '); ?> </h1>
     <table class="table table-condensed">
         <thead>
         <tr>

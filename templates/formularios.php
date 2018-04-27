@@ -32,19 +32,32 @@
             ]
         ]);
 
-        if ($formularios->have_posts()):
-            ?>
-
+        if ($formularios->have_posts()): 
+            
+            /* TODO: abstrair template da tabela para o loop */
+        ?>
             <h3><?php echo $formAtts['labels']['name']; ?></h3>
-            <ul>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th> Campo de Atuação </th>
+                    <th> Resposta </th>
+                    <th> Data Última Edição </th>                    
+                    <th> Autor </th>
+                </tr>
+            </thead>
+            <tbody>
                 <?php while ($formularios->have_posts()): $formularios->the_post(); ?>
-                    <li>
-                        <a href="<?php the_permalink(); ?>">
-                            <?php the_title(); ?>
-                        </a>
-                    </li>
+                    <tr> 
+                        <td> <strong> <?php echo get_post_meta(get_the_ID(), "acolhesus_campo")[0];  ?> </strong> </td>
+                        <td> <a href="<?php the_permalink(); ?>"> <?php the_title(); ?> </a> </td>
+                        <td> <?php the_time( 'd/m/Y - G:i:s ' ); ?> </td>
+                        <td> <?php echo get_the_author(); ?> </td>
+                    </tr>
                 <?php endwhile; ?>
-            </ul>
+            </tbody>
+
+            </table>
 
             <?php
 
