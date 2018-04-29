@@ -12,6 +12,11 @@
     color: #003c46;
 }
 
+.acolhesus-form-container.lista-geral h3 a {
+    color: #003c46;
+    font-size: 20px;
+}
+
 .caldera-forms-conditional-field div,
 .caldera-forms-conditional-field div label {
     margin-left: 20px !important;

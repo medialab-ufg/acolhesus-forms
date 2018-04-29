@@ -3,7 +3,7 @@
 <?php if (!current_user_can('view_acolhesus')): ?>
     <center> Permissão negada </center>
 <?php else: ?>
-    <div class="acolhesus-form-container col-md-12">
+    <div class="acolhesus-form-container col-md-12 lista-geral">
         <h1 style="text-align: center; color: black">Política Nacional de Humanização - Formulários Acolhe SUS </h1>
         <hr>
 
@@ -32,11 +32,14 @@
             ]
         ]);
 
-        if ($formularios->have_posts()): 
-            
-            /* TODO: abstrair template da tabela para o loop */
-        ?>
-            <h3><?php echo $formAtts['labels']['name']; ?></h3>
+        if ($formularios->have_posts()): ?>
+
+            <h3>
+                <a href="<?php echo get_post_type_archive_link($formName); ?>"> <?php echo $formAtts['labels']['name']; ?> </a>
+            </h3>
+
+
+            <?php /* TODO: abstrair template da tabela para o loop */ ?>
             <table class="table table-condensed">
                 <thead>
                 <tr>
