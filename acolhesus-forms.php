@@ -328,7 +328,7 @@ class AcolheSUS {
 
     function can_user_view_form() {
         if ($this->isAcolheSusPage()) {
-            if (current_user_can('acolhesus_cgpnh')) {
+            if (current_user_can('view_acolhesus')) {
                 return true;
             } else {
                 wp_redirect(home_url());
