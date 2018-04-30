@@ -248,16 +248,21 @@ class AcolheSUS {
         update_post_meta($post->ID, '_entry_id', $entryid);
     }
 
-    function acolhesus_single_page() {
+    function acolhesus_single_page($template) {
+
         if ($this->isAcolheSusPage()) {
             return plugin_dir_path( __FILE__ ) . "templates/single_acolhesus.php";
         }
+
+        return $template;
     }
 
-    function acolhesus_archive_page() {
+    function acolhesus_archive_page($template) {
         if ($this->isAcolheSusPage()) {
             return plugin_dir_path( __FILE__ ) . "templates/archive_acolhesus.php";
         }
+
+        return $template;
     }
 
     function isAcolheSusPage() {
@@ -322,7 +327,7 @@ class AcolheSUS {
     function rewrite_rule_template_include( $template ) {
         global $wp_query;
 
-        if ( $wp_query->get( 'acolhe_sus' ) ) {
+        if ($wp_query->get('acolhe_sus')) {
 
             if ( file_exists( plugin_dir_path( __FILE__ ) . '/templates/' . $wp_query->get( 'acolhe_sus' ) . '.php' ) ) {
                 return plugin_dir_path( __FILE__ ) . '/templates/' . $wp_query->get( 'acolhe_sus' ) . '.php';
