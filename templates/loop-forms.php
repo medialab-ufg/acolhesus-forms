@@ -1,10 +1,10 @@
 <div class="acolhesus-form-container col-md-12">
     <h1 class="acolhesus-archive-title"> <?php echo post_type_archive_title('Formulário: '); ?> </h1>
-    <table class="table table-condensed">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th> Nome </th>
-            <th> Data Resposta </th>
+            <th> Data Criação </th>
             <th> Autor </th>
         </tr>
         </thead>
@@ -19,7 +19,7 @@
                             <?php the_title( '<h3 class="panel-title">', '</h3>' ); ?>
                         </a>
                     </td>
-                    <td> <?php the_time( 'd/m/Y' ); ?> </td>
+                    <td> <?php the_time( 'd/m/Y - G:i:s'); ?> </td>
                     <td> <a href="<?php echo get_author_posts_url($author_id); ?>"><?php echo get_the_author(); ?></a> </td>
                 </tr>
             <?php

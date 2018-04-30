@@ -40,12 +40,12 @@
 
 
             <?php /* TODO: abstrair template da tabela para o loop */ ?>
-            <table class="table table-condensed">
+            <table class="table table-hover">
                 <thead>
                 <tr>
                     <th> Campo de Atuação </th>
                     <th> Resposta </th>
-                    <th> Data Última Edição </th>                    
+                    <th> Data Criação </th>
                     <th> Autor </th>
                 </tr>
             </thead>

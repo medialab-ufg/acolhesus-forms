@@ -106,6 +106,8 @@ class AcolheSUS {
         add_action('wp_ajax_acolhesus_save_post_campo', array(&$this, 'ajax_callback_save_post_campo'));
 
         add_action('wp_ajax_acolhesus_add_form_entry', array(&$this, 'ajax_callback_add_form_entry'));
+
+        add_action('pre_get_posts', array(&$this, 'return_all_entries'));
     }
 
     function init_default_data() {
@@ -347,6 +349,15 @@ class AcolheSUS {
             return ! $this->forms[$post_type]['uma_entrada_por_campo'];
         }
         return false;
+    }
+
+    function return_all_entries($query) {
+
+        if ( isset($query->query['post_type']) && array_key_exists($query->query['post_type'], $this->forms) ) {
+            $query->set( 'posts_per_page', -1 );
+
+            return;
+        }
     }
 
 }
