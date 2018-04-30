@@ -107,7 +107,7 @@ class AcolheSUS {
 
         add_action('wp_ajax_acolhesus_add_form_entry', array(&$this, 'ajax_callback_add_form_entry'));
 
-        add_action('pre_get_posts', array(&$this, 'return_all_entries'));
+        add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
     }
 
     function init_default_data() {
@@ -180,7 +180,6 @@ class AcolheSUS {
             }
         }
 
-        
         if (array_key_exists($post->post_type, $this->forms)) {
 
             $caldera_plugin = get_class_methods(Caldera_Forms::class );
@@ -200,7 +199,7 @@ class AcolheSUS {
     private function get_basic_campo_form() {
         global $post;
         
-        $camposDoUsuario = get_user_meta(get_current_user_id(), 'acolhesus_campos');
+        $camposDoUsuario = $this->get_user_campos();
         $campoAtual = get_post_meta($post->ID, 'acolhesus_campo', true);
 
         $options = '';
@@ -228,10 +227,16 @@ class AcolheSUS {
     }
 
     function ajax_callback_add_form_entry() {
-        $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'publish');
-        if ($_id) {
-            echo json_encode(['id' => $_id, 'redirect_url' => get_permalink($_id)]);
-            wp_die();
+        $user_campos = $this->get_user_campos();
+        if (is_array($user_campos) && count($user_campos) > 0) {
+            $metas = [ 'acolhesus_campo' => array_shift($user_campos)];
+            $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'publish', $metas);
+            if ($_id) {
+                echo json_encode(['id' => $_id, 'redirect_url' => get_permalink($_id)]);
+                wp_die();
+            }
+        } else {
+            echo json_encode(['error' => 'Usuário não habilitado para criar nova resposta']);
         }
 
         return false;
@@ -351,13 +356,31 @@ class AcolheSUS {
         return false;
     }
 
-    function return_all_entries($query) {
+    function return_all_user_entries($query) {
+        if (!is_admin()) {
+            if ( isset($query->query['post_type']) && array_key_exists($query->query['post_type'], $this->forms) ) {
 
-        if ( isset($query->query['post_type']) && array_key_exists($query->query['post_type'], $this->forms) ) {
-            $query->set( 'posts_per_page', -1 );
+                $_campos_user = $this->get_user_campos();
 
-            return;
+                $query->set( 'posts_per_page', -1 );
+                $_posts_do_campo_do_user = [[
+                        'key' => 'acolhesus_campo',
+                        'value' => $_campos_user,
+                        'compare' => 'IN'
+                    ]];
+
+                $query->set('meta_query', $_posts_do_campo_do_user);
+
+                return;
+            }
         }
+    }
+
+    public function get_user_campos($userID = 0) {
+        if ($userID === 0)
+            $userID = get_current_user_id();
+
+        return get_user_meta($userID, 'acolhesus_campos');
     }
 
 }

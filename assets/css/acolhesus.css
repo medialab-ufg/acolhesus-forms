@@ -48,3 +48,12 @@
 .acolhesus-form-container .caldera-grid .form-group textarea {
     min-height: 150px;
 }
+
+.acolhesus-form-container #acolhesus_campo_selector {
+    width: 48%;
+    height: 34px;
+    padding: 6px 12px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}

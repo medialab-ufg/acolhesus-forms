@@ -132,7 +132,7 @@ class AcolheSUSAdminForm {
         global $AcolheSUS;
 
         $campos = $AcolheSUS->campos;
-        $camposSalvos = get_user_meta($user->ID, 'acolhesus_campos');
+        $camposSalvos = $AcolheSUS->get_user_campos($user->ID);
 
         ?>
         <table class="form-table field-add">
@@ -145,7 +145,7 @@ class AcolheSUSAdminForm {
                 <td>
                     <div class="panel-body">
                         
-                        <h4>Permissões adicionais (custom capabilities)</h4>
+                        <h4> Permissões adicionais </h4>
                         
                         <?php foreach ($this->customCaps as $cap => $props): ?>
 
@@ -156,10 +156,8 @@ class AcolheSUSAdminForm {
                             <br>
 
                         <?php endforeach; ?>
-                        
-                        
-                        
-                        <h4>Quais Campos de atuação esse usuário pode ver:</h4>
+
+                        <h4>Marque os campos de atuação que este usuário pode ver:</h4>
 
                         <?php foreach ($campos as $campo): ?>
 

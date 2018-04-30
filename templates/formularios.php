@@ -15,7 +15,7 @@
     
     <?php
     global $AcolheSUS;
-    $camposDoUsuario = get_user_meta(get_current_user_id(), 'acolhesus_campos');
+    $camposDoUsuario = $AcolheSUS->get_user_campos();
 
     foreach ($AcolheSUS->forms as $formName => $formAtts):
 
