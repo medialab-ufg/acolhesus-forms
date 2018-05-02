@@ -5,7 +5,7 @@
             <th> Campo de Atuação </th>
 			<th> Nome </th>
 			
-			<?php if ($AcolheSUS->can_add_entry(get_post_type())): ?>
+			<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
 	            <th> Data Criação </th>
 	            <th> Autor </th>
 			<?php endif; ?>
@@ -28,7 +28,7 @@
                         </a>
                     </td>
                     
-					<?php if ($AcolheSUS->can_add_entry(get_post_type())): ?>
+					<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
 						<td> <?php the_time( 'd/m/Y - G:i:s'); ?> </td>
 	                    <td> <a href="<?php echo get_author_posts_url($author_id); ?>"><?php echo get_the_author(); ?></a> </td>
 					<?php endif; ?>
@@ -41,11 +41,10 @@
     </table>
 
     <?php
-    $_post_type = get_post_type();
-    if ($AcolheSUS->can_add_entry($_post_type)) { ?>
+    if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)) { ?>
         <div class="col-md-12">
             <p>
-                <input type="hidden" id="new_post_type" name="new_post_type" value="<?php echo $_post_type; ?>">
+                <input type="hidden" id="new_post_type" name="new_post_type" value="<?php echo $current_acolhesus_formtype; ?>">
                 <button class="btn btn-info" id="add_acolhesus_entry">Nova resposta de <?php echo post_type_archive_title(); ?> </button>
             </p>
         </div>
