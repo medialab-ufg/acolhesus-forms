@@ -32,6 +32,12 @@
             ]
         ]);
 		
+		?>
+		<h3>
+			<a href="<?php echo get_post_type_archive_link($formName); ?>"> <?php echo $formAtts['labels']['name']; ?> </a>
+		</h3>
+		<?php 
+		
 		include( plugin_dir_path( __FILE__ ) . "loop-forms.php");
 		
     endforeach;
