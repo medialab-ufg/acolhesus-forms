@@ -32,7 +32,7 @@
             ]
         ]);
 		
-		include_once( plugin_dir_path( __FILE__ ) . "loop-forms.php");
+		include( plugin_dir_path( __FILE__ ) . "loop-forms.php");
 		
     endforeach;
     ?>
