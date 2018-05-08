@@ -57,3 +57,17 @@
     border: 1px solid #ccc;
     margin-bottom: 20px;
 }
+
+.acolhesus-form-container h1.list-title {
+    text-align: center;
+    color: black;
+}
+
+.acolhesus-form-container .logo-container {
+    margin: 10px auto;
+    text-align: center;
+}
+
+.acolhesus-form-container .logo-container img {
+    max-width: 140px;
+}

@@ -9,6 +9,8 @@
  * Text Domain: acolhesus-rhs
  */
 
+define('ACOLHESUS_URL', plugin_dir_url(__FILE__));
+
 /*
  * Inicialmente, depende de https://br.wordpress.org/plugins/caldera-forms/ (versao free)
  */
@@ -386,6 +388,21 @@ class AcolheSUS {
             $userID = get_current_user_id();
 
         return get_user_meta($userID, 'acolhesus_campos');
+    }
+
+    public function getLogoURL() {
+        return ACOLHESUS_URL . 'assets/images/logo.png';
+    }
+
+    public function getTitle() {
+        return 'Política Nacional de Humanização - Formulários Acolhe SUS';
+    }
+
+    public function renderLogo() {
+        $src = $this->getLogoURL();
+        $alt = $title = "Logo " . $this->getTitle();
+
+        echo "<img src='$src' alt='$alt' title='$title'/>";
     }
 
 }
