@@ -71,3 +71,11 @@
 .acolhesus-form-container .logo-container img {
     max-width: 140px;
 }
+
+.acolhesus-form-container table .open {
+    color: #0b7a6f;
+}
+
+.acolhesus-form-container table .closed {
+    color: darkred;
+}

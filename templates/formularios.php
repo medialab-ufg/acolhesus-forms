@@ -9,8 +9,8 @@
     ?>
 
     <div class="acolhesus-form-container col-md-12 lista-geral">
-        <h1 class="list-title"> <?php echo $AcolheSUS->getTitle(); ?> </h1>
-        <hr> <div class="logo-container"> <?php $AcolheSUS->renderLogo(); ?> </div> <hr>
+        <h1 class="list-title"> <?php echo $AcolheSUS->get_title(); ?> </h1>
+        <hr> <div class="logo-container"> <?php $AcolheSUS->render_logo(); ?> </div> <hr>
 
         <?php
         foreach ($AcolheSUS->forms as $formName => $formAtts):
@@ -37,7 +37,6 @@
 		
     endforeach;
     ?>
-
     </div>
 <?php endif; ?>
 

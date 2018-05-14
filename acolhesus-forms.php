@@ -109,6 +109,12 @@ class AcolheSUS {
 
         add_action('wp_ajax_acolhesus_add_form_entry', array(&$this, 'ajax_callback_add_form_entry'));
 
+        add_action('wp_ajax_acolhesus_lock_form', array(&$this, 'ajax_callback_lock_form'));
+
+        add_action('wp_ajax_lock_single_form', array(&$this, 'lock_form_entries'));
+
+        add_action('wp_ajax_unlock_single_form', array(&$this, 'unlock_form_entries'));
+
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
     }
 
@@ -244,6 +250,30 @@ class AcolheSUS {
         return false;
     }
 
+    function ajax_callback_lock_form() {
+        if (current_user_can('acolhesus_cgpnh')) {
+            $key = 'acolhesus_' . sanitize_text_field($_POST['type']);
+            update_option($key, 'locked');
+        } else {
+            echo json_encode(['error' => 'Usuário não habilitado para fechar a edição de usuários']);
+        }
+    }
+
+    function lock_form_entries() {
+        $_id = sanitize_text_field($_POST['form_id']);
+        update_post_meta($_id, "locked", true);
+        wp_die();
+    }
+
+    function unlock_form_entries() {
+        $_id = sanitize_text_field($_POST['form_id']);
+        update_post_meta($_id, "locked", false);
+        wp_die();
+    }
+
+    function is_form_locked($form_type) {
+        return (get_option('acolhesus_' . $form_type) === "locked");
+    }
 
     function saved_entry($entryid, $new_entry, $form) {
         global $post;
@@ -286,7 +316,6 @@ class AcolheSUS {
             wp_localize_script('rhs-acolhesus', 'acolhesus', [
                 'ajax_url' => admin_url('admin-ajax.php')
             ]);
-
         }
 
     }
@@ -390,17 +419,17 @@ class AcolheSUS {
         return get_user_meta($userID, 'acolhesus_campos');
     }
 
-    public function getLogoURL() {
+    public function get_logo_URL() {
         return ACOLHESUS_URL . 'assets/images/logo.png';
     }
 
-    public function getTitle() {
+    public function get_title() {
         return 'Política Nacional de Humanização - Formulários Acolhe SUS';
     }
 
-    public function renderLogo() {
-        $src = $this->getLogoURL();
-        $alt = $title = "Logo " . $this->getTitle();
+    public function render_logo() {
+        $src = $this->get_logo_URL();
+        $alt = $title = "Logo " . $this->get_title();
 
         echo "<img src='$src' alt='$alt' title='$title'/>";
     }
