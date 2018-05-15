@@ -10,7 +10,9 @@ $current_acolhesus_formtype = get_post_type();
     <h1 class="acolhesus-archive-title">
         <?php echo post_type_archive_title('Formulário: '); ?>
 
-        <?php if (current_user_can('acolhesus_cgpnh')): ?>
+        <?php
+        /*
+        if (current_user_can('acolhesus_cgpnh')): ?>
 
             <?php if ($AcolheSUS->is_form_locked($current_acolhesus_formtype)): ?>
                 <span style="color: red; font-size: 12px; float: right; margin-right: 10px;">Fechado</span>
@@ -21,7 +23,8 @@ $current_acolhesus_formtype = get_post_type();
                 </button>
             <?php endif; ?>
 
-        <?php endif; ?>
+        <?php endif;
+        */ ?>
     </h1>
 
     <hr>
