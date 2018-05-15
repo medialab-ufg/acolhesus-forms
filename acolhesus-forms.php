@@ -173,13 +173,41 @@ class AcolheSUS {
         }
 
     }
-    
+
+    function set_acolhesus_readonly($attrs, $field, $form) {
+        $_readonly_fields = ["text", "textarea", "number", "hidden", "paragraph"];
+        $field_type = Caldera_Forms_Field_Util::get_type($field, $form);
+
+        if (in_array($field_type, $_readonly_fields)) {
+            $attrs['readonly'] = 'readonly';
+        } else if ($field_type === "dropdown") {
+            $attrs['disabled'] = 'disabled';
+        }
+
+        if (empty($attrs["value"]) && ("text" === $field_type || "paragraph" === $field_type)) {
+            $attrs["value"] = "--------";
+        }
+
+        return $attrs;
+    }
+
+    function acolhesus_readonly_classes($wrapper_classes) {
+        $wrapper_classes[] = "acolhesus-readonly";
+
+        return $wrapper_classes;
+    }
+
     function filter_the_content($content) {
         global $post;
 
+        $_is_form_locked = get_post_meta($post->ID, "locked", true);
+        if ($_is_form_locked) {
+            add_filter('caldera_forms_field_attributes', array(&$this, 'set_acolhesus_readonly'), 20, 3);
+            add_filter('caldera_forms_render_form_wrapper_classes', array(&$this, 'acolhesus_readonly_classes'), 20);
+        }
+
         $saved_form_id = get_post_meta($post->ID, '_entry_id', true);
         $formType = get_post_type();
-
         $form = "";
 
         if (isset($this->forms[$formType])) {

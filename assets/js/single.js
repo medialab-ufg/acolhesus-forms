@@ -6,4 +6,6 @@ jQuery( function( $ ) {
             post_id: $('#acolhesus_campo_selector').data('post_id')
         })
     }).change();
+
+    $('.acolhesus-form-container .acolhesus-readonly input[type=\'submit\']').remove();
 });
