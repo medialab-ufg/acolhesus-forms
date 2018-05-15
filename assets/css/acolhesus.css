@@ -79,3 +79,7 @@
 .acolhesus-form-container table .closed {
     color: darkred;
 }
+
+.acolhesus-form-container .cf-toggle-group-buttons.btn-group a.btn {
+    padding: 3px 8px !important;
+}
