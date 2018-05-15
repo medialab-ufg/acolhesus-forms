@@ -1,0 +1,52 @@
+.acolhesus-form-container {
+
+  #acolhesus_campo_selector {
+    width: 48%;
+    height: 34px;
+    padding: 6px 12px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+
+  .caldera-grid {
+    .form-group {
+      margin-bottom: 20px;
+      padding: 2px;
+
+      textarea {
+        min-height: 150px;
+      }
+    }
+
+    &.acolhesus-readonly input {
+     border: none !important;
+     background: white !important;
+     box-shadow: none !important;
+    }
+
+    .caldera-forms-conditional-field {
+      div, div label {
+        margin-left: 20px !important;
+      }
+      div {
+        margin-bottom: 40px !important;
+      }
+    }
+
+    .cf-toggle-group-buttons.btn-group a.btn {
+      padding: 3px 8px !important;
+    }
+
+  } // .caldera-grid
+} // .acolhesus-form-container
+
+.single .acolhesus-form-container {
+  color: black;
+
+  h3 {
+    margin: 30px 0;
+    border-bottom: 1px solid $dark_green;
+    padding-bottom: 15px;
+  }
+}
