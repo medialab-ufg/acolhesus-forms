@@ -26,7 +26,6 @@ jQuery( function( $ ) {
     });
 
     $('.lock_form_entries').click(function () {
-
         var msg = 'Fechar a edição para ' + $(this).attr('data-txt') + ' ?';
         var post_id = $(this).attr('data-id');
         swal({ title: msg,
@@ -43,7 +42,9 @@ jQuery( function( $ ) {
                     action: 'lock_single_form',
                     form_id: post_id
                 };
-                $.post(acolhesus.ajax_url, data);
+                $.post(acolhesus.ajax_url, data).success(function(res) {
+                    console.log(res);
+                });
             }
         });
     });

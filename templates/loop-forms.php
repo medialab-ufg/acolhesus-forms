@@ -49,26 +49,7 @@
                     </td>
 
                     <?php if (current_user_can('acolhesus_cgpnh')) { ?>
-                        <td>
-                        <?php if ($_is_form_locked): ?>
-                            <button class="btn btn-default btn-primary" style="float: right; margin-right: 10px;">
-                                <a class="unlock_form_entries" data-id="<?php echo $_form_id; ?>"
-                                   data-txt="<?php echo get_the_title(); ?>"
-                                   style="color: white" href="javascript:void(0)">
-                                    ABRIR EDIÇÃO
-                                </a>
-                            </button>
-                        <?php else: ?>
-                            <button class="btn btn-default btn-danger" style="float: right; margin-right: 10px;">
-                                <a class="lock_form_entries" data-id="<?php echo $_form_id; ?>"
-                                   data-txt="<?php echo get_the_title(); ?>"
-                                   style="color: white">
-                                    FECHAR EDIÇÃO
-                                </a>
-                            </button>
-                        <?php endif; ?>
-
-                        </td>
+                        <td> <?php $AcolheSUS->render_entry_action($_form_id, get_the_title()); ?> </td>
                     <?php } ?>
                 </tr>
             <?php

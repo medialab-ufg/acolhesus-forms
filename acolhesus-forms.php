@@ -123,6 +123,8 @@ class AcolheSUS {
     private function set_forms_phases() {
         $this->forms['matriz_cenario']['fase'] = $this->fases[0];
         $this->forms['matriz_cenario']['eixo'] = $this->eixos[0];
+        $this->forms['avaliacao_grupos']['fase'] = $this->fases[0];
+        $this->forms['avaliacao_grupos']['eixo'] = $this->eixos[0];
     }
 
     function init_default_data() {
@@ -477,6 +479,21 @@ class AcolheSUS {
         $alt = $title = "Logo " . $this->get_title();
 
         echo "<img src='$src' alt='$alt' title='$title'/>";
+    }
+
+    public function render_entry_action($_form_id, $title) {
+        $_attrs = ["class" => "info", "title" => $title, "status" => "Abrir"];
+
+        if ($this->is_form_locked($_form_id)):
+            $_attrs['class'] = "danger";
+            $_attrs['status'] = "Fechar";
+        endif;
+
+        $_html  = "<button class='entry-status btn btn-default btn-" . $_attrs['class'] . "'>";
+        $_html .=  "<a class='lock_form_entries' data-id='" . $_form_id . "' data-text='" . $title . "' href='#'>";
+        $_html .= $_attrs['status'] . " edição </a> </button>" ;
+
+        echo $_html;
     }
 
 }
