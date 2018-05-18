@@ -43,14 +43,23 @@
   .acolhesus-form-container .lista-geral h1.list-title {
     text-align: center;
     color: black; }
-  .acolhesus-form-container .lista-geral .logo-container {
-    margin: 10px auto;
-    text-align: center; }
-    .acolhesus-form-container .lista-geral .logo-container img {
-      max-width: 140px; }
   .acolhesus-form-container table .open {
     color: #0b7a6f; }
   .acolhesus-form-container table .closed {
     color: darkred; }
+
+.lista-geral .entry-status {
+  float: right;
+  margin-right: 10px; }
+  .lista-geral .entry-status a {
+    color: white; }
+.lista-geral h3 a {
+  color: #003c46;
+  font-size: 20px; }
+.lista-geral .logo-container {
+  margin: 10px auto;
+  text-align: center; }
+  .lista-geral .logo-container img {
+    max-width: 140px; }
 
 /*# sourceMappingURL=acolhesus.css.map */

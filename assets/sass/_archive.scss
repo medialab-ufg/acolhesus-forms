@@ -23,16 +23,6 @@
       color: black;
     }
 
-    .logo-container {
-      margin: 10px auto;
-      text-align: center;
-
-      img {
-        max-width: 140px;
-      }
-
-    }
-
   } // lista-geral
 
   table {
@@ -41,3 +31,29 @@
   }
 
 } // .acolhesus-form-container
+
+.lista-geral {
+
+  .entry-status {
+    float: right;
+    margin-right: 10px;
+    a {
+      color: white;
+    }
+  }
+
+  h3 a {
+    color: $dark_green;
+    font-size: 20px;
+  }
+
+  .logo-container {
+    margin: 10px auto;
+    text-align: center;
+
+    img {
+      max-width: 140px;
+    }
+
+  }
+}
