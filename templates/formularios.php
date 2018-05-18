@@ -28,13 +28,17 @@
         ]);
 		
 		?>
-		<h3>
+		<h3 class="form-title">
 			<a href="<?php echo get_post_type_archive_link($formName); ?>"> <?php echo $formAtts['labels']['name']; ?> </a>
+            <div class="forms-info">
+                <strong> Fase: </strong><?php echo $formAtts['fase']; ?>
+                <?php echo isset($formAtts['eixo']) ? "<strong>Eixo:</strong> " . $formAtts['eixo'] : ""; ?>
+            </div>
 		</h3>
 		<?php 
 		global $current_acolhesus_formtype; $current_acolhesus_formtype = $formName;
 		include( plugin_dir_path( __FILE__ ) . "loop-forms.php");
-		
+		echo "<hr>";
     endforeach;
     ?>
     </div>

@@ -32,14 +32,28 @@
 
 } // .acolhesus-form-container
 
+.entry-status {
+  float: right;
+  margin-right: 10px;
+  a {
+    color: white;
+  }
+}
+
 .lista-geral {
 
-  .entry-status {
-    float: right;
-    margin-right: 10px;
+  .form-title {
     a {
-      color: white;
+      float: left;
+      padding-right: 20px;
     }
+  }
+
+  .forms-info {
+    padding-top: 7px;
+    float: left;
+    font-size: 12px;
+    color: black !important;
   }
 
   h3 a {

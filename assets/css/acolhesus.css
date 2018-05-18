@@ -48,11 +48,20 @@
   .acolhesus-form-container table .closed {
     color: darkred; }
 
-.lista-geral .entry-status {
+.entry-status {
   float: right;
   margin-right: 10px; }
-  .lista-geral .entry-status a {
+  .entry-status a {
     color: white; }
+
+.lista-geral .form-title a {
+  float: left;
+  padding-right: 20px; }
+.lista-geral .forms-info {
+  padding-top: 7px;
+  float: left;
+  font-size: 12px;
+  color: black !important; }
 .lista-geral h3 a {
   color: #003c46;
   font-size: 20px; }
