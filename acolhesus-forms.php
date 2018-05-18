@@ -111,7 +111,7 @@ class AcolheSUS {
 
         add_action('wp_ajax_acolhesus_lock_form', array(&$this, 'ajax_callback_lock_form'));
 
-        add_action('wp_ajax_lock_single_form', array(&$this, 'lock_form_entries'));
+        add_action('wp_ajax_toggle_lock_single_form', array(&$this, 'toggle_lock_form_entries'));
 
         add_action('wp_ajax_unlock_single_form', array(&$this, 'unlock_form_entries'));
 
@@ -306,9 +306,11 @@ class AcolheSUS {
         }
     }
 
-    function lock_form_entries() {
+    function toggle_lock_form_entries() {
         $_id = sanitize_text_field($_POST['form_id']);
-        update_post_meta($_id, "locked", true);
+        $toggle = $this->is_form_locked($_id);
+        update_post_meta($_id, "locked", $toggle);
+
         wp_die();
     }
 
@@ -490,7 +492,7 @@ class AcolheSUS {
         endif;
 
         $_html  = "<button class='entry-status btn btn-default btn-" . $_attrs['class'] . "'>";
-        $_html .=  "<a class='lock_form_entries' data-id='" . $_form_id . "' data-text='" . $title . "' href='#'>";
+        $_html .= "<a class='toggle_lock_form_entries' data-status='". $_attrs['status'] ."'  data-id='" . $_form_id . "' data-txt='" . $title . "' href='#'>";
         $_html .= $_attrs['status'] . " edição </a> </button>" ;
 
         echo $_html;

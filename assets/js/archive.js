@@ -25,13 +25,19 @@ jQuery( function( $ ) {
         }
     });
 
-    $('.lock_form_entries').click(function () {
-        var msg = 'Fechar a edição para ' + $(this).attr('data-txt') + ' ?';
+    $('.toggle_lock_form_entries').click(function () {
+
+
+
         var post_id = $(this).attr('data-id');
+        var status = $(this).attr('data-status');
+        var txt = $(this).attr('data-txt');
+        var msg = status + ' a edição para ' +  txt + ' ?';
+
         swal({ title: msg,
                 showCancelButton: true,
                 confirmButtonClass: "btn-success",
-                confirmButtonText: "Fechar edição",
+                confirmButtonText: status + " edição",
                 cancelButtonText: "Cancelar",
                 closeOnConfirm: true
             },
@@ -39,7 +45,7 @@ jQuery( function( $ ) {
             if(isConfirm) {
                 console.log('postado ... ' + post_id);
                 var data = {
-                    action: 'lock_single_form',
+                    action: 'toggle_lock_single_form',
                     form_id: post_id
                 };
                 $.post(acolhesus.ajax_url, data).success(function(res) {
