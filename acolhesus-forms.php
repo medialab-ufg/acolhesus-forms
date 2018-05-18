@@ -116,6 +116,13 @@ class AcolheSUS {
         add_action('wp_ajax_unlock_single_form', array(&$this, 'unlock_form_entries'));
 
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
+
+        $this->set_forms_phases();
+    }
+
+    private function set_forms_phases() {
+        $this->forms['matriz_cenario']['fase'] = $this->fases[0];
+        $this->forms['matriz_cenario']['eixo'] = $this->eixos[0];
     }
 
     function init_default_data() {
@@ -200,11 +207,7 @@ class AcolheSUS {
     function filter_the_content($content) {
         global $post;
 
-        $_is_form_locked = get_post_meta($post->ID, "locked", true);
-        if ($_is_form_locked) {
-            add_filter('caldera_forms_field_attributes', array(&$this, 'set_acolhesus_readonly'), 20, 3);
-            add_filter('caldera_forms_render_form_wrapper_classes', array(&$this, 'acolhesus_readonly_classes'), 20);
-        }
+        $this->render_locked_form($post->ID);
 
         $saved_form_id = get_post_meta($post->ID, '_entry_id', true);
         $formType = get_post_type();
@@ -215,6 +218,9 @@ class AcolheSUS {
                 $form .= $this->get_basic_campo_form();
             }
         }
+
+        $content .= "Fase " . $this->forms[$formType]['fase'];
+        $content .= "Eixo " . $this->forms[$formType]['eixo'];
 
         if (array_key_exists($post->post_type, $this->forms)) {
 
@@ -230,6 +236,17 @@ class AcolheSUS {
         }
 
         return $content . " <br>" . $form;
+    }
+
+    private function is_form_locked($form_id) {
+        return get_post_meta($form_id, "locked", true);
+    }
+
+    private function render_locked_form($form_id) {
+        if ($this->is_form_locked($form_id)) {
+            add_filter('caldera_forms_field_attributes', array(&$this, 'set_acolhesus_readonly'), 20, 3);
+            add_filter('caldera_forms_render_form_wrapper_classes', array(&$this, 'acolhesus_readonly_classes'), 20);
+        }
     }
 
     private function get_basic_campo_form() {
@@ -299,7 +316,7 @@ class AcolheSUS {
         wp_die();
     }
 
-    function is_form_locked($form_type) {
+    function is_form_type_locked($form_type) {
         return (get_option('acolhesus_' . $form_type) === "locked");
     }
 

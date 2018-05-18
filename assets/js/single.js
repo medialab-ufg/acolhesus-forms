@@ -8,4 +8,5 @@ jQuery( function( $ ) {
     }).change();
 
     $('.acolhesus-form-container .acolhesus-readonly input[type=\'submit\']').remove();
+    $('.acolhesus-form-container .acolhesus-readonly :radio').attr('disabled', true);
 });
