@@ -26,55 +26,36 @@ jQuery( function( $ ) {
     });
 
     $('.toggle_lock_form_entries').click(function () {
+        var entry = {
+            id:     $(this).attr('data-id'),
+            status: $(this).attr('data-status'),
+            txt:    $(this).attr('data-txt')
+        };
 
-
-
-        var post_id = $(this).attr('data-id');
-        var status = $(this).attr('data-status');
-        var txt = $(this).attr('data-txt');
-        var msg = status + ' a edição para ' +  txt + ' ?';
+        var msg = entry.status + ' a edição para ' +  entry.txt + ' ?';
+        var class_map = {'Fechar': 'danger', 'Abrir': 'info'};
 
         swal({ title: msg,
                 showCancelButton: true,
-                confirmButtonClass: "btn-success",
-                confirmButtonText: status + " edição",
+                confirmButtonClass: "btn-" + class_map[entry.status],
+                confirmButtonText: entry.status + " edição",
                 cancelButtonText: "Cancelar",
                 closeOnConfirm: true
             },
             function(isConfirm) {
-            if(isConfirm) {
-                console.log('postado ... ' + post_id);
+            if(entry.id && entry.status && isConfirm) {
                 var data = {
                     action: 'toggle_lock_single_form',
-                    form_id: post_id
+                    form_id: entry.id
                 };
                 $.post(acolhesus.ajax_url, data).success(function(res) {
-                    console.log(res);
+                    var r = JSON.parse(res);
+                    if (r.success) {
+                        swal({ title: r.success });
+                    }
                 });
             }
         });
-    });
-
-    $('.unlock_form_entries').click(function () {
-        var msg = 'Abrir a edição para ' + $(this).attr('data-txt') + ' ?';
-        var post_id = $(this).attr('data-id');
-        swal({ title: msg,
-                showCancelButton: true,
-                confirmButtonClass: "btn-success",
-                confirmButtonText: "Abrir edição",
-                cancelButtonText: "Cancelar",
-                closeOnConfirm: true
-            },
-            function(isConfirm) {
-                if(isConfirm) {
-                    console.log('postado ... ' + post_id);
-                    var data = {
-                        action: 'unlock_single_form',
-                        form_id: post_id
-                    };
-                    $.post(acolhesus.ajax_url, data);
-                }
-            });
     });
 
 });

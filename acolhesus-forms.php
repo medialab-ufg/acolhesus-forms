@@ -240,12 +240,12 @@ class AcolheSUS {
         return $content . " <br>" . $form;
     }
 
-    private function is_form_locked($form_id) {
-        return get_post_meta($form_id, "locked", true);
+    private function is_entry_locked($entry_id) {
+        return get_post_meta($entry_id, "locked", true);
     }
 
     private function render_locked_form($form_id) {
-        if ($this->is_form_locked($form_id)) {
+        if ($this->is_entry_locked($form_id)) {
             add_filter('caldera_forms_field_attributes', array(&$this, 'set_acolhesus_readonly'), 20, 3);
             add_filter('caldera_forms_render_form_wrapper_classes', array(&$this, 'acolhesus_readonly_classes'), 20);
         }
@@ -308,15 +308,12 @@ class AcolheSUS {
 
     function toggle_lock_form_entries() {
         $_id = sanitize_text_field($_POST['form_id']);
-        $toggle = $this->is_form_locked($_id);
-        update_post_meta($_id, "locked", $toggle);
+        $toggle = $this->is_entry_locked($_id);
+        if (update_post_meta($_id, "locked", !$toggle)) {
+            $estado = (!$toggle) ? "fechado" : "aberto";
+            echo json_encode(['success' => "Formulário $estado para edição!"]);
+        }
 
-        wp_die();
-    }
-
-    function unlock_form_entries() {
-        $_id = sanitize_text_field($_POST['form_id']);
-        update_post_meta($_id, "locked", false);
         wp_die();
     }
 
@@ -484,11 +481,11 @@ class AcolheSUS {
     }
 
     public function render_entry_action($_form_id, $title) {
-        $_attrs = ["class" => "info", "title" => $title, "status" => "Abrir"];
+        $_attrs = ["class" => "danger", "title" => $title, "status" => "Fechar"];
 
-        if ($this->is_form_locked($_form_id)):
-            $_attrs['class'] = "danger";
-            $_attrs['status'] = "Fechar";
+        if ($this->is_entry_locked($_form_id)):
+            $_attrs['class'] = "info";
+            $_attrs['status'] = "Abrir";
         endif;
 
         $_html  = "<button class='entry-status btn btn-default btn-" . $_attrs['class'] . "'>";
