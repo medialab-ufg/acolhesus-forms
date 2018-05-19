@@ -4,9 +4,21 @@ include_once( get_theme_file_path('header-full.php') );
 global $current_acolhesus_formtype;
 global $AcolheSUS;
 $current_acolhesus_formtype = get_post_type();
+
+$form = $AcolheSUS->forms[$current_acolhesus_formtype];
 ?>
 
 <div class="acolhesus-form-container col-md-12">
+
+    <?php if(current_user_can('acolhesus_cgpnh')): ?>
+    <div class="forms-info">
+        <center>
+            <strong> Fase: </strong><?php echo $form['fase']; ?> <br>
+            <?php echo isset($form['eixo']) ? "<strong>Eixo:</strong> " . $form['eixo'] : ""; ?>
+        </center>
+    </div>
+    <?php endif; ?>
+
     <h1 class="acolhesus-archive-title">
         <?php echo post_type_archive_title('Formulário: '); ?>
 
