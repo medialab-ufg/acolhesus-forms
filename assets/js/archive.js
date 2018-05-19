@@ -68,7 +68,7 @@ jQuery( function( $ ) {
     function toggleEntryStatus(_id, new_data) {
         if(new_data.status && new_data.button) {
             $(".status-" + _id + " span").attr('class', new_data.status.class).text(new_data.status.status);
-            $("button#entry-" + _id).addClass('btn-'+new_data.button.class);
+            $("button#entry-" + _id).removeClass().addClass('entry-status btn btn-'+new_data.button.class);
             $("button#entry-" + _id + ' a').text(new_data.button.text + " edição").attr('data-status', new_data.button.text);
         }
     }
