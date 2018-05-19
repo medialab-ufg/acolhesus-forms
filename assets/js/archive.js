@@ -44,6 +44,12 @@ jQuery( function( $ ) {
             },
             function(isConfirm) {
             if(entry.id && entry.status && isConfirm) {
+
+                var previous = {
+                   class: $(".status" + entry.id + " span").attr('class'),
+                   txt: $(".status" + entry.id + " span").text(),
+                };
+
                 var data = {
                     action: 'toggle_lock_single_form',
                     form_id: entry.id
@@ -52,11 +58,21 @@ jQuery( function( $ ) {
                     var r = JSON.parse(res);
                     if (r.success) {
                         swal({ title: r.success });
+                        toggleEntryStatus(entry.id,r.list);
                     }
                 });
             }
         });
     });
+
+    function toggleEntryStatus(_id, new_data) {
+        if(new_data.status && new_data.button) {
+            $(".status-" + _id + " span").attr('class', new_data.status.class).text(new_data.status.status);
+
+            $("button#entry-" + _id).addClass('btn-'+new_data.button.class);
+            $("button#entry-" + _id + ' a').text(new_data.button.text + " edição").data('status', new_data.button.text);
+        }
+    }
 
 });
 

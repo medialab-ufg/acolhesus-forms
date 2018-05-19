@@ -20,13 +20,12 @@
         if ( have_posts() ) {
             while(have_posts()): the_post();
             $author_id = get_the_author_meta( 'ID' );
-            $_form_id = get_the_ID();
-            $_is_form_locked = get_post_meta($_form_id, "locked", true);
+            $entry_id = get_the_ID();
             ?>
                 <tr>
                     <td> 
 						<strong> 
-							<?php echo get_post_meta($_form_id, "acolhesus_campo")[0];  ?>
+							<?php echo get_post_meta($entry_id, "acolhesus_campo")[0];  ?>
 						</strong> 
 					</td>
 					<td>
@@ -40,16 +39,10 @@
 	                    <td> <a href="<?php echo get_author_posts_url($author_id); ?>"><?php echo get_the_author(); ?></a> </td>
 					<?php endif; ?>
 
-                    <td>
-                        <?php if ($_is_form_locked): ?>
-                            <span class="closed">Fechado </span>
-                        <?php else: ?>
-                            <span class="open">Aberto</span>
-                        <?php endif; ?>
-                    </td>
+                    <td> <?php $AcolheSUS->render_entry_status($entry_id); ?> </td>
 
                     <?php if (current_user_can('acolhesus_cgpnh')) { ?>
-                        <td> <?php $AcolheSUS->render_entry_action($_form_id, get_the_title()); ?> </td>
+                        <td> <?php $AcolheSUS->render_entry_action($entry_id, get_the_title()); ?> </td>
                     <?php } ?>
                 </tr>
             <?php

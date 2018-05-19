@@ -311,10 +311,28 @@ class AcolheSUS {
         $toggle = $this->is_entry_locked($_id);
         if (update_post_meta($_id, "locked", !$toggle)) {
             $estado = (!$toggle) ? "fechado" : "aberto";
-            echo json_encode(['success' => "Formulário $estado para edição!"]);
+            echo json_encode([
+                'success' => "Formulário $estado para edição!",
+                'list' => $this->get_entry_strings($_id)
+            ]);
         }
 
         wp_die();
+    }
+
+    private function get_entry_strings($id) {
+        $status = ['status' => 'Aberto', 'class' => 'open'];
+        $button = ['text' => 'Fechar', 'class' => 'danger'];;
+
+        if($this->is_entry_locked($id)) {
+            $status['status'] = 'Fechado';
+            $status['class'] = 'closed';
+
+            $button['text'] = 'Abrir';
+            $button['class'] = 'info';
+        }
+
+        return ['status' => $status, 'button' => $button];
     }
 
     function is_form_type_locked($form_type) {
@@ -480,22 +498,33 @@ class AcolheSUS {
         echo "<img src='$src' alt='$alt' title='$title'/>";
     }
 
-    public function render_entry_action($_form_id, $title) {
+    public function render_entry_action($entry_id, $title) {
         $_attrs = ["class" => "danger", "title" => $title, "status" => "Fechar"];
 
-        if ($this->is_entry_locked($_form_id)):
+        if ($this->is_entry_locked($entry_id)):
             $_attrs['class'] = "info";
             $_attrs['status'] = "Abrir";
         endif;
 
-        $_html  = "<button class='entry-status btn btn-default btn-" . $_attrs['class'] . "'>";
-        $_html .= "<a class='toggle_lock_form_entries' data-status='". $_attrs['status'] ."'  data-id='" . $_form_id . "' data-txt='" . $title . "' href='#'>";
+        $_html  = "<button id='entry-$entry_id' class='entry-status btn btn-default btn-" . $_attrs['class'] . "'>";
+        $_html .= "<a class='toggle_lock_form_entries' data-status='". $_attrs['status'] ."'  data-id='" . $entry_id . "' data-txt='" . $title . "' href='#'>";
         $_html .= $_attrs['status'] . " edição </a> </button>" ;
 
         echo $_html;
     }
 
-}
+    public function render_entry_status($entry_id) {
+        $class = "open";
+        $status = "Aberto";
+        if ($this->is_entry_locked($entry_id)) {
+            $class = "closed";
+            $status = "Fechado";
+        }
+
+        echo "<div class='status-$entry_id'><span class='$class'> $status </span></div>";
+    }
+
+} // class
 
 global $AcolheSUS;
 $AcolheSUS = new AcolheSUS();
