@@ -370,11 +370,11 @@ class AcolheSUS {
         wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
 
         $type = get_post_type();
-        if ($type && array_key_exists($type, $this->forms)) {
+        if ( $type && array_key_exists($type, $this->forms)  || !empty(get_query_var('acolhe_sus')) ) {
 
             if (is_single()) {
                 wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js');
-            } else if (is_archive()) {
+            } else if ( is_archive() || !empty(get_query_var('acolhe_sus')) ) {
                 wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/archive.js');
             }
             wp_localize_script('rhs-acolhesus', 'acolhesus', [
