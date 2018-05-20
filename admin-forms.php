@@ -128,86 +128,105 @@ class AcolheSUSAdminForm {
     ////////////////////////// USERS ///////////////////////////////
 
     function extra_profile_fields($user) {
-        
         global $AcolheSUS;
 
         $campos = $AcolheSUS->campos;
+        $forms = $AcolheSUS->forms;
         $camposSalvos = $AcolheSUS->get_user_campos($user->ID);
-
+        $formPerms = $AcolheSUS->get_user_forms_perms($user->ID);
         ?>
+
         <table class="form-table field-add">
             <tbody>
             <tr class="user-links">
-                <th>
-                    <label for="links">Permissões Acolhe SUS</label>
-
-                </th>
+                <th> <label for="links"> Permissões Acolhe SUS </label> </th>
                 <td>
                     <div class="panel-body">
-                        
-                        <h4> Permissões adicionais </h4>
-                        
-                        <?php foreach ($this->customCaps as $cap => $props): ?>
 
+                        <h4> Permissões adicionais </h4>
+                        <?php foreach ($this->customCaps as $cap => $props): ?>
                             <input type="checkbox" name="acolhesus_caps[]" value="<?php echo $cap; ?>"
                                 <?php if (user_can($user->ID, $cap)) echo "checked"; ?>
                             />
-                            <?php echo $props['label']; ?> (<?php echo $cap; ?>)
-                            <br>
-
+                            <?php echo $props['label']; ?> (<?php echo $cap; ?>) <br>
                         <?php endforeach; ?>
 
-                        <h4>Marque os campos de atuação que este usuário pode ver:</h4>
-
+                        <h4> Marque os campos de atuação que este usuário pode ver: </h4>
                         <?php foreach ($campos as $campo): ?>
-
                             <input type="checkbox" name="acolhesus_campos[]" value="<?php echo $campo; ?>"
                                 <?php if (in_array($campo, $camposSalvos)) echo "checked"; ?>
                             />
-                            <?php echo $campo; ?>
-                            <br>
+                            <?php echo $campo; ?> <br>
+                        <?php endforeach; ?>
 
+                        <hr>
+
+                        <h4> Marque os formulários que este usuário pode ver/editar: </h4>
+                        <?php
+                        foreach ($forms as $slug => $attrs):
+                            $_f = [
+                                    'view' => 'ver_' . $attrs['slug'],
+                                    'edit' => 'editar_' . $attrs['slug']
+                            ];
+                            ?>
+                            <h3> <?php echo $attrs['labels']['name']; ?> </h3>
+                            <div>
+                                <input id='see_form' type="checkbox" name="acolhesus_form_perms[]"
+                                       value="<?php echo $_f['view'] ?>"  <?php if (in_array($_f['view'], $formPerms)) echo "checked"; ?> />
+                                <label for="see_form"> Ver </label> <br>
+
+                                <input id='edit_form' type="checkbox" name="acolhesus_form_perms[]"
+                                       value="<?php echo $_f['edit'] ?>" <?php if (in_array($_f['edit'], $formPerms)) echo "checked"; ?> />
+                                <label for="edit_form">Editar</label>
+                            </div>
                         <?php endforeach; ?>
 
                     </div>
                 </td>
             </tr>
-
-            
-            
             </tbody>
         </table>
+
         <?php
     }
 
     function save_extra_profile_fields( $userID ) {
-
         if ( ! current_user_can( 'edit_user', $userID ) ) {
             return false;
         }
 
-        delete_user_meta($userID, 'acolhesus_campos');
-
-        if (isset($_POST['acolhesus_campos']) && is_array($_POST['acolhesus_campos'])) {
-
-            foreach ($_POST['acolhesus_campos'] as $campo) {
-                add_user_meta($userID, 'acolhesus_campos', $campo);
-            }
-
-        }
+        $this->update_uf_permissions($userID);
+        $this->update_forms_permissions($userID);
 
         $user = get_userdata($userID);
-
         foreach ($this->customCaps as $cap => $props) {
-
             if (isset($_POST['acolhesus_caps']) && is_array($_POST['acolhesus_caps']) && in_array($cap, $_POST['acolhesus_caps'])) {
                 $user->add_cap($cap);
             } else {
                 $user->remove_cap($cap);
             }
-
         }
+    }
 
+    private function update_uf_permissions($userID) {
+        delete_user_meta($userID, 'acolhesus_campos');
+
+        if (isset($_POST['acolhesus_campos']) && is_array($_POST['acolhesus_campos'])) {
+            foreach ($_POST['acolhesus_campos'] as $campo) {
+                add_user_meta($userID, 'acolhesus_campos', $campo);
+            }
+        }
+    }
+
+    private function update_forms_permissions($userID) {
+        delete_user_meta($userID, 'acolhesus_form_perms');
+
+        if (isset($_POST['acolhesus_form_perms']) && is_array($_POST['acolhesus_form_perms'])) {
+            foreach ($_POST['acolhesus_form_perms'] as $form_perm) {
+                add_user_meta($userID, 'acolhesus_form_perms', $form_perm );
+
+            }
+        }
     }
 
 }

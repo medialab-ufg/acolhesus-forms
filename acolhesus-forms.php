@@ -483,6 +483,13 @@ class AcolheSUS {
         return get_user_meta($userID, 'acolhesus_campos');
     }
 
+    public function get_user_forms_perms($userID) {
+        if (is_null($userID))
+            $userID = get_current_user_id();
+
+        return get_user_meta($userID, 'acolhesus_form_perms');
+    }
+
     public function get_logo_URL() {
         return ACOLHESUS_URL . 'assets/images/logo.png';
     }
