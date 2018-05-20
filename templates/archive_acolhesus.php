@@ -9,7 +9,7 @@ $form = $AcolheSUS->forms[$current_acolhesus_formtype];
 ?>
 
 <div class="acolhesus-form-container col-md-12">
-
+<!--
     <?php if(current_user_can('acolhesus_cgpnh')): ?>
     <div class="forms-info">
         <center>
@@ -18,10 +18,9 @@ $form = $AcolheSUS->forms[$current_acolhesus_formtype];
         </center>
     </div>
     <?php endif; ?>
-
+-->
     <h1 class="acolhesus-archive-title">
         <?php echo post_type_archive_title('Formulário: '); ?>
-
         <?php
         /*
         if (current_user_can('acolhesus_cgpnh')): ?>
@@ -38,7 +37,7 @@ $form = $AcolheSUS->forms[$current_acolhesus_formtype];
         <?php endif;
         */ ?>
     </h1>
-
+	<a href="<?php echo home_url('formularios-acolhesus'); ?>">&lt;&lt;Voltar para todos os formulários</a>
     <hr>
 
 	<?php include_once( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?>

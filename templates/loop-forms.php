@@ -2,11 +2,20 @@
         <thead>
         <tr>
             <th> Campo de Atuação </th>
+			
+			<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+				<th> Fase </th>
+				<th> Eixo </th>
+			<?php endif; ?>
+			
+			
 			<th> Nome </th>
 			
 			<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
 	            <th> Data Criação </th>
 	            <th> Autor </th>
+				<th> Fase </th>
+				<th> Eixo </th>
 			<?php endif; ?>
 
             <th> Status </th>
@@ -28,6 +37,12 @@
 							<?php echo get_post_meta($entry_id, "acolhesus_campo")[0];  ?>
 						</strong> 
 					</td>
+					
+					<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_fase', true); ?> </td>
+						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_eixo', true); ?> </td>
+					<?php endif; ?>
+					
 					<td>
                         <a href="<?php the_permalink(); ?>">
                             <?php the_title( '<h3 class="panel-title">', '</h3>' ); ?>
@@ -37,6 +52,8 @@
 					<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
 						<td> <?php the_time( 'd/m/Y - G:i:s'); ?> </td>
 	                    <td> <a href="<?php echo get_author_posts_url($author_id); ?>"><?php echo get_the_author(); ?></a> </td>
+						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_fase', true); ?> </td>
+						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_eixo', true); ?> </td>
 					<?php endif; ?>
 
                     <td> <?php $AcolheSUS->render_entry_status($entry_id); ?> </td>

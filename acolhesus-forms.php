@@ -105,7 +105,7 @@ class AcolheSUS {
 
         add_action('template_redirect', array(&$this, 'can_user_view_form'));
 
-        add_action('wp_ajax_acolhesus_save_post_campo', array(&$this, 'ajax_callback_save_post_campo'));
+        add_action('wp_ajax_acolhesus_save_post_basic_info', array(&$this, 'ajax_callback_save_post_basic_info'));
 
         add_action('wp_ajax_acolhesus_add_form_entry', array(&$this, 'ajax_callback_add_form_entry'));
 
@@ -217,7 +217,7 @@ class AcolheSUS {
 
         if (isset($this->forms[$formType])) {
             if ( true !== $this->forms[$formType]['uma_entrada_por_campo'] ) {
-                $form .= $this->get_basic_campo_form();
+                $form .= $this->get_basic_info_form();
             }
         }
 
@@ -251,11 +251,13 @@ class AcolheSUS {
         }
     }
 
-    private function get_basic_campo_form() {
+    private function get_basic_info_form() {
         global $post;
         
         $camposDoUsuario = $this->get_user_campos();
         $campoAtual = get_post_meta($post->ID, 'acolhesus_campo', true);
+        $faseAtual = get_post_meta($post->ID, 'acolhesus_fase', true);
+        $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);
 
         $options = '';
 
@@ -267,15 +269,40 @@ class AcolheSUS {
 
         $title = '<h2>Campo de atuação</h2>';
 
-        return "$title<select id='acolhesus_campo_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select>";
+        $camposHtml = "$title<select id='acolhesus_campo_selector' class='acolhesus_basic_info_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select>";
+		
+		$options = '';
+		foreach ($this->fases as $fase) {
+            $options .= "<option value='$fase'";
+            $options .= selected($faseAtual, $fase, false);
+            $options .= ">$fase</option>\n";
+        }
+		
+		$title = '<h2>Fase</h2>';
 
+        $faseHtml = "$title<select id='acolhesus_fase_selector' class='acolhesus_basic_info_selector' name='acolhesus_fase' data-post_id='{$post->ID}'>$options</select>";
+		
+		$options = '';
+		foreach ($this->eixos as $eixo) {
+            $options .= "<option value='$eixo'";
+            $options .= selected($eixoAtual, $eixo, false);
+            $options .= ">$eixo</option>\n";
+        }
+		
+		$title = '<h2>Eixo</h2>';
+
+        $eixoHtml = "$title<select id='acolhesus_eixo_selector' class='acolhesus_basic_info_selector' name='acolhesus_eixo' data-post_id='{$post->ID}'>$options</select>";
+		
+		return $camposHtml . $faseHtml . $eixoHtml;
 
     }
 
-    function ajax_callback_save_post_campo() {
+    function ajax_callback_save_post_basic_info() {
         
         if (isset($_POST['acolhesus_campo']) && $_POST['post_id']) {
             update_post_meta($_POST['post_id'], 'acolhesus_campo', $_POST['acolhesus_campo']);
+            update_post_meta($_POST['post_id'], 'acolhesus_fase', $_POST['acolhesus_fase']);
+            update_post_meta($_POST['post_id'], 'acolhesus_eixo', $_POST['acolhesus_eixo']);
         }
 
         die;
