@@ -250,45 +250,57 @@ class AcolheSUS {
             add_filter('caldera_forms_render_form_wrapper_classes', array(&$this, 'acolhesus_readonly_classes'), 20);
         }
     }
-
+	
+	function get_campos_do_usuario_as_options($selected = '') {
+		$camposDoUsuario = $this->get_user_campos();
+		$options = '';
+		foreach ($camposDoUsuario as $campo) {
+            $options .= "<option value='$campo'";
+            $options .= selected($selected, $campo, false);
+            $options .= ">$campo</option>\n";
+        }
+		return $options;
+	}
+	
+	function get_eixos_as_options($selected = '') {
+		$options = '';
+		foreach ($this->eixos as $eixo) {
+            $options .= "<option value='$eixo'";
+            $options .= selected($selected, $eixo, false);
+            $options .= ">$eixo</option>\n";
+        }
+		return $options;
+	}
+	function get_fases_as_options($selected = '') {
+		$options = '';
+		foreach ($this->fases as $fase) {
+            $options .= "<option value='$fase'";
+            $options .= selected($selected, $fase, false);
+            $options .= ">$fase</option>\n";
+        }
+		return $options;
+	}
+	
     private function get_basic_info_form() {
         global $post;
         
-        $camposDoUsuario = $this->get_user_campos();
+        
         $campoAtual = get_post_meta($post->ID, 'acolhesus_campo', true);
         $faseAtual = get_post_meta($post->ID, 'acolhesus_fase', true);
         $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);
 
-        $options = '';
-
-        foreach ($camposDoUsuario as $campo) {
-            $options .= "<option value='$campo'";
-            $options .= selected($campoAtual, $campo, false);
-            $options .= ">$campo</option>\n";
-        }
+        $options = $this->get_campos_do_usuario_as_options($campoAtual);
 
         $title = '<h2>Campo de atuação</h2>';
 
         $camposHtml = "$title<select id='acolhesus_campo_selector' class='acolhesus_basic_info_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select>";
 		
-		$options = '';
-		foreach ($this->fases as $fase) {
-            $options .= "<option value='$fase'";
-            $options .= selected($faseAtual, $fase, false);
-            $options .= ">$fase</option>\n";
-        }
-		
+		$options = $this->get_fases_as_options($faseAtual);
 		$title = '<h2>Fase</h2>';
 
         $faseHtml = "$title<select id='acolhesus_fase_selector' class='acolhesus_basic_info_selector' name='acolhesus_fase' data-post_id='{$post->ID}'>$options</select>";
 		
-		$options = '';
-		foreach ($this->eixos as $eixo) {
-            $options .= "<option value='$eixo'";
-            $options .= selected($eixoAtual, $eixo, false);
-            $options .= ">$eixo</option>\n";
-        }
-		
+		$options = $this->get_eixos_as_options($eixoAtual);
 		$title = '<h2>Eixo</h2>';
 
         $eixoHtml = "$title<select id='acolhesus_eixo_selector' class='acolhesus_basic_info_selector' name='acolhesus_eixo' data-post_id='{$post->ID}'>$options</select>";
@@ -487,16 +499,44 @@ class AcolheSUS {
         if (!is_admin()) {
             if ( isset($query->query['post_type']) && array_key_exists($query->query['post_type'], $this->forms) ) {
 
-                $_campos_user = $this->get_user_campos();
-
+                $camposDoUsuario = $this->get_user_campos();
+				
+				$meta_query = [];
+				
+				if (isset($_GET['campo']) && !empty($_GET['campo'])) {
+					$meta_query[] = [
+						'key' => 'acolhesus_campo',
+						'value' => $_GET['campo'],
+					];
+				} else {
+					$meta_query[] = [
+						'key' => 'acolhesus_campo',
+						'value' => $camposDoUsuario,
+						'compare' => 'IN'
+					];
+				}
+				
+				if (isset($_GET['eixo']) && !empty($_GET['eixo'])) {
+					$meta_query[] = [
+						'key' => 'acolhesus_eixo',
+						'value' => $_GET['eixo'],
+					];
+				}
+				
+				if (isset($_GET['fase']) && !empty($_GET['fase'])) {
+					$meta_query[] = [
+						'key' => 'acolhesus_fase',
+						'value' => $_GET['fase'],
+					];
+				}
+				
+				if (isset($_GET['usuario']) && !empty($_GET['usuario'])) {
+					$query->set( 'author', $_GET['usuario'] );
+				}
+				
                 $query->set( 'posts_per_page', -1 );
-                $_posts_do_campo_do_user = [[
-                        'key' => 'acolhesus_campo',
-                        'value' => $_campos_user,
-                        'compare' => 'IN'
-                    ]];
 
-                $query->set('meta_query', $_posts_do_campo_do_user);
+                $query->set('meta_query', $meta_query);
 
                 return;
             }

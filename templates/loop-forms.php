@@ -51,7 +51,7 @@
                     
 					<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
 						<td> <?php the_time( 'd/m/Y - G:i:s'); ?> </td>
-	                    <td> <a href="<?php echo get_author_posts_url($author_id); ?>"><?php echo get_the_author(); ?></a> </td>
+	                    <td> <a href="<?php echo home_url('formularios-acolhesus/?usuario=' . $author_id); ?>"><?php echo get_the_author(); ?></a> </td>
 						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_fase', true); ?> </td>
 						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_eixo', true); ?> </td>
 					<?php endif; ?>
