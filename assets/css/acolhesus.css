@@ -57,9 +57,9 @@
 
 .entry-status {
   float: right;
-  margin-right: 10px; }
-  .entry-status a {
-    color: white; }
+  color: white;
+  margin-right: 10px;
+  width: 50%; }
 
 .lista-geral .form-title a {
   float: left;

@@ -580,9 +580,9 @@ class AcolheSUS {
             $_attrs['status'] = "Abrir";
         endif;
 
-        $_html  = "<button id='entry-$entry_id' class='entry-status btn btn-default btn-" . $_attrs['class'] . "'>";
-        $_html .= "<a class='toggle_lock_form_entries' data-status='". $_attrs['status'] ."'  data-id='" . $entry_id . "' data-txt='" . $title . "' href='#'>";
-        $_html .= $_attrs['status'] . " edição </a> </button>" ;
+        $_html  = "<a id='entry-$entry_id' class='toggle_lock_form_entries entry-status btn btn-default btn-" . $_attrs['class'] . "'";
+        $_html .= "data-status='". $_attrs['status'] ."'  data-id='" . $entry_id . "' data-txt='" . $title . "' href='#'>";
+        $_html .= $_attrs['status'] . " edição </a>" ;
 
         echo $_html;
     }

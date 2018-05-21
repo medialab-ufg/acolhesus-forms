@@ -44,12 +44,6 @@ jQuery( function( $ ) {
             },
             function(isConfirm) {
             if(entry.id && entry.status && isConfirm) {
-
-                var previous = {
-                   class: $(".status" + entry.id + " span").attr('class'),
-                   txt: $(".status" + entry.id + " span").text(),
-                };
-
                 var data = {
                     action: 'toggle_lock_single_form',
                     form_id: entry.id
@@ -68,8 +62,9 @@ jQuery( function( $ ) {
     function toggleEntryStatus(_id, new_data) {
         if(new_data.status && new_data.button) {
             $(".status-" + _id + " span").attr('class', new_data.status.class).text(new_data.status.status);
-            $("button#entry-" + _id).removeClass().addClass('entry-status btn btn-'+new_data.button.class);
-            $("button#entry-" + _id + ' a').text(new_data.button.text + " edição").attr('data-status', new_data.button.text);
+            $("a#entry-" + _id).removeClass()
+                .addClass('toggle_lock_form_entries entry-status btn btn-'+new_data.button.class)
+                .text(new_data.button.text + " edição").attr('data-status', new_data.button.text);
         }
     }
 
