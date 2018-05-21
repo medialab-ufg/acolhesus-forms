@@ -208,11 +208,19 @@ class AcolheSUS {
 
     function filter_the_content($content) {
         global $post;
+        $formType = get_post_type();
 
-        $this->render_locked_form($post->ID);
+        if (is_single()) {
+            if (!$this->can_user_see($formType)) {
+                echo "<div class='user-cant-see'> Sem permissão para ver as respostas de " . get_the_title() . "</div>";
+
+                return;
+            }
+
+            $this->render_locked_form($post->ID, $formType);
+        }
 
         $saved_form_id = get_post_meta($post->ID, '_entry_id', true);
-        $formType = get_post_type();
         $form = "";
 
         if (isset($this->forms[$formType])) {
@@ -244,8 +252,8 @@ class AcolheSUS {
         return get_post_meta($entry_id, "locked", true);
     }
 
-    private function render_locked_form($form_id) {
-        if ($this->is_entry_locked($form_id)) {
+    private function render_locked_form($form_id, $post_type) {
+        if ($this->is_entry_locked($form_id) || !$this->can_user_edit($post_type) ) {
             add_filter('caldera_forms_field_attributes', array(&$this, 'set_acolhesus_readonly'), 20, 3);
             add_filter('caldera_forms_render_form_wrapper_classes', array(&$this, 'acolhesus_readonly_classes'), 20);
         }
@@ -475,6 +483,9 @@ class AcolheSUS {
     function can_user_view_form() {
         if ($this->isAcolheSusPage()) {
             if (current_user_can('view_acolhesus')) {
+                if (is_single()) {
+                    return $this->can_user_see(get_post_type());
+                }
                 return true;
             } else {
                 wp_redirect(home_url());
@@ -493,6 +504,18 @@ class AcolheSUS {
             return ! $this->forms[$post_type]['uma_entrada_por_campo'];
         }
         return false;
+    }
+
+    public function can_user_see($post_type) {
+        $_see_perm = "ver_".$post_type;
+
+        return in_array($_see_perm, $this->get_user_forms_perms());
+    }
+
+    public function can_user_edit($post_type) {
+        $_edit_perm = "editar_".$post_type;
+
+        return in_array($_edit_perm, $this->get_user_forms_perms());
     }
 
     function return_all_user_entries($query) {
@@ -550,7 +573,7 @@ class AcolheSUS {
         return get_user_meta($userID, 'acolhesus_campos');
     }
 
-    public function get_user_forms_perms($userID) {
+    public function get_user_forms_perms($userID = null) {
         if (is_null($userID))
             $userID = get_current_user_id();
 
