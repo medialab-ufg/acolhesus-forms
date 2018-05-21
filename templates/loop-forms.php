@@ -7,15 +7,12 @@
 				<th> Fase </th>
 				<th> Eixo </th>
 			<?php endif; ?>
-			
-			
+
 			<th> Nome </th>
 			
 			<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
 	            <th> Data Criação </th>
 	            <th> Autor </th>
-				<th> Fase </th>
-				<th> Eixo </th>
 			<?php endif; ?>
 
             <th> Status </th>
@@ -52,8 +49,6 @@
 					<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
 						<td> <?php the_time( 'd/m/Y - G:i:s'); ?> </td>
 	                    <td> <a href="<?php echo home_url('formularios-acolhesus/?usuario=' . $author_id); ?>"><?php echo get_the_author(); ?></a> </td>
-						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_fase', true); ?> </td>
-						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_eixo', true); ?> </td>
 					<?php endif; ?>
 
                     <td> <?php $AcolheSUS->render_entry_status($entry_id); ?> </td>
