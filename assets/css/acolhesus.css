@@ -5,6 +5,10 @@
   background-color: #fff;
   border: 1px solid #ccc;
   margin-bottom: 20px; }
+.acolhesus-form-container .list-entries {
+  color: white;
+  float: right;
+  background: #003c46; }
 .acolhesus-form-container .caldera-grid .form-group {
   margin-bottom: 20px;
   padding: 2px; }
