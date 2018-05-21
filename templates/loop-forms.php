@@ -66,7 +66,7 @@
 
     <?php
     if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)) { ?>
-        <div class="col-md-12">
+        <div class="col-md-12 add-entry">
             <p>
                 <input type="hidden" id="new_post_type" name="new_post_type" value="<?php echo $current_acolhesus_formtype; ?>">
                 <button class="btn btn-info" id="add_acolhesus_entry">Nova resposta de <?php echo post_type_archive_title(); ?> </button>

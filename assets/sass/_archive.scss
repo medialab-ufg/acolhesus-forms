@@ -34,13 +34,17 @@
     font-size: 12px;
     color: $light_green;
   }
+  .add-entry {
+    margin-bottom: 40px;
+    border-bottom: 1px solid $light_gray;
+  }
 } // .acolhesus-form-container
 
 .entry-status {
   float: right;
   color: white;
   margin-right: 10px;
-  width: 50%;
+  min-width: 50%;
 }
 
 .lista-geral {
