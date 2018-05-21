@@ -37,7 +37,7 @@ $form = $AcolheSUS->forms[$current_acolhesus_formtype];
         <?php endif;
         */ ?>
     </h1>
-	<a href="<?php echo home_url('formularios-acolhesus'); ?>">&lt;&lt;Voltar para todos os formulários</a>
+	<a class="list-forms" href="<?php echo home_url('formularios-acolhesus'); ?>">&lt;&lt; Voltar para todos os formulários</a>
     <hr>
 
 	<?php include_once( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?>

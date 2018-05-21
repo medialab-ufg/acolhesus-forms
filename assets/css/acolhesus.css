@@ -44,13 +44,16 @@
   .acolhesus-form-container .lista-geral h3 a {
     color: #003c46;
     font-size: 20px; }
-  .acolhesus-form-container .lista-geral h1.list-title {
-    text-align: center;
-    color: black; }
   .acolhesus-form-container table .open {
     color: #0b7a6f; }
   .acolhesus-form-container table .closed {
     color: darkred; }
+  .acolhesus-form-container h1.list-title {
+    text-align: center;
+    color: black !important; }
+  .acolhesus-form-container .list-forms {
+    font-size: 12px;
+    color: #00b4b4; }
 
 .entry-status {
   float: right;
