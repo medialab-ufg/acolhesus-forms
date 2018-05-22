@@ -37,24 +37,24 @@
 
         <?php
         foreach ($AcolheSUS->forms as $formName => $formAtts):
-        
-			// Essa query é modificada pelo pre_get_posts que tem na classe principal do plugin
-			$wp_query = new WP_Query([
-	            'post_type' => $formName,
-	            'post_status' => 'publish',
-	            'posts_per_page' => -1,
-	        ]);
-			
-			?>
-			<h3 class="form-title">
-				<a href="<?php echo get_post_type_archive_link($formName); ?>"> <?php echo $formAtts['labels']['name']; ?> </a>
-	            
-			</h3>
-			<?php 
-			global $current_acolhesus_formtype; $current_acolhesus_formtype = $formName;
-			include( plugin_dir_path( __FILE__ ) . "loop-forms.php");
-			echo "<hr>";
-	    endforeach;
+            if ($AcolheSUS->can_user_see($formName)):
+                global $current_acolhesus_formtype;
+                $current_acolhesus_formtype = $formName;
+
+                // Essa query é modificada pelo pre_get_posts que tem na classe principal do plugin
+                $wp_query = new WP_Query([
+                    'post_type' => $formName,
+                    'post_status' => 'publish',
+                    'posts_per_page' => -1,
+                ]);
+        ?>
+                <h3 class="form-title">
+                    <a href="<?php echo get_post_type_archive_link($formName); ?>"> <?php echo $formAtts['labels']['name']; ?> </a>
+                </h3>
+			<?php
+                include( plugin_dir_path( __FILE__ ) . "loop-forms.php");
+            endif;
+        endforeach;
     ?>
     </div>
 <?php endif; ?>
