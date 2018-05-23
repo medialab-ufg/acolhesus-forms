@@ -233,9 +233,6 @@ class AcolheSUS {
             }
         }
 
-        $content .= "Fase " . $this->forms[$formType]['fase'];
-        $content .= "Eixo " . $this->forms[$formType]['eixo'];
-
         if (array_key_exists($post->post_type, $this->forms)) {
 
             $caldera_plugin = get_class_methods(Caldera_Forms::class );
