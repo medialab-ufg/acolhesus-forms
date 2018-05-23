@@ -177,7 +177,10 @@ class AcolheSUS {
                 'has_archive' => true,
                 'rewrite' => array('slug' => $form['slug']),
                 'capability_type' => 'post',
-                'menu_position' => 20
+                'menu_position' => 20,
+                'supports' => [
+                    'comments'
+                ]
             ));
 
         }

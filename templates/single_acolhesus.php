@@ -15,6 +15,16 @@
 
     <hr>
     <?php the_content(); ?>
+
+    <?php if ( comments_open() || get_comments_number()) : ?>
+        <div class="panel panel-default hidden-print">
+            <h2>Diligências</h2>
+            <div class="panel-footer panel-comentarios">
+                <?php comments_template(); ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
 </div>
 
 <?php include_once( get_theme_file_path('footer-full.php') ); ?>
