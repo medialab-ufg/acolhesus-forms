@@ -48,17 +48,18 @@ class AcolheSUS {
     ];
 
     public $fases = [
-        '|',
-        '||',
-        '|||',
+        '| - Análise Situacional',
+        '|| - Elaboração do Plano de Intervenção',
+        '||| - Monitoramento da Implementação do Plano de Trabalho',
         'Macrogestão'
     ];
 
     public $eixos = [
-        'Diagnóstico Situacional',
-        'Elaboração do Plano de Intervenção',
-        'Monitoramento da Implementação do Plano de Intervenção',
-        'Macrogestão'
+        'Acolhimento',
+        'Qualificação Profissional',
+        'Gestão de Processos de Trabalho',
+        'Organização do Cuidado',
+        'Ambiência'
     ];
 
     public $forms = [
@@ -78,7 +79,7 @@ class AcolheSUS {
                 'name' => 'Avaliações dos Grupos',
                 'singular_name' => 'Atuação do Grupo'
             ],
-            'slug' => 'avaliacao_grupo',
+            'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
             'fase' => 0
 
