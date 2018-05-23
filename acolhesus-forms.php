@@ -581,11 +581,11 @@ class AcolheSUS {
     }
 
     public function get_logo_URL() {
-        return ACOLHESUS_URL . 'assets/images/logo.png';
+        return ACOLHESUS_URL . 'assets/images/logo-full.png';
     }
 
     public function get_title() {
-        return 'Política Nacional de Humanização - Formulários Acolhe SUS';
+        return 'Plataforma de Gestão AcolheSUS';
     }
 
     public function render_logo() {
