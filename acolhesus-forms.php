@@ -82,7 +82,16 @@ class AcolheSUS {
             'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
             'fase' => 0
-
+        ],
+        'relatorio_oficina' => [
+            'labels' => [
+                'name' => 'Relatórios das Oficinas',
+                'singular_name' => 'Relatório da Oficina'
+            ],
+            'slug' => 'relatorio_oficina',
+            'uma_entrada_por_campo' => false,
+            'fase' => 0,
+            'eixo' => 0,
         ]
     ];
     
@@ -126,6 +135,8 @@ class AcolheSUS {
         $this->forms['matriz_cenario']['eixo'] = $this->eixos[0];
         $this->forms['avaliacao_grupos']['fase'] = $this->fases[0];
         $this->forms['avaliacao_grupos']['eixo'] = $this->eixos[0];
+        $this->forms['relatorio_oficina']['fase'] = $this->fases[0];
+        $this->forms['relatorio_oficina']['eixo'] = $this->eixos[0];
     }
 
     function init_default_data() {
