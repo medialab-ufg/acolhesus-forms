@@ -229,7 +229,7 @@ class AcolheSUS {
 
         if (isset($this->forms[$formType])) {
             if ( true !== $this->forms[$formType]['uma_entrada_por_campo'] ) {
-                $form .= $this->get_basic_info_form();
+                $form .= "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form() . "</div>";
             }
         }
 
@@ -300,19 +300,19 @@ class AcolheSUS {
 
         $options = $this->get_campos_do_usuario_as_options($campoAtual);
 
-        $title = '<h2>Campo de atuação</h2>';
+        $title = '<div class="col-md-4"> <h3>Campo de atuação</h3>';
 
-        $camposHtml = "$title<select id='acolhesus_campo_selector' class='acolhesus_basic_info_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select>";
+        $camposHtml = "$title<select id='acolhesus_campo_selector' class='acolhesus_basic_info_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select></div>";
 		
 		$options = $this->get_fases_as_options($faseAtual);
-		$title = '<h2>Fase</h2>';
+		$title = '<div class="col-md-4"> <h3>Fase</h3>';
 
-        $faseHtml = "$title<select id='acolhesus_fase_selector' class='acolhesus_basic_info_selector' name='acolhesus_fase' data-post_id='{$post->ID}'>$options</select>";
+        $faseHtml = "$title<select id='acolhesus_fase_selector' class='acolhesus_basic_info_selector' name='acolhesus_fase' data-post_id='{$post->ID}'>$options</select></div>";
 		
 		$options = $this->get_eixos_as_options($eixoAtual);
-		$title = '<h2>Eixo</h2>';
+		$title = '<div class="col-md-4"> <h3>Eixo</h3>';
 
-        $eixoHtml = "$title<select id='acolhesus_eixo_selector' class='acolhesus_basic_info_selector' name='acolhesus_eixo' data-post_id='{$post->ID}'>$options</select>";
+        $eixoHtml = "$title<select id='acolhesus_eixo_selector' class='acolhesus_basic_info_selector' name='acolhesus_eixo' data-post_id='{$post->ID}'>$options</select></div>";
 		
 		return $camposHtml . $faseHtml . $eixoHtml;
 

@@ -1,10 +1,15 @@
 .acolhesus-form-container .acolhesus_basic_info_selector, .acolhesus-form-container .acolhesus_filter_forms {
-  width: 48%;
+  width: 100%;
   height: 34px;
   padding: 6px 12px;
   background-color: #fff;
   border: 1px solid #ccc;
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  font-size: 14px; }
+.acolhesus-form-container .fixed-meta {
+  padding: 0; }
+  .acolhesus-form-container .fixed-meta div:first-child {
+    padding-left: 0; }
 .acolhesus-form-container .acolhesus_filter_forms {
   width: auto !important; }
 .acolhesus-form-container .list-entries {
