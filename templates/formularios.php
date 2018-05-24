@@ -29,7 +29,7 @@
 						<option value="">Todos os eixos</option>
 						<?php echo $AcolheSUS->get_eixos_as_options( isset($_GET['eixo']) ? $_GET['eixo'] : '' ); ?>
 					</select>
-					<input type="submit" value="Filtrar" />
+					<input class="btn btn-default" type="submit" value="Filtrar" />
 				</form>
 			</div>
 		</div>

@@ -1,10 +1,12 @@
-.acolhesus-form-container .acolhesus_basic_info_selector {
+.acolhesus-form-container .acolhesus_basic_info_selector, .acolhesus-form-container .acolhesus_filter_forms {
   width: 48%;
   height: 34px;
   padding: 6px 12px;
   background-color: #fff;
   border: 1px solid #ccc;
   margin-bottom: 20px; }
+.acolhesus-form-container .acolhesus_filter_forms {
+  width: auto !important; }
 .acolhesus-form-container .list-entries {
   color: white;
   float: right;
