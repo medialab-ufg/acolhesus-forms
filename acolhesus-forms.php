@@ -83,6 +83,15 @@ class AcolheSUS {
             'uma_entrada_por_campo' => false,
             'fase' => 0
         ],
+        'avaliacao_oficina' => [
+            'labels' => [
+                'name' => 'Avaliação de Oficinas Locais',
+                'singular_name' => 'Avaliação da Oficina'
+            ],
+            'slug' => 'avaliacao_oficina',
+            'uma_entrada_por_campo' => false,
+            'fase' => 0
+        ],
         'relatorio_oficina' => [
             'labels' => [
                 'name' => 'Relatórios das Oficinas',
