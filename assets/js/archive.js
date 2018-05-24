@@ -1,9 +1,12 @@
 jQuery( function( $ ) {
     $('.add_acolhesus_entry').click(function() {
+        var post_title = $.trim($(this).text());
+        var post_type  = $(this).attr('data-postType');
+
         var data = {
-            title: $('.add_acolhesus_entry').text(),
+            title: post_title,
             action: 'acolhesus_add_form_entry',
-            type: $('#new_post_type').val()
+            type: post_type
         };
         $.post(acolhesus.ajax_url, data).success(function(res) {
             var r = JSON.parse(res);
