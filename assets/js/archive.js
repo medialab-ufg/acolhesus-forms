@@ -1,7 +1,7 @@
 jQuery( function( $ ) {
-    $('#add_acolhesus_entry').click(function() {
+    $('.add_acolhesus_entry').click(function() {
         var data = {
-            title: $('#add_acolhesus_entry').text(),
+            title: $('.add_acolhesus_entry').text(),
             action: 'acolhesus_add_form_entry',
             type: $('#new_post_type').val()
         };
