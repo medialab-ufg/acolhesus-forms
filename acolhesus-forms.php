@@ -354,17 +354,17 @@ class AcolheSUS {
 
         $options = $this->get_campos_do_usuario_as_options($campoAtual);
 
-        $title = '<div class="col-md-4"> <h3>Campo de atuação</h3>';
+        $title = '<div class="col-md-4"> Campo de atuação';
 
         $camposHtml = "$title<select id='acolhesus_campo_selector' $attr class='acolhesus_basic_info_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select></div>";
 		
 		$options = $this->get_fases_as_options($faseAtual);
-		$title = '<div class="col-md-4"> <h3>Fase</h3>';
+		$title = '<div class="col-md-4"> Fase';
 
         $faseHtml = "$title<select id='acolhesus_fase_selector' $attr class='acolhesus_basic_info_selector' name='acolhesus_fase' data-post_id='{$post->ID}'>$options</select></div>";
 		
 		$options = $this->get_eixos_as_options($eixoAtual);
-		$title = '<div class="col-md-4"> <h3>Eixo</h3>';
+		$title = '<div class="col-md-4"> Eixo';
 
         $eixoHtml = "$title<select id='acolhesus_eixo_selector' $attr class='acolhesus_basic_info_selector' name='acolhesus_eixo' data-post_id='{$post->ID}'>$options</select></div>";
 		
