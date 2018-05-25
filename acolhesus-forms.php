@@ -112,22 +112,22 @@ class AcolheSUS {
             'fase' => 0,
             'eixo' => 0,
         ],
-        'matriz_pontos_criticos' => [
+        'matriz_p_criticos' => [
             'labels' => [
                 'name' => 'Matrizes de Pontos Críticos',
                 'singular_name' => 'Matriz de Pontos Críticos'
             ],
-            'slug' => 'matriz_pontos_criticos',
+            'slug' => 'matriz_p_criticos',
             'uma_entrada_por_campo' => true,
             'fase' => 0,
             'eixo' => 0
         ],
-        'matriz_objetivos_atividades' => [
+        'matriz_objetivos' => [
             'labels' => [
                 'name' => 'Matrizes de Objetivos e Atividades',
                 'singular_name' => 'Matriz de Objetivos e Atividades'
             ],
-            'slug' => 'matriz_objetivos_atividades',
+            'slug' => 'matriz_objetivos',
             'uma_entrada_por_campo' => true,
             'fase' => 0,
             'eixo' => 0
