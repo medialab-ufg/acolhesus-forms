@@ -10,6 +10,11 @@
     font-size: 14px;
   }
 
+  .acolhesus_basic_info_selector:disabled {
+    background: #eee;
+    cursor: not-allowed;
+  }
+
   .fixed-meta {
     padding: 0;
 

@@ -6,6 +6,9 @@
   border: 1px solid #ccc;
   margin-bottom: 20px;
   font-size: 14px; }
+.acolhesus-form-container .acolhesus_basic_info_selector:disabled {
+  background: #eee;
+  cursor: not-allowed; }
 .acolhesus-form-container .fixed-meta {
   padding: 0; }
   .acolhesus-form-container .fixed-meta div:first-child {

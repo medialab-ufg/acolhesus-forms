@@ -136,7 +136,7 @@ class AcolheSUS {
 
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
 
-        $this->set_forms_phases();
+        // $this->set_forms_phases(); // useless for now
     }
 
     private function set_forms_phases() {
@@ -249,7 +249,8 @@ class AcolheSUS {
 
         if (isset($this->forms[$formType])) {
             if ( true !== $this->forms[$formType]['uma_entrada_por_campo'] ) {
-                $form .= "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form() . "</div>";
+                $is_locked = $this->is_entry_locked($post->ID);
+                $form .= "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
             }
         }
 
@@ -310,10 +311,11 @@ class AcolheSUS {
 		return $options;
 	}
 	
-    private function get_basic_info_form() {
+    private function get_basic_info_form($is_locked = false) {
         global $post;
         
-        
+        $attr = ($is_locked) ? "disabled='disabled'": '';
+
         $campoAtual = get_post_meta($post->ID, 'acolhesus_campo', true);
         $faseAtual = get_post_meta($post->ID, 'acolhesus_fase', true);
         $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);
@@ -322,17 +324,17 @@ class AcolheSUS {
 
         $title = '<div class="col-md-4"> <h3>Campo de atuação</h3>';
 
-        $camposHtml = "$title<select id='acolhesus_campo_selector' class='acolhesus_basic_info_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select></div>";
+        $camposHtml = "$title<select id='acolhesus_campo_selector' $attr class='acolhesus_basic_info_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select></div>";
 		
 		$options = $this->get_fases_as_options($faseAtual);
 		$title = '<div class="col-md-4"> <h3>Fase</h3>';
 
-        $faseHtml = "$title<select id='acolhesus_fase_selector' class='acolhesus_basic_info_selector' name='acolhesus_fase' data-post_id='{$post->ID}'>$options</select></div>";
+        $faseHtml = "$title<select id='acolhesus_fase_selector' $attr class='acolhesus_basic_info_selector' name='acolhesus_fase' data-post_id='{$post->ID}'>$options</select></div>";
 		
 		$options = $this->get_eixos_as_options($eixoAtual);
 		$title = '<div class="col-md-4"> <h3>Eixo</h3>';
 
-        $eixoHtml = "$title<select id='acolhesus_eixo_selector' class='acolhesus_basic_info_selector' name='acolhesus_eixo' data-post_id='{$post->ID}'>$options</select></div>";
+        $eixoHtml = "$title<select id='acolhesus_eixo_selector' $attr class='acolhesus_basic_info_selector' name='acolhesus_eixo' data-post_id='{$post->ID}'>$options</select></div>";
 		
 		return $camposHtml . $faseHtml . $eixoHtml;
 
