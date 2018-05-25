@@ -65,8 +65,8 @@ class AcolheSUS {
     public $forms = [
         'matriz_cenario' => [
             'labels' => [
-                'name' => 'Matriz de Cenário',
-                'singular_name' => 'Formulário de Matriz de Cenário'
+                'name' => 'Matrizes de Cenário',
+                'singular_name' => 'Matriz de Cenário'
             ],
             'form_id' => '', // Setado via admin
             'slug' => 'matriz_cenario',
@@ -101,7 +101,38 @@ class AcolheSUS {
             'uma_entrada_por_campo' => false,
             'fase' => 0,
             'eixo' => 0,
-        ]
+        ],
+        'memoria_reuniao' => [
+            'labels' => [
+                'name' => 'Memória de Reuniões',
+                'singular_name' => 'Memória de Reunião'
+            ],
+            'slug' => 'memoria_reuniao',
+            'uma_entrada_por_campo' => false,
+            'fase' => 0,
+            'eixo' => 0,
+        ],
+        'matriz_pontos_criticos' => [
+            'labels' => [
+                'name' => 'Matrizes de Pontos Críticos',
+                'singular_name' => 'Matriz de Pontos Críticos'
+            ],
+            'slug' => 'matriz_pontos_criticos',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => 0
+        ],
+        'matriz_objetivos_atividades' => [
+            'labels' => [
+                'name' => 'Matrizes de Objetivos e Atividades',
+                'singular_name' => 'Matriz de Objetivos e Atividades'
+            ],
+            'slug' => 'matriz_objetivos_atividades',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => 0
+        ],
+        
     ];
     
     function __construct() {
@@ -200,7 +231,8 @@ class AcolheSUS {
                 'menu_position' => 20,
                 'supports' => [
                     'comments'
-                ]
+                ],
+                'show_ui' => false,
             ));
 
         }
