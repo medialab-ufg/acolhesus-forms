@@ -682,3 +682,4 @@ global $AcolheSUS;
 $AcolheSUS = new AcolheSUS();
 
 include('admin-forms.php');
+include('logger.php');
