@@ -266,7 +266,7 @@ class AcolheSUS {
         global $post;
         $formType = get_post_type();
 
-        if (is_single()) {
+        if (is_single() && $this->isAcolheSusPage()) {
             if (!$this->can_user_see($formType)) {
                 echo "<div class='user-cant-see'> Sem permissão para ver as respostas de " . get_the_title() . "</div>";
 
