@@ -35,13 +35,13 @@ jQuery( function( $ ) {
             txt:    $(this).attr('data-txt')
         };
 
-        var msg = entry.status + ' a edição para ' +  entry.txt + ' ?';
-        var class_map = {'Fechar': 'danger', 'Abrir': 'info'};
+        var msg = entry.status + ' ' +  entry.txt + ' ?';
+        var class_map = {'Validar formulário': 'danger', 'Abrir edição': 'info'};
 
         swal({ title: msg,
                 showCancelButton: true,
                 confirmButtonClass: "btn-" + class_map[entry.status],
-                confirmButtonText: entry.status + " edição",
+                confirmButtonText: entry.status,
                 cancelButtonText: "Cancelar",
                 closeOnConfirm: true
             },
@@ -67,7 +67,7 @@ jQuery( function( $ ) {
             $(".status-" + _id + " span").attr('class', new_data.status.class).text(new_data.status.status);
             $("a#entry-" + _id).removeClass()
                 .addClass('toggle_lock_form_entries entry-status btn btn-'+new_data.button.class)
-                .text(new_data.button.text + " edição").attr('data-status', new_data.button.text);
+                .text(new_data.button.text).attr('data-status', new_data.button.text);
         }
     }
 

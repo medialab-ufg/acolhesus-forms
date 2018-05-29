@@ -424,13 +424,13 @@ class AcolheSUS {
 
     private function get_entry_strings($id) {
         $status = ['status' => 'Aberto', 'class' => 'open'];
-        $button = ['text' => 'Fechar', 'class' => 'danger'];;
+        $button = ['text' => 'Validar formulário', 'class' => 'danger'];;
 
         if($this->is_entry_locked($id)) {
             $status['status'] = 'Fechado';
             $status['class'] = 'closed';
 
-            $button['text'] = 'Abrir';
+            $button['text'] = 'Abrir edição';
             $button['class'] = 'info';
         }
 
@@ -651,27 +651,24 @@ class AcolheSUS {
     }
 
     public function render_entry_action($entry_id, $title) {
-        $_attrs = ["class" => "danger", "title" => $title, "status" => "Fechar"];
-
-        if ($this->is_entry_locked($entry_id)):
-            $_attrs['class'] = "info";
-            $_attrs['status'] = "Abrir";
-        endif;
+        $strings = $this->get_entry_strings($entry_id);
+        $_attrs = [
+            "class" => $strings['button']['class'],
+            "title" => $title,
+            "status" => $strings['button']['text']
+        ];        
 
         $_html  = "<a id='entry-$entry_id' class='toggle_lock_form_entries entry-status btn btn-default btn-" . $_attrs['class'] . "'";
         $_html .= "data-status='". $_attrs['status'] ."'  data-id='" . $entry_id . "' data-txt='" . $title . "' href='#'>";
-        $_html .= $_attrs['status'] . " edição </a>" ;
+        $_html .= $_attrs['status'] . "</a>" ;
 
         echo $_html;
     }
 
     public function render_entry_status($entry_id) {
-        $class = "open";
-        $status = "Aberto";
-        if ($this->is_entry_locked($entry_id)) {
-            $class = "closed";
-            $status = "Fechado";
-        }
+        $strings = $this->get_entry_strings($entry_id);
+        $class = $strings['status']['class'];
+        $status = $strings['status']['status'];
 
         echo "<div class='status-$entry_id'><span class='$class'> $status </span></div>";
     }
