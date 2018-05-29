@@ -239,29 +239,6 @@ class AcolheSUS {
 
     }
 
-    function set_acolhesus_readonly($attrs, $field, $form) {
-        $_readonly_fields = ["text", "textarea", "number", "hidden", "paragraph"];
-        $field_type = Caldera_Forms_Field_Util::get_type($field, $form);
-
-        if (in_array($field_type, $_readonly_fields)) {
-            $attrs['readonly'] = 'readonly';
-        } else if ($field_type === "dropdown") {
-            $attrs['disabled'] = 'disabled';
-        }
-
-        if (empty($attrs["value"]) && ("text" === $field_type || "paragraph" === $field_type)) {
-            $attrs["value"] = "--------";
-        }
-
-        return $attrs;
-    }
-
-    function acolhesus_readonly_classes($wrapper_classes) {
-        $wrapper_classes[] = "acolhesus-readonly";
-
-        return $wrapper_classes;
-    }
-
     function filter_the_content($content) {
         global $post;
         $formType = get_post_type();
@@ -310,7 +287,51 @@ class AcolheSUS {
         if ($this->is_entry_locked($form_id) || !$this->can_user_edit($post_type) ) {
             add_filter('caldera_forms_field_attributes', array(&$this, 'set_acolhesus_readonly'), 20, 3);
             add_filter('caldera_forms_render_form_wrapper_classes', array(&$this, 'acolhesus_readonly_classes'), 20);
+            add_filter('caldera_forms_render_get_field', array(&$this, 'acolhesus_readonly_field'));
         }
+    }
+
+    function set_acolhesus_readonly($attrs, $field, $form) {
+        $_readonly_fields = ["text", "textarea", "number", "hidden", "paragraph"];
+        $field_type = Caldera_Forms_Field_Util::get_type($field, $form);
+
+        if (in_array($field_type, $_readonly_fields)) {
+            $attrs['readonly'] = 'readonly';
+        } else if ($field_type === "dropdown") {
+            $attrs['disabled'] = 'disabled';
+        }
+
+        if (empty($attrs["value"]) && ("text" === $field_type || "paragraph" === $field_type)) {
+            $attrs["value"] = "--------";
+        }
+
+        return $attrs;
+    }
+
+    function acolhesus_readonly_classes($wrapper_classes) {
+        $wrapper_classes[] = "acolhesus-readonly";
+
+        return $wrapper_classes;
+    }
+
+    function acolhesus_readonly_field($field) {
+        if ('toggle_switch' == $field['type']) {
+            $_field_val = $field['config']['default'];
+            $answer = Caldera_Forms_Field_Util::find_select_field_value( $field, $_field_val );
+
+            if (is_null($answer))
+                return;
+
+            $field['config']['default_option'] = $answer;
+            $field['config']['selected_class'] = 'acolhesus_readonly';
+            foreach ($field['config']['option'] as $_opt_id => $_opt_val ) {
+                if ($_opt_val['calc_value'] != $field['config']['default_option']) {
+                    unset( $field['config']['option'][$_opt_id] );
+                }
+            }
+        }
+
+        return $field;
     }
 	
 	function get_campos_do_usuario_as_options($selected = '') {

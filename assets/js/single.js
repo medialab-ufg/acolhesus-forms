@@ -12,6 +12,12 @@ jQuery( function( $ ) {
     $('.acolhesus-form-container .acolhesus-readonly input[type=\'submit\']').remove();
     $('.acolhesus-form-container .acolhesus-readonly :radio').attr('disabled', true);
 
+    $('.acolhesus-readonly a.acolhesus_readonly').each( function(id, e) {
+        var answer = $(this).text();
+        $(this).replaceWith(answer);
+    });
+    // $('.acolhesus-readonly a.btn-default').remove();
+
     if ( $('.user-cant-see').length > 0 ) {
         $('.acolhesus-form-container h3').remove();
         $('.acolhesus-form-container hr').remove();
