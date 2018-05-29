@@ -403,6 +403,7 @@ class AcolheSUS {
         if (current_user_can('acolhesus_cgpnh')) {
             $key = 'acolhesus_' . sanitize_text_field($_POST['type']);
             update_option($key, 'locked');
+            do_action('acolhesus_lock_form', $key);
         } else {
             echo json_encode(['error' => 'Usuário não habilitado para fechar a edição de usuários']);
         }
@@ -417,6 +418,7 @@ class AcolheSUS {
                 'success' => "Formulário $estado para edição!",
                 'list' => $this->get_entry_strings($_id)
             ]);
+            do_action('acolhesus_toggle_lock_entry', $_id, !$toggle);
         }
 
         wp_die();

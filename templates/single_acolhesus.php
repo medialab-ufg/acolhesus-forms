@@ -25,6 +25,35 @@
         </div>
     <?php endif; ?>
 
+    <div class="panel hidden-print">
+        <h3>Histórico</h3>
+        <div class="panel-footer panel-comentarios">
+            <?php 
+            $logs = get_comments([
+                'include_unapproved' => true,
+                'type' => 'acolhesus_log',
+                'post_id' => get_the_ID()
+            ]);
+
+            ?>
+
+            <?php foreach ($logs as $log): ?>
+
+                <div class="acolhesus-log">
+                
+                    <?php echo date('d/m/Y H:i', strtotime($log->comment_date)); ?>: 
+
+                    <?php echo $log->comment_content; ?>
+                
+                </div>
+
+            <?php endforeach; ?>
+            
+            
+        
+        </div>
+    </div>
+
 </div>
 
 <?php include_once( get_theme_file_path('footer-full.php') ); ?>

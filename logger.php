@@ -4,6 +4,7 @@ class AcolheSUSLogger {
 
     public $edit_session = '';
     public $edit_session_action = '';
+    public $comment_type = 'acolhesus_log';
 
     public function __construct() {
 
@@ -14,6 +15,10 @@ class AcolheSUSLogger {
 
         add_action('caldera_forms_submit_complete', [&$this, 'save_entry_begin'], 1, 4);
         add_action('caldera_forms_submit_complete', [&$this, 'save_entry_end'], 99, 4);
+
+        add_action('acolhesus_toggle_lock_entry', [&$this, 'log_toggle_lock_entry'], 10, 2);
+
+        add_action( 'pre_get_comments', [&$this, 'filter_comment_type']);
         
     }
     
@@ -44,7 +49,7 @@ class AcolheSUSLogger {
         }
         $message = $this->edit_session;
         
-        //$this->log($post_id, $action, $message);
+        $this->log($post_id, $action, $message);
     }
 
     function save_field($entry, $field, $form, $entry_id) {
@@ -60,6 +65,20 @@ class AcolheSUSLogger {
         return $newdata;
     }
 
+    function log_toggle_lock_entry($entry_id, $state) {
+        $estado = $state ? "fechou" : "abriu";
+        $this->log($entry_id, $estado . ' este formulário para edição', '');
+    }
+
+    function filter_comment_type($query) {
+        if ( $query->query_vars['type'] !== $this->comment_type ) {
+            $query->query_vars['type__not_in'] = array_merge(
+                (array) $query->query_vars['type__not_in'],
+                array($this->comment_type)
+            );
+         }
+    }
+
 
 
     function log($post_id, $action, $message, $user_id = null) {
@@ -72,13 +91,15 @@ class AcolheSUSLogger {
 
         $content = $user->display_name . ' ' . $action . '<br/><br/>';
 
-        $comment_id = wp_new_comment( [
+        $comment_id = wp_insert_comment( [
             'comment_post_ID' => $post_id,
             'user_id' => $user_id,
             'comment_content' => $content . $message,
             'comment_author' => $user->display_name,
             'comment_author_url' => $user->user_url,
-            'comment_author_email' => $user->user_email
+            'comment_author_email' => $user->user_email,
+            'comment_type' => $this->comment_type,
+            'comment_approved' => 0,
         ] );
         
 
