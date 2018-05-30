@@ -29,7 +29,7 @@ class AcolheSUSAdminForm {
 	public function add_admin_menu() {
 
 		add_menu_page(
-			esc_html__( 'AcolheSUS', 'acolhesus-rhs' ),
+			esc_html__( 'Configuração dos Formulários AcolheSUS', 'acolhesus-rhs' ),
 			esc_html__( 'Opções AcolheSUS', 'acolhesus-rhs' ),
 			'manage_options',
 			'acolhesus-config',
@@ -92,19 +92,21 @@ class AcolheSUSAdminForm {
         global $AcolheSUS;
 
         $registered_forms = Caldera_Forms::get_forms();
-        foreach($registered_forms as $f) {
-            echo  '<strong>', $f['name'] . '</strong> (' . $f['ID'] . ') | ';
-        }
-
-        echo "<hr/>";
-
         if(is_array($registered_forms) && count($registered_forms) > 0 ) {
             $forms = $AcolheSUS->forms;
 
-            $form_ids = $this->get_acolhesus_option('form_ids');
-
             foreach ($forms as $formName => $form) {
-                echo $formName, ' <input type="text" name="acolhesus[form_ids][', $formName, ']" value="', $form['form_id'], '" /><br/><br/>';
+                echo $form['labels']['name'] . " ";
+                $f_name = "acolhesus[form_ids][$formName]";
+                echo "<select name='$f_name'><option></option>";
+                foreach($registered_forms as $f) {
+                    $id = $f['ID'];
+                    $nome = $f['name'];
+                    $selected = ($form['form_id'] == $id) ? "selected" : "";
+
+                    echo  "<option value='$id' $selected> $nome </option>";
+                }
+                echo "</select><br/>";
             }
         }
     }
