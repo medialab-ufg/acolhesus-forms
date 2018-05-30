@@ -1,4 +1,5 @@
 .acolhesus-form-container {
+  @include send-form();
 
   .acolhesus_basic_info_selector, .acolhesus_filter_forms {
     width: 100%;
