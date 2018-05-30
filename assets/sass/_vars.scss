@@ -5,7 +5,20 @@ $light_green: #00b4b4;
 $light_gray: #f2f3f5;
 
 @mixin send-form() {
-  input[type='submit'] {
+  .single input[type='submit'] {
+
+    background: $light_green;
+    border-color: $green;
+    float: right;
+    color: white;
+    //width: 36%;
+    //float: none;
+    //text-transform: uppercase;
+    // padding: 15px 0;
+    border-bottom: 2px solid black;
+    border-left: 1px solid black;
+
+    /*
     width: 100%;
     text-transform: uppercase;
     padding: 15px 0;
@@ -25,10 +38,11 @@ $light_gray: #f2f3f5;
     font-size: 20px;
     border: solid #0a767a 3px;
     text-decoration: none;
+    */
 
     &:hover {
-      color: white;
-      border: aliceblue;
+      //color: white;
+      //border: aliceblue;
       background: #0a686b;
       background-image: -webkit-linear-gradient(top, #0a686b, #34d9d1);
       background-image: -moz-linear-gradient(top, #0a686b, #34d9d1);

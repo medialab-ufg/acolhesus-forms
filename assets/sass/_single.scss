@@ -1,5 +1,5 @@
 .acolhesus-form-container {
-  // @include send-form();
+  @include send-form();
 
   .acolhesus_basic_info_selector, .acolhesus_filter_forms {
     width: 100%;
@@ -68,6 +68,12 @@
   .user-cant-see {
     text-align: center;
   }
+
+  button.cf-uploader-trigger {
+    border: 1px solid;
+    background: $light_gray;
+  }
+
 } // .acolhesus-form-container
 
 .single .acolhesus-form-container {
