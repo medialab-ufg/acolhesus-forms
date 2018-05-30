@@ -1,4 +1,7 @@
 jQuery( function( $ ) {
+    var no_edit = '.acolhesus-readonly';
+    var base = '.acolhesus-form-container';
+
     $('.acolhesus_basic_info_selector').change(function() {
         $.post(acolhesus.ajax_url, {
             action: 'acolhesus_save_post_basic_info',
@@ -9,17 +12,41 @@ jQuery( function( $ ) {
         })
     }).change();
 
-    $('.acolhesus-form-container .acolhesus-readonly input[type=\'submit\']').remove();
-    $('.acolhesus-form-container .acolhesus-readonly :radio').attr('disabled', true);
-
-    $('.acolhesus-readonly a.acolhesus_readonly').each( function(id, e) {
+    $(base + ' ' + no_edit + ' input[type=\'submit\']').remove();
+    $(no_edit + ' :radio').attr('disabled', true);
+    $(no_edit + ' :checkbox').attr('disabled', true);
+    $(no_edit + ' a.acolhesus_readonly').each( function(id, e) {
         var answer = $(this).text();
         $(this).replaceWith(answer);
     });
-    // $('.acolhesus-readonly a.btn-default').remove();
+    $(no_edit + ' .is-cfdatepicker').each( function(id, e) {
+        var date = $(this).val();
+        $(this).replaceWith(date);
+    });
 
-    if ( $('.user-cant-see').length > 0 ) {
-        $('.acolhesus-form-container h3').remove();
-        $('.acolhesus-form-container hr').remove();
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            var new_elements = mutation.addedNodes;
+            if (!new_elements)
+                return;
+
+            for (var i = 0; i < new_elements.length; i++) {
+                var _el = new_elements[i];
+                if ('trumbowyg-button-pane' === $(_el).attr('class')) {
+                    $(_el).remove();
+                    $(no_edit + ' .trumbowyg-editor').attr('contenteditable', false);
+                }
+            }
+        });
+    }).observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: false,
+        characterData: false
+    });
+
+    if ($('.user-cant-see').length > 0) {
+        $(base + ' h3').remove();
+        $(base + ' hr').remove();
     }
 });
