@@ -13,7 +13,6 @@
         <?php endif; ?>
     </h3>
 
-    <hr>
     <?php the_content(); ?>
 
     <div id="form-accordion">
