@@ -34,14 +34,19 @@
                     'type' => 'acolhesus_log',
                     'post_id' => get_the_ID()
                 ]);
-                ?>
 
-                <?php foreach ($logs as $log): ?>
-                    <div class="acolhesus-log">
-                        <?php echo '<strong>' . date('d/m/Y H:i', strtotime($log->comment_date)) . '</strong>'; ?>:
-                        <?php echo $log->comment_content; ?>
-                    </div>
-                <?php endforeach; ?>
+                if (count($logs) <= 0) {
+                    echo "<center> Formulário ainda sem dados no histórico. </center>";
+                } else {
+                    foreach ($logs as $log): ?>
+                        <div class="acolhesus-log">
+                            <?php echo '<strong>' . date('d/m/Y H:i', strtotime($log->comment_date)) . '</strong>'; ?>:
+                            <?php echo $log->comment_content; ?>
+                        </div>
+                    <?php
+                    endforeach;
+                }
+                ?>
             </div>
         </div>
     </div>
