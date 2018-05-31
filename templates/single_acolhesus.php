@@ -16,43 +16,36 @@
     <hr>
     <?php the_content(); ?>
 
-    <?php if ( comments_open() || get_comments_number()) : ?>
+    <div id="form-accordion">
+
+        <?php if ( comments_open() || get_comments_number()) : ?>
+            <h3> Diligências </h3>
+            <div class="panel hidden-print">
+                <div class="panel-footer panel-comentarios"> <?php comments_template(); ?> </div>
+            </div>
+        <?php endif; ?>
+
+        <h3> Histórico </h3>
         <div class="panel hidden-print">
-            <h3>Diligências</h3>
             <div class="panel-footer panel-comentarios">
-                <?php comments_template(); ?>
+                <?php
+                $logs = get_comments([
+                    'include_unapproved' => true,
+                    'type' => 'acolhesus_log',
+                    'post_id' => get_the_ID()
+                ]);
+                ?>
+
+                <?php foreach ($logs as $log): ?>
+                    <div class="acolhesus-log">
+                        <?php echo '<strong>' . date('d/m/Y H:i', strtotime($log->comment_date)) . '</strong>'; ?>:
+                        <?php echo $log->comment_content; ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
-    <?php endif; ?>
-
-    <div class="panel hidden-print">
-        <h3>Histórico</h3>
-        <div class="panel-footer panel-comentarios">
-            <?php 
-            $logs = get_comments([
-                'include_unapproved' => true,
-                'type' => 'acolhesus_log',
-                'post_id' => get_the_ID()
-            ]);
-
-            ?>
-
-            <?php foreach ($logs as $log): ?>
-
-                <div class="acolhesus-log">
-                
-                    <?php echo date('d/m/Y H:i', strtotime($log->comment_date)); ?>: 
-
-                    <?php echo $log->comment_content; ?>
-                
-                </div>
-
-            <?php endforeach; ?>
-            
-            
-        
-        </div>
     </div>
+
 
 </div>
 

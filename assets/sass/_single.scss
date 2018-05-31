@@ -84,4 +84,19 @@
     border-bottom: 1px solid $dark_green;
     padding-bottom: 15px;
   }
+
+  #form-accordion {
+    margin-top: 30px;
+
+    h3 {
+      padding: 15px 30px;
+      margin: 0;
+      background: $dark_green;
+      color: white;
+      font-size: 18px;
+    }
+    .ui-accordion-content {
+      padding: 0 !important;
+    }
+  }
 }

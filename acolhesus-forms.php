@@ -498,7 +498,9 @@ class AcolheSUS {
         if ( $type && array_key_exists($type, $this->forms)  || !empty(get_query_var('acolhe_sus')) ) {
 
             if (is_single()) {
-                wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js');
+                wp_enqueue_script('jquery-ui-accordion', null, array('jquery'), null, false);
+                wp_enqueue_script('rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js', array('jquery', 'jquery-ui-accordion'));
+
             } else if ( is_archive() || !empty(get_query_var('acolhe_sus')) ) {
                 wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/archive.js');
             }

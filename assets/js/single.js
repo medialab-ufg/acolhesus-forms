@@ -52,4 +52,22 @@ jQuery( function( $ ) {
         $(base + ' h3').remove();
         $(base + ' hr').remove();
     }
+
+    var accordion = '#form-accordion';
+    var icons = {
+        header: "ui-icon-circle-arrow-e",
+        activeHeader: "ui-icon-circle-arrow-s"
+    };
+    $(accordion).accordion({
+        icons: icons,
+        collapsible: true,
+        active: false
+    });
+    $("#toggle").button().on("click", function() {
+        if ($(accordion).accordion( "option", "icons")) {
+            $(accordion).accordion( "option", "icons", null);
+        } else {
+            $(accordion).accordion( "option", "icons", icons);
+        }
+    });
 });
