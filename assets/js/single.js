@@ -61,7 +61,8 @@ jQuery( function( $ ) {
     $(accordion).accordion({
         icons: icons,
         collapsible: true,
-        active: false
+        active: false,
+        heightStyle: "content"
     });
     $("#toggle").button().on("click", function() {
         if ($(accordion).accordion( "option", "icons")) {
