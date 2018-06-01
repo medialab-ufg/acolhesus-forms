@@ -15,6 +15,7 @@ jQuery( function( $ ) {
 
     if(cant_edit) {
         $(base + ' ' + no_edit + ' input[type=\'submit\']').remove();
+        $(base + ' ' + no_edit + ' button.cf-uploader-trigger').remove();
         $(no_edit + ' :radio').attr('disabled', true);
         $(no_edit + ' :checkbox').attr('disabled', true);
         $(no_edit + ' a.acolhesus_readonly').each( function(id, e) {
