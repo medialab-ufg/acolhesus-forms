@@ -49,8 +49,8 @@ class AcolheSUS {
 
     public $fases = [
         '| - Análise Situacional',
-        '|| - Elaboração do Plano de Intervenção',
-        '||| - Monitoramento da Implementação do Plano de Trabalho',
+        '|| - Elaboração e Modelização do Plano de Trabalho',
+        '||| - Implementação, Monitoramento e Avaliação',
         'Macrogestão'
     ];
 
