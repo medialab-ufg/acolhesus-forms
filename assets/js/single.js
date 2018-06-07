@@ -20,13 +20,11 @@ jQuery( function( $ ) {
                 acolhesus_eixo: $('#acolhesus_eixo_selector').val(),
                 post_id: $('#acolhesus_campo_selector').data('post_id')
             }).success(function (r) {
+                $(self).find("option[value='']").remove();
                 $(self).removeClass('required-acolhesus');
                 $($field_msg).hide();
             });
         }
-    }).click(function() {
-        // Remove opção vazia assim que usuário escolhe fase/eixo
-        $(this).find("option[value='']").remove();
     });
 
     $('form').submit(function (e) {
