@@ -11,7 +11,7 @@ $_possui_diligencias = !in_array($post_type, $_sem_diligencias);
         <?php the_title(); ?>
 
         <?php if (get_post_meta(get_the_ID(), 'locked', true)): ?>
-            <span style="color: red; font-style: italic; font-size: 10px"> preenchimento encerrado </span>
+            <span class="closed-form"> preenchimento encerrado </span>
         <?php endif; ?>
 
         <?php if (current_user_can('acolhesus_cgpnh')): ?>

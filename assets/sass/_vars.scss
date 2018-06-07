@@ -4,6 +4,16 @@ $dark_green: #003c46;
 $light_green: #00b4b4;
 $light_gray: #f2f3f5;
 
+$error_red: #a94442;
+$error_bg: #F2DEDE;
+
+@mixin error_select() {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  border-color: $error_red;
+  background: $error_bg;
+}
+
 @mixin send-form() {
   .single input[type='submit'] {
 

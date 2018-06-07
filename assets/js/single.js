@@ -4,14 +4,36 @@ jQuery( function( $ ) {
     var cant_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
 
     $('.acolhesus_basic_info_selector').change(function() {
-        $.post(acolhesus.ajax_url, {
-            action: 'acolhesus_save_post_basic_info',
-            acolhesus_campo: $('#acolhesus_campo_selector').val(),
-            acolhesus_fase: $('#acolhesus_fase_selector').val(),
-            acolhesus_eixo: $('#acolhesus_eixo_selector').val(),
-            post_id: $('#acolhesus_campo_selector').data('post_id')
-        })
-    }).change();
+        var opt_val = $(this).val();
+        var field = $(this).attr('name');
+        var $field_msg = '.' + field + " .fixed";
+
+        if ((0 === opt_val.length) && ("" === opt_val)) {
+            $(this).addClass('required-acolhesus');
+            $($field_msg).show();
+        } else {
+            var self = this;
+            $.post(acolhesus.ajax_url, {
+                action: 'acolhesus_save_post_basic_info',
+                acolhesus_campo: $('#acolhesus_campo_selector').val(),
+                acolhesus_fase: $('#acolhesus_fase_selector').val(),
+                acolhesus_eixo: $('#acolhesus_eixo_selector').val(),
+                post_id: $('#acolhesus_campo_selector').data('post_id')
+            }).success(function (r) {
+                $(self).removeClass('required-acolhesus');
+                $($field_msg).hide();
+            });
+        }
+    }).click(function() {
+        // Remove opção vazia assim que usuário escolhe fase/eixo
+        $(this).find("option[value='']").remove();
+    });
+
+    $('form').submit(function (e) {
+        $('.acolhesus_basic_info_selector').change();
+        e.preventDefault();
+        return false;
+    });
 
     if(cant_edit) {
         $(base + ' ' + no_edit + ' input[type=\'submit\']').remove();

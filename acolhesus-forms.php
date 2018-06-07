@@ -346,7 +346,7 @@ class AcolheSUS {
 	}
 	
 	function get_eixos_as_options($selected = '') {
-		$options = '';
+        $options = "<option value=''></option>";
 		foreach ($this->eixos as $eixo) {
             $options .= "<option value='$eixo'";
             $options .= selected($selected, $eixo, false);
@@ -355,7 +355,7 @@ class AcolheSUS {
 		return $options;
 	}
 	function get_fases_as_options($selected = '') {
-		$options = '';
+		$options = "<option value=''></option>";
 		foreach ($this->fases as $fase) {
             $options .= "<option value='$fase'";
             $options .= selected($selected, $fase, false);
@@ -367,38 +367,50 @@ class AcolheSUS {
     private function get_basic_info_form($is_locked = false) {
         global $post;
         
-        $attr = ($is_locked) ? "disabled='disabled'": '';
+        $attr  = ($is_locked) ? "disabled='disabled'": '';
+        $attr .= " required";
 
         $campoAtual = get_post_meta($post->ID, 'acolhesus_campo', true);
         $faseAtual = get_post_meta($post->ID, 'acolhesus_fase', true);
         $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);
 
         $options = $this->get_campos_do_usuario_as_options($campoAtual);
+        $camposHtml = $this->get_fixed_select("Campo de atuação", "acolhesus_campo", $attr, $post->ID, $options);
 
-        $title = '<div class="col-md-4"> Campo de atuação';
-
-        $camposHtml = "$title<select id='acolhesus_campo_selector' $attr class='acolhesus_basic_info_selector' name='acolhesus_campo' data-post_id='{$post->ID}'>$options</select></div>";
-		
 		$options = $this->get_fases_as_options($faseAtual);
-		$title = '<div class="col-md-4"> Fase';
-
-        $faseHtml = "$title<select id='acolhesus_fase_selector' $attr class='acolhesus_basic_info_selector' name='acolhesus_fase' data-post_id='{$post->ID}'>$options</select></div>";
+        $faseHtml = $this->get_fixed_select("Fase", "acolhesus_fase", $attr, $post->ID, $options);
 		
 		$options = $this->get_eixos_as_options($eixoAtual);
-		$title = '<div class="col-md-4"> Eixo';
+        $eixoHtml = $this->get_fixed_select("Eixo", "acolhesus_eixo", $attr, $post->ID, $options);
 
-        $eixoHtml = "$title<select id='acolhesus_eixo_selector' $attr class='acolhesus_basic_info_selector' name='acolhesus_eixo' data-post_id='{$post->ID}'>$options</select></div>";
-		
 		return $camposHtml . $faseHtml . $eixoHtml;
 
     }
 
+    private function get_fixed_select($title, $name, $attr, $post_id, $options=[]) {
+        $id = $name . "_selector";
+        $html  = "<div class='col-md-4 $name'> $title <span class='field_required'>*</span>";
+        $html .= "<select id='$id' $attr class='acolhesus_basic_info_selector' name='$name' data-post_id='$post_id'>";
+        $html .= $options . " </select>";
+        if (in_array($name, ["acolhesus_eixo","acolhesus_fase"]))
+            $html .= $this->required_field();
+        $html .= "</div>";
+
+        return $html;
+    }
+
+    private function required_field() {
+        return "<div class='fixed field_required'> Campo obrigatório!</div>";
+    }
+
     function ajax_callback_save_post_basic_info() {
-        
+        $_all_required_fields = isset($_POST['acolhesus_campo']) && !empty($_POST['acolhesus_fase']) && !empty($_POST['acolhesus_eixo']);
         if (isset($_POST['acolhesus_campo']) && $_POST['post_id']) {
             update_post_meta($_POST['post_id'], 'acolhesus_campo', $_POST['acolhesus_campo']);
             update_post_meta($_POST['post_id'], 'acolhesus_fase', $_POST['acolhesus_fase']);
             update_post_meta($_POST['post_id'], 'acolhesus_eixo', $_POST['acolhesus_eixo']);
+        } else{
+            echo json_encode(['error' => 'Campos obrigatórios não enviados!']);
         }
 
         die;
