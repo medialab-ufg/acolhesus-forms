@@ -47,6 +47,36 @@ class AcolheSUS {
         'TO'
     ];
 
+    public $campos_completos = [
+        'AC' => 'AC - Rio Branco - Hospital de Urgência e Emergência',
+        'AL' => 'AL - Arapiraca - Hospital de Emergência Dr. Daniel Houly',
+        'AM' => 'AM - Manaus - Hospital Dr. João Lúcio Pereira Machado',
+        'AP' => 'AP - Macapá - Hospital Dr. Oswaldo Cruz',
+        'BA' => 'BA - Salvador - Hospital Geral do Estado',
+        'CE' => 'CE - Fortaleza - Hospital São José',
+        'DF' => 'DF - Brasília - Regional Macro Centro-Norte - APS',
+        'ES' => 'ES',
+        'GO' => 'GO - Cristalina - Hospital Municipal de Cristalina Chaud Salles',
+        'MA' => 'MA - São Luís - UPA Itaqui Bacana',
+        'MG' => 'MG - Juiz de Fora - Hospital Regional Dr. João Penido',
+        'MS' => 'MS - Campo Grande - Hospital Regional de Mato Grosso do Sul',
+        'MT' => 'MT - Várzea Grande - Hospital e Pronto Socorre Municipal de Várzea Grande',
+        'PA' => 'PA - Belém - CAPS Renascer',
+        'PB' => 'PB - João Pessoa - Maternidade Frei Damião',
+        'PE' => 'PE',
+        'PI' => 'PI - Parnaíba - Hospital Estadual Dirceu Arcoverde',
+        'PR' => 'PR',
+        'RJ' => 'RJ - Duque de Caxias - Hospital Estadual Adão Pereira Nunes',
+        'RN' => 'RN - Natal - Hospital José Pedro Bezerra',
+        'RO' => 'RO',
+        'RR' => 'RR - Boa Vista - Pronto Atendimento Airton Rocha',
+        'RS' => 'RS',
+        'SC' => 'SC - São José - Hospital Regional de São José Dr. Homero Miranda',
+        'SE' => 'SE',
+        'SP' => 'SP',
+        'TO' => 'TO - Palmas - Hospital Geral de Palmas'
+    ];
+
     public $fases = [
         '| - Análise Situacional',
         '|| - Elaboração e Modelização do Plano de Trabalho',
@@ -338,9 +368,11 @@ class AcolheSUS {
 		$camposDoUsuario = $this->get_user_campos();
 		$options = '';
 		foreach ($camposDoUsuario as $campo) {
+            $campo_completo = $this->campos_completos[$campo];
+
             $options .= "<option value='$campo'";
             $options .= selected($selected, $campo, false);
-            $options .= ">$campo</option>\n";
+            $options .= "> $campo_completo </option>\n";
         }
 		return $options;
 	}
