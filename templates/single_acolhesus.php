@@ -1,5 +1,11 @@
 <?php include_once( get_theme_file_path('header-full.php') ); ?>
 
+<?php
+$post_type = get_post_type();
+$_sem_diligencias = ["avaliacao_grupos", "avaliacao_oficina"];
+$_possui_diligencias = !in_array($post_type, $_sem_diligencias);
+?>
+
 <div class="acolhesus-form-container">
     <h3>
         <?php the_title(); ?>
@@ -9,7 +15,7 @@
         <?php endif; ?>
 
         <?php if (current_user_can('acolhesus_cgpnh')): ?>
-            <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link(get_post_type()); ?>"> VER TODAS RESPOSTAS </a>
+            <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODAS RESPOSTAS </a>
         <?php endif; ?>
     </h3>
 
@@ -17,7 +23,7 @@
 
     <div id="form-accordion">
 
-        <?php if ( comments_open() || get_comments_number()) : ?>
+        <?php if ($_possui_diligencias && (comments_open() || get_comments_number()) ) : ?>
             <h3> Diligências </h3>
             <div class="panel hidden-print">
                 <div class="panel-footer panel-comentarios"> <?php comments_template(); ?> </div>
