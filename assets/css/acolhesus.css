@@ -77,6 +77,8 @@
   padding: 3px 8px !important; }
 .acolhesus-form-container .caldera-grid .radio {
   width: 100% !important; }
+  .acolhesus-form-container .caldera-grid .radio input {
+    opacity: 1 !important; }
 .acolhesus-form-container .user-cant-see {
   text-align: center; }
 .acolhesus-form-container button.cf-uploader-trigger {

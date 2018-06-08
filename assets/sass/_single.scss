@@ -71,6 +71,9 @@
 
     .radio {
       width: 100% !important;
+      input {
+        opacity: 1 !important;
+      }
     }
 
   } // .caldera-grid
