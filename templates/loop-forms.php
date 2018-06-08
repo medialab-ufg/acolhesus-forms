@@ -65,15 +65,20 @@
     </table>
 
     <?php
-    if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)) { ?>
-        <div class="col-md-12 add-entry">
-            <p>
-                <button class="add_acolhesus_entry btn btn-info" data-postType="<?php echo $current_acolhesus_formtype; ?>">
-                    Nova resposta de <?php echo post_type_archive_title(); ?>
-                </button>
-            </p>
-        </div>
+    if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)) {
+        $post_type_data = get_post_type_object($current_acolhesus_formtype);
+        if(is_object($post_type_data)) {
+            $f_name = $post_type_data->labels->singular_name;
+        ?>
+            <div class="col-md-12 add-entry">
+                <p>
+                    <button class="add_acolhesus_entry btn btn-info" data-postType="<?php echo $current_acolhesus_formtype; ?>">
+                        Nova resposta de <?php echo $f_name ?>
+                    </button>
+                </p>
+            </div>
         <?php
+        }
     }
     ?>
 <hr>

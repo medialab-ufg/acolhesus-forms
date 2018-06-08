@@ -96,7 +96,7 @@ class AcolheSUS {
         'matriz_cenario' => [
             'labels' => [
                 'name' => 'Matrizes de Cenário',
-                'singular_name' => 'Matriz de Cenário'
+                'singular_name' => 'Matriz de Cenários'
             ],
             'form_id' => '', // Setado via admin
             'slug' => 'matriz_cenario',
@@ -107,7 +107,7 @@ class AcolheSUS {
         'avaliacao_grupos' => [
             'labels' => [
                 'name' => 'Avaliações dos Grupos',
-                'singular_name' => 'Atuação do Grupo'
+                'singular_name' => 'Avaliação da Atuação de Grupo do Projeto'
             ],
             'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
@@ -116,7 +116,7 @@ class AcolheSUS {
         'avaliacao_oficina' => [
             'labels' => [
                 'name' => 'Avaliação de Oficinas Locais',
-                'singular_name' => 'Avaliação da Oficina'
+                'singular_name' => 'Avaliação de Oficina Local'
             ],
             'slug' => 'avaliacao_oficina',
             'uma_entrada_por_campo' => false,
@@ -125,7 +125,7 @@ class AcolheSUS {
         'relatorio_oficina' => [
             'labels' => [
                 'name' => 'Relatórios das Oficinas',
-                'singular_name' => 'Relatório da Oficina'
+                'singular_name' => 'Relatório de Oficina'
             ],
             'slug' => 'relatorio_oficina',
             'uma_entrada_por_campo' => false,
@@ -135,7 +135,7 @@ class AcolheSUS {
         'memoria_reuniao' => [
             'labels' => [
                 'name' => 'Memória de Reuniões',
-                'singular_name' => 'Memória de Reunião'
+                'singular_name' => 'Memória de Reunião/Vídeo'
             ],
             'slug' => 'memoria_reuniao',
             'uma_entrada_por_campo' => false,
