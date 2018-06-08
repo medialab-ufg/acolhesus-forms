@@ -196,8 +196,6 @@ class AcolheSUS {
         add_action('wp_ajax_unlock_single_form', array(&$this, 'unlock_form_entries'));
 
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
-
-        // $this->set_forms_phases(); // useless for now
     }
 
     private function set_forms_phases() {
@@ -269,11 +267,21 @@ class AcolheSUS {
 
     }
 
+    function limit_paragraphs_input($attrs) {
+        $attrs[ 'maxlength' ] = 500;
+        return $attrs;
+    }
+
     function filter_the_content($content) {
         global $post;
         $formType = get_post_type();
 
         if (is_single() && $this->isAcolheSusPage()) {
+            $limit_paragraph = ["avaliacao_grupos", "avaliacao_oficina"];
+            if (in_array($formType, $limit_paragraph)) {
+                add_filter('caldera_forms_field_attributes-paragraph', array(&$this, 'limit_paragraphs_input'));
+            }
+
             if (!$this->can_user_see($formType)) {
                 echo "<div class='user-cant-see'> Sem permissão para ver as respostas de " . get_the_title() . "</div>";
 
