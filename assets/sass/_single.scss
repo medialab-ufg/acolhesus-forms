@@ -93,6 +93,10 @@
     @include error_select();
   }
 
+  .caldera-grid .cf-multi-uploader-list>ul>li .file-type {
+    width: 100%;
+  }
+
   span.closed-form {
     color: red;
     font-style: italic;
