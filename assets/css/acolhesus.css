@@ -92,6 +92,9 @@
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     border-color: #a94442;
     background: #F2DEDE; }
+  .single .acolhesus-form-container .caldera-grid .alert.alert-success {
+    overflow: hidden;
+    text-align: center; }
   .single .acolhesus-form-container .caldera-grid .cf-multi-uploader-list > ul > li .file-type {
     width: 100%; }
   .single .acolhesus-form-container span.closed-form {

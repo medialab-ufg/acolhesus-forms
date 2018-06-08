@@ -96,8 +96,16 @@
     @include error_select();
   }
 
-  .caldera-grid .cf-multi-uploader-list>ul>li .file-type {
-    width: 100%;
+  .caldera-grid  {
+
+    .alert.alert-success {
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .cf-multi-uploader-list>ul>li .file-type {
+      width: 100%;
+    }
   }
 
   span.closed-form {
