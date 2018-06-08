@@ -345,7 +345,9 @@ class AcolheSUS {
     }
 
     function acolhesus_readonly_field($field) {
-        if ('toggle_switch' == $field['type']) {
+        if ('filtered_select2' === $field['type']) {
+            $field['config']['custom_class'] .= 'acolhesus_readonly_s2';
+        } else if ('toggle_switch' == $field['type']) {
             $_field_val = $field['config']['default'];
             $answer = Caldera_Forms_Field_Util::find_select_field_value( $field, $_field_val );
 

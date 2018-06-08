@@ -47,6 +47,12 @@ jQuery( function( $ ) {
             $(this).replaceWith(date);
         });
 
+        var select2_el_id = "#" + $(no_edit + ' .acolhesus_readonly_s2 select').attr('id');
+        setTimeout(
+         function() {
+             $(select2_el_id).select2('readonly', true);
+         },100);
+
         var observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 var new_elements = mutation.addedNodes;
