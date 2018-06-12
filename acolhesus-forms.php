@@ -164,6 +164,8 @@ class AcolheSUS {
         ],
         
     ];
+
+    const CAMPO_META = 'acolhesus_campo';
     
     function __construct() {
 
@@ -272,56 +274,78 @@ class AcolheSUS {
         return $attrs;
     }
 
+    private function limit_paragraphs($formType) {
+        $limit_paragraph = ["avaliacao_grupos", "avaliacao_oficina"];
+        if (in_array($formType, $limit_paragraph)) {
+            add_filter('caldera_forms_field_attributes-paragraph', array(&$this, 'limit_paragraphs_input'));
+        }
+    }
+
     function filter_the_content($content) {
         global $post;
         $formType = get_post_type();
+        $_post_id = $post->ID;
 
         if (is_single() && $this->isAcolheSusPage()) {
-            $limit_paragraph = ["avaliacao_grupos", "avaliacao_oficina"];
-            if (in_array($formType, $limit_paragraph)) {
-                add_filter('caldera_forms_field_attributes-paragraph', array(&$this, 'limit_paragraphs_input'));
-            }
 
-            if (!$this->can_user_see($formType)) {
-                echo "<div class='user-cant-see'> Sem permissão para ver as respostas de " . get_the_title() . "</div>";
-
+            if (!$this->user_can_not_view($formType, get_the_title()))
                 return;
-            }
 
-            $this->render_locked_form($post->ID, $formType);
-        }
+            $form = "<br>";
 
-        $saved_form_id = get_post_meta($post->ID, '_entry_id', true);
-        $form = "";
+            $this->lock_form($_post_id, $formType);
+            $this->limit_paragraphs($formType);
 
-        if (isset($this->forms[$formType])) {
-            if ( true !== $this->forms[$formType]['uma_entrada_por_campo'] ) {
-                $is_locked = $this->is_entry_locked($post->ID);
+            if (isset($this->forms[$formType]) && (true !== $this->forms[$formType]['uma_entrada_por_campo']) ) {
+                $is_locked = $this->is_entry_locked($_post_id);
                 $form .= "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
             }
+
+            $this->render_form_cities($_post_id, $formType);
+            $form .= $this->get_entry_form($_post_id, $formType);
+
+            return $content . $form;
         }
+    }
 
-        if (array_key_exists($post->post_type, $this->forms)) {
+    private function user_can_not_view($formType, $title) {
+        $is_allowed = $this->can_user_see($formType);
+        if (!$is_allowed)
+            echo "<div class='user-cant-see'> Sem permissão para ver as respostas de $title </div>";
 
-            $caldera_plugin = get_class_methods(Caldera_Forms::class );
+        return $is_allowed;
+    }
+
+    private function get_entry_form($_post_id, $formType) {
+        $_form = "";
+        if (array_key_exists($formType, $this->forms)) {
+            $caldera_plugin = get_class_methods(Caldera_Forms::class);
 
             if (is_array($caldera_plugin) && in_array("render_form", $caldera_plugin)) {
-
+                $saved_form_id = get_post_meta($_post_id, '_entry_id', true);
                 $entry_id = ($saved_form_id) ? $saved_form_id : null;
-                $form .= Caldera_Forms::render_form([
-                    'id' => $this->forms[$post->post_type]['form_id'], 
-                ], $entry_id);
+                $_form .= Caldera_Forms::render_form(['id' => $this->forms[$formType]['form_id']], $entry_id);
             }
         }
 
-        return $content . " <br>" . $form;
+        return $_form;
+    }
+
+
+    private function render_form_cities($id, $type='') {
+        if ("matriz_cenario" === $type) {
+            $uf = get_post_meta($id, self::CAMPO_META, true);
+            $uf_cities = UFMunicipio::get_cities_options($uf);
+            echo "<label for='municipios-matriz-cenario'>  Municípios de abrangência da unidade </label>";
+            echo "<select multiple name='municipios-matriz-cenario' class='matriz-cenario-cities form-controle'> $uf_cities </select>";
+        }
     }
 
     private function is_entry_locked($entry_id) {
         return get_post_meta($entry_id, "locked", true);
     }
 
-    private function render_locked_form($form_id, $post_type) {
+    private function lock_form($form_id, $post_type) {
         if ($this->is_entry_locked($form_id) || !$this->can_user_edit($post_type) ) {
             add_filter('caldera_forms_field_attributes', array(&$this, 'set_acolhesus_readonly'), 20, 3);
             add_filter('caldera_forms_render_form_wrapper_classes', array(&$this, 'acolhesus_readonly_classes'), 20);
@@ -412,7 +436,7 @@ class AcolheSUS {
         $attr  = ($is_locked) ? "disabled='disabled'": '';
         $attr .= " required";
 
-        $campoAtual = get_post_meta($post->ID, 'acolhesus_campo', true);
+        $campoAtual = get_post_meta($post->ID, self::CAMPO_META, true);
         $faseAtual = get_post_meta($post->ID, 'acolhesus_fase', true);
         $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);
 
@@ -426,7 +450,6 @@ class AcolheSUS {
         $eixoHtml = $this->get_fixed_select("Eixo", "acolhesus_eixo", $attr, $post->ID, $options);
 
 		return $camposHtml . $faseHtml . $eixoHtml;
-
     }
 
     private function get_fixed_select($title, $name, $attr, $post_id, $options=[]) {
@@ -448,7 +471,7 @@ class AcolheSUS {
     function ajax_callback_save_post_basic_info() {
         $_all_required_fields = isset($_POST['acolhesus_campo']) && !empty($_POST['acolhesus_fase']) && !empty($_POST['acolhesus_eixo']);
         if (isset($_POST['acolhesus_campo']) && $_POST['post_id']) {
-            update_post_meta($_POST['post_id'], 'acolhesus_campo', $_POST['acolhesus_campo']);
+            update_post_meta($_POST['post_id'], self::CAMPO_META, $_POST['acolhesus_campo']);
             update_post_meta($_POST['post_id'], 'acolhesus_fase', $_POST['acolhesus_fase']);
             update_post_meta($_POST['post_id'], 'acolhesus_eixo', $_POST['acolhesus_eixo']);
         } else{
@@ -554,6 +577,11 @@ class AcolheSUS {
             if (is_single()) {
                 wp_enqueue_script('jquery-ui-accordion', null, array('jquery'), null, false);
                 wp_enqueue_script('rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js', array('jquery', 'jquery-ui-accordion'));
+
+                if ("matriz_cenario" === $type) {
+                    wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' );
+                    wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery') );
+                }
 
             } else if ( is_archive() || !empty(get_query_var('acolhe_sus')) ) {
                 wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/archive.js');
@@ -662,12 +690,12 @@ class AcolheSUS {
 				
 				if (isset($_GET['campo']) && !empty($_GET['campo'])) {
 					$meta_query[] = [
-						'key' => 'acolhesus_campo',
+						'key' => self::CAMPO_META,
 						'value' => $_GET['campo'],
 					];
 				} else {
 					$meta_query[] = [
-						'key' => 'acolhesus_campo',
+						'key' => self::CAMPO_META,
 						'value' => $camposDoUsuario,
 						'compare' => 'IN'
 					];
