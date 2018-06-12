@@ -2,15 +2,18 @@
 
 <?php
 $post_type = get_post_type();
+$post_id = get_the_ID();
 $_sem_diligencias = ["avaliacao_grupos", "avaliacao_oficina"];
 $_possui_diligencias = !in_array($post_type, $_sem_diligencias);
+$_view_perm = "ver_" . $post_type;
+$can_user_view = in_array($_view_perm, get_user_meta(get_current_user_id(), 'acolhesus_form_perms'));
 ?>
 
 <div class="acolhesus-form-container">
     <h3>
         <?php the_title(); ?>
 
-        <?php if (get_post_meta(get_the_ID(), 'locked', true)): ?>
+        <?php if (get_post_meta($post_id, 'locked', true)): ?>
             <span class="closed-form"> preenchimento encerrado </span>
         <?php endif; ?>
 
@@ -30,32 +33,32 @@ $_possui_diligencias = !in_array($post_type, $_sem_diligencias);
             </div>
         <?php endif; ?>
 
-        <h3> Histórico </h3>
-        <div class="panel hidden-print">
-            <div class="panel-footer panel-comentarios">
-                <?php
-                $logs = get_comments([
-                    'include_unapproved' => true,
-                    'type' => 'acolhesus_log',
-                    'post_id' => get_the_ID()
-                ]);
+        <?php if ($can_user_view): ?>
 
-                if (count($logs) <= 0) {
-                    echo "<center> Formulário ainda sem dados no histórico. </center>";
-                } else {
-                    foreach ($logs as $log): ?>
-                        <div class="acolhesus-log">
-                            <?php echo '<strong>' . date('d/m/Y H:i', strtotime($log->comment_date)) . '</strong>'; ?>:
-                            <?php echo $log->comment_content; ?>
-                        </div>
+            <h3> Histórico </h3>
+            <div class="panel hidden-print">
+                <div class="panel-footer panel-comentarios">
                     <?php
-                    endforeach;
-                }
-                ?>
-            </div>
-        </div>
-    </div>
+                    $log_opts = ['include_unapproved' => true, 'type' => 'acolhesus_log', 'post_id' => $post_id];
+                    $logs = get_comments($log_opts);
 
+                    if (count($logs) <= 0) {
+                        echo "<center> Formulário ainda sem dados no histórico. </center>";
+                    } else {
+                        foreach ($logs as $log): ?>
+                            <div class="acolhesus-log">
+                                <?php echo '<strong>' . date('d/m/Y H:i', strtotime($log->comment_date)) . '</strong>'; ?>:
+                                <?php echo $log->comment_content; ?>
+                            </div>
+                        <?php
+                        endforeach;
+                    }
+                    ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+    </div>
 
 </div>
 
