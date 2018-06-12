@@ -162,7 +162,16 @@ class AcolheSUS {
             'fase' => 0,
             'eixo' => 0
         ],
-        
+        'indicadores' => [
+            'labels' => [
+                'name' => 'Indicadores Epidemiológicos',
+                'singular_name' => 'Monitoramento de Indicadores Epidemiológicos'
+            ],
+            'slug' => 'indicadores',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => 0
+        ],
     ];
 
     const CAMPO_META = 'acolhesus_campo';
