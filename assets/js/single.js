@@ -2,7 +2,7 @@ jQuery( function( $ ) {
     var no_edit = '.acolhesus-readonly';
     var base = '.acolhesus-form-container';
     var cant_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
-
+    
     $('.acolhesus_basic_info_selector').change(function() {
         var opt_val = $(this).val();
         var field = $(this).attr('name');
@@ -98,4 +98,6 @@ jQuery( function( $ ) {
             $(accordion).accordion( "option", "icons", icons);
         }
     });
+
+    $('.matriz-cenario-cities').select2();
 });
