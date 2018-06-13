@@ -96,6 +96,12 @@
     @include error_select();
   }
 
+  .matriz-cenario-cities {
+    width: 100%;
+    font-size: 12px;
+    color: black !important;
+  }
+
   .caldera-grid  {
 
     .alert.alert-success {

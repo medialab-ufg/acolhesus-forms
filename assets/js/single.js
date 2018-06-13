@@ -99,5 +99,23 @@ jQuery( function( $ ) {
         }
     });
 
-    $('.matriz-cenario-cities').select2();
+    $('.matriz-cenario-cities').select2({
+        placeholder: "Selecione um ou mais municípios",
+        allowClear: true,
+        theme: 'classic'
+    }).on('select2:select', function(evt) {
+        var data = evt.params.data;
+        var _val_ = data.text;
+        if (data.selected && _val_) {
+            var post = $("#form_id").data('id');
+
+            $.post(acolhesus.ajax_url, {
+                action: 'add_city_to_form',
+                city: _val_,
+                post_id: post
+            }).success(function (r) { });
+        }
+    });
+
+
 });

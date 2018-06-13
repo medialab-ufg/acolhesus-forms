@@ -206,6 +206,8 @@ class AcolheSUS {
 
         add_action('wp_ajax_unlock_single_form', array(&$this, 'unlock_form_entries'));
 
+        add_action('wp_ajax_add_city_to_form', array(&$this, 'add_city_to_form'));
+
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
     }
 
@@ -347,13 +349,12 @@ class AcolheSUS {
         return $_form;
     }
 
-
     private function render_form_cities($id, $type='') {
         if ("matriz_cenario" === $type) {
             $uf = get_post_meta($id, self::CAMPO_META, true);
             $uf_cities = UFMunicipio::get_cities_options($uf);
-            echo "<label for='municipios-matriz-cenario'>  Municípios de abrangência da unidade </label> <br>";
-            echo "<select multiple name='municipios-matriz-cenario' class='matriz-cenario-cities form-controle'> $uf_cities </select>";
+            echo "<div class='col-md-6' id='form_id' data-id='$id'><label for='municipios-matriz-cenario'>  Municípios de abrangência da unidade </label> <br>";
+            echo "<select multiple name='municipios-matriz-cenario' class='matriz-cenario-cities form-controle'> $uf_cities </select></div>";
         }
     }
 
@@ -412,6 +413,12 @@ class AcolheSUS {
         }
 
         return $field;
+    }
+
+    function add_city_to_form() {
+        $r = add_post_meta($_POST['post_id'], 'acolhesus_form_municipio', $_POST['city']);
+
+        return json_encode($r);
     }
 	
 	function get_campos_do_usuario_as_options($selected = '') {
