@@ -352,7 +352,7 @@ class AcolheSUS {
         if ("matriz_cenario" === $type) {
             $uf = get_post_meta($id, self::CAMPO_META, true);
             $uf_cities = UFMunicipio::get_cities_options($uf);
-            echo "<label for='municipios-matriz-cenario'>  Municípios de abrangência da unidade </label>";
+            echo "<label for='municipios-matriz-cenario'>  Municípios de abrangência da unidade </label> <br>";
             echo "<select multiple name='municipios-matriz-cenario' class='matriz-cenario-cities form-controle'> $uf_cities </select>";
         }
     }
@@ -595,8 +595,8 @@ class AcolheSUS {
                 wp_enqueue_script('rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js', array('jquery', 'jquery-ui-accordion'));
 
                 if ("matriz_cenario" === $type) {
-                    wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' );
-                    wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery') );
+                    wp_enqueue_style('select2', plugin_dir_url( __FILE__ ) . 'assets/lib/select2/select2.min.css');
+                    wp_enqueue_script('select2', plugin_dir_url( __FILE__ ) . 'assets/lib/select2/select2.min.js', array('jquery'));
                 }
 
             } else if ( is_archive() || !empty(get_query_var('acolhe_sus')) ) {
