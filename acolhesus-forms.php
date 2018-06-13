@@ -106,7 +106,7 @@ class AcolheSUS {
         ],
         'avaliacao_grupos' => [
             'labels' => [
-                'name' => 'Avaliações dos Grupos',
+                'name' => 'Avaliações de Grupos',
                 'singular_name' => 'Avaliação da Atuação de Grupo do Projeto'
             ],
             'slug' => 'avaliacao_grupos',
@@ -115,7 +115,7 @@ class AcolheSUS {
         ],
         'avaliacao_oficina' => [
             'labels' => [
-                'name' => 'Avaliação de Oficinas Locais',
+                'name' => 'Avaliações de Oficinas Locais',
                 'singular_name' => 'Avaliação de Oficina Local'
             ],
             'slug' => 'avaliacao_oficina',
@@ -124,7 +124,7 @@ class AcolheSUS {
         ],
         'relatorio_oficina' => [
             'labels' => [
-                'name' => 'Relatórios das Oficinas',
+                'name' => 'Relatórios de Oficinas',
                 'singular_name' => 'Relatório de Oficina'
             ],
             'slug' => 'relatorio_oficina',
