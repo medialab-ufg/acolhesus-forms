@@ -1,6 +1,6 @@
 jQuery( function( $ ) {
     $('.add_acolhesus_entry').click(function() {
-        var post_title = $.trim($(this).text());
+        var post_title = $(this).attr('data-newTitle');
         var post_type  = $(this).attr('data-postType');
 
         var data = {

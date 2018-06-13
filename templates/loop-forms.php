@@ -72,7 +72,9 @@
         ?>
             <div class="col-md-12 add-entry">
                 <p>
-                    <button class="add_acolhesus_entry btn btn-info" data-postType="<?php echo $current_acolhesus_formtype; ?>">
+                    <button class="add_acolhesus_entry btn btn-info"
+                            data-newTitle="<?php echo $f_name ?>"
+                            data-postType="<?php echo $current_acolhesus_formtype; ?>">
                         Nova resposta de <?php echo $f_name ?>
                     </button>
                 </p>
