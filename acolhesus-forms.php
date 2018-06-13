@@ -297,7 +297,7 @@ class AcolheSUS {
 
         if (is_single() && $this->isAcolheSusPage()) {
 
-            if (!$this->user_can_not_view($formType, get_the_title()))
+            if (!$this->user_can_view($formType, get_the_title()))
                 return;
 
             $form = "<br>";
@@ -305,10 +305,7 @@ class AcolheSUS {
             $this->lock_form($_post_id, $formType);
             $this->limit_paragraphs($formType);
 
-            if (isset($this->forms[$formType]) && (true !== $this->forms[$formType]['uma_entrada_por_campo']) ) {
-                $is_locked = $this->is_entry_locked($_post_id);
-                $form .= "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
-            }
+            $form .= $this->render_fixed_meta($_post_id, $formType);
 
             $this->render_form_cities($_post_id, $formType);
             $form .= $this->get_entry_form($_post_id, $formType);
@@ -317,7 +314,17 @@ class AcolheSUS {
         }
     }
 
-    private function user_can_not_view($formType, $title) {
+    private function render_fixed_meta($_post_id, $formType) {
+        $extra_info = "";
+        if (isset($this->forms[$formType]) && (true !== $this->forms[$formType]['uma_entrada_por_campo']) ) {
+            $is_locked = $this->is_entry_locked($_post_id);
+            $extra_info = "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
+        }
+
+        return $extra_info;
+    }
+
+    private function user_can_view($formType, $title) {
         $is_allowed = $this->can_user_see($formType);
         if (!$is_allowed)
             echo "<div class='user-cant-see'> Sem permissão para ver as respostas de $title </div>";
