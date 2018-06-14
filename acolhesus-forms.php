@@ -78,10 +78,10 @@ class AcolheSUS {
     ];
 
     public $fases = [
-        '| - Análise Situacional',
-        '|| - Elaboração e Modelização do Plano de Trabalho',
-        '||| - Implementação, Monitoramento e Avaliação',
-        'Macrogestão'
+        'fase_1' => 'Fase | - Análise Situacional',
+        'fase_2' => 'Fase || - Elaboração e Modelização do Plano de Trabalho',
+        'fase_3' => 'Fase ||| - Implementação, Monitoramento e Avaliação',
+        'macrogestao' => 'Macrogestão'
     ];
 
     public $eixos = [
@@ -445,10 +445,10 @@ class AcolheSUS {
 	}
 	function get_fases_as_options($selected = '') {
 		$options = "<option value=''></option>";
-		foreach ($this->fases as $fase) {
-            $options .= "<option value='$fase'";
-            $options .= selected($selected, $fase, false);
-            $options .= ">$fase</option>\n";
+		foreach ($this->fases as $slug => $fase) {
+            $options .= "<option value='$slug'";
+            $options .= selected($selected, $slug, false);
+            $options .= "> $fase </option>\n";
         }
 		return $options;
 	}

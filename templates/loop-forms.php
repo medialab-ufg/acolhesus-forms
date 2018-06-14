@@ -27,6 +27,7 @@
             while(have_posts()): the_post();
             $author_id = get_the_author_meta( 'ID' );
             $entry_id = get_the_ID();
+            $fase = get_post_meta(get_the_ID(), 'acolhesus_fase', true);
             ?>
                 <tr>
                     <td> 
@@ -36,7 +37,7 @@
 					</td>
 					
 					<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
-						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_fase', true); ?> </td>
+						<td> <?php echo $AcolheSUS->fases[$fase]; ?> </td>
 						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_eixo', true); ?> </td>
 					<?php endif; ?>
 					
