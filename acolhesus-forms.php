@@ -323,6 +323,11 @@ class AcolheSUS {
             $extra_info = "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
         }
 
+        if ("matriz_cenario" === $formType) {
+            $municipios = json_encode(get_post_meta($_post_id, 'acolhesus_form_municipio'), JSON_UNESCAPED_UNICODE);
+            echo "<input type='hidden' id='entry_cities' name='entry_cities' value='$municipios'>";
+        }
+
         return $extra_info;
     }
 

@@ -99,13 +99,14 @@ jQuery( function( $ ) {
         }
     });
 
-    $('.matriz-cenario-cities').select2({
+    var $select_class = '.matriz-cenario-cities';
+    $($select_class).select2({
         placeholder: "Selecione um ou mais municípios",
         allowClear: true,
         theme: 'classic'
     }).on('select2:select', function(evt) {
         var data = evt.params.data;
-        var _val_ = data.text;
+        var _val_ = data.id;
         if (data.selected && _val_) {
             var post = $("#form_id").data('id');
 
@@ -117,5 +118,10 @@ jQuery( function( $ ) {
         }
     });
 
+    var $entry_cities = $('#entry_cities');
+    if ( $entry_cities.length > 0 ) {
+        var _cities = JSON.parse( $entry_cities.val() );
+        $($select_class).val(_cities).trigger('change');
+    }
 
 });
