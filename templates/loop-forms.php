@@ -1,44 +1,43 @@
 <table class="table table-hover">
-        <thead>
-        <tr>
-            <th> Campo de Atuação </th>
+    <thead>
+    <tr>
+        <th> Campo de Atuação </th>
 			
-			<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
-				<th> Fase </th>
-				<th> Eixo </th>
-			<?php endif; ?>
+        <?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+            <th> Fase </th>
+            <th> Eixo </th>
+        <?php endif; ?>
 
-			<th> Nome </th>
+        <th> Nome </th>
 			
-			<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
-	            <th> Data Criação </th>
-	            <th> Autor </th>
-			<?php endif; ?>
+        <?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+            <th> Data Criação </th>
+            <th> Autor </th>
+        <?php endif; ?>
 
-            <th> Status </th>
-            <?php if (current_user_can('acolhesus_cgpnh')) { ?>
-                <th> Ação </th>
-            <?php } ?>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        if ( have_posts() ) {
-            while(have_posts()): the_post();
-            $author_id = get_the_author_meta( 'ID' );
-            $entry_id = get_the_ID();
-            $fase = get_post_meta(get_the_ID(), 'acolhesus_fase', true);
-            ?>
-                <tr>
-                    <td> 
-						<strong> 
-							<?php echo get_post_meta($entry_id, "acolhesus_campo")[0];  ?>
-						</strong> 
-					</td>
+        <th> Status </th>
+        <?php if (current_user_can('acolhesus_cgpnh')) { ?>
+            <th> Ação </th>
+        <?php } ?>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    if ( have_posts() ) {
+        while(have_posts()): the_post();
+        $author_id = get_the_author_meta( 'ID' );
+        $entry_id = get_the_ID();
+        $fase = get_post_meta($entry_id, 'acolhesus_fase', true);
+        $eixo = get_post_meta($entry_id, 'acolhesus_eixo', true);
+        ?>
+            <tr>
+                <td>
+                    <strong> <?php echo get_post_meta($entry_id, "acolhesus_campo")[0];  ?> </strong>
+                </td>
 					
 					<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
 						<td> <?php echo $AcolheSUS->fases[$fase]; ?> </td>
-						<td> <?php echo get_post_meta(get_the_ID(), 'acolhesus_eixo', true); ?> </td>
+						<td> <?php echo $eixo; ?> </td>
 					<?php endif; ?>
 					
 					<td>

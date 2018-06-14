@@ -34,7 +34,6 @@
 			</div>
 		</div>
 
-
         <?php
         foreach ($AcolheSUS->forms as $formName => $formAtts):
             if ($AcolheSUS->can_user_see($formName)):
