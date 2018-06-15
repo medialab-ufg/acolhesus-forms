@@ -35,34 +35,34 @@
                     <strong> <?php echo get_post_meta($entry_id, "acolhesus_campo")[0];  ?> </strong>
                 </td>
 					
-					<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
-						<td> <?php echo $AcolheSUS->fases[$fase]; ?> </td>
-						<td> <?php echo $eixo; ?> </td>
-					<?php endif; ?>
+                <?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+                    <td> <?php echo $AcolheSUS->fases[$fase]; ?> </td>
+                    <td> <?php echo $eixo; ?> </td>
+                <?php endif; ?>
 					
-					<td>
-                        <a href="<?php the_permalink(); ?>">
-                            <?php the_title( '<h3 class="panel-title">', '</h3>' ); ?>
-                        </a>
-                    </td>
+                <td>
+                    <a href="<?php the_permalink(); ?>">
+                        <?php the_title( '<h3 class="panel-title">', '</h3>' ); ?>
+                    </a>
+                </td>
                     
-					<?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
-						<td> <?php the_time( 'd/m/Y - G:i:s'); ?> </td>
-	                    <td> <a href="<?php echo home_url('formularios-acolhesus/?usuario=' . $author_id); ?>"><?php echo get_the_author(); ?></a> </td>
-					<?php endif; ?>
+                <?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+                    <td> <?php the_time( 'd/m/Y - G:i:s'); ?> </td>
+                    <td> <a href="<?php echo get_author_posts_url($author_id); ?>"><?php echo get_the_author(); ?></a> </td>
+                <?php endif; ?>
 
-                    <td> <?php $AcolheSUS->render_entry_status($entry_id); ?> </td>
+                <td> <?php $AcolheSUS->render_entry_status($entry_id); ?> </td>
 
-                    <?php if (current_user_can('acolhesus_cgpnh')) { ?>
-                        <td> <?php $AcolheSUS->render_entry_action($entry_id, get_the_title()); ?> </td>
-                    <?php } ?>
-                </tr>
-            <?php
-            endwhile;
-        }
+                <?php if (current_user_can('acolhesus_cgpnh')) { ?>
+                    <td> <?php $AcolheSUS->render_entry_action($entry_id, get_the_title()); ?> </td>
+                <?php } ?>
+            </tr>
+        <?php
+        endwhile;
+    }
         ?>
-        </tbody>
-    </table>
+    </tbody>
+</table>
 
     <?php
     if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)) {
