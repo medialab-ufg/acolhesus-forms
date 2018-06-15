@@ -33,7 +33,7 @@ jQuery( function( $ ) {
         return false;
     });
 
-    if(cant_edit) {
+    if (cant_edit) {
         $(base + ' ' + no_edit + ' input[type=\'submit\']').remove();
         $(base + ' ' + no_edit + ' button.cf-uploader-trigger').remove();
         $(no_edit + ' :radio').attr('disabled', true);
@@ -114,6 +114,10 @@ jQuery( function( $ ) {
     if ( $entry_cities.length > 0 ) {
         var _cities = JSON.parse( $entry_cities.val() );
         $($select_class).val(_cities).trigger('change');
+    }
+
+    if (cant_edit) {
+        $('.matriz-cenario-cities').prop("disabled", true);
     }
 
     function toggle_city(obj_evt, post_id, add) {
