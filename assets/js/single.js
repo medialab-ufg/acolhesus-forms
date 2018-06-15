@@ -100,28 +100,38 @@ jQuery( function( $ ) {
     });
 
     var $select_class = '.matriz-cenario-cities';
+    var post = $("#form_id").data('id');
     $($select_class).select2({
         placeholder: "Selecione um ou mais municípios",
         allowClear: true,
+        multiple: true,
         theme: 'classic'
-    }).on('select2:select', function(evt) {
-        var data = evt.params.data;
-        var _val_ = data.id;
-        if (data.selected && _val_) {
-            var post = $("#form_id").data('id');
-
-            $.post(acolhesus.ajax_url, {
-                action: 'add_city_to_form',
-                city: _val_,
-                post_id: post
-            }).success(function (r) { });
-        }
+    }).on( 'select2:select', function(evt) { toggle_city({event: evt}, post, true); })
+      .on( 'select2:unselect', function(evt) { toggle_city({event: evt}, post, false);
     });
 
     var $entry_cities = $('#entry_cities');
     if ( $entry_cities.length > 0 ) {
         var _cities = JSON.parse( $entry_cities.val() );
         $($select_class).val(_cities).trigger('change');
+    }
+
+    function toggle_city(obj_evt, post_id, add) {
+        if (add) {
+            var _action = 'add_entry_city';
+        } else if ( add === false) {
+            var _action = 'remove_entry_city';
+        } else {
+            return false;
+        }
+
+        var event = obj_evt.event;
+        var data = event.params.data;
+
+        if (_action && post_id && data.id) {
+            var del_data = { action: _action, city: data.id, post_id: post_id};
+            $.post(acolhesus.ajax_url, del_data);
+        }
     }
 
 });
