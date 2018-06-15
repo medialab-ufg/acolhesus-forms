@@ -117,7 +117,8 @@ jQuery( function( $ ) {
     }
 
     if (cant_edit) {
-        $('.matriz-cenario-cities').prop("disabled", true);
+        $($select_class).prop("disabled", true);
+        $('.select2-container--classic .select2-selection--multiple').css('border', 0);
     }
 
     function toggle_city(obj_evt, post_id, add) {
