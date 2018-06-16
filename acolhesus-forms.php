@@ -318,6 +318,8 @@ class AcolheSUS {
 
             return $content . $form;
         }
+
+        return $content;
     }
 
     private function render_fixed_meta($_post_id, $formType) {
