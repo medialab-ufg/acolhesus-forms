@@ -111,7 +111,8 @@ class AcolheSUS {
             ],
             'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
-            'fase' => 0
+            'fase' => 0,
+            'possui_validacao' => false
         ],
         'avaliacao_oficina' => [
             'labels' => [
@@ -120,7 +121,8 @@ class AcolheSUS {
             ],
             'slug' => 'avaliacao_oficina',
             'uma_entrada_por_campo' => false,
-            'fase' => 0
+            'fase' => 0,
+            'possui_validacao' => false
         ],
         'relatorio_oficina' => [
             'labels' => [
@@ -331,6 +333,13 @@ class AcolheSUS {
         }
 
         return $extra_info;
+    }
+
+    public function has_validations($formType) {
+        if (isset($this->forms[$formType]['possui_validacao']))
+            return $this->forms[$formType]['possui_validacao'];
+
+        return true;
     }
 
     private function user_can_view($formType, $title) {

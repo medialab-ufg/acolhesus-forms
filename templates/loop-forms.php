@@ -15,10 +15,14 @@
             <th> Autor </th>
         <?php endif; ?>
 
-        <th> Status </th>
-        <?php if (current_user_can('acolhesus_cgpnh')) { ?>
-            <th> Ação </th>
-        <?php } ?>
+        <?php if ($AcolheSUS->has_validations($current_acolhesus_formtype)): ?>
+
+            <th> Status </th>
+            <?php if (current_user_can('acolhesus_cgpnh')) { ?>
+                <th> Ação </th>
+            <?php } ?>
+
+        <?php endif; ?>
     </tr>
     </thead>
     <tbody>
@@ -29,11 +33,10 @@
         $entry_id = get_the_ID();
         $fase = get_post_meta($entry_id, 'acolhesus_fase', true);
         $eixo = get_post_meta($entry_id, 'acolhesus_eixo', true);
+        $uf_atuacao = get_post_meta($entry_id, "acolhesus_campo")[0];
         ?>
             <tr>
-                <td>
-                    <strong> <?php echo get_post_meta($entry_id, "acolhesus_campo")[0];  ?> </strong>
-                </td>
+                <td> <strong> <?php echo $uf_atuacao; ?> </strong> </td>
 					
                 <?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
                     <td> <?php echo $AcolheSUS->fases[$fase]; ?> </td>
@@ -51,11 +54,15 @@
                     <td> <a href="<?php echo get_author_posts_url($author_id); ?>"><?php echo get_the_author(); ?></a> </td>
                 <?php endif; ?>
 
-                <td> <?php $AcolheSUS->render_entry_status($entry_id); ?> </td>
+                <?php if ($AcolheSUS->has_validations($current_acolhesus_formtype)): ?>
+                    <td> <?php $AcolheSUS->render_entry_status($entry_id); ?> </td>
 
-                <?php if (current_user_can('acolhesus_cgpnh')) { ?>
-                    <td> <?php $AcolheSUS->render_entry_action($entry_id, get_the_title()); ?> </td>
-                <?php } ?>
+                    <?php if (current_user_can('acolhesus_cgpnh')) { ?>
+                        <td> <?php $AcolheSUS->render_entry_action($entry_id, get_the_title()); ?> </td>
+                    <?php } ?>
+
+                <?php endif; ?>
+                
             </tr>
         <?php
         endwhile;
