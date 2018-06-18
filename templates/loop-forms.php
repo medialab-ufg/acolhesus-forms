@@ -5,7 +5,11 @@
 			
         <?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
             <th> Fase </th>
-            <th> Eixo </th>
+
+            <?php if ($AcolheSUS->form_type_has_axis($current_acolhesus_formtype)): ?>
+                <th> Eixo </th>
+            <?php endif; ?>
+
         <?php endif; ?>
 
         <th> Nome </th>
@@ -31,16 +35,19 @@
         while(have_posts()): the_post();
         $author_id = get_the_author_meta( 'ID' );
         $entry_id = get_the_ID();
-        $fase = get_post_meta($entry_id, 'acolhesus_fase', true);
-        $eixo = get_post_meta($entry_id, 'acolhesus_eixo', true);
         $uf_atuacao = get_post_meta($entry_id, "acolhesus_campo")[0];
         ?>
             <tr>
                 <td> <strong> <?php echo $uf_atuacao; ?> </strong> </td>
 					
                 <?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
-                    <td> <?php echo $AcolheSUS->fases[$fase]; ?> </td>
-                    <td> <?php echo $eixo; ?> </td>
+
+                    <td> <?php echo $AcolheSUS->get_entry_phase($entry_id); ?> </td>
+
+                    <?php if ($AcolheSUS->form_type_has_axis($current_acolhesus_formtype)): ?>
+                        <td> <?php echo $AcolheSUS->get_entry_axis($entry_id); ?> </td>
+                    <?php endif; ?>
+
                 <?php endif; ?>
 					
                 <td>

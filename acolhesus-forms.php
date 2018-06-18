@@ -112,6 +112,7 @@ class AcolheSUS {
             'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
             'fase' => 0,
+            'eixo' => false,
             'possui_validacao' => false
         ],
         'avaliacao_oficina' => [
@@ -122,7 +123,8 @@ class AcolheSUS {
             'slug' => 'avaliacao_oficina',
             'uma_entrada_por_campo' => false,
             'fase' => 0,
-            'possui_validacao' => false
+            'eixo' => false,
+            'possui_validacao' => false,
         ],
         'relatorio_oficina' => [
             'labels' => [
@@ -132,7 +134,7 @@ class AcolheSUS {
             'slug' => 'relatorio_oficina',
             'uma_entrada_por_campo' => false,
             'fase' => 0,
-            'eixo' => 0,
+            'eixo' => false,
         ],
         'memoria_reuniao' => [
             'labels' => [
@@ -142,7 +144,7 @@ class AcolheSUS {
             'slug' => 'memoria_reuniao',
             'uma_entrada_por_campo' => false,
             'fase' => 0,
-            'eixo' => 0,
+            'eixo' => false,
         ],
         'matriz_p_criticos' => [
             'labels' => [
@@ -173,7 +175,7 @@ class AcolheSUS {
             'uma_entrada_por_campo' => true,
             'fase' => 0,
             'eixo' => 0
-        ],
+        ]
     ];
 
     const CAMPO_META = 'acolhesus_campo';
@@ -240,9 +242,9 @@ class AcolheSUS {
                     foreach ($this->campos as $uf) {
                         $title = $form['labels']['singular_name'] . " ({$uf})";
                         $metas = [
-                            'acolhesus_campo' => $uf,
-                            'acolhesus_eixo', $form['eixo'],
-                            'acolhesus_fase', $form['fase']
+                            'acolhesus_campo'=> $uf,
+                            'acolhesus_eixo' => $form['eixo'],
+                            'acolhesus_fase' => $form['fase']
                         ];
                         $this->add_acolhesus_entry($title, $formName, 'publish', $metas);
                     }
@@ -472,7 +474,9 @@ class AcolheSUS {
 		return $options;
 	}
 	function get_fases_as_options($selected = '') {
-		$options = "<option value=''></option>";
+		if (is_single())
+		    $options = "<option value=''></option>";
+
 		foreach ($this->fases as $slug => $fase) {
             $options .= "<option value='$slug'";
             $options .= selected($selected, $slug, false);
@@ -829,6 +833,21 @@ class AcolheSUS {
         $status = $strings['status']['status'];
 
         echo "<div class='status-$entry_id'><span class='$class'> $status </span></div>";
+    }
+
+    public function get_entry_phase($id) {
+        $fase_slug = get_post_meta($id, 'acolhesus_fase', true);
+        $fase = empty($fase_slug) ? "----" : $this->fases[$fase_slug];
+
+        return $fase;
+    }
+
+    public function get_entry_axis($id) {
+        return get_post_meta($id, 'acolhesus_eixo', true);
+    }
+
+    public function form_type_has_axis($type) {
+        return (isset($this->forms[$type]) && $this->forms[$type]['eixo']);
     }
 
 } // class

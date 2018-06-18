@@ -22,13 +22,18 @@
 						<?php echo $AcolheSUS->get_campos_do_usuario_as_options( isset($_GET['campo']) ? $_GET['campo'] : '' ); ?>
 					</select>
 					<select name="fase" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
-						<option value="">Todos as fases</option>
+						<option value="">Todas as fases</option>
 						<?php echo $AcolheSUS->get_fases_as_options( isset($_GET['fase']) ? $_GET['fase'] : '' ); ?>
 					</select>
+
+                    <?/*
+                    // Neste momento, nenhum formulário possui eixo. Logo, não faz sentido na busca.
 					<select name="eixo" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
 						<option value="">Todos os eixos</option>
 						<?php echo $AcolheSUS->get_eixos_as_options( isset($_GET['eixo']) ? $_GET['eixo'] : '' ); ?>
 					</select>
+                    */ ?>
+
 					<input class="btn btn-default" type="submit" value="Filtrar" />
 				</form>
 			</div>
