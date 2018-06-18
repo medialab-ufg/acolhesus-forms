@@ -135,6 +135,7 @@ class AcolheSUS {
             'uma_entrada_por_campo' => false,
             'fase' => 0,
             'eixo' => false,
+            'omitir_macrogestao' => true,
         ],
         'memoria_reuniao' => [
             'labels' => [
@@ -474,8 +475,14 @@ class AcolheSUS {
 		return $options;
 	}
 	function get_fases_as_options($selected = '') {
-		if (is_single())
-		    $options = "<option value=''></option>";
+		if (is_single()) {
+            $options = "<option value=''></option>";
+
+            $type = get_post_type();
+            if (isset($this->forms[$type]['omitir_macrogestao']) && $this->forms[$type]['omitir_macrogestao']) {
+                array_pop($this->fases);
+            }
+        }
 
 		foreach ($this->fases as $slug => $fase) {
             $options .= "<option value='$slug'";
