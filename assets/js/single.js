@@ -100,15 +100,17 @@ jQuery( function( $ ) {
     });
 
     var $select_class = '.matriz-cenario-cities';
-    var post = $("#form_id").data('id');
-    $($select_class).select2({
-        placeholder: "Selecione um ou mais municípios",
-        allowClear: true,
-        multiple: true,
-        theme: 'classic'
-    }).on( 'select2:select', function(evt) { toggle_city({event: evt}, post, true); })
-      .on( 'select2:unselect', function(evt) { toggle_city({event: evt}, post, false);
-    });
+    if ($($select_class).lenght > 0) {
+        var post = $("#form_id").data('id');
+        $($select_class).select2({
+            placeholder: "Selecione um ou mais municípios",
+            allowClear: true,
+            multiple: true,
+            theme: 'classic'
+        }).on( 'select2:select', function(evt) { toggle_city({event: evt}, post, true); })
+            .on( 'select2:unselect', function(evt) { toggle_city({event: evt}, post, false);
+            });
+    }
 
     var $entry_cities = $('#entry_cities');
     if ( $entry_cities.length > 0 ) {
