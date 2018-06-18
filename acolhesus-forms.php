@@ -328,8 +328,11 @@ class AcolheSUS {
     private function render_fixed_meta($_post_id, $formType) {
         $extra_info = "";
         if (isset($this->forms[$formType]) && (true !== $this->forms[$formType]['uma_entrada_por_campo']) ) {
-            $is_locked = $this->is_entry_locked($_post_id);
-            $extra_info = "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
+            // Variável que caldera forms envia após submit do form
+            if (!isset($_GET['cf_su'])) {
+                $is_locked = $this->is_entry_locked($_post_id);
+                $extra_info = "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
+            }
         }
 
         if ("matriz_cenario" === $formType) {
