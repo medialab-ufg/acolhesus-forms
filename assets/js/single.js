@@ -100,7 +100,7 @@ jQuery( function( $ ) {
     });
 
     var $select_class = '.matriz-cenario-cities';
-    if ($($select_class).lenght > 0) {
+    if ($($select_class).length > 0) {
         var post = $("#form_id").data('id');
         $($select_class).select2({
             placeholder: "Selecione um ou mais municípios",
