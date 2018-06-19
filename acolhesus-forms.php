@@ -114,6 +114,16 @@ class AcolheSUS {
             'fase' => 0,
             'eixo' => 0
         ],
+        'visita_guiada' => [
+            'labels' => [
+                'name' => 'Roteiros de Visita Guiada',
+                'singular_name' => 'Roteiro de Visita Guiada'
+            ],
+            'slug' => 'visita_guiada',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => false
+        ],
         'matriz_p_criticos' => [
             'labels' => [
                 'name' => 'Matrizes de Pontos Críticos',
