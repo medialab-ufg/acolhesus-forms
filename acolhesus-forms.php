@@ -104,6 +104,36 @@ class AcolheSUS {
             'fase' => 0,
             'eixo' => 0
         ],
+        'indicadores' => [
+            'labels' => [
+                'name' => 'Indicadores Epidemiológicos',
+                'singular_name' => 'Monitoramento de Indicadores Epidemiológicos'
+            ],
+            'slug' => 'indicadores',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => 0
+        ],
+        'matriz_p_criticos' => [
+            'labels' => [
+                'name' => 'Matrizes de Pontos Críticos',
+                'singular_name' => 'Matriz de Pontos Críticos'
+            ],
+            'slug' => 'matriz_p_criticos',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => 0
+        ],
+        'matriz_objetivos' => [
+            'labels' => [
+                'name' => 'Matrizes de Objetivos e Atividades',
+                'singular_name' => 'Matriz de Objetivos e Atividades'
+            ],
+            'slug' => 'matriz_objetivos',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => 0
+        ],
         'avaliacao_grupos' => [
             'labels' => [
                 'name' => 'Avaliações de Grupos',
@@ -147,36 +177,6 @@ class AcolheSUS {
             'fase' => 0,
             'eixo' => false,
         ],
-        'matriz_p_criticos' => [
-            'labels' => [
-                'name' => 'Matrizes de Pontos Críticos',
-                'singular_name' => 'Matriz de Pontos Críticos'
-            ],
-            'slug' => 'matriz_p_criticos',
-            'uma_entrada_por_campo' => true,
-            'fase' => 0,
-            'eixo' => 0
-        ],
-        'matriz_objetivos' => [
-            'labels' => [
-                'name' => 'Matrizes de Objetivos e Atividades',
-                'singular_name' => 'Matriz de Objetivos e Atividades'
-            ],
-            'slug' => 'matriz_objetivos',
-            'uma_entrada_por_campo' => true,
-            'fase' => 0,
-            'eixo' => 0
-        ],
-        'indicadores' => [
-            'labels' => [
-                'name' => 'Indicadores Epidemiológicos',
-                'singular_name' => 'Monitoramento de Indicadores Epidemiológicos'
-            ],
-            'slug' => 'indicadores',
-            'uma_entrada_por_campo' => true,
-            'fase' => 0,
-            'eixo' => 0
-        ]
     ];
 
     const CAMPO_META = 'acolhesus_campo';
