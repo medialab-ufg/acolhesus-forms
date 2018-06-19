@@ -124,6 +124,16 @@ class AcolheSUS {
             'fase' => 0,
             'eixo' => false
         ],
+        'fluxograma' => [
+            'labels' => [
+                'name' => 'Fluxogramas Analisadores',
+                'singular_name' => 'Fluxograma Analisador'
+            ],
+            'slug' => 'fluxograma',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => false
+        ],
         'matriz_p_criticos' => [
             'labels' => [
                 'name' => 'Matrizes de Pontos Críticos',
