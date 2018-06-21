@@ -532,7 +532,6 @@ class AcolheSUS {
 		$options = $this->get_fases_as_options($faseAtual);
         $faseHtml = $this->get_fixed_select("Fase", "acolhesus_fase", $attr, $post->ID, $options);
 
-
         if ($this->form_type_has_axis($type)) {
             $options = $this->get_eixos_as_options($eixoAtual);
             $eixoHtml = $this->get_fixed_select("Eixo", "acolhesus_eixo", $attr, $post->ID, $options);
