@@ -680,8 +680,10 @@ class AcolheSUS {
         $type = get_post_type();
         if ( $type && array_key_exists($type, $this->forms)  || !empty(get_query_var('acolhe_sus')) ) {
 
+            wp_enqueue_script('jquery-ui-accordion', null, array('jquery'), null, false);
+
             if (is_single()) {
-                wp_enqueue_script('jquery-ui-accordion', null, array('jquery'), null, false);
+
                 wp_enqueue_script('rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js', array('jquery', 'jquery-ui-accordion'));
 
                 if ("matriz_cenario" === $type) {

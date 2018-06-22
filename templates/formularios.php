@@ -52,6 +52,7 @@
 			}
 		}
 
+        echo "<div class='acolhesus-forms-list'>";
         foreach ($registered_forms as $formName => $formAtts):
             if ($AcolheSUS->can_user_see($formName)):
                 global $current_acolhesus_formtype;
@@ -64,13 +65,16 @@
                     'posts_per_page' => -1,
                 ]);
 				?>
-                <h3 class="form-title">
-                    <a href="<?php echo get_post_type_archive_link($formName); ?>"> <?php echo $formAtts['labels']['name']; ?> </a>
-                </h3>
-			<?php
-                include( plugin_dir_path( __FILE__ ) . "loop-forms.php");
+                    <h3 class="form-title"> <?php echo $formAtts['labels']['name']; ?>
+<!--                        <a href="--><?php //echo get_post_type_archive_link($formName); ?><!--"> --><?php //echo $formAtts['labels']['name']; ?><!-- </a>-->
+                    </h3>
+                    <div class="panel"> <?php include( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?> </div>
+        <?php
 			endif;
+
         endforeach;
+
+        echo "</div>";
 		?>
     </div>
 <?php endif; ?>

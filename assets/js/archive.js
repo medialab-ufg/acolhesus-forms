@@ -28,6 +28,12 @@ jQuery( function( $ ) {
         }
     });
 
+    $('.acolhesus-forms-list').accordion({
+        collapsible: true,
+        active: false,
+        heightStyle: "content"
+    });
+
     $('.toggle_lock_form_entries').click(function () {
         var entry = {
             id:     $(this).attr('data-id'),
