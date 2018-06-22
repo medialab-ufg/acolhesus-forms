@@ -489,7 +489,9 @@ class AcolheSUS {
 	}
 	
 	function get_eixos_as_options($selected = '') {
-        $options = "<option value=''></option>";
+        if (is_single()) {
+            $options = "<option value=''></option>";
+        }
 		foreach ($this->eixos as $eixo) {
             $options .= "<option value='$eixo'";
             $options .= selected($selected, $eixo, false);
