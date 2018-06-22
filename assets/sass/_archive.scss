@@ -35,8 +35,16 @@
     color: $light_green;
   }
   .add-entry {
-    margin-bottom: 40px;
-    border-bottom: 1px solid $light_gray;
+
+    .add_acolhesus_entry {
+      background: $dark-green;
+      color: white;
+      &:hover {
+        background: $green;
+      }
+    }
+    //margin-bottom: 40px;
+    //border-bottom: 1px solid $light_gray;
   }
 } // .acolhesus-form-container
 

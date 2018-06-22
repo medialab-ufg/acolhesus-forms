@@ -236,6 +236,23 @@ class AcolheSUS {
         add_action('wp_ajax_remove_entry_city', array(&$this, 'remove_entry_city'));
 
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
+
+        add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
+    }
+
+    function acolhesus_add_entry_btn_callback($type) {
+        if (!is_null($type) && $this->can_add_entry($type)) {
+           $obj = get_post_type_object($type);
+           if ($obj instanceof WP_Post_Type) {
+               $f_name = $obj->labels->singular_name; ?>
+               <div class="add-entry">
+                   <button class="add_acolhesus_entry btn" data-newTitle="<?php echo $f_name ?>" data-postType="<?php echo $type; ?>">
+                       Adicionar <?php echo $f_name ?>
+                   </button>
+               </div>
+               <?php
+           }
+        }
     }
 
     private function set_forms_phases() {

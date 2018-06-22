@@ -133,9 +133,11 @@
   .acolhesus-form-container .list-forms {
     font-size: 12px;
     color: #00b4b4; }
-  .acolhesus-form-container .add-entry {
-    margin-bottom: 40px;
-    border-bottom: 1px solid #f2f3f5; }
+  .acolhesus-form-container .add-entry .add_acolhesus_entry {
+    background: #003c46;
+    color: white; }
+    .acolhesus-form-container .add-entry .add_acolhesus_entry:hover {
+      background: #0b7a6f; }
 
 .entry-status {
   float: right;
