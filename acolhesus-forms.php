@@ -185,6 +185,7 @@ class AcolheSUS {
             'uma_entrada_por_campo' => false,
             'fase' => 0,
             'eixo' => false,
+            'possui_validacao' => false,
             'omitir_macrogestao' => true,
         ],
         'memoria_reuniao' => [
@@ -196,6 +197,7 @@ class AcolheSUS {
             'uma_entrada_por_campo' => false,
             'fase' => 0,
             'eixo' => false,
+            'possui_validacao' => false
         ],
     ];
 
