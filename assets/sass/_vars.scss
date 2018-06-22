@@ -21,38 +21,10 @@ $error_bg: #F2DEDE;
     border-color: $green;
     float: right;
     color: white;
-    //width: 36%;
-    //float: none;
-    //text-transform: uppercase;
-    // padding: 15px 0;
     border-bottom: 2px solid black;
     border-left: 1px solid black;
 
-    /*
-    width: 100%;
-    text-transform: uppercase;
-    padding: 15px 0;
-    background: $dark_green;
-    background-image: -webkit-linear-gradient(top, $dark_green, $light_green);
-    background-image: -moz-linear-gradient(top, $dark_green, $light_green);
-    background-image: -ms-linear-gradient(top, $dark_green, $light_green);
-    background-image: -o-linear-gradient(top, $dark_green, $light_green);
-    background-image: linear-gradient(to bottom, $dark_green, $light_green);
-    -webkit-border-radius: 7;
-    -moz-border-radius: 7;
-    border-radius: 7px;
-    -webkit-box-shadow: -0.8px 1px 6px #000;
-    -moz-box-shadow: -0.8px 1px 6px #000;
-    box-shadow: -0.8px 1px 6px #000;
-    color: #ffffff;
-    font-size: 20px;
-    border: solid #0a767a 3px;
-    text-decoration: none;
-    */
-
     &:hover {
-      //color: white;
-      //border: aliceblue;
       background: #0a686b;
       background-image: -webkit-linear-gradient(top, #0a686b, #34d9d1);
       background-image: -moz-linear-gradient(top, #0a686b, #34d9d1);

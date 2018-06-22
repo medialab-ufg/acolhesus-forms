@@ -28,10 +28,15 @@ jQuery( function( $ ) {
         }
     });
 
+    var icons = {
+        header: "ui-icon-circle-arrow-e",
+        activeHeader: "ui-icon-circle-arrow-s"
+    };
     $('.acolhesus-forms-list').accordion({
         collapsible: true,
         active: false,
-        heightStyle: "content"
+        heightStyle: "content",
+        icons: icons
     });
 
     $('.toggle_lock_form_entries').click(function () {
