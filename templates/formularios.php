@@ -77,7 +77,13 @@
                         <a class="btn btn-default" href="<?php echo $link; ?>"> <?php echo $ver_todos; ?> </a>
                         <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
                     </div>
-                    <?php include( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?>
+                    <?php
+                    if ($wp_query->found_posts > 0) {
+                        include( plugin_dir_path( __FILE__ ) . "loop-forms.php");
+                    } else {
+                        echo "<center> Nenhuma resposta de $nome! </center>";
+                    }
+                    ?>
                 </div>
             <?php
             endif;
