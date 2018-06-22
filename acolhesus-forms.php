@@ -504,10 +504,12 @@ class AcolheSUS {
         $options = '';
         foreach ($this->forms as $_f) {
             $slug = $_f['slug'];
-            $nome = $_f['labels']['name'];
-            $options .= "<option value='$slug'";
-            $options .= selected($selected, $slug, false);
-            $options .= ">$nome</option>\n";
+            if ($this->can_user_see($slug)) {
+                $nome = $_f['labels']['name'];
+                $options .= "<option value='$slug'";
+                $options .= selected($selected, $slug, false);
+                $options .= ">$nome</option>\n";
+            }
         }
 
         return $options;
