@@ -52,11 +52,17 @@
 			}
 		}
 
+		/*
+		 * TODO: Após aprovação do layout, refatorar esse código para devidas classes
+		 * */
         echo "<div class='acolhesus-forms-list'>";
         foreach ($registered_forms as $formName => $formAtts):
             if ($AcolheSUS->can_user_see($formName)):
                 global $current_acolhesus_formtype;
                 $current_acolhesus_formtype = $formName;
+                $nome =  $formAtts['labels']['name'];
+                $link = get_post_type_archive_link($formName);
+                $ver_todos = "Ir para " . $nome;
 
                 // Essa query é modificada pelo pre_get_posts que tem na classe principal do plugin
                 $wp_query = new WP_Query([
@@ -65,16 +71,18 @@
                     'posts_per_page' => -1,
                 ]);
 				?>
-                    <h3 class="form-title"> <?php echo $formAtts['labels']['name']; ?>
-<!--                        <a href="--><?php //echo get_post_type_archive_link($formName); ?><!--"> --><?php //echo $formAtts['labels']['name']; ?><!-- </a>-->
-                    </h3>
-                    <div class="panel"> <?php include( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?> </div>
-        <?php
-			endif;
+                <h3 class="form-title"> <?php echo $nome; ?> </h3>
+                <div class="panel">
+                    <div class="ver-todos">
+                        <a class="btn btn-default" href="<?php echo $link; ?>"> <?php echo $ver_todos; ?> </a>
+                    </div>
+                    <?php include( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?>
+                </div>
+            <?php
+            endif;
 
-        endforeach;
-
-        echo "</div>";
+         endforeach;
+         echo "</div>";
 		?>
     </div>
 <?php endif; ?>

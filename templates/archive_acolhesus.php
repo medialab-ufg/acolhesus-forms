@@ -20,7 +20,4 @@ if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
     echo "<center> Sem permissões para ver o formulário " . $form['labels']['name'] . ". </center>";
 endif;
 
-
-?>
-
-<?php include_once( get_theme_file_path('footer-full.php') ); ?>
+include_once( get_theme_file_path('footer-full.php') );

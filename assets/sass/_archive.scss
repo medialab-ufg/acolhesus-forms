@@ -83,6 +83,25 @@
       background-image:url('../images/ui-icons.png') !important;
     }
 
+    .ver-todos {
+      margin-bottom: 20px;
+      float: left;
+      width: 100%;
+      border-bottom: 1px solid $light_gray;
+      padding-bottom: 20px;
+
+      a {
+        float: right;
+        background: $dark-green;
+        color: white;
+        border: none;
+
+        &:hover {
+          background: $green;
+        }
+      }
+    }
+
     .entry-status { color: white; }
   }
 

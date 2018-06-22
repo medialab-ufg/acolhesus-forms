@@ -164,6 +164,19 @@
   margin-bottom: 5px; }
 .lista-geral .acolhesus-forms-list .ui-icon-circle-arrow-e, .lista-geral .acolhesus-forms-list .ui-icon-circle-arrow-s {
   background-image: url("../images/ui-icons.png") !important; }
+.lista-geral .acolhesus-forms-list .ver-todos {
+  margin-bottom: 20px;
+  float: left;
+  width: 100%;
+  border-bottom: 1px solid #f2f3f5;
+  padding-bottom: 20px; }
+  .lista-geral .acolhesus-forms-list .ver-todos a {
+    float: right;
+    background: #003c46;
+    color: white;
+    border: none; }
+    .lista-geral .acolhesus-forms-list .ver-todos a:hover {
+      background: #0b7a6f; }
 .lista-geral .acolhesus-forms-list .entry-status {
   color: white; }
 .lista-geral .logo-container {
