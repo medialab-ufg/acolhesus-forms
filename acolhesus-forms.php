@@ -499,6 +499,20 @@ class AcolheSUS {
         }
 		return $options;
 	}
+
+	function get_forms_as_options($selected = '') {
+        $options = '';
+        foreach ($this->forms as $_f) {
+            $slug = $_f['slug'];
+            $nome = $_f['labels']['name'];
+            $options .= "<option value='$slug'";
+            $options .= selected($selected, $slug, false);
+            $options .= ">$nome</option>\n";
+        }
+
+        return $options;
+    }
+
 	function get_fases_as_options($selected = '') {
 		if (is_single()) {
             $options = "<option value=''></option>";

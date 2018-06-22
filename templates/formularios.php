@@ -31,13 +31,18 @@
 						<?php echo $AcolheSUS->get_eixos_as_options( isset($_GET['eixo']) ? $_GET['eixo'] : '' ); ?>
 					</select>
 
+					<select name="form" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
+						<option value="">Todos os formulários</option>
+						<?php echo $AcolheSUS->get_forms_as_options( isset($_GET['form']) ? $_GET['form'] : '' ); ?>
+					</select>
+
 					<input class="btn btn-default" type="submit" value="Filtrar" />
 				</form>
 			</div>
 		</div>
 
         <?php
-		if (isset($_GET['form'])) {
+		if (isset($_GET['form']) && (!empty($_GET['form'])) && count($_GET) === 4 ) {
 			$_form_filter = sanitize_text_field($_GET['form']);
 			if ( array_key_exists($_form_filter, $registered_forms) ) {
 				$registered_forms = [$_form_filter => $registered_forms[$_form_filter]];
