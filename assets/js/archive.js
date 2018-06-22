@@ -34,7 +34,7 @@ jQuery( function( $ ) {
     };
     $('.acolhesus-forms-list').accordion({
         collapsible: true,
-        // active: false,
+        active: false,
         heightStyle: "content",
         icons: icons
     });
