@@ -51,11 +51,12 @@
 				echo "<pre style='text-align: center'> Formulário inexistente! </pre>";
 			}
 		}
-
+		
 		/*
 		 * TODO: Após aprovação do layout, refatorar esse código para devidas classes
 		 * */
-        echo "<div class='acolhesus-forms-list'>";
+		$extra_class = (empty($_GET)) ? "default" : "filtered";
+        echo "<div class='acolhesus-forms-list $extra_class'>";
         foreach ($registered_forms as $formName => $formAtts):
             if ($AcolheSUS->can_user_see($formName)):
                 global $current_acolhesus_formtype;

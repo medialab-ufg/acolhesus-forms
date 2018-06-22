@@ -41,7 +41,9 @@ jQuery( function( $ ) {
         icons: icons
     });
 
-    // $($_forms_).accordion("option", {"active": 0});
+    if ($( $_forms_ ).hasClass('filtered')) {
+        $($_forms_).accordion("option", {"active": 0});
+    }
 
     $('.toggle_lock_form_entries').click(function () {
         var entry = {
