@@ -6,12 +6,12 @@
 
     global $AcolheSUS, $wp_query;
     $camposDoUsuario = $AcolheSUS->get_user_campos();
+	$registered_forms = $AcolheSUS->forms;
     ?>
 
     <div class="acolhesus-form-container col-md-12 lista-geral">
         <h1 class="list-title"> <?php echo $AcolheSUS->get_title(); ?> </h1>
         <hr> <div class="logo-container"> <?php $AcolheSUS->render_logo(); ?> </div> <hr>
-
 
 		<div class="panel panel-default">
 			<div class="panel-body">
@@ -37,7 +37,17 @@
 		</div>
 
         <?php
-        foreach ($AcolheSUS->forms as $formName => $formAtts):
+		if (isset($_GET['form'])) {
+			$_form_filter = sanitize_text_field($_GET['form']);
+			if ( array_key_exists($_form_filter, $registered_forms) ) {
+				$registered_forms = [$_form_filter => $registered_forms[$_form_filter]];
+			} else {
+				$registered_forms = [];
+				echo "<pre style='text-align: center'> Formulário inexistente! </pre>";
+			}
+		}
+
+        foreach ($registered_forms as $formName => $formAtts):
             if ($AcolheSUS->can_user_see($formName)):
                 global $current_acolhesus_formtype;
                 $current_acolhesus_formtype = $formName;
@@ -48,15 +58,15 @@
                     'post_status' => 'publish',
                     'posts_per_page' => -1,
                 ]);
-        ?>
+				?>
                 <h3 class="form-title">
                     <a href="<?php echo get_post_type_archive_link($formName); ?>"> <?php echo $formAtts['labels']['name']; ?> </a>
                 </h3>
 			<?php
                 include( plugin_dir_path( __FILE__ ) . "loop-forms.php");
-            endif;
+			endif;
         endforeach;
-    ?>
+		?>
     </div>
 <?php endif; ?>
 
