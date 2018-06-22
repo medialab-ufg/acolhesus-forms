@@ -32,12 +32,16 @@ jQuery( function( $ ) {
         header: "ui-icon-circle-arrow-e",
         activeHeader: "ui-icon-circle-arrow-s"
     };
-    $('.acolhesus-forms-list').accordion({
+
+    $_forms_ = '.acolhesus-forms-list';
+    $($_forms_).accordion({
         collapsible: true,
         active: false,
         heightStyle: "content",
         icons: icons
     });
+
+    // $($_forms_).accordion("option", {"active": 0});
 
     $('.toggle_lock_form_entries').click(function () {
         var entry = {
