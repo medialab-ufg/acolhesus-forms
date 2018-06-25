@@ -164,6 +164,16 @@ class AcolheSUS {
             'fase' => 0,
             'eixo' => 0
         ],
+        'efeitos_esperados' => [
+            'labels' => [
+                'name' => 'Monitoramento do Efeito Esperado e Inesperado',
+                'singular_name' => 'Efeitos Esperados e Inesperados'
+            ],
+            'slug' => 'efeitos_esperados',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => 0
+        ],
         'avaliacao_grupos' => [
             'labels' => [
                 'name' => 'Avaliações de Grupos',
