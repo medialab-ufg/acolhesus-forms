@@ -154,6 +154,16 @@ class AcolheSUS {
             'fase' => 0,
             'eixo' => 0
         ],
+        'plano_trabalho' => [
+            'labels' => [
+                'name' => 'Planos de Trabalho',
+                'singular_name' => 'Plano de Trabalho'
+            ],
+            'slug' => 'plano_trabalho',
+            'uma_entrada_por_campo' => true,
+            'fase' => 0,
+            'eixo' => 0
+        ],
         'avaliacao_grupos' => [
             'labels' => [
                 'name' => 'Avaliações de Grupos',
