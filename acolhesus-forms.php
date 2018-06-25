@@ -95,7 +95,7 @@ class AcolheSUS {
     public $forms = [
         'matriz_cenario' => [
             'labels' => [
-                'name' => 'Matrizes de Cenário',
+                'name' => 'Matriz de Cenários',
                 'singular_name' => 'Matriz de Cenários'
             ],
             'form_id' => '', // Setado via admin
@@ -106,8 +106,8 @@ class AcolheSUS {
         ],
         'indicadores' => [
             'labels' => [
-                'name' => 'Indicadores Epidemiológicos',
-                'singular_name' => 'Monitoramento de Indicadores Epidemiológicos'
+                'name' => 'Dados Epidemiológicos',
+                'singular_name' => 'Monitoramento de Dados Epidemiológicos'
             ],
             'slug' => 'indicadores',
             'uma_entrada_por_campo' => true,
@@ -116,7 +116,7 @@ class AcolheSUS {
         ],
         'visita_guiada' => [
             'labels' => [
-                'name' => 'Roteiros de Visita Guiada',
+                'name' => 'Roteiro de Visita Guiada',
                 'singular_name' => 'Roteiro de Visita Guiada'
             ],
             'slug' => 'visita_guiada',
@@ -126,7 +126,7 @@ class AcolheSUS {
         ],
         'fluxograma' => [
             'labels' => [
-                'name' => 'Fluxogramas Analisadores',
+                'name' => 'Fluxograma Analisador',
                 'singular_name' => 'Fluxograma Analisador'
             ],
             'slug' => 'fluxograma',
@@ -136,7 +136,7 @@ class AcolheSUS {
         ],
         'matriz_p_criticos' => [
             'labels' => [
-                'name' => 'Matrizes de Pontos Críticos',
+                'name' => 'Matriz de Pontos Críticos',
                 'singular_name' => 'Matriz de Pontos Críticos'
             ],
             'slug' => 'matriz_p_criticos',
@@ -146,7 +146,7 @@ class AcolheSUS {
         ],
         'matriz_objetivos' => [
             'labels' => [
-                'name' => 'Matrizes de Objetivos e Atividades',
+                'name' => 'Matriz de Objetivos e Atividades',
                 'singular_name' => 'Matriz de Objetivos e Atividades'
             ],
             'slug' => 'matriz_objetivos',
@@ -156,7 +156,7 @@ class AcolheSUS {
         ],
         'plano_trabalho' => [
             'labels' => [
-                'name' => 'Planos de Trabalho',
+                'name' => 'Plano de Trabalho',
                 'singular_name' => 'Plano de Trabalho'
             ],
             'slug' => 'plano_trabalho',
@@ -176,7 +176,7 @@ class AcolheSUS {
         ],
         'avaliacao_grupos' => [
             'labels' => [
-                'name' => 'Avaliações de Grupos',
+                'name' => 'Avaliação de Grupo',
                 'singular_name' => 'Avaliação da Atuação de Grupo do Projeto'
             ],
             'slug' => 'avaliacao_grupos',
@@ -187,7 +187,7 @@ class AcolheSUS {
         ],
         'avaliacao_oficina' => [
             'labels' => [
-                'name' => 'Avaliações de Oficinas Locais',
+                'name' => 'Avaliação de Oficina Local',
                 'singular_name' => 'Avaliação de Oficina Local'
             ],
             'slug' => 'avaliacao_oficina',
@@ -198,7 +198,7 @@ class AcolheSUS {
         ],
         'relatorio_oficina' => [
             'labels' => [
-                'name' => 'Relatórios de Oficinas',
+                'name' => 'Relatório de Oficina',
                 'singular_name' => 'Relatório de Oficina'
             ],
             'slug' => 'relatorio_oficina',
@@ -210,7 +210,7 @@ class AcolheSUS {
         ],
         'memoria_reuniao' => [
             'labels' => [
-                'name' => 'Memória de Reuniões',
+                'name' => 'Memória de Reunião',
                 'singular_name' => 'Memória de Reunião/Vídeo'
             ],
             'slug' => 'memoria_reuniao',

@@ -16,7 +16,6 @@ if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
         <?php include_once( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?>
 
         <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
-
     </div>
 
 <?php else:
