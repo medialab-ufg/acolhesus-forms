@@ -21,14 +21,14 @@
             </div>
 
             <form method="GET" class="filtros acolhesus-filtros" id="forms-filter">
-                <h3 class="form-title"> Campos de Atuação</h3>
+                <h3 class="form-title"> Campo de Atuação</h3>
                 <div>
                     <select name="campo" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
                         <option value="">Todos os campos</option>
                         <?php echo $AcolheSUS->get_campos_do_usuario_as_options( isset($_GET['campo']) ? $_GET['campo'] : '' ); ?>
                     </select>
                 </div>
-                <h3 class="form-title"> Fases </h3>
+                <h3 class="form-title"> Fase </h3>
                 <div>
                     <select name="fase" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
                         <option value="">Todas as fases</option>
@@ -36,7 +36,7 @@
                     </select>
                 </div>
 
-                <h3 class="form-title"> Eixos </h3>
+                <h3 class="form-title"> Eixo </h3>
                 <div>
                     <select name="eixo" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
                         <option value="">Todos os eixos</option>
@@ -44,7 +44,7 @@
                     </select>
                 </div>
 
-                <h3 class="form-title"> Formulários </h3>
+                <h3 class="form-title"> Formulário </h3>
                 <div>
                     <select name="form" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
                         <option value="">Todos os formulários</option>
