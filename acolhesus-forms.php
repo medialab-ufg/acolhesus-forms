@@ -902,9 +902,7 @@ class AcolheSUS {
     public function render_logo() {
         $src = $this->get_logo_URL();
         $alt = $title = "Logo " . $this->get_title();
-
         $_home_url = home_url('formularios-acolhesus');
-
 
         echo "<a href='$_home_url'> <img src='$src' alt='$alt' title='$title'/> </a>";
     }
