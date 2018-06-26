@@ -197,5 +197,15 @@
 .lista-geral .acolhesus_filter_forms {
   margin-top: 5px;
   margin-bottom: 10px; }
+.lista-geral input.filter-forms {
+  background: #003c46;
+  color: white;
+  text-transform: uppercase;
+  border: none;
+  float: left;
+  margin: 10px 0 10px 0;
+  text-align: center; }
+  .lista-geral input.filter-forms:hover {
+    background: #0b7a6f; }
 
 /*# sourceMappingURL=acolhesus.css.map */

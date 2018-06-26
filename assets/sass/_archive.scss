@@ -141,4 +141,21 @@
     margin-top: 5px;
     margin-bottom: 10px;
   }
+
+  input.filter-forms {
+    background: $dark_green;
+    color: white;
+    text-transform: uppercase;
+    border: none;
+    float: left;
+    margin: 10px 0 10px 0;
+    text-align: center;
+    //width: 100%;
+    //padding: 10px 0 10px 0;
+
+    &:hover {
+      background: $green;
+    }
+  }
+
 } // .lista-geral

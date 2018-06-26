@@ -54,7 +54,7 @@
 
             </form>
 
-            <input class="btn btn-default" type="submit" value="Filtrar" form="forms-filter"/>
+            <input class="btn btn-default filter-forms" type="submit" value="Filtrar" form="forms-filter"/>
 		</div>
 
         <?php
