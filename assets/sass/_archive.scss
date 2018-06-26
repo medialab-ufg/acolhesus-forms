@@ -57,6 +57,16 @@
 
 .lista-geral {
 
+  .filters-wrapper {
+    .welcome {
+      color: black;
+      text-align: center;
+      margin-bottom: 20px;
+
+      .user-name { font-weight: bolder }
+    }
+  }
+
   .form-title {
     a {
       float: left;
@@ -126,4 +136,9 @@
     }
 
   }
-}
+
+  .acolhesus_filter_forms {
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+} // .lista-geral

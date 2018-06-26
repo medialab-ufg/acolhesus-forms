@@ -7,7 +7,6 @@
     padding: 6px 12px;
     background-color: #fff;
     border: 1px solid #ccc;
-    margin-bottom: 20px;
     font-size: 14px;
   }
 
@@ -34,8 +33,6 @@
       }
     }
   } //fixed-meta
-
-  .acolhesus_filter_forms { width: auto !important; }
 
   .list-entries {
     color: white;
@@ -98,6 +95,11 @@
 }
 .single .acolhesus-form-container {
   color: black;
+
+  .acolhesus_filter_forms {
+    width: auto !important;
+    margin-bottom: 20px;
+  }
 
   .select2-container--classic .select2-selection--multiple {
     ul.select2-selection__rendered {

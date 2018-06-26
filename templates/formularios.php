@@ -15,8 +15,8 @@
         <hr> <div class="logo-container"> <?php $AcolheSUS->render_logo(); ?> </div> <hr>
 
 		<div class="filters-wrapper">
-            <div class="welcome" style="color: black; text-align: center; margin-bottom: 20px">
-                Olá, <strong><?php echo $user?></strong>! <br>
+            <div class="welcome">
+                Olá, <span class="user-name"><?php echo $user?></span>! <br>
                 Utilize os filtros abaixo para acessar os formulários
             </div>
 

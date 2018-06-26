@@ -19,7 +19,6 @@
   padding: 6px 12px;
   background-color: #fff;
   border: 1px solid #ccc;
-  margin-bottom: 20px;
   font-size: 14px; }
 .acolhesus-form-container .acolhesus_basic_info_selector:disabled {
   background: #eee;
@@ -35,8 +34,6 @@
     display: none; }
   .acolhesus-form-container .fixed-meta div:first-child {
     padding-left: 0; }
-.acolhesus-form-container .acolhesus_filter_forms {
-  width: auto !important; }
 .acolhesus-form-container .list-entries {
   color: white;
   float: right;
@@ -72,6 +69,9 @@
 
 .single .acolhesus-form-container {
   color: black; }
+  .single .acolhesus-form-container .acolhesus_filter_forms {
+    width: auto !important;
+    margin-bottom: 20px; }
   .single .acolhesus-form-container .select2-container--classic .select2-selection--multiple ul.select2-selection__rendered {
     width: 100%; }
     .single .acolhesus-form-container .select2-container--classic .select2-selection--multiple ul.select2-selection__rendered input[type='search'] {
@@ -145,6 +145,12 @@
   margin-right: 10px;
   min-width: 50%; }
 
+.lista-geral .filters-wrapper .welcome {
+  color: black;
+  text-align: center;
+  margin-bottom: 20px; }
+  .lista-geral .filters-wrapper .welcome .user-name {
+    font-weight: bolder; }
 .lista-geral .form-title a {
   float: left;
   padding-right: 20px; }
@@ -188,5 +194,8 @@
     max-width: 250px; }
     .lista-geral .logo-container img:hover {
       opacity: 0.8; }
+.lista-geral .acolhesus_filter_forms {
+  margin-top: 5px;
+  margin-bottom: 10px; }
 
 /*# sourceMappingURL=acolhesus.css.map */

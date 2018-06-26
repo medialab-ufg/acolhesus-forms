@@ -28,14 +28,14 @@ jQuery( function( $ ) {
         }
     });
 
-
-
     $_forms_ = '.acolhesus-forms-list';
+    $_filters = '.acolhesus-filtros';
     $($_forms_).accordion(getAccordionConfig());
-    $('.acolhesus-filtros').accordion(getAccordionConfig());
+    $($_filters).accordion(getAccordionConfig());
 
     if ($( $_forms_ ).hasClass('filtered')) {
         $($_forms_).accordion("option", {"active": 0});
+        $($_filters).accordion("option", {"active": 0});
     }
 
     $('.toggle_lock_form_entries').click(function () {
