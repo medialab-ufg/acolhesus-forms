@@ -56,41 +56,44 @@
 		 * TODO: Após aprovação do layout, refatorar esse código para devidas classes
 		 * */
 		$extra_class = (empty($_GET)) ? "default" : "filtered";
-        echo "<div class='acolhesus-forms-list $extra_class'>";
-        foreach ($registered_forms as $formName => $formAtts):
-            if ($AcolheSUS->can_user_see($formName)):
-                global $current_acolhesus_formtype;
-                $current_acolhesus_formtype = $formName;
-                $nome =  $formAtts['labels']['name'];
-                $link = get_post_type_archive_link($formName);
-                $ver_todos = "Ir para " . $nome;
 
-                // Essa query é modificada pelo pre_get_posts que tem na classe principal do plugin
-                $wp_query = new WP_Query([
-                    'post_type' => $formName,
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                ]);
-				?>
-                <h3 class="form-title"> <?php echo $nome; ?> </h3>
-                <div class="panel">
-                    <div class="ver-todos">
-                        <a class="btn btn-default" href="<?php echo $link; ?>"> <?php echo $ver_todos; ?> </a>
-                        <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
+        if (!empty($_GET)) {
+            echo "<div class='acolhesus-forms-list $extra_class'>";
+            foreach ($registered_forms as $formName => $formAtts):
+                if ($AcolheSUS->can_user_see($formName)):
+                    global $current_acolhesus_formtype;
+                    $current_acolhesus_formtype = $formName;
+                    $nome = $formAtts['labels']['name'];
+                    $link = get_post_type_archive_link($formName);
+                    $ver_todos = "Ir para " . $nome;
+
+                    // Essa query é modificada pelo pre_get_posts que tem na classe principal do plugin
+                    $wp_query = new WP_Query([
+                        'post_type' => $formName,
+                        'post_status' => 'publish',
+                        'posts_per_page' => -1,
+                    ]);
+                    ?>
+                    <h3 class="form-title"> <?php echo $nome; ?> </h3>
+                    <div class="panel">
+                        <div class="ver-todos">
+                            <a class="btn btn-default" href="<?php echo $link; ?>"> <?php echo $ver_todos; ?> </a>
+                            <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
+                        </div>
+                        <?php
+                        if ($wp_query->found_posts > 0) {
+                            include(plugin_dir_path(__FILE__) . "loop-forms.php");
+                        } else {
+                            echo "<center> Nenhuma resposta de $nome! </center>";
+                        }
+                        ?>
                     </div>
                     <?php
-                    if ($wp_query->found_posts > 0) {
-                        include( plugin_dir_path( __FILE__ ) . "loop-forms.php");
-                    } else {
-                        echo "<center> Nenhuma resposta de $nome! </center>";
-                    }
-                    ?>
-                </div>
-            <?php
-            endif;
+                endif;
 
-         endforeach;
-         echo "</div>";
+            endforeach;
+            echo "</div>";
+        }
 		?>
     </div>
 <?php endif; ?>
