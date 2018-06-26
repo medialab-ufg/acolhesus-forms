@@ -28,18 +28,11 @@ jQuery( function( $ ) {
         }
     });
 
-    var icons = {
-        header: "ui-icon-circle-arrow-e",
-        activeHeader: "ui-icon-circle-arrow-s"
-    };
+
 
     $_forms_ = '.acolhesus-forms-list';
-    $($_forms_).accordion({
-        collapsible: true,
-        active: false,
-        heightStyle: "content",
-        icons: icons
-    });
+    $($_forms_).accordion(getAccordionConfig());
+    $('.acolhesus-filtros').accordion(getAccordionConfig());
 
     if ($( $_forms_ ).hasClass('filtered')) {
         $($_forms_).accordion("option", {"active": 0});
@@ -86,6 +79,19 @@ jQuery( function( $ ) {
                 .addClass('toggle_lock_form_entries entry-status btn btn-'+new_data.button.class)
                 .text(new_data.button.text).attr('data-status', new_data.button.text);
         }
+    }
+
+    function getAccordionConfig() {
+        var icons = {
+            header: "ui-icon-circle-arrow-e",
+            activeHeader: "ui-icon-circle-arrow-s"
+        };
+        return {
+            collapsible: true,
+            active: false,
+            heightStyle: "content",
+            icons: icons
+        };
     }
 
 });

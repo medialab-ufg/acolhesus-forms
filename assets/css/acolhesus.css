@@ -156,7 +156,7 @@
 .lista-geral h3 a {
   color: #003c46;
   font-size: 20px; }
-.lista-geral .acolhesus-forms-list h3.form-title {
+.lista-geral .acolhesus-forms-list h3.form-title, .lista-geral .acolhesus-filtros h3.form-title {
   color: white;
   background: #00b4b4;
   font-size: 100%;
@@ -164,27 +164,29 @@
   padding-left: 30px;
   border: 0;
   margin-bottom: 5px; }
-.lista-geral .acolhesus-forms-list .ui-icon-circle-arrow-e, .lista-geral .acolhesus-forms-list .ui-icon-circle-arrow-s {
+.lista-geral .acolhesus-forms-list .ui-icon-circle-arrow-e, .lista-geral .acolhesus-forms-list .ui-icon-circle-arrow-s, .lista-geral .acolhesus-filtros .ui-icon-circle-arrow-e, .lista-geral .acolhesus-filtros .ui-icon-circle-arrow-s {
   background-image: url("../images/ui-icons.png") !important; }
-.lista-geral .acolhesus-forms-list .ver-todos {
+.lista-geral .acolhesus-forms-list .ver-todos, .lista-geral .acolhesus-filtros .ver-todos {
   margin-bottom: 20px;
   float: left;
   width: 100%;
   border-bottom: 1px solid #f2f3f5;
   padding-bottom: 20px; }
-  .lista-geral .acolhesus-forms-list .ver-todos a {
+  .lista-geral .acolhesus-forms-list .ver-todos a, .lista-geral .acolhesus-filtros .ver-todos a {
     float: right;
     background: #003c46;
     color: white;
     border: none; }
-    .lista-geral .acolhesus-forms-list .ver-todos a:hover {
+    .lista-geral .acolhesus-forms-list .ver-todos a:hover, .lista-geral .acolhesus-filtros .ver-todos a:hover {
       background: #0b7a6f; }
-.lista-geral .acolhesus-forms-list .entry-status {
+.lista-geral .acolhesus-forms-list .entry-status, .lista-geral .acolhesus-filtros .entry-status {
   color: white; }
 .lista-geral .logo-container {
   margin: 10px auto;
   text-align: center; }
   .lista-geral .logo-container img {
-    max-width: 270px; }
+    max-width: 250px; }
+    .lista-geral .logo-container img:hover {
+      opacity: 0.8; }
 
 /*# sourceMappingURL=acolhesus.css.map */
