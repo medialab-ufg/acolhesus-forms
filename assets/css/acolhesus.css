@@ -151,6 +151,10 @@
   margin-bottom: 20px; }
   .lista-geral .filters-wrapper .welcome .user-name {
     font-weight: bolder; }
+.lista-geral .filters-wrapper .btn-wrapper {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 30px;
+  padding-bottom: 10px !important; }
 .lista-geral .form-title a {
   float: left;
   padding-right: 20px; }
@@ -165,7 +169,7 @@
 .lista-geral .acolhesus-forms-list h3.form-title, .lista-geral .acolhesus-filtros h3.form-title {
   color: white;
   background: #00b4b4;
-  font-size: 100%;
+  font-size: 15px;
   padding: 10px;
   padding-left: 30px;
   border: 0;

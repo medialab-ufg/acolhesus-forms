@@ -54,8 +54,12 @@
 
             </form>
 
-            <input class="btn btn-default filter-forms" type="submit" value="Filtrar" form="forms-filter"/>
+            <div class="col-md-12 btn-wrapper no-padding">
+                <input class="btn btn-default filter-forms" type="submit" value="Filtrar" form="forms-filter"/>
+            </div>
 		</div>
+
+
 
         <?php
         /*
@@ -73,7 +77,8 @@
 
 		$extra_class = (empty($_GET)) ? "default" : "filtered";
         if (!empty($_GET) && isset($_GET['form'])) {
-            echo "<div class='acolhesus-forms-list $extra_class'>";
+            // echo "<div class='col-md-12' style='text-align: center'>Formulários encontrados</div>";
+            echo "<div class='col-md-12 acolhesus-forms-list $extra_class'>";
             foreach ($registered_forms as $formName => $formAtts):
                 if ($AcolheSUS->can_user_see($formName)):
                     global $current_acolhesus_formtype;

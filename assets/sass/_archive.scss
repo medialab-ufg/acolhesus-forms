@@ -65,6 +65,11 @@
 
       .user-name { font-weight: bolder }
     }
+    .btn-wrapper {
+      border-bottom: 1px solid #eee;
+      margin-bottom: 30px;
+      padding-bottom: 10px !important;
+    }
   }
 
   .form-title {
@@ -90,7 +95,7 @@
     h3.form-title {
       color: white;
       background: #00b4b4;
-      font-size: 100%;
+      font-size: 15px;
       padding: 10px;
       padding-left: 30px;
       border: 0;
