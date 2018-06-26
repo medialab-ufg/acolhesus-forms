@@ -11,8 +11,8 @@
     ?>
 
     <div class="acolhesus-form-container col-md-12 lista-geral">
-        <h1 class="list-title"> <?php echo $AcolheSUS->get_title(); ?> </h1>
-        <hr> <div class="logo-container"> <?php $AcolheSUS->render_logo(); ?> </div> <hr>
+        <h1 class="list-title"> <?php echo $formView->get_title(); ?> </h1>
+        <hr> <div class="logo-container"> <?php $formView->render_logo(); ?> </div> <hr>
 
 		<div class="filters-wrapper">
             <div class="welcome">
@@ -58,8 +58,6 @@
                 <input class="btn btn-default filter-forms" type="submit" value="Filtrar" form="forms-filter"/>
             </div>
 		</div>
-
-
 
         <?php
         /*
