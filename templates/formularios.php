@@ -11,8 +11,8 @@
     ?>
 
     <div class="acolhesus-form-container col-md-12 lista-geral">
-        <h1 class="list-title"> <?php echo $formView->get_title(); ?> </h1>
-        <hr> <div class="logo-container"> <?php $formView->render_logo(); ?> </div> <hr>
+
+        <?php $formView->renderFormHeader(); ?>
 
 		<div class="filters-wrapper">
             <div class="welcome">
