@@ -29,4 +29,8 @@ class AcolheSUSView {
         echo $header;
     }
 
+    public function renderFormsDenied() {
+        echo '<center> Usuário sem permissão para acessar esta página! </center>';
+    }
+
 }

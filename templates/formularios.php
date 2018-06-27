@@ -1,9 +1,9 @@
-<?php include_once( get_theme_file_path('header-full.php') ); ?>
+<?php
+include_once( get_theme_file_path('header-full.php') );
 
-<?php if (!current_user_can('view_acolhesus')): ?>
-    <center> Permissão negada! </center>
-<?php else:
-
+if (!current_user_can('view_acolhesus')):
+    $formView->renderFormsDenied();
+else:
     global $AcolheSUS, $wp_query;
     $camposDoUsuario = $AcolheSUS->get_user_campos();
 	$registered_forms = $AcolheSUS->forms;
@@ -114,6 +114,7 @@
         }
 		?>
     </div>
-<?php endif; ?>
+<?php
+endif;
 
-<?php include_once( get_theme_file_path('footer-full.php') ); ?>
+include_once( get_theme_file_path('footer-full.php') );
