@@ -513,6 +513,9 @@ class AcolheSUS {
 	function get_campos_do_usuario_as_options($selected = '') {
 		$camposDoUsuario = $this->get_user_campos();
 		$options = '';
+        if (is_single()) {
+            $options = "<option value=''></option>";
+        }
 		foreach ($camposDoUsuario as $campo) {
             $campo_completo = $this->campos_completos[$campo];
 
@@ -524,6 +527,7 @@ class AcolheSUS {
 	}
 	
 	function get_eixos_as_options($selected = '') {
+        $options = '';
         if (is_single()) {
             $options = "<option value=''></option>";
         }
@@ -551,6 +555,7 @@ class AcolheSUS {
     }
 
 	function get_fases_as_options($selected = '') {
+        $options = '';
 		if (is_single()) {
             $options = "<option value=''></option>";
 
@@ -567,6 +572,26 @@ class AcolheSUS {
         }
 		return $options;
 	}
+
+	function get_filter_options($filter, $selected = '') {
+        $options = '';
+        switch ($filter) {
+            case 'campo':
+                $options = $this->get_campos_do_usuario_as_options($selected);
+                break;
+            case 'eixo':
+                $options = $this->get_eixos_as_options($selected);
+                break;
+            case 'fase':
+                $options = $this->get_fases_as_options($selected);
+                break;
+            case 'form':
+                $options = $this->get_forms_as_options($selected);
+                break;
+        }
+
+        return $options;
+    }
 	
     private function get_basic_info_form($is_locked = false) {
         global $post;
