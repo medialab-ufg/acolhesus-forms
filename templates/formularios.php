@@ -15,10 +15,8 @@ else:
         <?php $formView->renderFormHeader(); ?>
 
 		<div class="filters-wrapper">
-            <div class="welcome">
-                Olá, <span class="user-name"><?php echo $user?></span>! <br>
-                Utilize os filtros abaixo para acessar os formulários
-            </div>
+
+            <?php $formView->renderWelcomeMessage($user); ?>
 
             <form method="GET" class="filtros acolhesus-filtros" id="forms-filter">
                 <h3 class="form-title"> Campo de Atuação</h3>

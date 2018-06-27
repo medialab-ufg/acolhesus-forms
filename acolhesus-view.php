@@ -29,6 +29,15 @@ class AcolheSUSView {
         echo $header;
     }
 
+    public function renderWelcomeMessage($name = '') {
+        $_header = "";
+        if ($name && !empty($name)) {
+            $_header =  'Olá, <span class="user-name">' . $name .'</span>!<br>';
+        }
+
+        echo '<div class="welcome">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
+    }
+
     public function renderFormsDenied() {
         echo '<center> Usuário sem permissão para acessar esta página! </center>';
     }
