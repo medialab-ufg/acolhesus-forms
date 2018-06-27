@@ -1,7 +1,14 @@
 <?php
 define('ACOLHESUS_URL', plugin_dir_url(__FILE__));
 
-class AcolheSUSView {
+class AcolheSUSView extends AcolheSUS {
+
+    public $filtros = [
+        'campo' => ['plural' => 'Todos os campos',      'singular' => 'Campo de Atuação'],
+        'fase'  => ['plural' => 'Todas as fases',       'singular' => 'Fase'],
+        'eixo'  => ['plural' => 'Todos os eixos',       'singular' => 'Eixo'],
+        'form'  => ['plural' => 'Todos os formulários', 'singular' => 'Formulário']
+    ];
 
     private function get_logo_URL()
     {
@@ -36,6 +43,20 @@ class AcolheSUSView {
         }
 
         echo '<div class="welcome">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
+    }
+
+    public function renderFilters() {
+        foreach ($this->filtros as $filtro => $props) {
+            $opt = isset($_GET[$filtro]) ? $_GET[$filtro] : '';
+
+            $html  = "<h3 class='form-title'>" . $props['singular'] . "</h3>";
+            $html .= "<div><select name='$filtro' class='acolhesus_filter_forms' id='acolhesus_filter_forms_campos'>";
+            $html .= "<option value=''>" . $props['plural'] . "</option>";
+            $html .= $this->get_filter_options($filtro, $opt);
+            $html .= "</select></div>";
+
+            echo $html;
+        }
     }
 
     public function renderFormsDenied() {

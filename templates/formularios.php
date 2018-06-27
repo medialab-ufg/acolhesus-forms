@@ -19,37 +19,7 @@ else:
             <?php $formView->renderWelcomeMessage($user); ?>
 
             <form method="GET" class="filtros acolhesus-filtros" id="forms-filter">
-                <h3 class="form-title"> Campo de Atuação</h3>
-                <div>
-                    <select name="campo" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
-                        <option value="">Todos os campos</option>
-                        <?php echo $AcolheSUS->get_campos_do_usuario_as_options( isset($_GET['campo']) ? $_GET['campo'] : '' ); ?>
-                    </select>
-                </div>
-                <h3 class="form-title"> Fase </h3>
-                <div>
-                    <select name="fase" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
-                        <option value="">Todas as fases</option>
-                        <?php echo $AcolheSUS->get_fases_as_options( isset($_GET['fase']) ? $_GET['fase'] : '' ); ?>
-                    </select>
-                </div>
-
-                <h3 class="form-title"> Eixo </h3>
-                <div>
-                    <select name="eixo" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
-                        <option value="">Todos os eixos</option>
-                        <?php echo $AcolheSUS->get_eixos_as_options( isset($_GET['eixo']) ? $_GET['eixo'] : '' ); ?>
-                    </select>
-                </div>
-
-                <h3 class="form-title"> Formulário </h3>
-                <div>
-                    <select name="form" class="acolhesus_filter_forms" id="acolhesus_filter_forms_campos">
-                        <option value="">Todos os formulários</option>
-                        <?php echo $AcolheSUS->get_forms_as_options( isset($_GET['form']) ? $_GET['form'] : '' ); ?>
-                    </select>
-                </div>
-
+                <?php $formView->renderFilters(); ?>
             </form>
 
             <div class="col-md-12 btn-wrapper no-padding">
