@@ -59,6 +59,21 @@ class AcolheSUSView extends AcolheSUS {
         }
     }
 
+    public function filterSelectedForm(&$forms=[]) {
+        if (isset($_GET['form']) && (!empty($_GET['form'])) && count($_GET) === 4 ) {
+            $_form_filter = sanitize_text_field($_GET['form']);
+            if (array_key_exists($_form_filter, $forms)) {
+                $forms = [$_form_filter => $forms[$_form_filter]];
+            } else {
+                $forms = [];
+                echo "<pre style='text-align: center'> Formulário inexistente! </pre>";
+                return $forms;
+            }
+        }
+
+        return $forms;
+    }
+
     public function renderFormsDenied() {
         echo '<center> Usuário sem permissão para acessar esta página! </center>';
     }

@@ -28,18 +28,7 @@ else:
 		</div>
 
         <?php
-        /*
-		 * TODO: Após aprovação do layout, refatorar esse código para devidas classes
-		 * */
-		if (isset($_GET['form']) && (!empty($_GET['form'])) && count($_GET) === 4 ) {
-			$_form_filter = sanitize_text_field($_GET['form']);
-			if ( array_key_exists($_form_filter, $registered_forms) ) {
-				$registered_forms = [$_form_filter => $registered_forms[$_form_filter]];
-			} else {
-				$registered_forms = [];
-				echo "<pre style='text-align: center'> Formulário inexistente! </pre>";
-			}
-		}
+        $formView->filterSelectedForm($registered_forms);
 
 		$extra_class = (empty($_GET)) ? "default" : "filtered";
         if (!empty($_GET) && isset($_GET['form'])) {
