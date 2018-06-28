@@ -5,7 +5,6 @@ if (!current_user_can('view_acolhesus')):
     $formView->renderFormsDenied();
 else:
     global $AcolheSUS, $wp_query;
-    $camposDoUsuario = $AcolheSUS->get_user_campos();
 	$registered_forms = $AcolheSUS->forms;
 	$user = wp_get_current_user()->display_name;
     ?>
@@ -25,6 +24,7 @@ else:
             <div class="col-md-12 btn-wrapper no-padding">
                 <input class="btn btn-default filter-forms" type="submit" value="Filtrar" form="forms-filter"/>
             </div>
+
 		</div>
 
         <?php
@@ -32,7 +32,6 @@ else:
 
 		$extra_class = (empty($_GET)) ? "default" : "filtered";
         if (!empty($_GET) && isset($_GET['form'])) {
-            // echo "<div class='col-md-12' style='text-align: center'>Formulários encontrados</div>";
             echo "<div class='col-md-12 acolhesus-forms-list $extra_class'>";
             foreach ($registered_forms as $formName => $formAtts):
                 if ($AcolheSUS->can_user_see($formName)):
