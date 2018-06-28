@@ -273,15 +273,6 @@ class AcolheSUS {
         }
     }
 
-    private function set_forms_phases() {
-        $this->forms['matriz_cenario']['fase'] = $this->fases[0];
-        $this->forms['matriz_cenario']['eixo'] = $this->eixos[0];
-        $this->forms['avaliacao_grupos']['fase'] = $this->fases[0];
-        $this->forms['avaliacao_grupos']['eixo'] = $this->eixos[0];
-        $this->forms['relatorio_oficina']['fase'] = $this->fases[0];
-        $this->forms['relatorio_oficina']['eixo'] = $this->eixos[0];
-    }
-
     function init_default_data() {
         global $AcolheSUSAdminForm;
         // Populate form IDs
