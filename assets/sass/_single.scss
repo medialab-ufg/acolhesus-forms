@@ -15,10 +15,10 @@
     cursor: not-allowed;
   }
 
+  .field_required { color: #EE0000 }
+
   .fixed-meta {
     padding: 0;
-
-    .field_required { color: #EE0000 }
 
     .fixed {
       color: $error_red !important;

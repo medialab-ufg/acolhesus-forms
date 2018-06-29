@@ -423,7 +423,7 @@ class AcolheSUS {
         if ("matriz_cenario" === $type) {
             $uf = get_post_meta($id, self::CAMPO_META, true);
             $uf_cities = UFMunicipio::get_cities_options($uf);
-            echo "<div class='col-md-6' id='form_id' data-id='$id'><label for='municipios-matriz-cenario'>  Municípios de abrangência da unidade </label> <br>";
+            echo "<div class='col-md-6' id='form_id' data-id='$id'><label for='municipios-matriz-cenario'>  Municípios de abrangência da unidade </label> " .$this->span_required() . " <br>";
             echo "<select multiple name='municipios-matriz-cenario' class='matriz-cenario-cities form-controle'> $uf_cities </select></div>";
         }
     }
@@ -613,7 +613,7 @@ class AcolheSUS {
 
     private function get_fixed_select($title, $name, $attr, $post_id, $options=[]) {
         $id = $name . "_selector";
-        $html  = "<div class='col-md-4 $name'> $title <span class='field_required'>*</span>";
+        $html  = "<div class='col-md-4 $name'> $title " . $this->span_required();
         $html .= "<select id='$id' $attr class='acolhesus_basic_info_selector' name='$name' data-post_id='$post_id'>";
         $html .= $options . " </select>";
         if (in_array($name, ["acolhesus_eixo","acolhesus_fase"]))
@@ -625,6 +625,10 @@ class AcolheSUS {
 
     private function required_field() {
         return "<div class='fixed field_required'> Campo obrigatório!</div>";
+    }
+
+    private function span_required() {
+        return "<span class='field_required'>*</span>";
     }
 
     function ajax_callback_save_post_basic_info() {
