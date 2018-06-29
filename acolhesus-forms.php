@@ -423,8 +423,10 @@ class AcolheSUS {
         if ("matriz_cenario" === $type) {
             $uf = get_post_meta($id, self::CAMPO_META, true);
             $uf_cities = UFMunicipio::get_cities_options($uf);
-            echo "<div class='col-md-6' id='form_id' data-id='$id'><label for='municipios-matriz-cenario'>  Municípios de abrangência da unidade </label> " .$this->span_required() . " <br>";
-            echo "<select multiple name='municipios-matriz-cenario' class='matriz-cenario-cities form-controle'> $uf_cities </select></div>";
+            $_title = "Municípios de abrangência da unidade";
+            echo "<div class='col-md-6 no-padding' id='form_id' data-id='$id'><label for='municipios-matriz-cenario'> $_title </label> " .$this->span_required() . " <br>";
+            echo "<select multiple name='municipios-matriz-cenario' class='matriz-cenario-cities form-controle'> $uf_cities </select>";
+            echo $this->required_field() . "</div>";
         }
     }
 
@@ -593,7 +595,6 @@ class AcolheSUS {
 
         $campoAtual = get_post_meta($post->ID, self::CAMPO_META, true);
         $faseAtual = get_post_meta($post->ID, 'acolhesus_fase', true);
-        $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);
 
         $options = $this->get_campos_do_usuario_as_options($campoAtual);
         $camposHtml = $this->get_fixed_select("Campo de atuação", "acolhesus_campo", $attr, $post->ID, $options);
@@ -602,6 +603,7 @@ class AcolheSUS {
         $faseHtml = $this->get_fixed_select("Fase", "acolhesus_fase", $attr, $post->ID, $options);
 
         if ($this->form_type_has_axis($type)) {
+            $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);
             $options = $this->get_eixos_as_options($eixoAtual);
             $eixoHtml = $this->get_fixed_select("Eixo", "acolhesus_eixo", $attr, $post->ID, $options);
         } else {
@@ -616,8 +618,7 @@ class AcolheSUS {
         $html  = "<div class='col-md-4 $name'> $title " . $this->span_required();
         $html .= "<select id='$id' $attr class='acolhesus_basic_info_selector' name='$name' data-post_id='$post_id'>";
         $html .= $options . " </select>";
-        if (in_array($name, ["acolhesus_eixo","acolhesus_fase"]))
-            $html .= $this->required_field();
+        $html .= $this->required_field();
         $html .= "</div>";
 
         return $html;
