@@ -10,6 +10,12 @@ class AcolheSUSView extends AcolheSUS {
         'form'  => ['plural' => 'Todos os formulários', 'singular' => 'Formulário']
     ];
 
+
+    function __construct()
+    {
+        // Construtor vazio para evitar repetir as operações da classe pai
+    }
+
     private function get_logo_URL()
     {
         return ACOLHESUS_URL . 'assets/images/logo-full.png';
