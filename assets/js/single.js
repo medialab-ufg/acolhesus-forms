@@ -27,9 +27,10 @@ jQuery( function( $ ) {
         }
     });
 
-    $('form').submit(function (e) {
-        $('.acolhesus_basic_info_selector').change();
+    var current_form_id = $('.caldera-grid form').attr('id');
+    $('form#' + current_form_id).submit(function (e) {
         e.preventDefault();
+        $('.acolhesus_basic_info_selector').change();
         return false;
     });
 
@@ -118,6 +119,11 @@ jQuery( function( $ ) {
         $($select_class).val(_cities).trigger('change');
     }
 
+    var total_cities = $('#total_entry_cities').val();
+    if (total_cities && total_cities > 0) {
+        $('.cities-mc .field_required').hide();
+    }
+
     if (cant_edit) {
         $($select_class).prop("disabled", true);
         $('.select2-container--classic .select2-selection--multiple').css('border', 0);
@@ -135,10 +141,16 @@ jQuery( function( $ ) {
         var event = obj_evt.event;
         var data = event.params.data;
 
+        var total_cities = $($select_class).val();
+        if (total_cities && total_cities.length > 0) {
+            $('.cities-mc .field_required').hide();
+        } else {
+            $('.cities-mc .field_required').show();
+        }
+
         if (_action && post_id && data.id) {
             var del_data = { action: _action, city: data.id, post_id: post_id};
             $.post(acolhesus.ajax_url, del_data);
         }
     }
-
 });

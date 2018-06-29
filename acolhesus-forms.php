@@ -382,8 +382,14 @@ class AcolheSUS {
         }
 
         if ("matriz_cenario" === $formType) {
-            $municipios = json_encode(get_post_meta($_post_id, 'acolhesus_form_municipio'), JSON_UNESCAPED_UNICODE);
-            echo "<input type='hidden' id='entry_cities' name='entry_cities' value='$municipios'>";
+            $cities = get_post_meta($_post_id, 'acolhesus_form_municipio');
+            $total = count($cities);
+            $municipios = json_encode($cities, JSON_UNESCAPED_UNICODE);
+
+            $extra_input  = "<input type='hidden' id='entry_cities' name='entry_cities' value='$municipios'>";
+            $extra_input .= "<input type='hidden' id='total_entry_cities' name='total_entry_cities' value='$total'>";
+
+            echo $extra_input;
         }
 
         return $extra_info;
@@ -424,7 +430,7 @@ class AcolheSUS {
             $uf = get_post_meta($id, self::CAMPO_META, true);
             $uf_cities = UFMunicipio::get_cities_options($uf);
             $_title = "Municípios de abrangência da unidade";
-            echo "<div class='col-md-6 no-padding' id='form_id' data-id='$id'><label for='municipios-matriz-cenario'> $_title </label> " .$this->span_required() . " <br>";
+            echo "<div class='col-md-6 no-padding cities-mc' id='form_id' data-id='$id'><label for='municipios-matriz-cenario'> $_title </label> " .$this->span_required() . " <br>";
             echo "<select multiple name='municipios-matriz-cenario' class='matriz-cenario-cities form-controle'> $uf_cities </select>";
             echo $this->required_field() . "</div>";
         }
