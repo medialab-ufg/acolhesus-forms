@@ -25,12 +25,15 @@
   cursor: not-allowed; }
 .acolhesus-form-container .field_required {
   color: #EE0000; }
+.acolhesus-form-container .fixed.field_required {
+  color: #a94442;
+  font-size: 12px !important; }
 .acolhesus-form-container .fixed-meta {
   padding: 0; }
   .acolhesus-form-container .fixed-meta .fixed {
     color: #a94442 !important;
     font-size: 12px !important;
-    margin-top: -15px;
+    margin-top: 5px;
     display: none; }
   .acolhesus-form-container .fixed-meta div:first-child {
     padding-left: 0; }

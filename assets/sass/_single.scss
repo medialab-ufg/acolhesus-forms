@@ -17,13 +17,18 @@
 
   .field_required { color: #EE0000 }
 
+  .fixed.field_required {
+    color: $error_red;
+    font-size: 12px !important;
+  }
+
   .fixed-meta {
     padding: 0;
 
     .fixed {
       color: $error_red !important;
       font-size: 12px !important;
-      margin-top: -15px;
+      margin-top: 5px;
       display: none;
     }
 
