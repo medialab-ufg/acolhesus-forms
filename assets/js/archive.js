@@ -95,7 +95,17 @@ jQuery( function( $ ) {
     }
 
 
-    $('.acolhesus_filter_forms').select2({width: '100%'});
+    $('.acolhesus_filter_forms').select2({
+        width: '100%',
+        language: {
+            "noResults": function(){
+                return "Digite outros termos";
+            }
+        },
+        escapeMarkup: function (markup) {
+            return markup;
+        }
+    });
 
 });
 
