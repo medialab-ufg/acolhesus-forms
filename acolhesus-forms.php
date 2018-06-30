@@ -757,6 +757,9 @@ class AcolheSUS {
 
             } else if ( is_archive() || !empty(get_query_var('acolhe_sus')) ) {
                 wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/archive.js');
+                wp_enqueue_style('select2', plugin_dir_url( __FILE__ ) . 'assets/lib/select2/select2.min.css');
+                wp_enqueue_script('select2', plugin_dir_url( __FILE__ ) . 'assets/lib/select2/select2.min.js', array('jquery'));
+
             }
             wp_localize_script('rhs-acolhesus', 'acolhesus', [
                 'ajax_url' => admin_url('admin-ajax.php')
