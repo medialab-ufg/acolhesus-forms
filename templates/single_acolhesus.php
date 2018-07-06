@@ -22,7 +22,7 @@ $can_user_view = in_array($_view_perm, get_user_meta(get_current_user_id(), 'aco
         <?php endif; ?>
     </h3>
 
-    <?php the_content(); ?>
+    <?php  the_content(); ?>
 
     <div id="form-accordion">
 

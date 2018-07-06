@@ -256,7 +256,25 @@ class AcolheSUS {
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
 
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
+
+        add_filter( 'caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
     }
+
+    function check_send_mail( $mail, $data, $form )
+    {
+        foreach ($form['fields'] as $field)
+        {
+            if($field['type'] === 'checkbox' && $field['slug'] === 'save_send')
+            {
+                $val = current($field['config']['option'])['value'];
+                if($val === 'true')
+                {
+                    return $mail;
+                }else return false;
+            }
+        }
+    }
+
 
     function acolhesus_add_entry_btn_callback($type) {
         if (!is_null($type) && $this->can_add_entry($type)) {
