@@ -215,6 +215,17 @@ class AcolheSUS {
             'eixo' => false,
             'possui_validacao' => false
         ],
+        'atividades_dispersao' => [
+            'labels' => [
+                'name' => 'Memória de Reunião/Atividades de Dispersão',
+                'singular_name' => 'Memória de Reunião/Atividades de Dispersão'
+            ],
+            'slug' => 'atividades_dispersao',
+            'uma_entrada_por_campo' => false,
+            'fase' => 0,
+            'eixo' => false,
+            'possui_validacao' => false
+        ],
     ];
 
     const CAMPO_META = 'acolhesus_campo';
