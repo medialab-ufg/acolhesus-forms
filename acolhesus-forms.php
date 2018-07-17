@@ -173,7 +173,7 @@ class AcolheSUS {
         'avaliacao_grupos' => [
             'labels' => [
                 'name' => 'Avaliação de Grupo',
-                'singular_name' => 'Avaliação da Atuação de Grupo do Projeto'
+                'singular_name' => 'Avaliação de Grupo'
             ],
             'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
