@@ -103,10 +103,10 @@ class AcolheSUS {
         'indicadores' => [
             'labels' => [
                 'name' => 'Dados Epidemiológicos',
-                'singular_name' => 'Monitoramento de Dados Epidemiológicos'
+                'singular_name' => 'Dados Epidemiológicos'
             ],
             'slug' => 'indicadores',
-            'uma_entrada_por_campo' => true,
+            'uma_entrada_por_campo' => false,
             'fase' => 0,
             'eixo' => 0
         ],
