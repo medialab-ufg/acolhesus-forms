@@ -153,4 +153,50 @@ jQuery( function( $ ) {
             $.post(acolhesus.ajax_url, del_data);
         }
     }
+
+
 });
+
+function save_for_later() {
+    var all_inputs = new FormData(),
+        cr_post = get_save("input[name=_cf_cr_pst]", all_inputs)
+
+    //Text
+    get_save('input[type=text]', all_inputs);
+    get_save('input[type=number]', all_inputs);
+
+    //Radio and checkbox
+    get_save('input:checked', all_inputs);
+
+    //Text areas
+    get_save('textarea', all_inputs);
+
+    //A:btnSuccess
+    get_save('a.btn-success', all_inputs);
+
+    all_inputs.append('action', 'acolhesus_save_for_later');
+    //----------------- Send by AJAX -------------------------------//
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function()
+    {
+        if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        {
+            console.log("Saved");
+        }
+    };
+
+    xmlHttp.open("post", acolhesus.ajax_url);
+    xmlHttp.send(all_inputs);
+}
+
+function get_save(query, all_inputs) {
+    var nodes = document.querySelectorAll(query);
+    Array.prototype.forEach.call (nodes, function (node) {
+        var name = node.name;
+        var value = node.value;
+        if(value)
+        {
+            all_inputs.append(name, value);
+        }
+    } );
+}

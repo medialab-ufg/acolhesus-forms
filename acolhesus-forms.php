@@ -241,6 +241,8 @@ class AcolheSUS {
 
         add_action('wp_ajax_acolhesus_save_post_basic_info', array(&$this, 'ajax_callback_save_post_basic_info'));
 
+        add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_save_for_later'));
+
         add_action('wp_ajax_acolhesus_add_form_entry', array(&$this, 'ajax_callback_add_form_entry'));
 
         add_action('wp_ajax_acolhesus_lock_form', array(&$this, 'ajax_callback_lock_form'));
@@ -258,6 +260,32 @@ class AcolheSUS {
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
 
         add_filter( 'caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
+    }
+
+    function ajax_callback_save_save_for_later()
+    {
+        global $wpdb;
+        $_entry_id = get_post_meta($_POST['_cf_cr_pst'], '_entry_id', true);
+
+        foreach ($_POST as $index => $value)
+        {
+            if($index != '_cf_cr_pst' && $index != 'action')
+            {
+                if(!is_numeric($value))
+                {
+                    $value = "'".$value."'";
+                }
+
+                $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
+                $ok = $wpdb->query($sql);
+                if(!$ok)
+                {
+                    $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, value) VALUES (".$value.") where entry_id=".$_entry_id." and field_id='".$index."'";
+
+                }
+            }
+        }
+
     }
 
     function check_send_mail( $mail, $data, $form )
@@ -382,6 +410,8 @@ class AcolheSUS {
 
             $this->render_form_cities($_post_id, $formType);
             $form .= $this->get_entry_form($_post_id, $formType);
+
+            $form .= '<button onclick="save_for_later()">Salvar</button>';
 
             return $content . $form;
         }
