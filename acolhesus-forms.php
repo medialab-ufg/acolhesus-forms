@@ -417,6 +417,8 @@ class AcolheSUS {
             $this->render_form_cities($_post_id, $formType);
             $form .= $this->get_entry_form($_post_id, $formType);
 
+            $form .= "<div id='acolhesus_form_anexos'></div>";
+
             return $content . $form;
         }
 

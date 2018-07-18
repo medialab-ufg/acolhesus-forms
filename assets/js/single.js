@@ -7,7 +7,6 @@ jQuery( function( $ ) {
 
     var tag = 'input[name="novo_form"]';
     var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
-
     if (is_new) {
         $(campo_atuacao).val('');
         $.post(acolhesus.ajax_url, { action: 'delete_new_form_tag', post_id: current_post_id });
@@ -140,8 +139,12 @@ jQuery( function( $ ) {
         $('.select2-container--classic .select2-selection--multiple').css('border', 0);
     }
 
+    var attachments_wrapper = '#acolhesus_form_anexos';
     $('.form_attachments').last().remove();
-    $('.form_attachments').first().appendTo($('.anexos-form-wrapper'));
+    $('.form_attachments').first().appendTo($(attachments_wrapper));
+    if ($(attachments_wrapper + " ul").html() == "" ) {
+        $(attachments_wrapper).remove();
+    }
 
     function toggle_city(obj_evt, post_id, add) {
         if (add) {
