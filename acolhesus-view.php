@@ -122,4 +122,31 @@ class AcolheSUSView extends AcolheSUS {
         echo '<center> Usuário sem permissão para acessar esta página! </center>';
     }
 
+    function get_entry_attachments() {
+        add_filter('caldera_forms_render_get_field_type-advanced_file', array(&$this, 'render_form_attachments'),20);
+    }
+
+    function render_form_attachments($field) {
+        if (isset($field['type']) && "advanced_file" === $field['type']) {
+            $anexos = $this->get_attachments($field["ID"]);
+            if (is_array($anexos)) {
+                echo "<ul class='form_attachments'>";
+                    array_map(function($e) { $this->attach_style($e['value']); }, $anexos);
+                echo "</ul>";
+            }
+        }
+
+        return $field;
+    }
+
+    private function attach_style($url) {
+        if (!empty($url)) {  ?>
+            <li class="cf-uploader-queue-item">
+                <a href="#remove-file" data-file="<?php echo $url; ?>" class="cf-file-remove">&times;</a>
+                <a href="<?php echo $url; ?>"> <?php echo basename($url); ?> </a>
+            </li>
+            <?php
+        }
+    }
+
 }

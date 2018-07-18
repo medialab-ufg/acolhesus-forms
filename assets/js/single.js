@@ -129,6 +129,9 @@ jQuery( function( $ ) {
         $('.select2-container--classic .select2-selection--multiple').css('border', 0);
     }
 
+    $('.form_attachments').last().remove();
+    $('.form_attachments').first().appendTo($('.anexos-form-wrapper'));
+
     function toggle_city(obj_evt, post_id, add) {
         if (add) {
             var _action = 'add_entry_city';

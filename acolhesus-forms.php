@@ -268,7 +268,8 @@ class AcolheSUS {
 
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
 
-        add_filter( 'caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
+        add_filter('caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
+
     }
 
     function check_send_mail( $mail, $data, $form )
@@ -286,6 +287,20 @@ class AcolheSUS {
         }
     }
 
+    protected function get_attachments($field_id) {
+
+        if ($form_id = get_the_ID()) {
+            $entry = get_post_meta($form_id, '_entry_id', true);
+            if ($entry) {
+                global $wpdb;
+                $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                $atts = $wpdb->get_results("SELECT value FROM " . $caldera_entries . " WHERE field_id = '$field_id' AND entry_id = '$entry'", ARRAY_A);
+
+                return $atts;
+            }
+        }
+        return false;
+    }
 
     function acolhesus_add_entry_btn_callback($type) {
         if (!is_null($type) && $this->can_add_entry($type)) {
