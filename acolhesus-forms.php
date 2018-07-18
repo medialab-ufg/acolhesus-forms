@@ -97,7 +97,7 @@ class AcolheSUS {
             'form_id' => '', // Setado via admin
             'slug' => 'matriz_cenario',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_1',
             'eixo' => 0
         ],
         'indicadores' => [
@@ -107,7 +107,7 @@ class AcolheSUS {
             ],
             'slug' => 'indicadores',
             'uma_entrada_por_campo' => false,
-            'fase' => 0,
+            'fase' => 'fase_1',
             'eixo' => 0
         ],
         'visita_guiada' => [
@@ -117,7 +117,7 @@ class AcolheSUS {
             ],
             'slug' => 'visita_guiada',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_1',
             'eixo' => false
         ],
         'fluxograma' => [
@@ -127,7 +127,7 @@ class AcolheSUS {
             ],
             'slug' => 'fluxograma',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_1',
             'eixo' => false
         ],
         'matriz_p_criticos' => [
@@ -137,7 +137,7 @@ class AcolheSUS {
             ],
             'slug' => 'matriz_p_criticos',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_1',
             'eixo' => 0
         ],
         'matriz_objetivos' => [
@@ -157,7 +157,7 @@ class AcolheSUS {
             ],
             'slug' => 'plano_trabalho',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_2',
             'eixo' => 0
         ],
         'efeitos_esperados' => [
