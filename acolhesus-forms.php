@@ -270,7 +270,7 @@ class AcolheSUS {
 
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
 
-        add_filter('caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
+        // add_filter('caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
 
     }
 
