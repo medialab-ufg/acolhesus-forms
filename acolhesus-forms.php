@@ -264,6 +264,8 @@ class AcolheSUS {
 
         add_action('wp_ajax_remove_entry_city', array(&$this, 'remove_entry_city'));
 
+        add_action('wp_ajax_delete_new_form_tag', array(&$this, 'delete_new_form_tag'));
+
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
 
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
@@ -284,6 +286,12 @@ class AcolheSUS {
                     return $mail;
                 }else return false;
             }
+        }
+    }
+
+    function delete_new_form_tag() {
+        if (isset($_POST['post_id']) && is_numeric($_POST['post_id'])) {
+            delete_post_meta($_POST['post_id'], 'new_form');
         }
     }
 
@@ -698,7 +706,7 @@ class AcolheSUS {
     function ajax_callback_add_form_entry() {
         $user_campos = $this->get_user_campos();
         if (is_array($user_campos) && count($user_campos) > 0) {
-            $metas = [ 'acolhesus_campo' => array_shift($user_campos)];
+            $metas = ['acolhesus_campo' => array_shift($user_campos), 'new_form' => true];
             $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'publish', $metas);
             if ($_id) {
                 echo json_encode(['id' => $_id, 'redirect_url' => get_permalink($_id)]);
