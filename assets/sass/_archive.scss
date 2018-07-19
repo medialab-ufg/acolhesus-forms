@@ -55,6 +55,15 @@
   min-width: 50%;
 }
 
+
+.select2-container--classic .select2-results__option--highlighted[aria-selected] {
+  background-color: $dark_green !important;
+}
+
+.select2-container--classic.select2-container--open .select2-dropdown {
+  border-color: $dark_green !important;
+}
+
 .lista-geral {
 
   .filters-wrapper {
@@ -170,8 +179,6 @@
     float: left;
     margin: 10px 0 10px 0;
     text-align: center;
-    //width: 100%;
-    //padding: 10px 0 10px 0;
 
     &:hover {
       background: $green;

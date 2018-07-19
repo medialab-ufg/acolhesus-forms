@@ -151,6 +151,12 @@
   margin-right: 10px;
   min-width: 50%; }
 
+.select2-container--classic .select2-results__option--highlighted[aria-selected] {
+  background-color: #003c46 !important; }
+
+.select2-container--classic.select2-container--open .select2-dropdown {
+  border-color: #003c46 !important; }
+
 .lista-geral .filters-wrapper .welcome {
   color: black;
   text-align: center;

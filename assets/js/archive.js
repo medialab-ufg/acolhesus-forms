@@ -97,6 +97,7 @@ jQuery( function( $ ) {
 
     $('.acolhesus_filter_forms').select2({
         width: '100%',
+        theme: 'classic',
         language: {
             "noResults": function(){
                 return "Digite outros termos";
