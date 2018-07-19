@@ -55,7 +55,9 @@ class AcolheSUSView extends AcolheSUS {
         foreach ($this->filtros as $filtro => $props) {
             $opt = isset($_GET[$filtro]) ? $_GET[$filtro] : '';
 
-            $html  = "<h3 class='form-title'>" . $props['singular'] . "</h3>";
+            $_filtered = $this->get_filter_selected($filtro, $opt);
+
+            $html  = "<h3 class='form-title'>" . $props['singular'] . " <span class='used_filter'>" . $_filtered . " </span></h3>";
             $html .= "<div><select name='$filtro' class='acolhesus_filter_forms' id='acolhesus_filter_forms_campos'>";
             $html .= "<option value=''>" . $props['plural'] . "</option>";
             $html .= $this->get_filter_options($filtro, $opt);
@@ -94,7 +96,7 @@ class AcolheSUSView extends AcolheSUS {
     }
 
     public function noForms() {
-        echo "<h5 style='text-align: center; padding: 20px 0'> Nenhum formulário encontrado para os filtros selecionados. </h5>";
+        echo "<p class='no-forms-found'> Nenhum formulário encontrado para os filtros selecionados. </p>";
     }
 
     public function renderFormsLoop($forms) {

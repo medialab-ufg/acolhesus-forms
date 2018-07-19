@@ -102,6 +102,21 @@
       margin-bottom: 5px;
     }
 
+    .no-forms-found {
+      text-align: center;
+      padding: 20px 0;
+      border: none;
+
+      span.ui-icon { display: none; }
+    }
+
+    span.used_filter {
+      color: gold;
+      font-size: 12px;
+      font-style: italic;
+      float: right;
+    }
+
     .ui-icon-circle-arrow-e,.ui-icon-circle-arrow-s {
       background-image:url('../images/ui-icons.png') !important;
     }

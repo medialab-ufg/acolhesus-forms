@@ -645,6 +645,28 @@ class AcolheSUS {
 
         return $options;
     }
+
+    function get_filter_selected($filter, $value = '') {
+        if (!empty($value)) {
+            $selected = "";
+            switch ($filter) {
+                case 'campo':
+                    $selected = $this->campos_completos[$value];
+                    break;
+                case 'eixo':
+                    $selected = $value;
+                    break;
+                case 'fase':
+                    $selected = $this->fases[$value];
+                    break;
+                case 'form':
+                    $selected = $this->forms[$value]['labels']['singular_name'];
+                    break;
+            }
+
+            return $selected;
+        }
+    }
 	
     private function get_basic_info_form($is_locked = false) {
         global $post;
