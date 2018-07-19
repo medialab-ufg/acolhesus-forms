@@ -275,7 +275,7 @@ class AcolheSUS {
 
         foreach ($_POST as $index => $value)
         {
-            if($index != '_cf_cr_pst' && $index != 'action' && $index != 'formId')
+            if(strpos($index, 'fld_') !== false)
             {
                 $sql_exists = "SELECT count(field_id) AS count FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='$index' AND entry_id=$_entry_id";
                 $count = $wpdb->get_results($sql_exists, 'ARRAY_A')[0]['count'];

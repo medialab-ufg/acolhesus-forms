@@ -177,6 +177,9 @@ function save_for_later() {
     //A:btnSuccess
     get_save('a.btn-success', all_inputs);
 
+    //Select box
+    get_save('select', all_inputs);
+
     //Form ID
     var form = document.querySelector('div.caldera-grid > form'),
             formId = form.dataset.formId;
@@ -190,7 +193,7 @@ function save_for_later() {
     {
         if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
         {
-            console.log("Saved");
+            swal("Sucesso", "Formulário salvo", "success");
         }
     };
 
