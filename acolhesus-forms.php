@@ -199,7 +199,7 @@ class AcolheSUS {
             ],
             'slug' => 'relatorio_oficina',
             'uma_entrada_por_campo' => false,
-            'fase' => 0,
+            'fase' => 'macrogestao',
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true,
