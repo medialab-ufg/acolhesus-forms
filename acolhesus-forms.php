@@ -267,21 +267,65 @@ class AcolheSUS {
         global $wpdb;
         $_entry_id = get_post_meta($_POST['_cf_cr_pst'], '_entry_id', true);
 
+        $formId = $_POST['formId'];
+        $sql_form_info = "SELECT config from ".$wpdb->prefix."cf_forms WHERE form_id='".$formId."' and type='primary'";
+        $fields = unserialize($wpdb->get_results($sql_form_info, 'ARRAY_A')[0]['config'])['fields'];
+        //print_r($_POST);
+        //print_r($fields);
+
         foreach ($_POST as $index => $value)
         {
-            if($index != '_cf_cr_pst' && $index != 'action')
+            if($index != '_cf_cr_pst' && $index != 'action' && $index != 'formId')
             {
-                if(!is_numeric($value))
-                {
-                    $value = "'".$value."'";
-                }
+                $sql_exists = "SELECT count(field_id) AS count FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='$index' AND entry_id=$_entry_id";
+                $count = $wpdb->get_results($sql_exists, 'ARRAY_A')[0]['count'];
 
-                $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
-                $ok = $wpdb->query($sql);
-                if(!$ok)
-                {
-                    $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, value) VALUES (".$value.") where entry_id=".$_entry_id." and field_id='".$index."'";
+                if($count > 0)
+                {//Exists
+                    if(!is_array($value))
+                    {
+                        if(!is_numeric($value))
+                        {
+                            $value = "'".$value."'";
+                        }
+                        $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
+                        $wpdb->query($sql);
+                    }else{
+                        $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+                        $wpdb->query($delete_sql);
 
+                        $index = "'".$index."'";
+                        $slug = "'".$fields[$index]['slug']."'";
+
+                        foreach($value as $v)
+                        {
+                            $v = "'".$v."'";
+                            $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
+                            $wpdb->query($sql);
+                        }
+                    }
+                }else //New
+                {
+                    if(!empty($fields[$index]['slug']) && !empty($_entry_id))
+                    {
+                        $slug = "'".$fields[$index]['slug']."'";
+                        $index = "'".$index."'";
+                        if(!is_array($value))
+                        {
+                            $value = "'".$value."'";
+
+                            $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $value)";
+                            $wpdb->query($sql);
+                        }else
+                        {
+                            foreach($value as $v)
+                            {
+                                $v = "'".$v."'";
+                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
+                                $wpdb->query($sql);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -409,9 +453,13 @@ class AcolheSUS {
             $form .= $this->render_fixed_meta($_post_id, $formType);
 
             $this->render_form_cities($_post_id, $formType);
-            $form .= $this->get_entry_form($_post_id, $formType);
+            $created_form = $this->get_entry_form($_post_id, $formType);
+            $form .= $created_form;
 
-            $form .= '<button onclick="save_for_later()">Salvar</button>';
+            if(!empty($created_form))
+            {
+                $form .= '<button class="save_for_later btn btn-default">Salvar</button>';
+            }
 
             return $content . $form;
         }

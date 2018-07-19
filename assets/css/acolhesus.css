@@ -63,6 +63,10 @@
 .acolhesus-form-container button.cf-uploader-trigger {
   border: 1px solid;
   background: #f2f3f5; }
+.acolhesus-form-container button.save_for_later {
+  margin-top: -60px;
+  position: relative;
+  z-index: 10; }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
   background-color: #003c46 !important; }

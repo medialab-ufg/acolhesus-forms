@@ -154,6 +154,9 @@ jQuery( function( $ ) {
         }
     }
 
+    $(document).on('click', '.save_for_later', function() {
+        save_for_later();
+    });
 
 });
 
@@ -161,7 +164,7 @@ function save_for_later() {
     var all_inputs = new FormData(),
         cr_post = get_save("input[name=_cf_cr_pst]", all_inputs)
 
-    //Text
+    //Text, number
     get_save('input[type=text]', all_inputs);
     get_save('input[type=number]', all_inputs);
 
@@ -174,7 +177,13 @@ function save_for_later() {
     //A:btnSuccess
     get_save('a.btn-success', all_inputs);
 
+    //Form ID
+    var form = document.querySelector('div.caldera-grid > form'),
+            formId = form.dataset.formId;
+
     all_inputs.append('action', 'acolhesus_save_for_later');
+    all_inputs.append('formId', formId);
+
     //----------------- Send by AJAX -------------------------------//
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function()
@@ -194,6 +203,8 @@ function get_save(query, all_inputs) {
     Array.prototype.forEach.call (nodes, function (node) {
         var name = node.name;
         var value = node.value;
+
+        //name = name.substring(0, name.indexOf('['));
         if(value)
         {
             all_inputs.append(name, value);
