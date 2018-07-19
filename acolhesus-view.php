@@ -80,6 +80,23 @@ class AcolheSUSView extends AcolheSUS {
         return $forms;
     }
 
+    public function filterSelectedPhase(&$forms=[]) {
+        if (isset($_GET['fase']) && !empty($_GET['fase'])) {
+            $phase = sanitize_text_field($_GET['fase']);
+            if (in_array($phase, array_keys($this->fases))) {
+                $forms = array_filter($forms, function($form) {
+                    return ($form["fase"] === sanitize_text_field($_GET['fase']));
+                });
+            }
+        }
+
+        return $forms;
+    }
+
+    public function noForms() {
+        echo "<h5 style='text-align: center; padding: 20px 0'> Nenhum formulário encontrado para os filtros selecionados. </h5>";
+    }
+
     public function renderFormsLoop($forms) {
         global $AcolheSUS;
         foreach ($forms as $formName => $formAtts):
