@@ -264,15 +264,21 @@ class AcolheSUS {
 
     function ajax_callback_save_save_for_later()
     {
-        global $wpdb;
+        global $wpdb, $AcolheSUSLogger;
         $_entry_id = get_post_meta($_POST['_cf_cr_pst'], '_entry_id', true);
 
         $formId = $_POST['formId'];
         $sql_form_info = "SELECT config from ".$wpdb->prefix."cf_forms WHERE form_id='".$formId."' and type='primary'";
         $fields = unserialize($wpdb->get_results($sql_form_info, 'ARRAY_A')[0]['config'])['fields'];
+
+        $sql_current_values = "SELECT field_id, value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."'";
+        $current_value = $wpdb->get_results($sql_current_values, 'ARRAY_A');
+
+        //print_r($current_value);
         //print_r($_POST);
         //print_r($fields);
 
+        $msg = "";
         foreach ($_POST as $index => $value)
         {
             if(strpos($index, 'fld_') !== false)
@@ -284,6 +290,7 @@ class AcolheSUS {
                 {//Exists
                     if(!is_array($value))
                     {
+                        $msg .= $fields[$index]['label'].": $value <br/>";
                         if(!is_numeric($value))
                         {
                             $value = "'".$value."'";
@@ -294,22 +301,27 @@ class AcolheSUS {
                         $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
                         $wpdb->query($delete_sql);
 
+                        $msg .= $fields[$index]['label'].":<br/>";
                         $index = "'".$index."'";
                         $slug = "'".$fields[$index]['slug']."'";
-
                         foreach($value as $v)
                         {
+                            $msg .= "$v<br>";
                             $v = "'".$v."'";
                             $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
                             $wpdb->query($sql);
                         }
                     }
+
+
                 }else //New
                 {
                     if(!empty($fields[$index]['slug']) && !empty($_entry_id))
                     {
+                        $msg .= $fields[$index]['label'].": $value <br/>";
                         $slug = "'".$fields[$index]['slug']."'";
                         $index = "'".$index."'";
+
                         if(!is_array($value))
                         {
                             $value = "'".$value."'";
@@ -320,6 +332,7 @@ class AcolheSUS {
                         {
                             foreach($value as $v)
                             {
+                                $msg .= "$v<br>";
                                 $v = "'".$v."'";
                                 $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
                                 $wpdb->query($sql);
@@ -330,6 +343,22 @@ class AcolheSUS {
             }
         }
 
+        $msg .= "<br><br>";
+        $AcolheSUSLogger->log($_POST['_cf_cr_pst'], ' salvou o formulário ', $msg);
+
+
+    }
+
+    function search_in_array($current_value, $search)
+    {
+        foreach ($current_value as $value)
+        {
+            if($value['field_id'] == $search && !empty($value['value']))
+            {
+                return $value['value'];
+            }
+        }
+        return false;
     }
 
     function check_send_mail( $mail, $data, $form )
