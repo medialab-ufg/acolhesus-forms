@@ -140,8 +140,9 @@ jQuery( function( $ ) {
     }
 
     var attachments_wrapper = '#acolhesus_form_anexos';
-    $('.form_attachments').last().remove();
-    $('.form_attachments').first().appendTo($(attachments_wrapper));
+    var attachments = '.form_attachments';
+    $(attachments).last().remove();
+    $(attachments).first().appendTo($(attachments_wrapper));
     if ($(attachments_wrapper + " ul").html() == "" ) {
         $(attachments_wrapper).remove();
     }
@@ -261,3 +262,8 @@ function get_save(query, all_inputs) {
         }
     } );
 }
+
+jQuery(document).on('cf.form.submit', function(evt, data) {
+    var $form = data.$form;
+    var formId = $form.attr('id');
+});
