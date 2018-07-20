@@ -220,10 +220,17 @@ function save_for_later() {
 function get_save(query, all_inputs) {
     var nodes = document.querySelectorAll(query);
     Array.prototype.forEach.call (nodes, function (node) {
-        var name = node.name;
-        var value = node.value;
+        var name = node.name, value;
 
-        //name = name.substring(0, name.indexOf('['));
+        if(node.type != 'radio')
+        {
+            value = node.value;
+        }
+        else
+        {
+            value = node.parentNode.dataset.label;
+        }
+
         if(value)
         {
             all_inputs.append(name, value);

@@ -280,18 +280,32 @@ class AcolheSUS {
     {
         global $wpdb, $AcolheSUSLogger;
         $_entry_id = get_post_meta($_POST['_cf_cr_pst'], '_entry_id', true);
+        if(!$_entry_id)
+        {
+            $new_entry = array(
+                'form_id' => $_POST['formId'],
+                'user_id' => get_current_user_id(),
+                'datestamp' => date_i18n('Y-m-d H:i:s', time(), 0),
+                'status' => 'pending'
+            );
+
+            $wpdb->insert($wpdb->prefix . 'cf_form_entries', $new_entry);
+            $_entry_id = $wpdb->insert_id;
+            update_post_meta($_POST['_cf_cr_pst'], '_entry_id', $_entry_id);
+        }
 
         $formId = $_POST['formId'];
         $sql_form_info = "SELECT config from ".$wpdb->prefix."cf_forms WHERE form_id='".$formId."' and type='primary'";
         $fields = unserialize($wpdb->get_results($sql_form_info, 'ARRAY_A')[0]['config'])['fields'];
+        //print_r($fields);
 
         $sql_current_values = "SELECT field_id, value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."'";
         $current_values = $wpdb->get_results($sql_current_values, 'ARRAY_A');
 
         $msg = "";
-        $old_value = '';
         foreach ($_POST as $index => $value)
         {
+            $old_value = '';
             if(strpos($index, 'fld_') !== false)
             {
                 $sql_exists = "SELECT count(field_id) AS count FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='$index' AND entry_id=$_entry_id";
@@ -302,7 +316,6 @@ class AcolheSUS {
                     if(!is_array($value))
                     {//Others
                         $return = $this->search_in_array($current_values, $index);
-
                         if(is_array($return))
                         {
                             $old_value = $return[0];
@@ -322,7 +335,9 @@ class AcolheSUS {
                             {
                                 $value = "'".$value."'";
                             }
+
                             $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
+
                             $wpdb->query($sql);
                         }
                     }else{//Checkbox
@@ -401,7 +416,7 @@ class AcolheSUS {
         $results = [];
         foreach ($current_value as $value)
         {
-            if($value['field_id'] == $search && !empty($value['value']))
+            if($value['field_id'] == $search && $value['value'] != '')
             {
                 $results[] =  $value['value'];
             }
@@ -417,7 +432,6 @@ class AcolheSUS {
 
     function check_send_mail( $mail, $data, $form )
     {
-        print "LKLKJLKJ";
         foreach ($form['fields'] as $field)
         {
             if($field['type'] === 'checkbox' && $field['slug'] === 'save_send')
@@ -425,6 +439,8 @@ class AcolheSUS {
                 $val = current($field['config']['option'])['value'];
                 if($val === 'true')
                 {
+                    $form_link = get_permalink($form['ID']);
+                    $mail['message'] .= "<br><br>$form_link";
                     return $mail;
                 }else return false;
             }
