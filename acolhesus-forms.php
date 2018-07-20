@@ -177,7 +177,7 @@ class AcolheSUS {
             ],
             'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
-            'fase' => 0,
+            'fase' => 'macrogestao',
             'eixo' => false,
             'possui_validacao' => false
         ],
@@ -188,7 +188,7 @@ class AcolheSUS {
             ],
             'slug' => 'avaliacao_oficina',
             'uma_entrada_por_campo' => false,
-            'fase' => 0,
+            'fase' => 'macrogestao',
             'eixo' => false,
             'possui_validacao' => false,
         ],
@@ -211,7 +211,7 @@ class AcolheSUS {
             ],
             'slug' => 'memoria_reuniao',
             'uma_entrada_por_campo' => false,
-            'fase' => 0,
+            'fase' => 'macrogestao',
             'eixo' => false,
             'possui_validacao' => false
         ],
