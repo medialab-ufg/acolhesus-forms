@@ -171,19 +171,19 @@ jQuery( function( $ ) {
         }
     }
 
-    if($())
-
-    window.onbeforeunload = function() {
-        return "Você deseja realmente sair?";
-    };
-    $(document).on('click', '.save_for_later', function() {
-        window.onbeforeunload = '';
-        save_for_later();
-    });
-
-    $(document).on('submit', 'form', function () {
-        window.onbeforeunload = '';
-    })
+    // if($())
+    //
+    // window.onbeforeunload = function() {
+    //     return "Você deseja realmente sair?";
+    // };
+    // $(document).on('click', '.save_for_later', function() {
+    //     window.onbeforeunload = '';
+    //     save_for_later();
+    // });
+    //
+    // $(document).on('submit', 'form', function () {
+    //     window.onbeforeunload = '';
+    // })
 });
 
 function save_for_later() {
