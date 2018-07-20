@@ -266,6 +266,8 @@ class AcolheSUS {
 
         add_action('wp_ajax_delete_new_form_tag', array(&$this, 'delete_new_form_tag'));
 
+        add_action('wp_ajax_delete_form_attachment', array(&$this, 'delete_form_attachment'));
+
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
 
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
@@ -290,19 +292,30 @@ class AcolheSUS {
     }
 
     function delete_new_form_tag() {
-        if (isset($_POST['post_id']) && is_numeric($_POST['post_id'])) {
+        if (is_user_logged_in() && isset($_POST['post_id']) && is_numeric($_POST['post_id'])) {
             delete_post_meta($_POST['post_id'], 'new_form');
         }
     }
 
-    protected function get_attachments($field_id) {
+    function delete_form_attachment() {
+        if (is_user_logged_in() && isset($_POST['attach']) && isset($_POST['entry'])) {
+            global $wpdb;
+            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
 
+            $id = $_POST['attach'];
+            $entry = $_POST['entry'];
+
+            $wpdb->query("DELETE FROM " . $caldera_entries . " WHERE id = '$id' AND entry_id='$entry'");
+        }
+    }
+
+    protected function get_attachments($field_id) {
         if ($form_id = get_the_ID()) {
             $entry = get_post_meta($form_id, '_entry_id', true);
             if ($entry) {
                 global $wpdb;
                 $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
-                $atts = $wpdb->get_results("SELECT value FROM " . $caldera_entries . " WHERE field_id = '$field_id' AND entry_id = '$entry'", ARRAY_A);
+                $atts = $wpdb->get_results("SELECT id, value FROM " . $caldera_entries . " WHERE field_id = '$field_id' AND entry_id = '$entry'", ARRAY_A);
 
                 return $atts;
             }

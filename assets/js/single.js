@@ -170,4 +170,22 @@ jQuery( function( $ ) {
             $.post(acolhesus.ajax_url, del_data);
         }
     }
+
+    $(attachments_wrapper + ' a.acolhesus-remove-file').on('click', function() {
+        var nome = $(this).data('name');
+        if (confirm("Deseja remover o anexo " + nome + "?")) {
+            var attach_id = $(this).data('id');
+            var entry_id = $('input[name="_cf_frm_edt"]').val();
+            console.log("Removendo " + attach_id);
+
+            if (attach_id && entry_id) {
+                var data = { action: 'delete_form_attachment', attach: attach_id, entry: entry_id};
+                $.post(acolhesus.ajax_url, data).success(function () {
+                    $(attachments_wrapper + " li.attach-" + attach_id).hide();
+                });
+            } else {
+                alert("Não foi possível remover " + nome + " agora. Tente novamente mais tarde.");
+            }
+        }
+    });
 });
