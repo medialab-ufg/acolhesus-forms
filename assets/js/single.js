@@ -2,6 +2,16 @@ jQuery( function( $ ) {
     var no_edit = '.acolhesus-readonly';
     var base = '.acolhesus-form-container';
     var cant_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
+    var campo_atuacao = '#acolhesus_campo_selector';
+    var current_post_id = $(campo_atuacao).data('post_id');
+
+    var tag = 'input[name="novo_form"]';
+    var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
+    if (is_new) {
+        $(campo_atuacao).val('');
+        $.post(acolhesus.ajax_url, { action: 'delete_new_form_tag', post_id: current_post_id });
+    }
+
 
     $('.acolhesus_basic_info_selector').change(function() {
         var opt_val = $(this).val();
@@ -15,10 +25,10 @@ jQuery( function( $ ) {
             var self = this;
             $.post(acolhesus.ajax_url, {
                 action: 'acolhesus_save_post_basic_info',
-                acolhesus_campo: $('#acolhesus_campo_selector').val(),
+                acolhesus_campo: $(campo_atuacao).val(),
                 acolhesus_fase: $('#acolhesus_fase_selector').val(),
                 acolhesus_eixo: $('#acolhesus_eixo_selector').val(),
-                post_id: $('#acolhesus_campo_selector').data('post_id')
+                post_id: current_post_id
             }).success(function (r) {
                 $(self).find("option[value='']").remove();
                 $(self).removeClass('required-acolhesus');
@@ -127,6 +137,13 @@ jQuery( function( $ ) {
     if (cant_edit) {
         $($select_class).prop("disabled", true);
         $('.select2-container--classic .select2-selection--multiple').css('border', 0);
+    }
+
+    var attachments_wrapper = '#acolhesus_form_anexos';
+    $('.form_attachments').last().remove();
+    $('.form_attachments').first().appendTo($(attachments_wrapper));
+    if ($(attachments_wrapper + " ul").html() == "" ) {
+        $(attachments_wrapper).remove();
     }
 
     function toggle_city(obj_evt, post_id, add) {

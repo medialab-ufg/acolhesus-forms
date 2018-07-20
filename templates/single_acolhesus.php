@@ -3,10 +3,15 @@
 <?php
 $post_type = get_post_type();
 $post_id = get_the_ID();
-$_sem_diligencias = ["avaliacao_grupos", "avaliacao_oficina","relatorio_oficina","memoria_reuniao"];
+$_sem_diligencias = ["avaliacao_grupos", "avaliacao_oficina","relatorio_oficina","memoria_reuniao", "atividades_dispersao"];
 $_possui_diligencias = !in_array($post_type, $_sem_diligencias);
 $_view_perm = "ver_" . $post_type;
 $can_user_view = in_array($_view_perm, get_user_meta(get_current_user_id(), 'acolhesus_form_perms'));
+$is_new_form = get_post_meta($post_id, 'new_form', true);
+
+if ($is_new_form) {
+    echo "<input type='hidden' name='novo_form' value='true'>";
+}
 ?>
 
 <div class="acolhesus-form-container">
@@ -22,7 +27,9 @@ $can_user_view = in_array($_view_perm, get_user_meta(get_current_user_id(), 'aco
         <?php endif; ?>
     </h3>
 
-    <?php  the_content(); ?>
+    <?php $formView->get_entry_attachments(); ?>
+
+    <?php the_content(); ?>
 
     <div id="form-accordion">
 
@@ -57,7 +64,6 @@ $can_user_view = in_array($_view_perm, get_user_meta(get_current_user_id(), 'aco
                 </div>
             </div>
         <?php endif; ?>
-
     </div>
 
 </div>

@@ -67,6 +67,22 @@
   margin-top: -60px;
   position: relative;
   z-index: 10; }
+.acolhesus-form-container #acolhesus_form_anexos {
+  border-bottom: 1px solid;
+  width: 98%; }
+  .acolhesus-form-container #acolhesus_form_anexos ul.form_attachments {
+    list-style: none;
+    padding: 0; }
+    .acolhesus-form-container #acolhesus_form_anexos ul.form_attachments a.acolhesus-remove-file {
+      color: #cf0000;
+      text-decoration: none;
+      border: 0; }
+    .acolhesus-form-container #acolhesus_form_anexos ul.form_attachments a.acolhesus-file-name {
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: black; }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
   background-color: #003c46 !important; }
@@ -152,6 +168,12 @@
   margin-right: 10px;
   min-width: 50%; }
 
+.select2-container--classic .select2-results__option--highlighted[aria-selected] {
+  background-color: #003c46 !important; }
+
+.select2-container--classic.select2-container--open .select2-dropdown {
+  border-color: #003c46 !important; }
+
 .lista-geral .filters-wrapper .welcome {
   color: black;
   text-align: center;
@@ -181,6 +203,17 @@
   padding-left: 30px;
   border: 0;
   margin-bottom: 5px; }
+.lista-geral .acolhesus-forms-list .no-forms-found, .lista-geral .acolhesus-filtros .no-forms-found {
+  text-align: center;
+  padding: 20px 0;
+  border: none; }
+  .lista-geral .acolhesus-forms-list .no-forms-found span.ui-icon, .lista-geral .acolhesus-filtros .no-forms-found span.ui-icon {
+    display: none; }
+.lista-geral .acolhesus-forms-list span.used_filter, .lista-geral .acolhesus-filtros span.used_filter {
+  color: gold;
+  font-size: 12px;
+  font-style: italic;
+  float: right; }
 .lista-geral .acolhesus-forms-list .ui-icon-circle-arrow-e, .lista-geral .acolhesus-forms-list .ui-icon-circle-arrow-s, .lista-geral .acolhesus-filtros .ui-icon-circle-arrow-e, .lista-geral .acolhesus-filtros .ui-icon-circle-arrow-s {
   background-image: url("../images/ui-icons.png") !important; }
 .lista-geral .acolhesus-forms-list .ver-todos, .lista-geral .acolhesus-filtros .ver-todos {

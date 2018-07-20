@@ -97,17 +97,17 @@ class AcolheSUS {
             'form_id' => '', // Setado via admin
             'slug' => 'matriz_cenario',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_1',
             'eixo' => 0
         ],
         'indicadores' => [
             'labels' => [
                 'name' => 'Dados Epidemiológicos',
-                'singular_name' => 'Monitoramento de Dados Epidemiológicos'
+                'singular_name' => 'Dados Epidemiológicos'
             ],
             'slug' => 'indicadores',
-            'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'uma_entrada_por_campo' => false,
+            'fase' => 'fase_1',
             'eixo' => 0
         ],
         'visita_guiada' => [
@@ -117,7 +117,7 @@ class AcolheSUS {
             ],
             'slug' => 'visita_guiada',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_1',
             'eixo' => false
         ],
         'fluxograma' => [
@@ -127,7 +127,7 @@ class AcolheSUS {
             ],
             'slug' => 'fluxograma',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_1',
             'eixo' => false
         ],
         'matriz_p_criticos' => [
@@ -137,7 +137,7 @@ class AcolheSUS {
             ],
             'slug' => 'matriz_p_criticos',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_1',
             'eixo' => 0
         ],
         'matriz_objetivos' => [
@@ -157,7 +157,7 @@ class AcolheSUS {
             ],
             'slug' => 'plano_trabalho',
             'uma_entrada_por_campo' => true,
-            'fase' => 0,
+            'fase' => 'fase_2',
             'eixo' => 0
         ],
         'efeitos_esperados' => [
@@ -173,7 +173,7 @@ class AcolheSUS {
         'avaliacao_grupos' => [
             'labels' => [
                 'name' => 'Avaliação de Grupo',
-                'singular_name' => 'Avaliação da Atuação de Grupo do Projeto'
+                'singular_name' => 'Avaliação de Grupo'
             ],
             'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
@@ -199,7 +199,7 @@ class AcolheSUS {
             ],
             'slug' => 'relatorio_oficina',
             'uma_entrada_por_campo' => false,
-            'fase' => 0,
+            'fase' => 'macrogestao',
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true,
@@ -210,6 +210,17 @@ class AcolheSUS {
                 'singular_name' => 'Memória de Reunião/Vídeo'
             ],
             'slug' => 'memoria_reuniao',
+            'uma_entrada_por_campo' => false,
+            'fase' => 0,
+            'eixo' => false,
+            'possui_validacao' => false
+        ],
+        'atividades_dispersao' => [
+            'labels' => [
+                'name' => 'Memória de Reunião/Atividades de Dispersão',
+                'singular_name' => 'Memória de Reunião/Atividades de Dispersão'
+            ],
+            'slug' => 'atividades_dispersao',
             'uma_entrada_por_campo' => false,
             'fase' => 0,
             'eixo' => false,
@@ -255,11 +266,14 @@ class AcolheSUS {
 
         add_action('wp_ajax_remove_entry_city', array(&$this, 'remove_entry_city'));
 
+        add_action('wp_ajax_delete_new_form_tag', array(&$this, 'delete_new_form_tag'));
+
         add_action('pre_get_posts', array(&$this, 'return_all_user_entries'));
 
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
 
-        add_filter( 'caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
+        // add_filter('caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
+
     }
 
     function ajax_callback_save_save_for_later()
@@ -417,6 +431,26 @@ class AcolheSUS {
         }
     }
 
+    function delete_new_form_tag() {
+        if (isset($_POST['post_id']) && is_numeric($_POST['post_id'])) {
+            delete_post_meta($_POST['post_id'], 'new_form');
+        }
+    }
+
+    protected function get_attachments($field_id) {
+
+        if ($form_id = get_the_ID()) {
+            $entry = get_post_meta($form_id, '_entry_id', true);
+            if ($entry) {
+                global $wpdb;
+                $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                $atts = $wpdb->get_results("SELECT value FROM " . $caldera_entries . " WHERE field_id = '$field_id' AND entry_id = '$entry'", ARRAY_A);
+
+                return $atts;
+            }
+        }
+        return false;
+    }
 
     function acolhesus_add_entry_btn_callback($type) {
         if (!is_null($type) && $this->can_add_entry($type)) {
@@ -530,6 +564,8 @@ class AcolheSUS {
             {
                 $form .= '<button class="save_for_later btn btn-default">Salvar</button>';
             }
+
+            $form .= "<div id='acolhesus_form_anexos'></div>";
 
             return $content . $form;
         }
@@ -757,6 +793,28 @@ class AcolheSUS {
 
         return $options;
     }
+
+    function get_filter_selected($filter, $value = '') {
+        if (!empty($value)) {
+            $selected = "";
+            switch ($filter) {
+                case 'campo':
+                    $selected = $this->campos_completos[$value];
+                    break;
+                case 'eixo':
+                    $selected = $value;
+                    break;
+                case 'fase':
+                    $selected = $this->fases[$value];
+                    break;
+                case 'form':
+                    $selected = $this->forms[$value]['labels']['singular_name'];
+                    break;
+            }
+
+            return $selected;
+        }
+    }
 	
     private function get_basic_info_form($is_locked = false) {
         global $post;
@@ -820,7 +878,7 @@ class AcolheSUS {
     function ajax_callback_add_form_entry() {
         $user_campos = $this->get_user_campos();
         if (is_array($user_campos) && count($user_campos) > 0) {
-            $metas = [ 'acolhesus_campo' => array_shift($user_campos)];
+            $metas = ['acolhesus_campo' => array_shift($user_campos), 'new_form' => true];
             $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'publish', $metas);
             if ($_id) {
                 echo json_encode(['id' => $_id, 'redirect_url' => get_permalink($_id)]);

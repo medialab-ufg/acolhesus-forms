@@ -55,7 +55,9 @@ class AcolheSUSView extends AcolheSUS {
         foreach ($this->filtros as $filtro => $props) {
             $opt = isset($_GET[$filtro]) ? $_GET[$filtro] : '';
 
-            $html  = "<h3 class='form-title'>" . $props['singular'] . "</h3>";
+            $_filtered = $this->get_filter_selected($filtro, $opt);
+
+            $html  = "<h3 class='form-title'>" . $props['singular'] . " <span class='used_filter'>" . $_filtered . " </span></h3>";
             $html .= "<div><select name='$filtro' class='acolhesus_filter_forms' id='acolhesus_filter_forms_campos'>";
             $html .= "<option value=''>" . $props['plural'] . "</option>";
             $html .= $this->get_filter_options($filtro, $opt);
@@ -78,6 +80,23 @@ class AcolheSUSView extends AcolheSUS {
         }
 
         return $forms;
+    }
+
+    public function filterSelectedPhase(&$forms=[]) {
+        if (isset($_GET['fase']) && !empty($_GET['fase'])) {
+            $phase = sanitize_text_field($_GET['fase']);
+            if (in_array($phase, array_keys($this->fases))) {
+                $forms = array_filter($forms, function($form) {
+                    return ($form["fase"] === sanitize_text_field($_GET['fase']));
+                });
+            }
+        }
+
+        return $forms;
+    }
+
+    public function noForms() {
+        echo "<p class='no-forms-found'> Nenhum formulário encontrado para os filtros selecionados. </p>";
     }
 
     public function renderFormsLoop($forms) {
@@ -120,6 +139,33 @@ class AcolheSUSView extends AcolheSUS {
 
     public function renderFormsDenied() {
         echo '<center> Usuário sem permissão para acessar esta página! </center>';
+    }
+
+    function get_entry_attachments() {
+        add_filter('caldera_forms_render_get_field_type-advanced_file', array(&$this, 'render_form_attachments'),20);
+    }
+
+    function render_form_attachments($field) {
+        if (isset($field['type']) && "advanced_file" === $field['type']) {
+            $anexos = $this->get_attachments($field["ID"]);
+            if (is_array($anexos)) {
+                echo "<ul class='form_attachments cf-adv-preview-list'>";
+                    array_map(function($e) { $this->attach_style($e['value']); }, $anexos);
+                echo "</ul>";
+            }
+        }
+
+        return $field;
+    }
+
+    private function attach_style($url) {
+        if (!empty($url)) {  ?>
+            <li class="cf-uploader-queue-item">
+                <a href="#remove-file" data-file="<?php echo $url; ?>" class="cf-file-remove acolhesus-remove-file">&times;</a>
+                <a href="<?php echo $url; ?>" class="acolhesus-file-name"> <?php echo basename($url); ?> </a>
+            </li>
+            <?php
+        }
     }
 
 }
