@@ -390,12 +390,8 @@ class AcolheSUS {
             if($value['field_id'] == $search && !empty($value['value']))
             {
                 $results[] =  $value['value'];
-                //unset($current_value[key($current_value)]);
-                //print_r(key($current_value));
             }
         }
-        //print_r($results);
-        //print_r($current_value);
 
         if(empty($results))
         {
@@ -407,6 +403,7 @@ class AcolheSUS {
 
     function check_send_mail( $mail, $data, $form )
     {
+        print "LKLKJLKJ";
         foreach ($form['fields'] as $field)
         {
             if($field['type'] === 'checkbox' && $field['slug'] === 'save_send')

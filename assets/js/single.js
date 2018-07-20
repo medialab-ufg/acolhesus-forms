@@ -157,7 +157,6 @@ jQuery( function( $ ) {
     $(document).on('click', '.save_for_later', function() {
         save_for_later();
     });
-
 });
 
 function save_for_later() {
@@ -214,3 +213,8 @@ function get_save(query, all_inputs) {
         }
     } );
 }
+
+
+window.onbeforeunload = function() {
+    return "Você deseja realmente sair?";
+};
