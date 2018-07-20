@@ -231,7 +231,7 @@ function get_save(query, all_inputs) {
     } );
 }
 
-
-window.onbeforeunload = function() {
-    return "Você deseja realmente sair?";
-};
+// Por enquanto deixemos comentado
+// window.onbeforeunload = function() {
+//     return "Você deseja realmente sair?";
+// };
