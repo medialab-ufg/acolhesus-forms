@@ -210,6 +210,9 @@ function save_for_later() {
         if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
         {
             swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
+            setTimeout(function () {
+               window.location.reload();
+            }, 1000);
         }
     };
 
