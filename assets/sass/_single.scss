@@ -89,6 +89,12 @@
     background: $light_gray;
   }
 
+  button.save_for_later {
+    margin-top: -60px;
+    position: relative;
+    z-index: 10;
+  }
+
   #acolhesus_form_anexos {
     border-bottom: 1px solid;
     width: 98%;
@@ -111,7 +117,7 @@
         }
       } //a
     }
-  }
+  } // #acolhesus_form_anexos
 
 } // .acolhesus-form-container
 

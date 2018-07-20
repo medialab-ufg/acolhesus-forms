@@ -252,6 +252,8 @@ class AcolheSUS {
 
         add_action('wp_ajax_acolhesus_save_post_basic_info', array(&$this, 'ajax_callback_save_post_basic_info'));
 
+        add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_save_for_later'));
+
         add_action('wp_ajax_acolhesus_add_form_entry', array(&$this, 'ajax_callback_add_form_entry'));
 
         add_action('wp_ajax_acolhesus_lock_form', array(&$this, 'ajax_callback_lock_form'));
@@ -276,6 +278,160 @@ class AcolheSUS {
 
     }
 
+    function ajax_callback_save_save_for_later()
+    {
+        global $wpdb, $AcolheSUSLogger;
+        $_entry_id = get_post_meta($_POST['_cf_cr_pst'], '_entry_id', true);
+        if(!$_entry_id)
+        {
+            $new_entry = array(
+                'form_id' => $_POST['formId'],
+                'user_id' => get_current_user_id(),
+                'datestamp' => date_i18n('Y-m-d H:i:s', time(), 0),
+                'status' => 'pending'
+            );
+
+            $wpdb->insert($wpdb->prefix . 'cf_form_entries', $new_entry);
+            $_entry_id = $wpdb->insert_id;
+            update_post_meta($_POST['_cf_cr_pst'], '_entry_id', $_entry_id);
+        }
+
+        $formId = $_POST['formId'];
+        $sql_form_info = "SELECT config from ".$wpdb->prefix."cf_forms WHERE form_id='".$formId."' and type='primary'";
+        $fields = unserialize($wpdb->get_results($sql_form_info, 'ARRAY_A')[0]['config'])['fields'];
+        //print_r($fields);
+
+        $sql_current_values = "SELECT field_id, value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."'";
+        $current_values = $wpdb->get_results($sql_current_values, 'ARRAY_A');
+
+        $msg = "";
+        foreach ($_POST as $index => $value)
+        {
+            $old_value = '';
+            if(strpos($index, 'fld_') !== false)
+            {
+                $sql_exists = "SELECT count(field_id) AS count FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='$index' AND entry_id=$_entry_id";
+                $count = $wpdb->get_results($sql_exists, 'ARRAY_A')[0]['count'];
+
+                if($count > 0)
+                {//Exists
+                    if(!is_array($value))
+                    {//Others
+                        $return = $this->search_in_array($current_values, $index);
+                        if(is_array($return))
+                        {
+                            $old_value = $return[0];
+
+                        }
+
+                        if($old_value != $value)
+                        {
+                            if(!empty($old_value))
+                            {
+                                $old_value .= " para ";
+                            }
+
+                            $msg .= $fields[$index]['label'].": $old_value $value <br/>";
+
+                            if(!is_numeric($value))
+                            {
+                                $value = "'".$value."'";
+                            }
+
+                            $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
+
+                            $wpdb->query($sql);
+                        }
+                    }else{//Checkbox
+                        $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+                        $wpdb->query($delete_sql);
+
+                        $return = $this->search_in_array($current_values, $index);
+
+                        if(is_array($return))
+                        {
+                            $old_value = $return[0];
+                            foreach ($return as $option)
+                            {
+                                if(!in_array($option, $value))
+                                {
+                                    $msg .= $fields[$index]['label'].":<br/>";
+                                    foreach ($value as $v)
+                                    {
+                                        $msg .= "$v<br>";
+                                    }
+                                    break;
+                                }
+                            }
+
+                        }
+
+                        $index = "'".$index."'";
+                        $slug = "'".$fields[$index]['slug']."'";
+                        foreach($value as $v)
+                        {
+                            $v = "'".$v."'";
+                            $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
+                            $wpdb->query($sql);
+                        }
+                    }
+
+
+                }else //New
+                {
+                    if(!empty($fields[$index]['slug']) && !empty($_entry_id))
+                    {
+                        $msg .= $fields[$index]['label'].": $value <br/>";
+                        $slug = "'".$fields[$index]['slug']."'";
+                        $index = "'".$index."'";
+
+                        if(!is_array($value))
+                        {
+                            $value = "'".$value."'";
+
+                            $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $value)";
+                            $wpdb->query($sql);
+                        }else
+                        {
+                            foreach($value as $v)
+                            {
+                                $msg .= "$v<br>";
+                                $v = "'".$v."'";
+                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
+                                $wpdb->query($sql);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!empty($msg))
+        {
+            $msg .= "<br><br>";
+            $AcolheSUSLogger->log($_POST['_cf_cr_pst'], ' salvou o formulário ', $msg);
+        }
+    }
+
+    function search_in_array(&$current_value, $search)
+    {
+        $results = [];
+        foreach ($current_value as $value)
+        {
+            if($value['field_id'] == $search && $value['value'] != '')
+            {
+                $results[] =  $value['value'];
+            }
+        }
+
+        if(empty($results))
+        {
+            return false;
+        }
+
+        return $results;
+    }
+
     function check_send_mail( $mail, $data, $form )
     {
         foreach ($form['fields'] as $field)
@@ -285,6 +441,8 @@ class AcolheSUS {
                 $val = current($field['config']['option'])['value'];
                 if($val === 'true')
                 {
+                    $form_link = get_permalink($form['ID']);
+                    $mail['message'] .= "<br><br>$form_link";
                     return $mail;
                 }else return false;
             }
@@ -428,7 +586,13 @@ class AcolheSUS {
             $form .= $this->render_fixed_meta($_post_id, $formType);
 
             $this->render_form_cities($_post_id, $formType);
-            $form .= $this->get_entry_form($_post_id, $formType);
+            $created_form = $this->get_entry_form($_post_id, $formType);
+            $form .= $created_form;
+
+            if(!empty($created_form))
+            {
+                $form .= '<button class="save_for_later btn btn-default">Salvar</button>';
+            }
 
             $form .= "<div id='acolhesus_form_anexos'></div>";
 

@@ -176,7 +176,6 @@ jQuery( function( $ ) {
         if (confirm("Deseja remover o anexo " + nome + "?")) {
             var attach_id = $(this).data('id');
             var entry_id = $('input[name="_cf_frm_edt"]').val();
-            console.log("Removendo " + attach_id);
 
             if (attach_id && entry_id) {
                 var data = { action: 'delete_form_attachment', attach: attach_id, entry: entry_id};
@@ -188,4 +187,77 @@ jQuery( function( $ ) {
             }
         }
     });
+
+    $(document).on('click', '.save_for_later', function() {
+        save_for_later();
+    });
 });
+
+function save_for_later() {
+    var all_inputs = new FormData(),
+        cr_post = get_save("input[name=_cf_cr_pst]", all_inputs);
+
+    //Text, number
+    get_save('input[type=text]', all_inputs);
+    get_save('input[type=number]', all_inputs);
+
+    //Radio and checkbox
+    get_save('input:checked', all_inputs);
+
+    //Text areas
+    get_save('textarea', all_inputs);
+
+    //A:btnSuccess
+    get_save('a.btn-success', all_inputs);
+
+    //Select box
+    get_save('select', all_inputs);
+
+    //Form ID
+    var form = document.querySelector('div.caldera-grid > form'),
+            formId = form.dataset.formId;
+
+    all_inputs.append('action', 'acolhesus_save_for_later');
+    all_inputs.append('formId', formId);
+
+    //----------------- Send by AJAX -------------------------------//
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function()
+    {
+        if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        {
+            swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
+            setTimeout(function () {
+               window.location.reload();
+            }, 1000);
+        }
+    };
+
+    xmlHttp.open("post", acolhesus.ajax_url);
+    xmlHttp.send(all_inputs);
+}
+
+function get_save(query, all_inputs) {
+    var nodes = document.querySelectorAll(query);
+    Array.prototype.forEach.call (nodes, function (node) {
+        var name = node.name, value;
+
+        if(node.type != 'radio' || node.tagName == 'A')
+        {
+            value = node.value;
+        }
+        else
+        {
+            value = node.parentNode.dataset.label;
+            if(!value)
+            {
+                value = node.value;
+            }
+        }
+
+        if(value)
+        {
+            all_inputs.append(name, value);
+        }
+    } );
+}

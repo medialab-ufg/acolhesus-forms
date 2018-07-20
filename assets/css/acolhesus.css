@@ -63,6 +63,10 @@
 .acolhesus-form-container button.cf-uploader-trigger {
   border: 1px solid;
   background: #f2f3f5; }
+.acolhesus-form-container button.save_for_later {
+  margin-top: -60px;
+  position: relative;
+  z-index: 10; }
 .acolhesus-form-container #acolhesus_form_anexos {
   border-bottom: 1px solid;
   width: 98%; }
