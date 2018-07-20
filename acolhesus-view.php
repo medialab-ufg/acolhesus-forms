@@ -149,7 +149,7 @@ class AcolheSUSView extends AcolheSUS {
         if (isset($field['type']) && "advanced_file" === $field['type']) {
             $anexos = $this->get_attachments($field["ID"]);
             if (is_array($anexos)) {
-                echo "<ul class='form_attachments'>";
+                echo "<ul class='form_attachments cf-adv-preview-list'>";
                     array_map(function($e) { $this->attach_style($e['value']); }, $anexos);
                 echo "</ul>";
             }
@@ -161,8 +161,8 @@ class AcolheSUSView extends AcolheSUS {
     private function attach_style($url) {
         if (!empty($url)) {  ?>
             <li class="cf-uploader-queue-item">
-                <a href="#remove-file" data-file="<?php echo $url; ?>" class="cf-file-remove">&times;</a>
-                <a href="<?php echo $url; ?>"> <?php echo basename($url); ?> </a>
+                <a href="#remove-file" data-file="<?php echo $url; ?>" class="cf-file-remove acolhesus-remove-file">&times;</a>
+                <a href="<?php echo $url; ?>" class="acolhesus-file-name"> <?php echo basename($url); ?> </a>
             </li>
             <?php
         }

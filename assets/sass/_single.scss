@@ -92,6 +92,25 @@
   #acolhesus_form_anexos {
     border-bottom: 1px solid;
     width: 98%;
+
+    ul.form_attachments {
+      list-style: none;
+      padding: 0;
+      a {
+        &.acolhesus-remove-file {
+          color: #cf0000;
+          text-decoration: none;
+          border: 0;
+        }
+        &.acolhesus-file-name {
+          font-weight: 700;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          color: black;
+        }
+      } //a
+    }
   }
 
 } // .acolhesus-form-container
