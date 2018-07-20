@@ -171,14 +171,24 @@ jQuery( function( $ ) {
         }
     }
 
+    if($())
+
+    window.onbeforeunload = function() {
+        return "Você deseja realmente sair?";
+    };
     $(document).on('click', '.save_for_later', function() {
+        window.onbeforeunload = '';
         save_for_later();
     });
+
+    $(document).on('submit', 'form', function () {
+        window.onbeforeunload = '';
+    })
 });
 
 function save_for_later() {
     var all_inputs = new FormData(),
-        cr_post = get_save("input[name=_cf_cr_pst]", all_inputs)
+        cr_post = get_save("input[name=_cf_cr_pst]", all_inputs);
 
     //Text, number
     get_save('input[type=text]', all_inputs);
@@ -225,13 +235,17 @@ function get_save(query, all_inputs) {
     Array.prototype.forEach.call (nodes, function (node) {
         var name = node.name, value;
 
-        if(node.type != 'radio')
+        if(node.type != 'radio' || node.tagName == 'A')
         {
             value = node.value;
         }
         else
         {
             value = node.parentNode.dataset.label;
+            if(!value)
+            {
+                value = node.value;
+            }
         }
 
         if(value)
@@ -241,7 +255,3 @@ function get_save(query, all_inputs) {
     } );
 }
 
-// Por enquanto deixemos comentado
-// window.onbeforeunload = function() {
-//     return "Você deseja realmente sair?";
-// };
