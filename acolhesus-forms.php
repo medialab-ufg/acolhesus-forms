@@ -181,7 +181,8 @@ class AcolheSUS {
             'uma_entrada_por_campo' => false,
             'fase' => 'macrogestao',
             'eixo' => false,
-            'possui_validacao' => false
+            'possui_validacao' => false,
+            'omitir_macrogestao' => true
         ],
         'avaliacao_oficina' => [
             'labels' => [
@@ -193,6 +194,7 @@ class AcolheSUS {
             'fase' => 'macrogestao',
             'eixo' => false,
             'possui_validacao' => false,
+            'omitir_macrogestao' => true
         ],
         'relatorio_oficina' => [
             'labels' => [
@@ -204,7 +206,7 @@ class AcolheSUS {
             'fase' => 'macrogestao',
             'eixo' => false,
             'possui_validacao' => false,
-            'omitir_macrogestao' => true,
+            'omitir_macrogestao' => true
         ],
         'memoria_reuniao' => [
             'labels' => [
@@ -215,7 +217,8 @@ class AcolheSUS {
             'uma_entrada_por_campo' => false,
             'fase' => 'macrogestao',
             'eixo' => false,
-            'possui_validacao' => false
+            'possui_validacao' => false,
+            'omitir_macrogestao' => true
         ],
         'atividades_dispersao' => [
             'labels' => [
@@ -226,7 +229,8 @@ class AcolheSUS {
             'uma_entrada_por_campo' => false,
             'fase' => 0,
             'eixo' => false,
-            'possui_validacao' => false
+            'possui_validacao' => false,
+            'omitir_macrogestao' => true
         ],
     ];
 
