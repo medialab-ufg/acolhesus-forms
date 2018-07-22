@@ -591,7 +591,7 @@ class AcolheSUS {
 
             if(!empty($created_form))
             {
-                $form .= '<button class="save_for_later btn btn-default">Salvar</button>';
+                $form .= '<button class="save_for_later btn btn-info">Salvar</button>';
             }
 
             $form .= "<div id='acolhesus_form_anexos'></div>";
