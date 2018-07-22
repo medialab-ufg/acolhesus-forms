@@ -118,7 +118,8 @@ class AcolheSUS {
             'slug' => 'visita_guiada',
             'uma_entrada_por_campo' => true,
             'fase' => 'fase_1',
-            'eixo' => false
+            'eixo' => false,
+            'can_not_save_incomplete' => true
         ],
         'fluxograma' => [
             'labels' => [
@@ -128,7 +129,8 @@ class AcolheSUS {
             'slug' => 'fluxograma',
             'uma_entrada_por_campo' => true,
             'fase' => 'fase_1',
-            'eixo' => false
+            'eixo' => false,
+            'can_not_save_incomplete' => true
         ],
         'matriz_p_criticos' => [
             'labels' => [
@@ -589,8 +591,7 @@ class AcolheSUS {
             $created_form = $this->get_entry_form($_post_id, $formType);
             $form .= $created_form;
 
-            if(!empty($created_form))
-            {
+            if (!empty($created_form) && $this->can_save_incomplete($formType)) {
                 $form .= '<button class="save_for_later btn btn-info">Salvar</button>';
             }
 
@@ -600,6 +601,13 @@ class AcolheSUS {
         }
 
         return $content;
+    }
+
+    private function can_save_incomplete($formType) {   
+        $flag = 'can_not_save_incomplete';
+        $form = $this->forms[$formType];
+
+        return (!is_null($form) && !(isset($form[$flag]) && $form[$flag]));
     }
 
     private function render_fixed_meta($_post_id, $formType) {
