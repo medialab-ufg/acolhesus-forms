@@ -37,6 +37,14 @@ jQuery( function( $ ) {
         }
     });
 
+
+    if ($(base + ' .single input[type="submit"]').length == 0) {
+        var save_btn = 'button.save_for_later';
+        if ($(save_btn).length === 1) {
+            $(save_btn).css('margin-top',0);
+        }
+    }
+
     var current_form_id = $('.caldera-grid form').attr('id');
     $('form#' + current_form_id).submit(function (e) {
         e.preventDefault();
