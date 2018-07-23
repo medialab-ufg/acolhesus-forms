@@ -29,7 +29,8 @@
   color: #a94442;
   font-size: 12px !important; }
 .acolhesus-form-container .fixed-meta {
-  padding: 0; }
+  padding: 0;
+  margin-bottom: 20px; }
   .acolhesus-form-container .fixed-meta .fixed {
     color: #a94442 !important;
     font-size: 12px !important;
