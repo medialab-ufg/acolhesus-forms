@@ -274,4 +274,8 @@ function get_save(query, all_inputs) {
 jQuery(document).on('cf.form.submit', function(evt, data) {
     var $form = data.$form;
     var formId = $form.attr('id');
+
+    jQuery('button.save_for_later').hide();
+    jQuery('.fixed-meta').hide();
+    jQuery('#form-accordion').hide();
 });
