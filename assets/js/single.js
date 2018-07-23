@@ -277,5 +277,6 @@ jQuery(document).on('cf.form.submit', function(evt, data) {
 
     jQuery('button.save_for_later').hide();
     jQuery('.fixed-meta').hide();
+    jQuery('.cities-mc').hide();
     jQuery('#form-accordion').hide();
 });
