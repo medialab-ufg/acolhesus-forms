@@ -143,7 +143,7 @@ jQuery( function( $ ) {
     var attachments = '.form_attachments';
     $(attachments).last().remove();
     $(attachments).first().appendTo($(attachments_wrapper));
-    if ($(attachments_wrapper + " ul").html() == "" ) {
+    if ((typeof $(attachments_wrapper + " ul").html() === "undefined") || ($(attachments_wrapper + " ul").html() === "")) {
         $(attachments_wrapper).remove();
     }
 
