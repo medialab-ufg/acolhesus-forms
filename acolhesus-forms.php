@@ -140,7 +140,7 @@ class AcolheSUS {
             'slug' => 'matriz_p_criticos',
             'uma_entrada_por_campo' => true,
             'fase' => 'fase_1',
-            'eixo' => 0
+            'eixo' => 'todos'
         ],
         'matriz_objetivos' => [
             'labels' => [
@@ -160,7 +160,7 @@ class AcolheSUS {
             'slug' => 'plano_trabalho',
             'uma_entrada_por_campo' => true,
             'fase' => 'fase_2',
-            'eixo' => 0
+            'eixo' => 'todos'
         ],
         'efeitos_esperados' => [
             'labels' => [
@@ -1140,13 +1140,18 @@ class AcolheSUS {
 						'compare' => 'IN'
 					];
 				}
-				
+
+				/*
+				 * Comentar por enquanto, até definirmos exatamente como vai funcionar essa questão dos eixos
+				 * Até o momento, apenas dois forms terão eixo, e este valor não será armazenado no banco de dados
+				 *
 				if (isset($_GET['eixo']) && !empty($_GET['eixo'])) {
 					$meta_query[] = [
 						'key' => 'acolhesus_eixo',
 						'value' => $_GET['eixo'],
 					];
 				}
+				*/
 				
 				if (isset($_GET['fase']) && !empty($_GET['fase'])) {
 					$meta_query[] = [

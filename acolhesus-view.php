@@ -95,46 +95,19 @@ class AcolheSUSView extends AcolheSUS {
         return $forms;
     }
 
-    public function noForms() {
-        echo "<p class='no-forms-found'> Nenhum formulário encontrado para os filtros selecionados. </p>";
+    public function filterSelectedAxis(&$forms=[]) {
+        if (isset($_GET['eixo']) && !empty($_GET['eixo'])) {
+             $eixo = sanitize_text_field($_GET['eixo']);
+             if (in_array($eixo, $this->eixos)) {
+                 $forms = array_filter($forms, function($f) { return $f["eixo"] === "todos"; });
+            }
+        }
+
+        return $forms;
     }
 
-    public function renderFormsLoop($forms) {
-        global $AcolheSUS;
-        foreach ($forms as $formName => $formAtts):
-            if ($this->can_user_see($formName)):
-                global $current_acolhesus_formtype;
-                $current_acolhesus_formtype = $formName;
-                $nome = $formAtts['labels']['name'];
-                $link = get_post_type_archive_link($formName);
-                $ver_todos = "Ir para " . $nome;
-
-                // Essa query é modificada pelo pre_get_posts que tem na classe principal do plugin
-                $wp_query = new WP_Query([
-                    'post_type' => $formName,
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                ]);
-
-                ?>
-                <h3 class="form-title"> <?php echo $nome; ?> </h3>
-                <div class="panel">
-                    <div class="ver-todos">
-                        <a class="btn btn-default" href="<?php echo $link; ?>"> <?php echo $ver_todos; ?> </a>
-                        <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
-                    </div>
-                    <?php
-                    if ($wp_query->found_posts > 0) {
-                        include(plugin_dir_path(__FILE__) . "templates/loop-forms.php");
-                    } else {
-                        echo "<center> Nenhuma resposta de $nome! </center>";
-                    }
-                    ?>
-                </div>
-            <?php
-            endif;
-
-        endforeach;
+    public function noForms() {
+        echo "<p class='no-forms-found'> Nenhum formulário encontrado para os filtros selecionados. </p>";
     }
 
     public function renderFormsDenied() {

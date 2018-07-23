@@ -5,7 +5,7 @@ if (!current_user_can('view_acolhesus')):
     $formView->renderFormsDenied();
 else:
     global $AcolheSUS, $wp_query;
-	$registered_forms = $AcolheSUS->forms;
+	$forms = $AcolheSUS->forms;
 	$user = wp_get_current_user()->display_name;
     ?>
 
@@ -28,17 +28,20 @@ else:
 		</div>
 
         <?php
-        $formView->filterSelectedForm($registered_forms);
 
-        $formView->filterSelectedPhase($registered_forms);
+        $formView->filterSelectedForm($forms);
+
+        $formView->filterSelectedPhase($forms);
+
+        $formView->filterSelectedAxis($forms);
 
 		$extra_class = (empty($_GET)) ? "default" : "filtered";
         if (!empty($_GET) && isset($_GET['form'])) {
             echo "<div class='col-md-12 acolhesus-forms-list $extra_class'>";
-            if (empty($registered_forms)) {
+            if (empty($forms)) {
                 $formView->noForms();
             } else {
-                foreach ($registered_forms as $formName => $formAtts):
+                foreach ($forms as $formName => $formAtts):
                     if ($AcolheSUS->can_user_see($formName)):
                         global $current_acolhesus_formtype;
                         $current_acolhesus_formtype = $formName;
