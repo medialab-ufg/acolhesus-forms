@@ -182,6 +182,7 @@ jQuery( function( $ ) {
     });
 
     $(document).on('click', '.save_for_later', function() {
+        window.onbeforeunload = '';
         save_for_later();
     });
 });
