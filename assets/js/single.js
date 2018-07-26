@@ -203,6 +203,14 @@ jQuery( function( $ ) {
         };
     });
 
+    $(window).on('load', function () {
+        $(document).on('click', 'a.btn-success', function () {
+            window.onbeforeunload = function() {
+                return false;
+            };
+        });
+    });
+
     $(document).on('click', 'input[type=submit]', function (event) {
         window.onbeforeunload = '';
     });
