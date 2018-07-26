@@ -280,7 +280,7 @@ class AcolheSUS {
 
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
 
-        // add_filter('caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
+        add_filter('caldera_forms_mailer', array(&$this, 'append_content_to_mail'), 10, 3);
 
     }
 
@@ -305,7 +305,6 @@ class AcolheSUS {
         $formId = $_POST['formId'];
         $sql_form_info = "SELECT config from ".$wpdb->prefix."cf_forms WHERE form_id='".$formId."' and type='primary'";
         $fields = unserialize($wpdb->get_results($sql_form_info, 'ARRAY_A')[0]['config'])['fields'];
-        //print_r($fields);
 
         $sql_current_values = "SELECT field_id, value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."'";
         $current_values = $wpdb->get_results($sql_current_values, 'ARRAY_A');
@@ -438,20 +437,15 @@ class AcolheSUS {
         return $results;
     }
 
-    function check_send_mail( $mail, $data, $form )
+    function append_content_to_mail($mail, $data, $form)
     {
-        foreach ($form['fields'] as $field)
-        {
-            if($field['type'] === 'checkbox' && $field['slug'] === 'save_send')
-            {
-                $val = current($field['config']['option'])['value'];
-                if($val === 'true')
-                {
-                    $form_link = get_permalink($form['ID']);
-                    $mail['message'] .= "<br><br>$form_link";
-                    return $mail;
-                }else return false;
+        if (isset($_POST['_cf_cr_pst'])) {            
+            $form_link = get_permalink($_POST['_cf_cr_pst']);
+            if ($form_link) {
+                $mail['message'] = $mail['message'] . "<br><br> Link: $form_link";    
             }
+                
+            return $mail;
         }
     }
 
@@ -596,7 +590,7 @@ class AcolheSUS {
             $form .= $created_form;
 
             if (!empty($created_form) && $this->can_save_incomplete($formType)) {
-                $form .= '<button class="save_for_later btn btn-info">Salvar</button>';
+                $form .= '<button class="save_for_later btn btn-info" type="button">Salvar</button>';
             }
 
             $form .= "<div id='acolhesus_form_anexos'></div>";

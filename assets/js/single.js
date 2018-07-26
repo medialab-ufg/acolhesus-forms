@@ -197,7 +197,26 @@ jQuery( function( $ ) {
         }
     });
 
+    $(document).on('change', 'input.form-control, select.form-control, input[type=checkbox], textarea.form-control', function () {
+        window.onbeforeunload = function() {
+            return false;
+        };
+    });
+
+    $(window).on('load', function () {
+        $(document).on('click', 'a.btn-success', function () {
+            window.onbeforeunload = function() {
+                return false;
+            };
+        });
+    });
+
+    $(document).on('click', 'input[type=submit]', function (event) {
+        window.onbeforeunload = '';
+    });
+
     $(document).on('click', '.save_for_later', function() {
+        window.onbeforeunload = '';
         save_for_later();
     });
 });
