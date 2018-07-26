@@ -437,16 +437,16 @@ class AcolheSUS {
         return $results;
     }
 
-    function append_content_to_mail( $mail, $data, $form )
+    function append_content_to_mail($mail, $data, $form)
     {
-        if (isset($form['_cf_cr_pst'])) {
+        if (isset($form['_cf_cr_pst'])) {            
             $form_link = get_permalink($form['_cf_cr_pst']);
-            $mail['message'] .= "<br><br>$form_link";
-            
+            if ($form_link) {
+                $mail['message'] = $mail['message'] . "<br><br> Link: $form_link";    
+            }
+                
             return $mail;
         }
-
-        return false;
     }
 
     function delete_new_form_tag() {
