@@ -439,8 +439,8 @@ class AcolheSUS {
 
     function append_content_to_mail($mail, $data, $form)
     {
-        if (isset($form['_cf_cr_pst'])) {            
-            $form_link = get_permalink($form['_cf_cr_pst']);
+        if (isset($_POST['_cf_cr_pst'])) {            
+            $form_link = get_permalink($_POST['_cf_cr_pst']);
             if ($form_link) {
                 $mail['message'] = $mail['message'] . "<br><br> Link: $form_link";    
             }
