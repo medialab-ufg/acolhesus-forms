@@ -280,7 +280,7 @@ class AcolheSUS {
 
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
 
-        // add_filter('caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
+        add_filter('caldera_forms_mailer', array(&$this, 'check_send_mail'), 10, 3);
 
     }
 
@@ -305,7 +305,6 @@ class AcolheSUS {
         $formId = $_POST['formId'];
         $sql_form_info = "SELECT config from ".$wpdb->prefix."cf_forms WHERE form_id='".$formId."' and type='primary'";
         $fields = unserialize($wpdb->get_results($sql_form_info, 'ARRAY_A')[0]['config'])['fields'];
-        //print_r($fields);
 
         $sql_current_values = "SELECT field_id, value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."'";
         $current_values = $wpdb->get_results($sql_current_values, 'ARRAY_A');
