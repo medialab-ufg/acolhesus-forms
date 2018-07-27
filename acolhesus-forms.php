@@ -108,7 +108,8 @@ class AcolheSUS {
             'slug' => 'indicadores',
             'uma_entrada_por_campo' => false,
             'fase' => 'fase_1',
-            'eixo' => 0
+            'eixo' => 0,
+            'omitir_macrogestao' => true
         ],
         'visita_guiada' => [
             'labels' => [
