@@ -91,8 +91,8 @@ class AcolheSUS {
     public $forms = [
         'matriz_cenario' => [
             'labels' => [
-                'name' => 'Matriz de Cenários',
-                'singular_name' => 'Matriz de Cenários'
+                'name' => 'Matriz de Cenário',
+                'singular_name' => 'Matriz de Cenário'
             ],
             'form_id' => '', // Setado via admin
             'slug' => 'matriz_cenario',
@@ -102,8 +102,8 @@ class AcolheSUS {
         ],
         'indicadores' => [
             'labels' => [
-                'name' => 'Dados Epidemiológicos',
-                'singular_name' => 'Dados Epidemiológicos'
+                'name' => 'Indicadores Epidemiológicos',
+                'singular_name' => 'Indicadores Epidemiológicos'
             ],
             'slug' => 'indicadores',
             'uma_entrada_por_campo' => false,
