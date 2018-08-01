@@ -259,8 +259,6 @@ class AcolheSUS {
 
         add_action('wp_ajax_acolhesus_save_post_basic_info', array(&$this, 'ajax_callback_save_post_basic_info'));
 
-        add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_save_for_later'));
-
         add_action('wp_ajax_acolhesus_add_form_entry', array(&$this, 'ajax_callback_add_form_entry'));
 
         add_action('wp_ajax_acolhesus_lock_form', array(&$this, 'ajax_callback_lock_form'));
@@ -283,6 +281,84 @@ class AcolheSUS {
 
         add_filter('caldera_forms_mailer', array(&$this, 'append_content_to_mail'), 10, 3);
 
+        add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_save_for_later'));
+
+        add_action( 'caldera_forms_submit_post_process', array(&$this, 'get_old_attachment'), 10, 4 );
+
+        add_filter( 'caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
+    }
+
+    function get_old_attachment($form, $referrer, $process_id, $entry_id)
+    {
+        $to_save = [];
+        foreach ($form['fields'] as $field)
+        {
+            if(strcmp($field['type'], 'advanced_file') === 0 )
+            {
+                $field_id = $field["ID"];
+                $slug = $field['slug'];
+                $anexos = $this->get_attachments($field_id);
+                foreach ($anexos as $attachment)
+                {
+                    $to_save[] = $attachment;
+                }
+            }
+        }
+
+        if(!empty($to_save))
+        {
+            update_option('rhs_old_attachment', $to_save);
+            update_option('rhs_temp_slug', $slug);
+
+            global $wpdb;
+            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+            $sql_delete = "DELETE FROM " . $caldera_entries . " WHERE entry_id = '$entry_id' AND slug = '$slug'";
+
+            $wpdb->query($sql_delete);
+        }else{
+            delete_option('rhs_old_attachment');
+            delete_option('rhs_temp_slug');
+        }
+    }
+
+    function filter_caldera_forms_ajax_return( $out, $form )
+    {
+        $old_attach = get_option('rhs_old_attachment');
+
+        if(!empty($old_attach))
+        {
+            foreach ($form['fields'] as $field)
+            {
+                if(strcmp($field['type'], 'advanced_file') === 0 )
+                {
+                    $field_id = $field["ID"];
+                    $form_id = get_the_ID();
+                    if ($form_id) {
+                        $entry = get_post_meta($form_id, '_entry_id', true);
+                        if ($entry) {
+                            global $wpdb;
+                            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                            $slug = get_option('rhs_temp_slug');
+
+                            if(!empty($slug))
+                            {
+                                foreach ($old_attach as $att)
+                                {
+                                    $att = $att['value'];
+                                    $sql_insert = "INSERT INTO $caldera_entries (entry_id, field_id, slug, value) VALUES ('$entry', '$field_id', '$slug', '$att')";
+                                    $wpdb->query($sql_insert);
+                                }
+                            }
+                        }
+                    }
+
+                    delete_option('rhs_old_attachment');
+                    delete_option('rhs_temp_slug');
+                }
+            }
+        }
+
+        return $out;
     }
 
     function ajax_callback_save_save_for_later()
