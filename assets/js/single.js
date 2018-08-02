@@ -215,6 +215,10 @@ jQuery( function( $ ) {
         window.onbeforeunload = '';
     });
 
+    $(document).on('click', 'button[type=submit]', function (event) {
+        window.onbeforeunload = '';
+    });
+
     $(document).on('click', '.save_for_later', function() {
         window.onbeforeunload = '';
         save_for_later();
