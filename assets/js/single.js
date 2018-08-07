@@ -302,3 +302,12 @@ jQuery( document ).on(  'cf.validate.FormSuccess', function( event, obj ){
     jQuery('#acolhesus_form_anexos').hide();
     jQuery('#form-accordion').hide();
 });
+
+jQuery(document).on('submit', "#form-comentario", function (event) {
+    //event.preventDefault();
+    jQuery.post(acolhesus.ajax_url, {
+        action: 'acolhesus_notify_user',
+    }).success(function (r) {
+        console.log("Notifyed");
+    });
+});

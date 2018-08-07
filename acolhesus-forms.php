@@ -286,6 +286,20 @@ class AcolheSUS {
         add_action( 'caldera_forms_submit_post_process', array(&$this, 'get_old_attachment'), 10, 4 );
 
         add_filter( 'caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
+
+        add_action('wp_ajax_acolhesus_notify_user', array(&$this, 'ajax_callback_notify_user'));
+    }
+
+    function ajax_callback_notify_user()
+    {
+        if( current_user_can('editor') || current_user_can('administrator') )
+        {
+            /*global $RHSNotifications;
+
+            $current_user = wp_get_current_user();
+
+            $RHSNotifications->add_notification(RHSNotifications::CHANNEL_COMMENTS, );*/
+        }
     }
 
     function get_old_attachment($form, $referrer, $process_id, $entry_id)
