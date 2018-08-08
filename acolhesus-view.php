@@ -1,6 +1,8 @@
 <?php
 define('ACOLHESUS_URL', plugin_dir_url(__FILE__));
 
+include "acolhesus-reports.php";
+
 class AcolheSUSView extends AcolheSUS {
 
     public $filtros = [

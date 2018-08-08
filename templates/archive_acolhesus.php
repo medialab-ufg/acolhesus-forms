@@ -5,6 +5,7 @@ global $current_acolhesus_formtype;
 global $AcolheSUS;
 $current_acolhesus_formtype = get_post_type();
 $form = $AcolheSUS->forms[$current_acolhesus_formtype];
+$e = new AcolheSUSReports();
 
 if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
 
@@ -16,6 +17,16 @@ if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
         <?php include_once( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?>
 
         <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
+
+        <br> <hr> <h3>Relatórios</h3> <hr>
+        <p>
+            <?php
+            foreach ( $e->getAnswersFor('fld_7982129') as $r) {
+                echo $r->value . "<br>";
+            }
+            ?>
+        </p>
+
     </div>
 
 <?php else:

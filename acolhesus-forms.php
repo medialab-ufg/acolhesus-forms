@@ -1210,8 +1210,7 @@ class AcolheSUS {
             if ( isset($query->query['post_type']) && array_key_exists($query->query['post_type'], $this->forms) ) {
 
                 $camposDoUsuario = $this->get_user_campos();
-				
-				$meta_query = [];
+                $meta_query = [];
 				
 				if (isset($_GET['campo']) && !empty($_GET['campo'])) {
 					$meta_query[] = [
