@@ -21,7 +21,6 @@ class AcolheSUS {
         'BA',
         'CE',
         'DF',
-        'ES',
         'GO',
         'MA',
         'MG',
@@ -29,17 +28,11 @@ class AcolheSUS {
         'MT',
         'PA',
         'PB',
-        'PE',
         'PI',
-        'PR',
         'RJ',
         'RN',
-        'RO',
         'RR',
-        'RS',
         'SC',
-        'SE',
-        'SP',
         'TO'
     ];
 
@@ -51,7 +44,6 @@ class AcolheSUS {
         'BA' => 'BA - Salvador - Hospital Geral do Estado',
         'CE' => 'CE - Fortaleza - Hospital São José',
         'DF' => 'DF - Brasília - Regional Macro Centro-Norte - APS',
-        'ES' => 'ES',
         'GO' => 'GO - Cristalina - Hospital Municipal de Cristalina Chaud Salles',
         'MA' => 'MA - São Luís - UPA Itaqui Bacana',
         'MG' => 'MG - Juiz de Fora - Hospital Regional Dr. João Penido',
@@ -59,18 +51,24 @@ class AcolheSUS {
         'MT' => 'MT - Várzea Grande - Hospital e Pronto Socorre Municipal de Várzea Grande',
         'PA' => 'PA - Belém - CAPS Renascer',
         'PB' => 'PB - João Pessoa - Maternidade Frei Damião',
-        'PE' => 'PE',
         'PI' => 'PI - Parnaíba - Hospital Estadual Dirceu Arcoverde',
-        'PR' => 'PR',
         'RJ' => 'RJ - Duque de Caxias - Hospital Estadual Adão Pereira Nunes',
         'RN' => 'RN - Natal - Hospital José Pedro Bezerra',
-        'RO' => 'RO',
         'RR' => 'RR - Boa Vista - Pronto Atendimento Airton Rocha',
-        'RS' => 'RS',
         'SC' => 'SC - São José - Hospital Regional de São José Dr. Homero Miranda',
-        'SE' => 'SE',
-        'SP' => 'SP',
         'TO' => 'TO - Palmas - Hospital Geral de Palmas'
+    ];
+
+    // Estados que não participam por enquanto do AcolheSUS
+    // Deixar aqui a título de conhecimento
+    private $estados_fora = [
+        'ES' => 'ES',
+        'PE' => 'PE',
+        'PR' => 'PR',
+        'RO' => 'RO',
+        'RS' => 'RS',
+        'SE' => 'SE',
+        'SP' => 'SP'
     ];
 
     public $fases = [
