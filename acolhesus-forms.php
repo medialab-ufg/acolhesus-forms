@@ -841,12 +841,14 @@ class AcolheSUS {
         if (is_single()) {
             $options = "<option value=''></option>";
         }
-		foreach ($camposDoUsuario as $campo) {
-            $campo_completo = $this->campos_completos[$campo];
 
-            $options .= "<option value='$campo'";
-            $options .= selected($selected, $campo, false);
-            $options .= "> $campo_completo </option>\n";
+        foreach ($camposDoUsuario as $campo) {
+            if (array_key_exists($campo, $this->campos_completos)) {
+                $campo_completo = $this->campos_completos[$campo];
+                $options .= "<option value='$campo'";
+                $options .= selected($selected, $campo, false);
+                $options .= "> $campo_completo </option>\n";
+            }
         }
 		return $options;
 	}
