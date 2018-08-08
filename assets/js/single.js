@@ -223,6 +223,27 @@ jQuery( function( $ ) {
         window.onbeforeunload = '';
         save_for_later();
     });
+
+    $(document).on('click', "#report", function () {
+        var info = new FormData();
+        //Form ID
+        var form = document.querySelector('div.caldera-grid > form'),
+            formId = form.dataset.formId;
+        get_save("input[name=_cf_cr_pst]", info);
+        info.append('formId', formId);
+        info.append('action', 'acolhesus_report');
+        $.ajax({
+            method: 'POST',
+            url: acolhesus.ajax_url,
+            data: info,
+            processData: false,
+            contentType: false
+        }).success(function (data) {
+            data = data.substring(0, data.length -1);
+            var data = JSON.parse(data);
+            console.log(data);
+        })
+    });
 });
 
 function save_for_later() {
@@ -304,7 +325,6 @@ jQuery( document ).on(  'cf.validate.FormSuccess', function( event, obj ){
 });
 
 jQuery(document).on('submit', "#form-comentario", function (event) {
-    //event.preventDefault();
     jQuery.post(acolhesus.ajax_url, {
         action: 'acolhesus_notify_user',
     }).success(function (r) {
