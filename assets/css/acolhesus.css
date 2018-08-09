@@ -93,6 +93,9 @@
 
 .single .acolhesus-form-container {
   color: black; }
+  .single .acolhesus-form-container a.voltar-home {
+    float: right;
+    margin-left: 15px; }
   .single .acolhesus-form-container .acolhesus_filter_forms {
     width: auto !important;
     margin-bottom: 20px; }

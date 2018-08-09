@@ -132,6 +132,11 @@
 .single .acolhesus-form-container {
   color: black;
 
+  a.voltar-home {
+    float: right;
+    margin-left: 15px;
+  }
+
   .acolhesus_filter_forms {
     width: auto !important;
     margin-bottom: 20px;
