@@ -23,7 +23,7 @@ if ($is_new_form) {
         <?php endif; ?>
 
         <?php if (current_user_can('acolhesus_cgpnh')): ?>
-            <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODAS RESPOSTAS </a>
+            <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>
         <?php endif; ?>
     </h3>
 
