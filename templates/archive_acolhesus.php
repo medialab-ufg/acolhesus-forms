@@ -16,6 +16,16 @@ if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
         <?php include_once( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?>
 
         <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
+
+        <br> <hr> <h3>Relatórios</h3> <hr>
+        <p>
+            <?php
+            $report = new AcolheSUSReports();
+            $id = 'fld_7982129';
+            echo $report->getAnswersFor($id);
+            ?>
+        </p>
+
     </div>
 
 <?php else:
