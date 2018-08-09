@@ -100,8 +100,8 @@ class AcolheSUS {
         ],
         'indicadores' => [
             'labels' => [
-                'name' => 'Indicadores Epidemiológicos',
-                'singular_name' => 'Indicadores Epidemiológicos'
+                'name' => 'Indicadores',
+                'singular_name' => 'Indicadores'
             ],
             'slug' => 'indicadores',
             'uma_entrada_por_campo' => false,
