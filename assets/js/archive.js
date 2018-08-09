@@ -34,7 +34,6 @@ jQuery( function( $ ) {
     $($_filters).accordion(getAccordionConfig());
 
     if ($( $_forms_ ).hasClass('filtered')) {
-        $($_forms_).accordion("option", {"active": 0});
         $($_filters).accordion("option", {"active": 0});
     }
 
