@@ -22,7 +22,11 @@ class AcolheSUSReports
         $d = $this->form_id($form);
         $f = $this->get_form_config($d);
 
-        return $f["fields"];
+        if (is_object($f)) {
+            return $f["fields"];
+        }
+
+        return [];
     }
 
     public function form_id($form_type)
@@ -82,11 +86,18 @@ class AcolheSUSReports
         $caldera_forms = $wpdb->prefix . 'cf_forms';
         $sql = "SELECT config FROM " . $caldera_forms . " WHERE form_id='$form_id'";
 
-        $return = $wpdb->get_row($sql)->config;
+        $result = $wpdb->get_row($sql);
 
-        if (is_string($return) && (strlen($return) > 100)) {
-            return unserialize($return);
+        if (is_object($result)) {
+            $return = $result->config;
+
+            if (is_string($return) && (strlen($return) > 100)) {
+                return unserialize($return);
+            }
+        } else {
+            echo "Formulário não configurado.";
         }
+
     }
 
     private function getTotal($field_id, $value)
