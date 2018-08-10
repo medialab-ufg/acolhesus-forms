@@ -38,21 +38,44 @@ class AcolheSUSReports
         return $f['form_ids'][$form_type];
     }
 
-    public function generateReports($formType)
+    public function renderReports($formType) {
+        ?>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th> Questão </th>
+                <th> Resposta </th>
+                <th> Total</th>
+            </tr>
+            </thead>
+            <tbody>
+                <?php echo $this->generateReports($formType); ?>
+            </tbody>
+        </table>
+        <?php
+    }
+
+    private function generateReports($formType)
     {
         $c = 0;
         $total_geral = 0;
+        $t = "";
         foreach ($this->get_form_fields($formType) as $id => $campo ) {
-            // "filtered_select2"
 
             $tipo = $campo["type"];
+            $e = "";
 
             if ( in_array($tipo, $this->report_fields) ) {
-                echo intval($this->getAnswersFor($id)) . " - <span><i><small>" . $campo["label"] . "</small></i></span> <br>";
+                // echo intval($this->getAnswersFor($id)) . " - <span><i><small>" . $campo["label"] . "</small></i></span> <br>";
+
+                $e .= $this->renderAnswerRow(""," ");
+                $e = $this->renderAnswerRow(intval($this->getAnswersFor($id)), $campo["label"]);
+                $e .= $this->renderAnswerRow(""," ");
+
                 if ($campo["type"] === "number") {
 
                     if ($c === 4) {
-                        echo "<br>"; // $total_geral - exibir aqui?
+                        // echo "<br>"; // $total_geral - exibir aqui?
                         $c = -1;
                         $total_geral = 0;
                     } else {
@@ -63,22 +86,30 @@ class AcolheSUSReports
                 }
 
             } else if ($tipo === "html" && !in_array($id, $this->excluded_fields)) {
-                echo $campo["config"]["default"] . "<hr>";
+
+                $e = "<td> " . $campo["config"]["default"] . "</td>";
+                $e .= $this->renderAnswerRow(""," ");
+                $e .= $this->renderAnswerRow(""," ");
+
             } else if ($tipo === "toggle_switch") {
                 $sim = $this->getTotal($id, "Sim");
                 $nao = $this->getTotal($id, "Não");
-                echo $campo["label"] . "<br>";
+                $e = "<td> " . $campo["label"] . "</td>";
 
-                $this->renderAnswerRow($sim," Sim");
-                $this->renderAnswerRow($nao, " Não");
-
-                echo "<br>";
+                $e .= $this->renderAnswerRow($sim," Sim");
+                $e .= $this->renderAnswerRow($nao, " Não");
             }
+
+            $t .= "<tr>";
+            $t .= $e;
+            $t .= "</tr>";
         }
+
+        return $t;
     }
 
     private function renderAnswerRow($total, $label) {
-        echo $total . "<span><i><small> $label </small></i></span> <br>";
+        return "<td> $total </td> <td> <span><i><small> $label </small></i></span> </td>";
     }
 
 
