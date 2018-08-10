@@ -251,6 +251,7 @@ jQuery( function( $ ) {
 });
 
 function save_for_later() {
+    swal({ showConfirmButton: false, showCancelButton: false, title: 'Salvando formulário...', icon: "warning" });
     var all_inputs = new FormData(),
         cr_post = get_save("input[name=_cf_cr_pst]", all_inputs);
 
