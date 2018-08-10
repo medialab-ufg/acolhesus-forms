@@ -336,7 +336,6 @@ class AcolheSUS {
     function filter_caldera_forms_ajax_return( $out, $form )
     {
         $old_attach = get_option('rhs_old_attachment');
-
         if(!empty($old_attach))
         {
             foreach ($form['fields'] as $field)
@@ -406,7 +405,6 @@ class AcolheSUS {
             {
                 $sql_exists = "SELECT count(field_id) AS count FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='$index' AND entry_id=$_entry_id";
                 $count = $wpdb->get_results($sql_exists, 'ARRAY_A')[0]['count'];
-
                 if($count > 0)
                 {//Exists
                     if(!is_array($value))
@@ -497,7 +495,42 @@ class AcolheSUS {
                         }
                     }
                 }
+            }else if($index == 'file_value') {//Saving files
+                $files = json_decode(stripslashes($value));
+
+                foreach ($files as $file)
+                {
+                    $upload_dir = wp_upload_dir();
+                    $file_name = $file->name;
+                    $file_content = end(explode("base64,", $file->file));
+                    $file_content = base64_decode($file_content);
+                    $path = $upload_dir['path']."/$file_name";
+
+                    $i = 1;
+                    while (file_exists($path))
+                    {
+                        $name = pathinfo($file_name, PATHINFO_FILENAME);
+                        $extension = pathinfo($file_name,PATHINFO_EXTENSION);
+                        $path = $upload_dir['path']."/$name-$i.$extension";
+                        $url_path = $upload_dir['url']."/$name-$i.$extension";
+                        $i++;
+                    }
+
+                    if(file_put_contents($path, $file_content))
+                    {
+                        $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+
+                        if(!empty($slug))
+                        {
+                            $file_input_id = $_POST['file_input_id'];
+                            $slug = "'".$fields[$file_input_id]['slug']."'";
+                            $sql_insert = "INSERT INTO $caldera_entries (entry_id, field_id, slug, value) VALUES ('$_entry_id', '$file_input_id', $slug, '$url_path')";
+                            $wpdb->query($sql_insert);
+                        }
+                    }
+                }
             }
+
         }
 
         if(!empty($msg))
