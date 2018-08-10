@@ -27,3 +27,4 @@ $formType = get_post_type();
         <?php $report->generateReports($formType); ?>
     </div>
 </div>
+<hr>
