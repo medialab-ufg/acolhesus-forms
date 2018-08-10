@@ -4,6 +4,8 @@ class AcolheSUSReports
 {
     private $report_fields = ["number"];
 
+    private $excluded_fields = ["fld_4739909"];
+
     public function __construct()
     {
         // nothing for now
@@ -46,11 +48,11 @@ class AcolheSUSReports
             $tipo = $campo["type"];
 
             if ( in_array($tipo, $this->report_fields) ) {
-                echo intval($this->getAnswersFor($id)) . " - <span><i><small>" . $campo["label"] . "</small></i></span> $id <br>";
+                echo intval($this->getAnswersFor($id)) . " - <span><i><small>" . $campo["label"] . "</small></i></span> <br>";
                 if ($campo["type"] === "number") {
 
                     if ($c === 4) {
-                        echo "<br>"; // $total_geral
+                        echo "<br>"; // $total_geral - exibir aqui?
                         $c = -1;
                         $total_geral = 0;
                     } else {
@@ -60,8 +62,8 @@ class AcolheSUSReports
                     $c++;
                 }
 
-            } else if ($tipo === "html") {
-                echo "<br>" .$campo["config"]["default"] . "<hr>";
+            } else if ($tipo === "html" && !in_array($id, $this->excluded_fields)) {
+                echo $campo["config"]["default"] . "<hr>";
             } else if ($tipo === "toggle_switch") {
                 $sim = $this->getTotal($id, "Sim");
                 $nao = $this->getTotal($id, "Não");
