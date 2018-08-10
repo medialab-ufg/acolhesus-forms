@@ -41,24 +41,28 @@ class AcolheSUSReports
         return $f['form_ids'][$form_type];
     }
 
-    public function renderReports($formType) {
-        ?>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th> Questão </th>
-                <th> Resposta </th>
-                <th> Total</th>
-            </tr>
-            </thead>
-            <tbody>
-                <?php echo $this->generateReports($formType); ?>
-            </tbody>
-        </table>
-        <?php
+    public function renderReports($formType)
+    {
+        $data = $this->generateReportData($formType);
+        if (is_string($data) && strlen($data) > 100) {
+            ?>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th> Questão </th>
+                    <th> Resposta </th>
+                    <th> Total</th>
+                </tr>
+                </thead>
+                <tbody> <?php echo $data; ?> </tbody>
+            </table>
+            <?php
+        } else {
+            echo "Relatório não disponível para este formulário!";
+        }
     }
 
-    private function generateReports($formType)
+    private function generateReportData($formType)
     {
         $c = 0;
         $total_geral = 0;
