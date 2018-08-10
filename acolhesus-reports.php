@@ -22,7 +22,7 @@ class AcolheSUSReports
         $d = $this->form_id($form);
         $f = $this->get_form_config($d);
 
-        if (is_object($f)) {
+        if (is_array($f) && array_key_exists("fields", $f)) {
             return $f["fields"];
         }
 
