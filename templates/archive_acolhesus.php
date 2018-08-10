@@ -13,27 +13,15 @@ if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
 
         <a class="list-forms" href="<?php echo home_url('formularios-acolhesus'); ?>">&lt;&lt; Voltar para todos os formulários</a> <hr>
 
+        <?php if ( $AcolheSUS->can_user_edit($current_acolhesus_formtype) ): ?>
+            <?php include_once("reports.php"); ?>
+        <?php endif; ?>
+
+        <hr>
+
         <?php include_once( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?>
 
         <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
-
-        <br> <hr> <h3>Relatórios de Avaliação de Grupos</h3> <hr>
-        <p>
-            <?php
-            $report = new AcolheSUSReports();
-            $id = 'fld_7982129';
-
-
-            foreach ($report->get_form_fields() as $id => $campo ) {
-                if ( in_array($campo["type"], ["number", "filtered_select2"]) ) {
-                    // echo $campo["label"] . "<br>";
-                    echo $report->getAnswersFor($id) . " (10%) -- " .  $report->get_field_data($id)["label"] . " [filtre aqui]" . "<br>";
-                }
-            }
-
-            ?>
-        </p>
-
     </div>
 
 <?php else:
