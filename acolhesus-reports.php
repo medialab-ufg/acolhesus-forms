@@ -58,7 +58,7 @@ class AcolheSUSReports
             </table>
             <?php
         } else {
-            echo "Relatório não disponível para este formulário!";
+            echo "<center>Relatório não disponível para este formulário!</center>";
         }
     }
 
