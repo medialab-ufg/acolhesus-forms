@@ -13,9 +13,7 @@ if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
 
         <a class="list-forms" href="<?php echo home_url('formularios-acolhesus'); ?>">&lt;&lt; Voltar para todos os formulários</a> <hr>
 
-        <?php if ( $AcolheSUS->can_user_edit($current_acolhesus_formtype) ): ?>
-            <?php include_once("reports.php"); ?>
-        <?php endif; ?>
+        <?php // if ($AcolheSUS->can_user_edit($current_acolhesus_formtype)) { include_once("reports.php"); } ?>
 
         <hr>
 
