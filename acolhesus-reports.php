@@ -4,7 +4,10 @@ class AcolheSUSReports
 {
     private $report_fields = ["number"];
 
-    private $excluded_fields = ["fld_4739909"];
+    private $excluded_fields = [
+        "fld_4739909", // texto ajuda avaliacao grupos
+        "fld_1123995" // anexos avaliacao grupos
+    ];
 
     public function __construct()
     {
