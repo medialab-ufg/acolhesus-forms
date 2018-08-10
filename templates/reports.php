@@ -23,7 +23,7 @@ $formType = get_post_type();
         <br><br>
     </center>
 
-    <p style="margin-top: 2px; border: 1px solid #d3d3d3; padding: 20px;">
+    <div style="margin-top: 2px; border: 1px solid #d3d3d3; padding: 20px; background: #f5f3f1">
         <?php $report->generateReports($formType); ?>
-    </p>
+    </div>
 </div>
