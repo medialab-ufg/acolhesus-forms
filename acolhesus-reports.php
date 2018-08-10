@@ -2,22 +2,11 @@
 
 class AcolheSUSReports
 {
+    private $report_fields = ["number"];
+
     public function __construct()
     {
         // nothing for now
-    }
-
-    function getAnswersFor($field_id)
-    {
-        if (is_string($field_id)) {
-            global $wpdb;
-            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
-            $sql = "SELECT SUM(value) as total FROM " . $caldera_entries . " WHERE field_id='$field_id'";
-
-            return $wpdb->get_row($sql)->total;
-        }
-
-        return [];
     }
 
     function get_field_data($slug)
@@ -49,7 +38,10 @@ class AcolheSUSReports
         $total_geral = 0;
         foreach ($this->get_form_fields($formType) as $id => $campo ) {
             // "filtered_select2"
-            if ( in_array($campo["type"], ["number"]) ) {
+
+            $tipo = $campo["type"];
+
+            if ( in_array($tipo, $this->report_fields) ) {
                 echo intval($this->getAnswersFor($id)) . " - <span><i><small>" . $campo["label"] . "</small></i></span> $id <br>";
                 if ($campo["type"] === "number") {
 
@@ -64,10 +56,23 @@ class AcolheSUSReports
                     $c++;
                 }
 
-            } else if ($campo["type"] === "html") {
-                echo $campo["config"]["default"];
+            } else if ($tipo === "html") {
+                echo "<br>" .$campo["config"]["default"] . "<hr>";
+            } else if ($tipo === "toggle_switch") {
+                $sim = $this->getTotal($id, "Sim");
+                $nao = $this->getTotal($id, "Não");
+                echo $campo["label"] . "<br>";
+
+                $this->renderAnswerRow($sim," Sim");
+                $this->renderAnswerRow($nao, " Não");
+
+                echo "<br>";
             }
         }
+    }
+
+    private function renderAnswerRow($total, $label) {
+        echo $total . "<span><i><small> $label </small></i></span> <br>";
     }
 
 
@@ -82,6 +87,30 @@ class AcolheSUSReports
         if (is_string($return) && (strlen($return) > 100)) {
             return unserialize($return);
         }
+    }
+
+    private function getTotal($field_id, $value)
+    {
+        if (is_string($field_id)) {
+            global $wpdb;
+            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+            $sql = "SELECT COUNT(*) as total FROM " . $caldera_entries . " WHERE field_id='$field_id' AND value='$value'";
+
+            return $wpdb->get_row($sql)->total;
+        }
+    }
+
+    private function getAnswersFor($field_id)
+    {
+        if (is_string($field_id)) {
+            global $wpdb;
+            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+            $sql = "SELECT SUM(value) as total FROM " . $caldera_entries . " WHERE field_id='$field_id'";
+
+            return $wpdb->get_row($sql)->total;
+        }
+
+        return [];
     }
 
 
