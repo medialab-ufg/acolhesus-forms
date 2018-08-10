@@ -17,12 +17,20 @@ if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
 
         <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
 
-        <br> <hr> <h3>Relatórios</h3> <hr>
+        <br> <hr> <h3>Relatórios de Avaliação de Grupos</h3> <hr>
         <p>
             <?php
             $report = new AcolheSUSReports();
             $id = 'fld_7982129';
-            echo $report->getAnswersFor($id);
+
+
+            foreach ($report->get_form_fields() as $id => $campo ) {
+                if ( in_array($campo["type"], ["number", "filtered_select2"]) ) {
+                    // echo $campo["label"] . "<br>";
+                    echo $report->getAnswersFor($id) . " (10%) -- " .  $report->get_field_data($id)["label"] . " [filtre aqui]" . "<br>";
+                }
+            }
+
             ?>
         </p>
 

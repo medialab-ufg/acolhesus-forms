@@ -23,10 +23,16 @@ class AcolheSUSReports
     function get_field_data($slug)
     {
         $f_id = "CF5b1acc437ffd1";
-
         $f = $this->get_form_config($f_id);
 
-        return Caldera_Forms::get_field_data($slug, $f);
+        return $f["fields"][$slug];
+    }
+
+    function get_form_fields() {
+        $f_id = "CF5b1acc437ffd1";
+        $f = $this->get_form_config($f_id);
+
+        return $f["fields"];
     }
 
 
