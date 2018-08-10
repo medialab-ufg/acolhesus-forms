@@ -28,11 +28,46 @@ class AcolheSUSReports
         return $f["fields"][$slug];
     }
 
-    function get_form_fields() {
-        $f_id = "CF5b1acc437ffd1";
-        $f = $this->get_form_config($f_id);
+    function get_form_fields($form)
+    {
+        $d = $this->form_id($form);
+        $f = $this->get_form_config($d);
 
         return $f["fields"];
+    }
+
+    public function form_id($form_type)
+    {
+        $f = get_option("acolhesus");
+
+        return $f['form_ids'][$form_type];
+    }
+
+    public function generateReports($formType)
+    {
+        $c = 0;
+        $total_geral = 0;
+        foreach ($this->get_form_fields($formType) as $id => $campo ) {
+            // "filtered_select2"
+            if ( in_array($campo["type"], ["number"]) ) {
+                echo intval($this->getAnswersFor($id)) . " - <span><i><small>" . $campo["label"] . "</small></i></span> $id <br>";
+                if ($campo["type"] === "number") {
+
+                    if ($c === 4) {
+                        echo "<br>"; // $total_geral
+                        $c = -1;
+                        $total_geral = 0;
+                    } else {
+                        $total_geral += intval($this->getAnswersFor($id));
+                    }
+
+                    $c++;
+                }
+
+            } else if ($campo["type"] === "html") {
+                echo $campo["config"]["default"];
+            }
+        }
     }
 
 
