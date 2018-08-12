@@ -135,7 +135,7 @@ class AcolheSUSReports
                 return unserialize($return);
             }
         } else {
-            echo "Formulário não configurado.";
+            echo "<center>Formulário não configurado.</center>";
         }
 
     }
@@ -162,6 +162,31 @@ class AcolheSUSReports
         }
 
         return [];
+    }
+
+    public function getStateFilter($formType,$field_id,$state) {
+        global $wpdb;
+        $meta = $wpdb->prefix . 'postmeta';
+        $p = $wpdb->prefix . 'posts';
+        // $sql = "SELECT meta_value FROM $meta WHERE post_id=98177 AND meta_key='_entry_id'";
+        // $t = "SELECT * FROM $p WHERE post_type='avaliacao_oficina' INNER JOIN $meta m WHERE ";
+
+        $sql = "SELECT ID FROM `rhs_posts` p INNER JOIN `rhs_postmeta` pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$state';";
+
+        $i = $wpdb->get_row($sql)->ID;
+
+        $s = "SELECT meta_value FROM $meta WHERE meta_key='_entry_id' AND post_id=$i";
+        return $wpdb->get_row($sql);
+
+        if (is_object($r)) {
+            $entry_id = $r->meta_value;
+            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+            $field_id = trim($field_id);
+            $sql = "SELECT SUM(value) as total FROM " . $caldera_entries . " WHERE field_id='$field_id' AND entry_id='$entry_id'";
+
+            return $wpdb->get_row($sql)->total;
+        }
+
     }
 
 

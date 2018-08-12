@@ -25,6 +25,8 @@ $formType = get_post_type();
 
     <div style="margin-top: 2px; border: 1px solid #d3d3d3; padding: 20px; background: #f3f3f3">
         <?php $report->renderReports($formType); ?>
+
+        <?php // echo $report->getStateFilter($formType, "fld_7982129","GO"); ?>
     </div>
 </div>
 <hr>
