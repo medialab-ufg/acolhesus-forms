@@ -2,7 +2,7 @@ jQuery( function( $ ) {
     $('.add_acolhesus_entry').click(function() {
         var post_title = $(this).attr('data-newTitle');
         var post_type  = $(this).attr('data-postType');
-
+        var campo = get_variable('campo');
         var data = {
             title: post_title,
             action: 'acolhesus_add_form_entry',
@@ -12,7 +12,7 @@ jQuery( function( $ ) {
             var r = JSON.parse(res);
             var entryURL = r.redirect_url;
             if(entryURL) {
-                window.location = entryURL;
+                window.location = entryURL+"?campo="+campo;
             }
 
         }).error(function (erro) {
@@ -93,6 +93,26 @@ jQuery( function( $ ) {
         };
     }
 
+    function get_variable(variable = null)
+    {
+        var $_GET = {};
+        if(document.location.toString().indexOf('?') !== -1) {
+            var query = document.location
+                .toString()
+                .replace(/^.*?\?/, '')
+                .replace(/#.*$/, '')
+                .split('&');
+
+            for(var i=0, l=query.length; i<l; i++) {
+                var aux = decodeURIComponent(query[i]).split('=');
+                $_GET[aux[0]] = aux[1];
+            }
+        }
+
+        if(variable === null)
+            return $_GET;
+        else return $_GET[variable];
+    }
 
     $('.acolhesus_filter_forms').select2({
         width: '100%',

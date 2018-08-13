@@ -8,10 +8,35 @@ jQuery( function( $ ) {
     var tag = 'input[name="novo_form"]';
     var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
     if (is_new) {
-        $(campo_atuacao).val('');
+        var campo = get_variable('campo');
+        if(campo)
+        {
+            $(campo_atuacao).val(campo);
+        }else $(campo_atuacao).val('');
+
         $.post(acolhesus.ajax_url, { action: 'delete_new_form_tag', post_id: current_post_id });
     }
 
+    function get_variable(variable = null)
+    {
+        var $_GET = {};
+        if(document.location.toString().indexOf('?') !== -1) {
+            var query = document.location
+                .toString()
+                .replace(/^.*?\?/, '')
+                .replace(/#.*$/, '')
+                .split('&');
+
+            for(var i=0, l=query.length; i<l; i++) {
+                var aux = decodeURIComponent(query[i]).split('=');
+                $_GET[aux[0]] = aux[1];
+            }
+        }
+
+        if(variable === null)
+            return $_GET;
+        else return $_GET[variable];
+    }
 
     $('.acolhesus_basic_info_selector').change(function() {
         var opt_val = $(this).val();
