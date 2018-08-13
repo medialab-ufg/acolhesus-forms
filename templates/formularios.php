@@ -47,7 +47,7 @@ else:
                         $current_acolhesus_formtype = $formName;
                         $nome = $formAtts['labels']['name'];
                         $link = get_post_type_archive_link($formName);
-                        $ver_todos = "Ir para " . $nome;
+                        $ver_todos = "Ver todas as respostas de " . $nome;
 
                         // Essa query é modificada pelo pre_get_posts que tem na classe principal do plugin
                         $wp_query = new WP_Query([
@@ -66,7 +66,7 @@ else:
                             if ($wp_query->found_posts > 0) {
                                 include(plugin_dir_path(__FILE__) . "loop-forms.php");
                             } else {
-                                echo "<center> Nenhuma resposta de $nome! </center>";
+                                echo "<p class='text-center'> Nenhuma resposta de $nome! </p>";
                             }
                             ?>
                         </div>

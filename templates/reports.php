@@ -3,7 +3,7 @@ $formType = get_post_type();
 ?>
 
 <?php date_default_timezone_set("America/Sao_Paulo"); ?>
-<a data-toggle="collapse" href="#relatorios" class="collapsed btn btn-default" aria-expanded="false"> Ver Relatórios </a>
+<a data-toggle="collapse" href="#relatorios" class="collapsed btn btn-default btn-info" aria-expanded="false"> Gerar Relatórios </a>
 
 <div id="relatorios" class="panel-collapse collapse" aria-expanded="false" style="color: black">
     <hr>

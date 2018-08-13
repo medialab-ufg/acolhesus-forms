@@ -28,17 +28,24 @@ class AcolheSUSView extends AcolheSUS {
         return 'Plataforma de Gestão AcolheSUS';
     }
 
+    private function get_home_URL()
+    {
+       return home_url('formularios-acolhesus');
+    }
+
     private function get_logo()
     {
         $src = $this->get_logo_URL();
         $alt = $title = "Logo " . $this->get_title();
-        $_home_url = home_url('formularios-acolhesus');
+        $_home_url = $this->get_home_URL();
 
         return "<a href='$_home_url'><img src='$src' alt='$alt' title='$title'/></a>";
     }
 
     public function renderFormHeader() {
-        $header = '<h1 class="list-title">' . $this->get_title() . '</h1>';
+        $URL = $this->get_home_URL();
+
+        $header = "<h1 class='list-title'> <a href='$URL'>" . $this->get_title() . "</a></h1>";
         $header .= '<hr> <div class="logo-container">' . $this->get_logo() . '</div><hr>';
 
         echo $header;
@@ -113,7 +120,7 @@ class AcolheSUSView extends AcolheSUS {
     }
 
     public function renderFormsDenied() {
-        echo '<center> Usuário sem permissão para acessar esta página! </center>';
+        echo '<p class="text-center"> Usuário sem permissão para acessar esta página! </p>';
     }
 
     function get_entry_attachments() {

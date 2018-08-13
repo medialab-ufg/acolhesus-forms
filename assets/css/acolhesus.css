@@ -165,8 +165,9 @@
   .acolhesus-form-container table .closed {
     color: darkred; }
   .acolhesus-form-container h1.list-title {
-    text-align: center;
-    color: black !important; }
+    text-align: center; }
+    .acolhesus-form-container h1.list-title a {
+      color: black !important; }
   .acolhesus-form-container .list-forms {
     font-size: 12px;
     color: #00b4b4; }
