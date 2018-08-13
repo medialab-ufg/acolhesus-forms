@@ -6,7 +6,9 @@ class AcolheSUSReports
 
     private $excluded_fields = [
         "fld_4739909", // texto ajuda avaliacao grupos
-        "fld_1123995" // anexos avaliacao grupos
+        "fld_1123995", // anexos avaliacao grupos
+        "fld_7434309", // "Markup Data" avaliacao grupos
+        "fld_1473627", // "Anexar documentos" avaliacao grupos
     ];
 
     public function __construct()
