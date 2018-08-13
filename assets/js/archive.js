@@ -130,6 +130,7 @@ jQuery( function( $ ) {
 
     $('.abrir-relatorios').click(function () {
         $("#lista-formularios").toggle();
+        $("a.list-forms").toggle();
     });
 });
 

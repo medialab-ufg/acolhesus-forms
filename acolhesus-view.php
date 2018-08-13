@@ -60,8 +60,13 @@ class AcolheSUSView extends AcolheSUS {
         echo '<div class="welcome">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
     }
 
-    public function renderFilters() {
-        foreach ($this->filtros as $filtro => $props) {
+    public function renderFilters($showForms = true) {
+        $filtros = $this->filtros;
+        if (!$showForms) {
+            array_pop($filtros);
+        }
+
+        foreach ($filtros as $filtro => $props) {
             $opt = isset($_GET[$filtro]) ? $_GET[$filtro] : '';
 
             $_filtered = $this->get_filter_selected($filtro, $opt);

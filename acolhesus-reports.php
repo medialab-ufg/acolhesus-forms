@@ -172,28 +172,36 @@ class AcolheSUSReports
         global $wpdb;
         $meta = $wpdb->prefix . 'postmeta';
         $p = $wpdb->prefix . 'posts';
-        // $sql = "SELECT meta_value FROM $meta WHERE post_id=98177 AND meta_key='_entry_id'";
-        // $t = "SELECT * FROM $p WHERE post_type='avaliacao_oficina' INNER JOIN $meta m WHERE ";
 
-        $sql = "SELECT ID FROM `rhs_posts` p INNER JOIN `rhs_postmeta` pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$state';";
+        $sql = "SELECT ID FROM $p p INNER JOIN $meta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$state';";
         $i = $wpdb->get_results($sql);
 
         $entry_ids = [];
         if (is_array($i)) {
             foreach ($i as $resp) {
-                //echo $resp->ID . " ---- ";
                 $a = $resp->ID;
-                $s = "SELECT meta_value as v FROM $meta WHERE meta_key='_entry_id' AND post_id=$a";
-                $__ = $wpdb->get_row($s);
+                if (!is_null($a)) {
+                    $s = "SELECT meta_value as v FROM $meta WHERE meta_key='_entry_id' AND post_id=$a";
+                    $__ = $wpdb->get_row($s);
 
-                $entry_ids[] = $__->v;
+                    if (!is_null($__)) {
+                        $entry_ids[] = $__->v;
+                    }
+                }
             }
         }
 
         if (count($entry_ids) > 0) {
             $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
             $field_id = trim($field_id);
-            $IN = "IN (" . implode( ',' ,$entry_ids) . ")";
+
+            if (count($entry_ids) == 1) {
+                $el = $entry_ids[0];
+                $IN = "='$el'";
+            } else {
+                $IN = "IN (" . implode( ',' ,$entry_ids) . ")";
+            }
+
             $sql = "SELECT SUM(value) as total FROM " . $caldera_entries . " WHERE field_id='$field_id' AND entry_id $IN";
 
 
