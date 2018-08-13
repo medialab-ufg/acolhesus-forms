@@ -78,7 +78,12 @@ class AcolheSUSReports
                 if (is_null($state)) {
                     $v = intval($this->getAnswersFor($id));
                 } else if (is_string($state) && (strlen($state) === 2)) {
-                    $v = $this->getStateFilter($formType, $id, $state)->total;
+                    $v = $this->getStateFilter($formType, $id, $state);
+                    if (is_object($v)) {
+                        $v = $v->total;
+                    } else {
+                        $v = "";
+                    }
                 }
 
                 $e = $this->renderAnswerRow($v, $campo["label"]);
