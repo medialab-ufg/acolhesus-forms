@@ -519,11 +519,10 @@ class AcolheSUS {
                     if(file_put_contents($path, $file_content))
                     {
                         $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
-
+                        $file_input_id = $_POST['file_input_id'];
+                        $slug = "'".$fields[$file_input_id]['slug']."'";
                         if(!empty($slug))
                         {
-                            $file_input_id = $_POST['file_input_id'];
-                            $slug = "'".$fields[$file_input_id]['slug']."'";
                             $sql_insert = "INSERT INTO $caldera_entries (entry_id, field_id, slug, value) VALUES ('$_entry_id', '$file_input_id', $slug, '$url_path')";
                             $wpdb->query($sql_insert);
                         }
