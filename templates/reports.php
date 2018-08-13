@@ -21,7 +21,9 @@ $formType = get_post_type();
         <br><br>
     </center>
 
-    <div style="margin-top: 2px; border: 1px solid #d3d3d3; padding: 20px; background: #f3f3f3">
+    <hr>
+
+    <div style="margin-top: 2px;padding: 20px;">
         <?php $report->renderReports($formType); ?>
     </div>
 </div>

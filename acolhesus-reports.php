@@ -52,7 +52,7 @@ class AcolheSUSReports
                 <thead>
                 <tr>
                     <th> Questão </th>
-                    <th> Resposta </th>
+                    <th> - </th>
                     <th> Total</th>
                 </tr>
                 </thead>
