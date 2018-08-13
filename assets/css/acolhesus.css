@@ -84,6 +84,16 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       color: black; }
+.acolhesus-form-container .go-right-1 {
+  margin-left: 100px !important; }
+.acolhesus-form-container .go-right-2 {
+  margin-left: 150px !important; }
+.acolhesus-form-container .go-right-3 {
+  margin-left: 250px !important; }
+.acolhesus-form-container .go-right-4 {
+  margin-left: 300px !important; }
+.acolhesus-form-container .h3-text {
+  font-size: 1.17em; }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
   background-color: #003c46 !important; }
