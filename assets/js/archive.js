@@ -3,6 +3,7 @@ jQuery( function( $ ) {
         var post_title = $(this).attr('data-newTitle');
         var post_type  = $(this).attr('data-postType');
         var campo = get_variable('campo');
+        sessionStorage.setItem("rhs_campo", campo);
         var data = {
             title: post_title,
             action: 'acolhesus_add_form_entry',
@@ -12,7 +13,7 @@ jQuery( function( $ ) {
             var r = JSON.parse(res);
             var entryURL = r.redirect_url;
             if(entryURL) {
-                window.location = entryURL+"?campo="+campo;
+                window.location = entryURL;
             }
 
         }).error(function (erro) {
