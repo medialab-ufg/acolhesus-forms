@@ -225,31 +225,33 @@ jQuery( function( $ ) {
     });
 
     var fileInput = document.querySelector("input[type=file]");
-    fileInput.addEventListener('change', function (e) {
-        var result = sessionStorage.getItem('rhs_input_file');
-        if(!result)
-        {
-            result = [];
-        }else{
-            result = JSON.parse(result);
-        }
+    if (fileInput) {
+        fileInput.addEventListener('change', function (e) {
+            var result = sessionStorage.getItem('rhs_input_file');
+            if(!result)
+            {
+                result = [];
+            }else{
+                result = JSON.parse(result);
+            }
 
-        for(var file of fileInput.files)
-        {
-            (function (file) {
-                var reader = new FileReader();
-                reader.onload = (function (file) {
-                    var name = file.name;
-                    return function (e){
-                        result.push({name: name, file: reader.result});
-                        sessionStorage.setItem('rhs_input_file', JSON.stringify(result));
-                    }
-                })(file);
+            for(var file of fileInput.files)
+            {
+                (function (file) {
+                    var reader = new FileReader();
+                    reader.onload = (function (file) {
+                        var name = file.name;
+                        return function (e){
+                            result.push({name: name, file: reader.result});
+                            sessionStorage.setItem('rhs_input_file', JSON.stringify(result));
+                        }
+                    })(file);
 
-                var fileInfo = reader.readAsDataURL(file);
-            })(file)
-        }
-    })
+                    var fileInfo = reader.readAsDataURL(file);
+                })(file)
+            }
+        })
+    }
 });
 
 function save_for_later() {
@@ -279,11 +281,12 @@ function save_for_later() {
 
     //Files
     var fileInput = document.querySelector("input[type=file]");
+    if (fileInput) {
+        var input_file = JSON.parse(sessionStorage.getItem('rhs_input_file'));
 
-    var input_file = JSON.parse(sessionStorage.getItem('rhs_input_file'));
-
-    all_inputs.append("file_input_id", fileInput.name);
-    all_inputs.append("file_value", sessionStorage.getItem('rhs_input_file'));
+        all_inputs.append("file_input_id", fileInput.name);
+        all_inputs.append("file_value", sessionStorage.getItem('rhs_input_file'));
+    }
 
     all_inputs.append('action', 'acolhesus_save_for_later');
     all_inputs.append('formId', formId);
