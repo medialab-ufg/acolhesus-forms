@@ -41,9 +41,9 @@ class AcolheSUSReports
         return $f['form_ids'][$form_type];
     }
 
-    public function renderReports($formType)
+    public function renderReports($formType, $state = null)
     {
-        $data = $this->generateReportData($formType);
+        $data = $this->generateReportData($formType,$state);
         if (is_string($data) && strlen($data) > 100) {
             ?>
             <table class="table table-hover">
@@ -62,7 +62,7 @@ class AcolheSUSReports
         }
     }
 
-    private function generateReportData($formType)
+    private function generateReportData($formType, $state = null)
     {
         $c = 0;
         $total_geral = 0;
@@ -73,17 +73,20 @@ class AcolheSUSReports
             $e = "";
 
             if ( in_array($tipo, $this->report_fields) ) {
-                // echo intval($this->getAnswersFor($id)) . " - <span><i><small>" . $campo["label"] . "</small></i></span> <br>";
+                if (is_null($state)) {
+                    $v = intval($this->getAnswersFor($id));
+                } else if (is_string($state) && (strlen($state) === 2)) {
+                    $v = $this->getStateFilter($formType, $id, $state)->total;
+                }
 
-                $e .= $this->renderAnswerRow(""," ");
-                $e = $this->renderAnswerRow(intval($this->getAnswersFor($id)), $campo["label"]);
+                $e = $this->renderAnswerRow(""," ");
+                $e .= $this->renderAnswerRow($v, $campo["label"]);
                 $e .= $this->renderAnswerRow(""," ");
 
                 if ($campo["type"] === "number") {
 
                     if ($c === 4) {
-                        // echo "<br>"; // $total_geral - exibir aqui?
-                        $c = -1;
+                        $c = -1; // echo "<br>"; // $total_geral - exibir aqui?
                         $total_geral = 0;
                     } else {
                         $total_geral += intval($this->getAnswersFor($id));
