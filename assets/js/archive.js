@@ -127,5 +127,9 @@ jQuery( function( $ ) {
             return markup;
         }
     });
+
+    $('.abrir-relatorios').click(function () {
+        $("#lista-formularios").toggle();
+    });
 });
 

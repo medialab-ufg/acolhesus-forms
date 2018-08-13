@@ -3,15 +3,13 @@ $formType = get_post_type();
 ?>
 
 <?php date_default_timezone_set("America/Sao_Paulo"); ?>
-<a data-toggle="collapse" href="#relatorios" class="collapsed btn btn-default btn-info" aria-expanded="false"> Gerar Relatórios </a>
-
-<div id="relatorios" class="panel-collapse collapse" aria-expanded="false" style="color: black">
-    <hr>
-    <h3 style="text-align: center">Relatórios de Avaliação de Grupos</h3>
+<hr>
+<div id="relatorios" class="panel-collapse collapse" aria-expanded="false" style="color: black;">
+    <h3 style="text-align: center">Relatórios de <?php echo post_type_archive_title(); ?></h3>
     <div style="text-align: center">Resultados até <?php echo date("d/m/Y G:i") ?></div>
     <br>
     <center>
-        <label for="campo">Campo:</label>
+        <label for="campo">Campo de Atuação:</label>
         <select name="" id="">
             <option value="todos">Todos os Campos de Atuação</option>
         </select>
@@ -27,4 +25,3 @@ $formType = get_post_type();
         <?php $report->renderReports($formType); ?>
     </div>
 </div>
-<hr>
