@@ -236,16 +236,18 @@ jQuery( function( $ ) {
 
         for(var file of fileInput.files)
         {
-            var reader = new FileReader();
-            reader.onload = (function (file) {
-                var name = file.name;
-                return function (e){
-                    result.push({name: name, file: reader.result});
-                    sessionStorage.setItem('rhs_input_file', JSON.stringify(result));
-                }
-            })(file);
+            (function (file) {
+                var reader = new FileReader();
+                reader.onload = (function (file) {
+                    var name = file.name;
+                    return function (e){
+                        result.push({name: name, file: reader.result});
+                        sessionStorage.setItem('rhs_input_file', JSON.stringify(result));
+                    }
+                })(file);
 
-            var fileInfo = reader.readAsDataURL(file);
+                var fileInfo = reader.readAsDataURL(file);
+            })(file)
         }
     })
 });
