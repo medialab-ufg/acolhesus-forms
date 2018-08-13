@@ -81,8 +81,7 @@ class AcolheSUSReports
                     $v = $this->getStateFilter($formType, $id, $state)->total;
                 }
 
-                $e = $this->renderAnswerRow(""," ");
-                $e .= $this->renderAnswerRow($v, $campo["label"]);
+                $e = $this->renderAnswerRow($v, $campo["label"]);
                 $e .= $this->renderAnswerRow(""," ");
 
                 if ($campo["type"] === "number") {
