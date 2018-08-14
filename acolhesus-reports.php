@@ -70,7 +70,6 @@ class AcolheSUSReports
         $total_geral = 0;
         $t = "";
         foreach ($this->get_form_fields($formType) as $id => $campo ) {
-
             $tipo = $campo["type"];
             $e = "";
 
@@ -114,6 +113,20 @@ class AcolheSUSReports
 
                 $e .= $this->renderAnswerRow($sim," Sim");
                 $e .= $this->renderAnswerRow($nao, " Não");
+            } else if ($tipo === "filtered_select2") {
+                $v = $this->getClosedListResults($id);
+
+                $html = "";
+                $total = 0;
+                if (is_array($v)) {
+                    foreach ($v as $_) {
+                        $total += $_->total;
+                        $html .= $_->total . " - " . $_->value . " <br> ";
+                    }
+                }
+
+                $e = "<td> " . $campo["label"] . "</td>";
+                $e .= $this->renderAnswerRow($html,"$total respostas");
             }
 
             $t .= "<tr>";
@@ -168,6 +181,19 @@ class AcolheSUSReports
             $sql = "SELECT SUM(value) as total FROM " . $caldera_entries . " WHERE field_id='$field_id'";
 
             return $wpdb->get_row($sql)->total;
+        }
+
+        return [];
+    }
+
+    private function getClosedListResults($field_id)
+    {
+        if (is_string($field_id)) {
+            global $wpdb;
+            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+            $sql = "SELECT count(*) as total, value FROM " . $caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC;";
+
+            return $wpdb->get_results($sql);
         }
 
         return [];
