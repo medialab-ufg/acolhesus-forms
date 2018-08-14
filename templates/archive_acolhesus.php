@@ -19,7 +19,7 @@ if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
 
         <?php if (current_user_can('administrator') && $AcolheSUS->can_user_edit($current_acolhesus_formtype)) { include_once("reports.php"); } ?>
 
-        <a class="list-forms" href="<?php echo home_url('formularios-acolhesus'); ?>">&lt;&lt; Voltar para todos os formulários</a> <hr>
+        <a class="list-forms" href="<?php echo home_url('formularios-acolhesus'); ?>">&lt;&lt; Voltar para tela inicial</a> <hr>
 
         <div id="lista-formularios">
             <?php include_once( plugin_dir_path( __FILE__ ) . "loop-forms.php"); ?>
