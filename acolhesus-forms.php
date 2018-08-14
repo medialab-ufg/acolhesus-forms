@@ -563,7 +563,7 @@ class AcolheSUS {
         if (isset($_POST['_cf_cr_pst'])) {            
             $form_link = get_permalink($_POST['_cf_cr_pst']);
             if ($form_link) {
-                $mail['message'] = $mail['message'] . "<br><br> Link: $form_link";    
+                $mail['message'] = $mail['message'] . "<br><br> Veja o formulário completo no link: $form_link";
             }
                 
             return $mail;
