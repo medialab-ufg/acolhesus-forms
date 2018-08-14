@@ -60,6 +60,7 @@ class AcolheSUSView extends AcolheSUS {
         echo '<div class="welcome">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
     }
 
+
     public function renderFilters($showForms = true) {
         $filtros = $this->filtros;
         if (!$showForms) {
@@ -67,15 +68,34 @@ class AcolheSUSView extends AcolheSUS {
         }
 
         foreach ($filtros as $filtro => $props) {
-            $opt = isset($_GET[$filtro]) ? $_GET[$filtro] : '';
+
+            // Deixar assim só até fechar layout dos relatórios
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $opt = (isset($_POST[$filtro]) ) ? $_POST[$filtro] : '';
+            } else {
+                $opt = (isset($_GET[$filtro]) ) ? $_GET[$filtro] : '';
+            }
 
             $_filtered = $this->get_filter_selected($filtro, $opt);
 
-            $html  = "<h3 class='form-title'>" . $props['singular'] . " <span class='used_filter'>" . $_filtered . " </span></h3>";
+            $html = "";
+            $style = "";
+
+            if (!$showForms) {
+                $_filtered = "";
+                $style = "style='font-size: 20px; margin-bottom: 10px; color: black'";
+                $html .= "<div class='col-md-4'>";
+            }
+
+            $html .= "<h3 class='form-title' $style>" . $props['singular'] . " <span class='used_filter'>" . $_filtered . " </span></h3>";
             $html .= "<div><select name='$filtro' class='acolhesus_filter_forms' id='acolhesus_filter_forms_campos'>";
             $html .= "<option value=''>" . $props['plural'] . "</option>";
             $html .= $this->get_filter_options($filtro, $opt);
             $html .= "</select></div>";
+
+            if (!$showForms) {
+                $html .= "</div>";
+            }
 
             echo $html;
         }

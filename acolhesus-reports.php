@@ -53,9 +53,9 @@ class AcolheSUSReports
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th> Questão </th>
-                    <th> - </th>
-                    <th> Total</th>
+                    <th> Total </th>
+                    <th> Detalhes </th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody> <?php echo $data; ?> </tbody>
@@ -126,8 +126,8 @@ class AcolheSUSReports
                     }
                 }
 
-                $e = "<td> " . $campo["label"] . "</td>";
-                $e .= $this->renderAnswerRow($html,"$total respostas");
+                $e = $this->renderAnswerRow($html,"$total respostas");
+                $e .= "<td> " . $campo["label"] . "</td>";
             }
 
             $t .= "<tr>";

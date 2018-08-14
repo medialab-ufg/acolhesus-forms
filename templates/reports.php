@@ -5,17 +5,20 @@ $formType = get_post_type();
 <?php date_default_timezone_set("America/Sao_Paulo"); ?>
 <hr>
 <div id="relatorios" class="panel-collapse collapse" aria-expanded="false" style="color: black;">
-    <h3 style="text-align: center">Relatórios de <?php echo post_type_archive_title(); ?></h3>
-    <div style="text-align: center">Resultados até <?php echo date("d/m/Y G:i") ?></div>
+    <?php /* <h3 style="text-align: center">Relatórios de <?php echo post_type_archive_title(); ?></h3> */?>
+    <h3 style="text-align: center">Resultados até <?php echo date("d/m/Y G:i") ?></h3>
     <br>
     <div class="text-center">
-        <form method="POST" class="reports acolhesus-reports" id="reports-filter">
-            <?php $formView->renderFilters(false); ?>
+        <form method="POST" class="reports acolhesus-reports" id="reports-filter"
+              style="background: #eaeaea; width: 100%; float: left;padding: 4% 0 5% 0;">
+            <div class="col-md-12">
+                <?php $formView->renderFilters(false); ?>
+            </div>
         </form>
 
         <div class="col-md-12 btn-wrapper no-padding">
             <br>
-            <input class="btn btn-default filter-forms" type="submit" value="Gerar" form="reports-filter"/>
+            <input class="btn btn-default filter-forms" type="submit" value="Gerar Relatórios" form="reports-filter"/>
         </div>
 
     </div>
@@ -25,7 +28,7 @@ $formType = get_post_type();
     <div style="margin-top: 2px;padding: 20px;">
         <?php
         $campo = null;
-        if (isset($_POST["campo"]) && strlen($_POST["campo"]) === 2 ) {
+        if (isset($_POST["campo"]) && strlen($_POST["campo"]) === 2) {
             $campo = sanitize_text_field($_POST["campo"]);
         }
 
