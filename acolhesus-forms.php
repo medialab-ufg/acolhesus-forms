@@ -1002,8 +1002,13 @@ class AcolheSUS {
     }
 
     private function get_fixed_select($title, $name, $attr, $post_id, $options=[]) {
+        $num_rows = 6;
+        if ($this->form_type_has_axis(get_post_type())) {
+            $num_rows = 4;
+        }
+
         $id = $name . "_selector";
-        $html  = "<div class='col-md-4 $name'> $title " . $this->span_required();
+        $html  = "<div class='col-md-$num_rows $name'> $title " . $this->span_required();
         $html .= "<select id='$id' $attr class='acolhesus_basic_info_selector' name='$name' data-post_id='$post_id'>";
         $html .= $options . " </select>";
         $html .= $this->required_field();
@@ -1325,6 +1330,13 @@ class AcolheSUS {
 
         echo "<div class='status-$entry_id'><span class='$class'> $status </span></div>";
     }
+    public function remove_entry($entry_id) {
+        return "<a class='btn btn-default btn-danger' data-id='$entry_id' style='color: white'> Excluir </a>";
+    }
+
+    private function delete_entry() {
+        //if (current_user_can('acolhesus_cgpnh'))
+    }
 
     public function get_entry_phase($id) {
         $fase_slug = get_post_meta($id, 'acolhesus_fase', true);
@@ -1338,7 +1350,9 @@ class AcolheSUS {
     }
 
     public function form_type_has_axis($type) {
-        return (isset($this->forms[$type]) && $this->forms[$type]['eixo']);
+        if ($type) {
+            return (isset($this->forms[$type]) && $this->forms[$type]['eixo']);
+        }
     }
 
 } // class
