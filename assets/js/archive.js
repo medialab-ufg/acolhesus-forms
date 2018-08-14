@@ -72,6 +72,18 @@ jQuery( function( $ ) {
         });
     });
 
+    $('.remove-form-entry').click(function () {
+        var _id = $(this).attr('data-id');
+        var data = { id: _id, action: "remove_form_entry" };
+        var title = $(this).attr('data-title');
+        if (confirm("Deseja apagar esta resposta de " + title + "?")) {
+            $.post(acolhesus.ajax_url, data).success(function(res) {
+                $("tr#entry-"+_id).remove();
+                alert('Resposta removida com sucesso!');
+            });
+        }
+    });
+
     function toggleEntryStatus(_id, new_data) {
         if(new_data.status && new_data.button) {
             $(".status-" + _id + " span").attr('class', new_data.status.class).text(new_data.status.status);

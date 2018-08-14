@@ -135,7 +135,10 @@ class AcolheSUSReports
                             foreach($__ids as $_id) {
                                 $d = $_id->entry_id;
                                 $subquery = "SELECT post_id FROM " . $this->postmeta . " WHERE meta_key='_entry_id' AND meta_value = '$d'";
-                                $post_id = $this->get_sql_results($subquery,"row")->post_id;
+                                $post_id = $this->get_sql_results($subquery,"row");
+                                if (is_object($post_id)) {
+                                    $post_id = $post_id->post_id;
+                                }
 
                                 $link = get_permalink($post_id);
                                 $title = get_the_title($post_id);

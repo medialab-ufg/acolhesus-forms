@@ -27,6 +27,10 @@
             <?php } ?>
 
         <?php endif; ?>
+
+        <?php if (current_user_can('acolhesus_cgpnh') && $AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+            <th> Excluir </th>
+        <?php endif; ?>
     </tr>
     </thead>
     <tbody>
@@ -37,7 +41,7 @@
         $entry_id = get_the_ID();
         $uf_atuacao = get_post_meta($entry_id, "acolhesus_campo")[0];
         ?>
-            <tr>
+            <tr id="entry-<?php echo $entry_id; ?>">
                 <td> <strong> <?php echo $uf_atuacao; ?> </strong> </td>
 					
                 <?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
@@ -69,7 +73,10 @@
                     <?php } ?>
 
                 <?php endif; ?>
-                
+
+                <?php if (current_user_can('acolhesus_cgpnh') && $AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+                    <td> <?php echo $AcolheSUS->remove_entry($entry_id, get_the_title()); ?> </td>
+                <?php endif; ?>
             </tr>
         <?php
         endwhile;

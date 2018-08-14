@@ -234,6 +234,8 @@ class AcolheSUS {
     ];
 
     const CAMPO_META = 'acolhesus_campo';
+
+    const CGPNH = 'acolhesus_cgpnh';
     
     function __construct() {
         add_action('init', [&$this, 'register_post_types']);
@@ -271,6 +273,8 @@ class AcolheSUS {
         add_action('wp_ajax_add_entry_city', array(&$this, 'add_entry_city'));
 
         add_action('wp_ajax_remove_entry_city', array(&$this, 'remove_entry_city'));
+
+        add_action('wp_ajax_remove_form_entry', array(&$this, 'remove_form_entry'));
 
         add_action('wp_ajax_delete_new_form_tag', array(&$this, 'delete_new_form_tag'));
 
@@ -912,6 +916,16 @@ class AcolheSUS {
             delete_post_meta($_POST['post_id'], 'acolhesus_form_municipio', $_POST['city']);
         }
     }
+
+    function remove_form_entry() {
+        if (current_user_can(self::CGPNH) && isset($_POST['id'])) {
+            $r = wp_delete_post(sanitize_text_field($_POST['id']));
+
+            if ($r) {
+                return json_encode(['success' => 'Resposta apagada com sucesso!']);
+            }
+        }
+    }
 	
 	function get_campos_do_usuario_as_options($selected = '') {
 		$camposDoUsuario = $this->get_user_campos();
@@ -1101,7 +1115,7 @@ class AcolheSUS {
     }
 
     function ajax_callback_lock_form() {
-        if (current_user_can('acolhesus_cgpnh')) {
+        if (current_user_can(self::CGPNH)) {
             $key = 'acolhesus_' . sanitize_text_field($_POST['type']);
             update_option($key, 'locked');
             do_action('acolhesus_lock_form', $key);
@@ -1377,11 +1391,8 @@ class AcolheSUS {
         echo "<div class='status-$entry_id'><span class='$class'> $status </span></div>";
     }
     public function remove_entry($entry_id) {
-        return "<a class='btn btn-default btn-danger' data-id='$entry_id' style='color: white'> Excluir </a>";
-    }
-
-    private function delete_entry() {
-        //if (current_user_can('acolhesus_cgpnh'))
+        $title = get_the_title($entry_id);
+        return "<a class='remove-form-entry btn btn-default btn-danger' data-id='$entry_id' data-title='$title' style='color: white'> Excluir </a>";
     }
 
     public function get_entry_phase($id) {
