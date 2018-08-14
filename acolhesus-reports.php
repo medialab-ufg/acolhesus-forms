@@ -11,9 +11,12 @@ class AcolheSUSReports
         "fld_1473627", // "Anexar documentos" avaliacao grupos
     ];
 
+    private $caldera_entries;
+
     public function __construct()
     {
-        // nothing for now
+        global $wpdb;
+        $this->caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
     }
 
     function get_field_data($slug)
@@ -60,7 +63,7 @@ class AcolheSUSReports
             </table>
             <?php
         } else {
-            echo "<center>Relatório não disponível para este formulário!</center>";
+            echo "<p class='text-center'>Relatório não disponível para este formulário!</p>";
         }
     }
 
@@ -141,7 +144,6 @@ class AcolheSUSReports
         return "<td> $total </td> <td> <span><i><small> $label </small></i></span> </td>";
     }
 
-
     private function get_form_config($form_id)
     {
         global $wpdb;
@@ -157,30 +159,36 @@ class AcolheSUSReports
                 return unserialize($return);
             }
         } else {
-            echo "<center>Formulário não configurado.</center>";
+            echo "<p class='text-center'>Formulário não configurado.</p>";
         }
 
+    }
+
+    private function get_sql_results($sql, $type) {
+        global $wpdb;
+
+        if ("row" === $type) {
+            return $wpdb->get_row($sql);
+        } else if ("total" === $type) {
+            return $wpdb->get_results($sql);
+        }
     }
 
     private function getTotal($field_id, $value)
     {
         if (is_string($field_id)) {
-            global $wpdb;
-            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
-            $sql = "SELECT COUNT(*) as total FROM " . $caldera_entries . " WHERE field_id='$field_id' AND value='$value'";
+            $sql = "SELECT COUNT(*) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND value='$value'";
 
-            return $wpdb->get_row($sql)->total;
+            return $this->get_sql_results($sql, "row")->total;
         }
     }
 
     private function getAnswersFor($field_id)
     {
         if (is_string($field_id)) {
-            global $wpdb;
-            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
-            $sql = "SELECT SUM(value) as total FROM " . $caldera_entries . " WHERE field_id='$field_id'";
+            $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
 
-            return $wpdb->get_row($sql)->total;
+            return $this->get_sql_results($sql, "row")->total;
         }
 
         return [];
@@ -193,7 +201,7 @@ class AcolheSUSReports
             $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
             $sql = "SELECT count(*) as total, value FROM " . $caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC;";
 
-            return $wpdb->get_results($sql);
+            return $this->get_sql_results($sql, "total");
         }
 
         return [];
