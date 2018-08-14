@@ -26,18 +26,10 @@ class AcolheSUSReports
         $this->postmeta = $wpdb->prefix . 'postmeta';
     }
 
-    function get_field_data($slug)
-    {
-        $f_id = "CF5b1acc437ffd1";
-        $f = $this->get_form_config($f_id);
-
-        return $f["fields"][$slug];
-    }
-
     function get_form_fields($form)
     {
-        $d = $this->form_id($form);
-        $f = $this->get_form_config($d);
+        $caldera_form_id = $this->form_id($form);
+        $f = $this->get_form_config($caldera_form_id);
 
         if (is_array($f) && array_key_exists("fields", $f)) {
             return $f["fields"];
@@ -85,13 +77,13 @@ class AcolheSUSReports
 
             if ( in_array($tipo, $this->report_fields) ) {
                 if (is_null($state)) {
-                    $v = intval($this->getAnswersFor($id));
+                    $v = intval($this->getAnswerStats($id));
                 } else if (is_string($state) && (strlen($state) === 2)) {
                     $v = $this->getStateFilter($formType, $id, $state);
-                    if (is_object($v)) {
-                        $v = $v;
+                    if (is_string($v)) {
+                        $v = intval($v);
                     } else {
-                        $v = "";
+                        $v = "---";
                     }
                 }
 
@@ -99,12 +91,11 @@ class AcolheSUSReports
                 $e .= $this->renderAnswerRow(""," ");
 
                 if ($campo["type"] === "number") {
-
                     if ($c === 4) {
                         $c = -1; // echo "<br>"; // $total_geral - exibir aqui?
                         $total_geral = 0;
                     } else {
-                        $total_geral += intval($this->getAnswersFor($id));
+                        $total_geral += intval($this->getAnswerStats($id));
                     }
 
                     $c++;
@@ -124,7 +115,7 @@ class AcolheSUSReports
                 $e .= $this->renderAnswerRow($sim," Sim");
                 $e .= $this->renderAnswerRow($nao, " Não");
             } else if ($tipo === "filtered_select2") {
-                $v = $this->getClosedListResults($id);
+                $v = $this->getAnswerStats($id, true);
 
                 $html = "";
                 $total = 0;
@@ -153,10 +144,8 @@ class AcolheSUSReports
 
     private function get_form_config($form_id)
     {
-        global $wpdb;
         $sql = "SELECT config FROM " . $this->caldera_forms . " WHERE form_id='$form_id'";
-
-        $result = $wpdb->get_row($sql);
+        $result = $this->get_sql_results($sql, "row");
 
         if (is_object($result)) {
             $return = $result->config;
@@ -165,19 +154,13 @@ class AcolheSUSReports
                 return unserialize($return);
             }
         } else {
-            echo "<p class='text-center'>Formulário não configurado.</p>";
+            echo $this->formNotSet();
         }
-
     }
 
-    private function get_sql_results($sql, $type) {
-        global $wpdb;
-
-        if ("row" === $type) {
-            return $wpdb->get_row($sql);
-        } else if ("total" === $type) {
-            return $wpdb->get_results($sql);
-        }
+    private function formNotSet()
+    {
+        return "<p class='text-center'> Formulário não configurado. </p>";
     }
 
     private function getTotal($field_id, $value)
@@ -189,44 +172,39 @@ class AcolheSUSReports
         }
     }
 
-    private function getAnswersFor($field_id)
+    private function getAnswerStats($field_id, $closed = false)
     {
+
         if (is_string($field_id)) {
-            $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
+            if ($closed) {
+                $sql = "SELECT count(*) as total, value FROM " . $this->caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC;";
 
-            return $this->get_sql_results($sql, "row")->total;
-        }
+                return $this->get_sql_results($sql, "total");
+            } else {
+                $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
 
-        return [];
-    }
-
-    private function getClosedListResults($field_id)
-    {
-        if (is_string($field_id)) {
-            $sql = "SELECT count(*) as total, value FROM " . $this->caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC;";
-
-            return $this->get_sql_results($sql, "total");
+                return $this->get_sql_results($sql, "row")->total;
+            }
         }
 
         return [];
     }
 
     public function getStateFilter($formType,$field_id,$state) {
-        global $wpdb;
 
         $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$state';";
-        $i = $wpdb->get_results($sql);
+        $state_ids = $this->get_sql_results($sql, "total");
 
         $entry_ids = [];
-        if (is_array($i)) {
-            foreach ($i as $resp) {
-                $a = $resp->ID;
-                if (!is_null($a)) {
-                    $s = "SELECT meta_value as v FROM $this->postmeta WHERE meta_key='_entry_id' AND post_id=$a";
-                    $__ = $wpdb->get_row($s);
+        if (is_array($state_ids)) {
+            foreach ($state_ids as $state) {
+                $_id = $state->ID;
+                if (!is_null($_id)) {
+                    $sql = "SELECT meta_value as total FROM $this->postmeta WHERE meta_key='_entry_id' AND post_id=$_id";
+                    $formulario = $this->get_sql_results($sql, "row");
 
-                    if (!is_null($__)) {
-                        $entry_ids[] = $__->v;
+                    if (!is_null($formulario) && is_object($formulario)) {
+                        $entry_ids[] = $formulario->total;
                     }
                 }
             }
@@ -237,13 +215,25 @@ class AcolheSUSReports
 
             if (count($entry_ids) == 1) {
                 $el = $entry_ids[0];
-                $IN = "='$el'";
+                $condition = "='$el'";
             } else {
-                $IN = "IN (" . implode( ',' ,$entry_ids) . ")";
+                $condition = "IN (" . implode( ',' ,$entry_ids) . ")";
             }
-            $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND entry_id $IN";
+            $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND entry_id $condition";
 
             return $this->get_sql_results($sql, "row")->total;
+        }
+    }
+
+    private function get_sql_results($sql, $type) {
+        global $wpdb;
+
+        if ("row" === $type) {
+            return $wpdb->get_row($sql);
+        } else if ("total" === $type) {
+            return $wpdb->get_results($sql);
+        } else {
+            return [];
         }
     }
 
