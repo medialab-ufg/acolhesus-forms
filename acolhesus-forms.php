@@ -236,8 +236,8 @@ class AcolheSUS {
     const CAMPO_META = 'acolhesus_campo';
     
     function __construct() {
-
         add_action('init', [&$this, 'register_post_types']);
+
         add_action('init', [&$this, 'init_default_data']);
 
         add_filter('the_content', [&$this, 'filter_the_content']);
@@ -247,10 +247,13 @@ class AcolheSUS {
         add_action('wp_enqueue_scripts', [&$this, 'load_acolhesus_assets']);
 
         add_filter('archive_template', [&$this, 'acolhesus_archive_page']);
+
         add_filter('single_template', [&$this, 'acolhesus_single_page']);
 
         add_action( 'generate_rewrite_rules', array( &$this, 'rewrite_rules' ), 10, 1 );
+
         add_filter( 'query_vars', array( &$this, 'rewrite_rules_query_vars' ) );
+
         add_filter( 'template_include', array( &$this, 'rewrite_rule_template_include' ) );
 
         add_action('template_redirect', array(&$this, 'can_user_view_form'));
@@ -286,6 +289,49 @@ class AcolheSUS {
         add_filter( 'caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
 
         add_action('wp_ajax_acolhesus_notify_user', array(&$this, 'ajax_callback_notify_user'));
+
+        add_action('wp_ajax_acolhesus_verify_indicadores_info', array(&$this, 'ajax_callback_verify_indicadores_info'));
+    }
+
+    function ajax_callback_verify_indicadores_info(){
+        global $wpdb;
+        $month_id = $_POST['data']['month_id']; $year_id = $_POST['data']['year_id']; $state = $_POST['data']['state'];
+        $month_val = $_POST['data']['month_val']; $year_val = $_POST['data']['year_val'];
+
+        $sql = "
+        SELECT mesano.*, state.estado from
+            (SELECT entry_a.entry_id, entry_a.value mes, entry_b.value ano
+                FROM ".$wpdb->prefix."cf_form_entry_values as entry_a join ".$wpdb->prefix."cf_form_entry_values as entry_b
+                where entry_a.field_id='".$month_id."' AND entry_b.field_id='".$year_id."' AND entry_a.entry_id=entry_b.entry_id
+            )
+            as mesano
+        JOIN
+            (SELECT post.meta_value as estado, postmeta.meta_value as entry_id from $wpdb->postmeta post JOIN $wpdb->postmeta postmeta 
+                ON post.post_id = postmeta.post_id 
+                where 
+                    (post.meta_key='acolhesus_campo' and postmeta.meta_key='_entry_id') 
+                        AND
+                    post.post_id IN 
+                        (SELECT ID FROM $wpdb->posts where post_type='indicadores')
+            ) 
+            as state
+        ON mesano.entry_id = state.entry_id
+        ";
+
+        $results = $wpdb->get_results($sql);
+
+        foreach ($results as $result)
+        {
+            if($state == $result->estado && $month_val == $result->mes && $year_val == $result->ano)
+            {
+                echo "false";
+                return;
+            }
+        }
+
+        echo "true";
+        return;
+
     }
 
     function ajax_callback_notify_user()
