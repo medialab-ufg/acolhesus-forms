@@ -216,11 +216,7 @@ jQuery( function( $ ) {
         });
     });
 
-    $(document).on('click', 'input[type=submit]', function (event) {
-        window.onbeforeunload = '';
-    });
-
-    $(document).on('click', 'button[type=submit]', function (event) {
+    $(document).on('click', 'input[type=submit], button[type=submit]', function (event) {
         window.onbeforeunload = '';
     });
 
@@ -256,6 +252,49 @@ jQuery( function( $ ) {
                 })(file)
             }
         })
+    }
+
+    var month_id = 'fld_680040', year_id = "fld_637266";
+    var month = "select[name="+month_id+"]", year = "select[name="+year_id+"]";
+
+    if($(month).length > 0 && $(year).length > 0 && $(campo_atuacao).length > 0)
+    {
+        if($(month).val() == '' || $(year).val() == '' || $(campo_atuacao).val() == '')
+        {
+            $(":input[type=submit]").prop("disabled", true);
+        }else $(":input[type=submit]").prop("disabled", false);
+
+        $(document).on("change", month+", "+year+", "+campo_atuacao, function () {
+            if($(month).val() == '' || $(year).val() == '' || $(campo_atuacao).val() == '')
+            {
+                $(":input[type=submit]").prop("disabled", true);
+            }else
+            {
+                if(is_new)
+                {
+                    var data ={
+                        month_id: month_id,
+                        year_id: year_id,
+                        month_val: $(month).val(),
+                        year_val: $(year).val(),
+                        state: $(campo_atuacao).val()
+                    };
+
+                    jQuery.post(acolhesus.ajax_url, {
+                        action: 'acolhesus_verify_indicadores_info',
+                        data: data
+                    }).success(function (result) {
+                        result = result.substr(0, result.length-1);
+                        if(result == 'true')
+                        {
+                            $(":input[type=submit]").prop("disabled", false);
+                        }else{
+                            $(":input[type=submit]").prop("disabled", true);
+                        }
+                    });
+                }
+            }
+        });
     }
 });
 
@@ -340,7 +379,6 @@ function get_save(query, all_inputs) {
 }
 
 jQuery( document ).on(  'cf.validate.FormSuccess', function( event, obj ){
-
     jQuery('button.save_for_later').hide();
     jQuery('.fixed-meta').hide();
     jQuery('.cities-mc').hide();
