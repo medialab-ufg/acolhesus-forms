@@ -378,7 +378,7 @@ function get_save(query, all_inputs) {
     } );
 }
 
-jQuery( document ).on(  'cf.validate.FormSuccess', function( event, obj ){
+jQuery(document).on('cf.validate.FormSuccess', function(event, obj) {
     jQuery('button.save_for_later').hide();
     jQuery('.fixed-meta').hide();
     jQuery('.cities-mc').hide();

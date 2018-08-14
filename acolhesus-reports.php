@@ -115,47 +115,43 @@ class AcolheSUSReports
                 $e .= $this->renderAnswerRow($sim," Sim");
                 $e .= $this->renderAnswerRow($nao, " Não");
             } else if ($tipo === "filtered_select2") {
-                $v = $this->getAnswerStats($id, true);
+                $respostas_fechadas = $this->getAnswerStats($id, true);
 
                 $html = "";
                 $total = 0;
-                if (is_array($v)) {
-
+                if (is_array($respostas_fechadas)) {
                     $conta = 0;
+                    foreach ($respostas_fechadas as $fechada) {
+                        $total += $fechada->total;
+                        $_entry = $fechada->value;
 
-                    foreach ($v as $_) {
-                        $total += $_->total;
-                        $pim = $_->value;
+                        $answer_post_ids = "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$_entry'";
+                        $__ids = $this->get_sql_results($answer_post_ids,"total");
 
-                        $q = "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$pim'";
+                        if (is_array($__ids)) {
+                            $_entry .= " &nbsp;&nbsp; <a data-toggle=\"collapse\" href=\"#link-$conta\" class=\"collapsed btn btn-default\" aria-expanded=\"false\">Ver links</a>";
+                            $_entry .= "<div id='link-$conta' class='panel-collapse collapse' aria-expanded='false'>";
 
-                        $ota = $this->get_sql_results($q,"total");
+                            foreach($__ids as $_id) {
+                                $d = $_id->entry_id;
+                                $subquery = "SELECT post_id FROM " . $this->postmeta . " WHERE meta_key='_entry_id' AND meta_value = '$d'";
+                                $post_id = $this->get_sql_results($subquery,"row")->post_id;
 
-                        if (is_array($ota)) {
+                                $link = get_permalink($post_id);
+                                $title = get_the_title($post_id);
 
-                            $pim .= " &nbsp;&nbsp;&nbsp; <a data-toggle=\"collapse\" href=\"#s-$conta\" class=\"collapsed btn btn-default\" aria-expanded=\"false\">Ver todos</a>";
-                            $pim .= "<div id='s-$conta' class='panel-collapse collapse' aria-expanded='false'>";
-
-                            foreach( $ota as $o) {
-                                $d = $o->entry_id;
-                                $q = "SELECT post_id FROM " . $this->postmeta . " WHERE meta_key='_entry_id' AND meta_value = '$d'";
-                                $hora_verdade = $this->get_sql_results($q,"row")->post_id;
-
-                                $link =get_permalink($hora_verdade);
-                                $t = get_the_title($hora_verdade);
-
-                                $pim .= "<p> <a href='$link' target='_blank'>$t</a></p>";
+                                $_entry .= "<p> <a href='$link' target='_blank'>$title</a></p>";
                             }
-                            $pim .= "</div>";
+                            $_entry .= "</div>";
                         }
 
-                        $html .= $_->total . " - " . $pim . " <br> ";
+                        $html .= $fechada->total . " - " . $_entry . "<br>";
                         $conta++;
                     }
                 }
 
                 $e = $this->renderAnswerRow($html,"$total respostas");
-                $e .= "<td> " . $campo["label"] . "</td>";
+                $e .= "<td>" . $campo["label"] . "</td>";
             }
 
             $t .= "<tr>";

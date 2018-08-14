@@ -54,7 +54,7 @@ if ($is_new_form) {
                     $logs = get_comments($log_opts);
 
                     if (count($logs) <= 0) {
-                        echo "<center> Formulário ainda sem dados no histórico. </center>";
+                        echo "<p class='text-center'> Formulário ainda sem dados no histórico. </p>";
                     } else {
                         foreach ($logs as $log): ?>
                             <div class="acolhesus-log">
