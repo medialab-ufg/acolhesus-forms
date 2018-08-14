@@ -62,7 +62,7 @@ class AcolheSUSReports
             </table>
             <?php
         } else {
-            echo "<p class='text-center'>Relatório não disponível para este formulário!</p>";
+            echo "<p class='text-center'> Relatório não disponível para este formulário! </p>";
         }
     }
 
@@ -120,9 +120,37 @@ class AcolheSUSReports
                 $html = "";
                 $total = 0;
                 if (is_array($v)) {
+
+                    $conta = 0;
+
                     foreach ($v as $_) {
                         $total += $_->total;
-                        $html .= $_->total . " - " . $_->value . " <br> ";
+                        $pim = $_->value;
+
+                        $q = "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$pim'";
+
+                        $ota = $this->get_sql_results($q,"total");
+
+                        if (is_array($ota)) {
+
+                            $pim .= " &nbsp;&nbsp;&nbsp; <a data-toggle=\"collapse\" href=\"#s-$conta\" class=\"collapsed btn btn-default\" aria-expanded=\"false\">Ver todos</a>";
+                            $pim .= "<div id='s-$conta' class='panel-collapse collapse' aria-expanded='false'>";
+
+                            foreach( $ota as $o) {
+                                $d = $o->entry_id;
+                                $q = "SELECT post_id FROM " . $this->postmeta . " WHERE meta_key='_entry_id' AND meta_value = '$d'";
+                                $hora_verdade = $this->get_sql_results($q,"row")->post_id;
+
+                                $link =get_permalink($hora_verdade);
+                                $t = get_the_title($hora_verdade);
+
+                                $pim .= "<p> <a href='$link' target='_blank'>$t</a></p>";
+                            }
+                            $pim .= "</div>";
+                        }
+
+                        $html .= $_->total . " - " . $pim . " <br> ";
+                        $conta++;
                     }
                 }
 
