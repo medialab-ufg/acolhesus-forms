@@ -11,12 +11,19 @@ class AcolheSUSReports
         "fld_1473627", // "Anexar documentos" avaliacao grupos
     ];
 
+    private $caldera_forms;
     private $caldera_entries;
+    private $posts;
+    private $postmeta;
 
     public function __construct()
     {
         global $wpdb;
         $this->caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+        $this->caldera_forms = $wpdb->prefix . 'cf_forms';
+
+        $this->posts = $wpdb->prefix . 'posts';
+        $this->postmeta = $wpdb->prefix . 'postmeta';
     }
 
     function get_field_data($slug)
@@ -82,7 +89,7 @@ class AcolheSUSReports
                 } else if (is_string($state) && (strlen($state) === 2)) {
                     $v = $this->getStateFilter($formType, $id, $state);
                     if (is_object($v)) {
-                        $v = $v->total;
+                        $v = $v;
                     } else {
                         $v = "";
                     }
@@ -147,8 +154,7 @@ class AcolheSUSReports
     private function get_form_config($form_id)
     {
         global $wpdb;
-        $caldera_forms = $wpdb->prefix . 'cf_forms';
-        $sql = "SELECT config FROM " . $caldera_forms . " WHERE form_id='$form_id'";
+        $sql = "SELECT config FROM " . $this->caldera_forms . " WHERE form_id='$form_id'";
 
         $result = $wpdb->get_row($sql);
 
@@ -197,9 +203,7 @@ class AcolheSUSReports
     private function getClosedListResults($field_id)
     {
         if (is_string($field_id)) {
-            global $wpdb;
-            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
-            $sql = "SELECT count(*) as total, value FROM " . $caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC;";
+            $sql = "SELECT count(*) as total, value FROM " . $this->caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC;";
 
             return $this->get_sql_results($sql, "total");
         }
@@ -209,10 +213,8 @@ class AcolheSUSReports
 
     public function getStateFilter($formType,$field_id,$state) {
         global $wpdb;
-        $meta = $wpdb->prefix . 'postmeta';
-        $p = $wpdb->prefix . 'posts';
 
-        $sql = "SELECT ID FROM $p p INNER JOIN $meta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$state';";
+        $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$state';";
         $i = $wpdb->get_results($sql);
 
         $entry_ids = [];
@@ -220,7 +222,7 @@ class AcolheSUSReports
             foreach ($i as $resp) {
                 $a = $resp->ID;
                 if (!is_null($a)) {
-                    $s = "SELECT meta_value as v FROM $meta WHERE meta_key='_entry_id' AND post_id=$a";
+                    $s = "SELECT meta_value as v FROM $this->postmeta WHERE meta_key='_entry_id' AND post_id=$a";
                     $__ = $wpdb->get_row($s);
 
                     if (!is_null($__)) {
@@ -231,7 +233,6 @@ class AcolheSUSReports
         }
 
         if (count($entry_ids) > 0) {
-            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
             $field_id = trim($field_id);
 
             if (count($entry_ids) == 1) {
@@ -240,11 +241,9 @@ class AcolheSUSReports
             } else {
                 $IN = "IN (" . implode( ',' ,$entry_ids) . ")";
             }
+            $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND entry_id $IN";
 
-            $sql = "SELECT SUM(value) as total FROM " . $caldera_entries . " WHERE field_id='$field_id' AND entry_id $IN";
-
-
-            return $wpdb->get_row($sql);
+            return $this->get_sql_results($sql, "row")->total;
         }
     }
 
