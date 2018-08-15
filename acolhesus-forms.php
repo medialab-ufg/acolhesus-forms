@@ -1407,8 +1407,7 @@ class AcolheSUS {
         global $wpdb;
         $is_empty = "----";
         $sql_entry_id = "
-        SELECT meta_value as entry_id FROM $wpdb->postmeta WHERE post_id = ".$id." AND meta_key = '_entry_id'
-        ";
+        SELECT meta_value as entry_id FROM $wpdb->postmeta WHERE post_id = ".$id." AND meta_key = '_entry_id'";
 
         $result = $wpdb->get_results($sql_entry_id);
 
@@ -1428,9 +1427,9 @@ class AcolheSUS {
             if(!empty($data))
             {
                 echo $data[0]->mes."/".$data[0]->ano;
-            }else echo $is_empty;
+            } else echo $is_empty;
 
-        }else echo $is_empty;
+        } else echo $is_empty;
     }
 
     public function get_entry_axis($id) {
