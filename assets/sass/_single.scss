@@ -139,6 +139,15 @@
   .h3-text{
     font-size: 1.17em;
   }
+
+  .data-inserida-box{
+    border: 1px solid red;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    min-width: 100%;
+    margin-bottom: 15px;
+    border-radius: 10px;
+  }
 } // .acolhesus-form-container
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {

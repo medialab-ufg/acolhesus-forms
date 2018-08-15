@@ -264,6 +264,13 @@ jQuery( function( $ ) {
             $(":input[type=submit]").prop("disabled", true);
         }else $(":input[type=submit]").prop("disabled", false);
 
+        var div = document.createElement('div');
+        div.id = "cant_save";
+        div.style.display = 'none';
+        div.className = "data-inserida-box";
+        div.innerHTML = "<p class='h3-text text-center'>Um indicador para esse campo, mês e ano já foi inserido anteriormente</p>";
+        $(div).insertAfter('.first_row');
+
         $(document).on("change", month+", "+year+", "+campo_atuacao, function () {
             if($(month).val() == '' || $(year).val() == '' || $(campo_atuacao).val() == '')
             {
@@ -288,8 +295,11 @@ jQuery( function( $ ) {
                         if(result == 'true')
                         {
                             $(":input[type=submit]").prop("disabled", false);
+                            $("#cant_save").hide();
                         }else{
                             $(":input[type=submit]").prop("disabled", true);
+                            $("#cant_save").show();
+
                         }
                     });
                 }
