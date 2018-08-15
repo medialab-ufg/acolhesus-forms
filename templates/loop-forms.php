@@ -11,7 +11,7 @@
             <?php endif; ?>
 
         <?php endif; ?>
-
+        <th> Data </th>
         <th> Nome </th>
 			
         <?php if ($AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
@@ -53,7 +53,11 @@
                     <?php endif; ?>
 
                 <?php endif; ?>
-					
+                <td>
+                    <?php
+                    echo $AcolheSUS->get_entry_date($entry_id);
+                    ?>
+                </td>
                 <td>
                     <a href="<?php the_permalink(); ?>">
                         <?php the_title( '<h3 class="panel-title">', '</h3>' ); ?>
