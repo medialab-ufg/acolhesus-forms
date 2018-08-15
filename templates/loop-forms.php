@@ -13,7 +13,7 @@
         <?php endif; ?>
 
         <?php if ("indicadores" === $current_acolhesus_formtype): ?>
-            <th> Data </th>
+            <th> Mês/Ano de ocorrência </th>
         <?php endif; ?>
 
         <th> Nome </th>
