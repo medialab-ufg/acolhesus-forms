@@ -2,8 +2,9 @@ jQuery( function( $ ) {
     $('.add_acolhesus_entry').click(function() {
         var post_title = $(this).attr('data-newTitle');
         var post_type  = $(this).attr('data-postType');
-        var campo = get_variable('campo');
+        var campo = get_variable('campo'), fase = get_variable('fase');
         sessionStorage.setItem("rhs_campo", campo);
+        sessionStorage.setItem("rhs_fase", fase);
         var data = {
             title: post_title,
             action: 'acolhesus_add_form_entry',

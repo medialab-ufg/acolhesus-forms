@@ -3,17 +3,24 @@ jQuery( function( $ ) {
     var base = '.acolhesus-form-container';
     var cant_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
     var campo_atuacao = '#acolhesus_campo_selector';
+    var fase_selector = "#acolhesus_fase_selector";
     var current_post_id = $(campo_atuacao).data('post_id');
 
     var tag = 'input[name="novo_form"]';
     var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
     if (is_new) {
-        var campo = sessionStorage.getItem("rhs_campo");
+        var campo = sessionStorage.getItem("rhs_campo"), fase = sessionStorage.getItem("rhs_fase");
         if(campo)
         {
             $(campo_atuacao).val(campo);
             sessionStorage.removeItem('rhs_campo');
         }else $(campo_atuacao).val('');
+
+        if(fase)
+        {
+            $(fase_selector).val(fase);
+            sessionStorage.removeItem('rhs_fase');
+        }else $(fase_selector).val('');
 
         $.post(acolhesus.ajax_url, { action: 'delete_new_form_tag', post_id: current_post_id });
     }
