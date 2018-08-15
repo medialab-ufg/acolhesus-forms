@@ -4,26 +4,8 @@ jQuery( function( $ ) {
     var cant_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
     var campo_atuacao = '#acolhesus_campo_selector';
     var fase_selector = "#acolhesus_fase_selector";
+    var eixo_selector = "#acolhesus_eixo_selector";
     var current_post_id = $(campo_atuacao).data('post_id');
-
-    var tag = 'input[name="novo_form"]';
-    var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
-    if (is_new) {
-        var campo = sessionStorage.getItem("rhs_campo"), fase = sessionStorage.getItem("rhs_fase");
-        if(campo)
-        {
-            $(campo_atuacao).val(campo);
-            sessionStorage.removeItem('rhs_campo');
-        }else $(campo_atuacao).val('');
-
-        if(fase)
-        {
-            $(fase_selector).val(fase);
-            sessionStorage.removeItem('rhs_fase');
-        }else $(fase_selector).val('');
-
-        $.post(acolhesus.ajax_url, { action: 'delete_new_form_tag', post_id: current_post_id });
-    }
 
     $('.acolhesus_basic_info_selector').change(function() {
         var opt_val = $(this).val();
@@ -38,8 +20,8 @@ jQuery( function( $ ) {
             $.post(acolhesus.ajax_url, {
                 action: 'acolhesus_save_post_basic_info',
                 acolhesus_campo: $(campo_atuacao).val(),
-                acolhesus_fase: $('#acolhesus_fase_selector').val(),
-                acolhesus_eixo: $('#acolhesus_eixo_selector').val(),
+                acolhesus_fase:  $(fase_selector).val(),
+                acolhesus_eixo:  $(eixo_selector).val(),
                 post_id: current_post_id
             }).success(function (r) {
                 $(self).find("option[value='']").remove();
@@ -49,7 +31,28 @@ jQuery( function( $ ) {
         }
     });
 
+    var tag = 'input[name="novo_form"]';
+    var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
+    if (is_new) {
+        var campo = sessionStorage.getItem("rhs_campo"), fase = sessionStorage.getItem("rhs_fase");
+        if(campo)
+        {
+            $(campo_atuacao).val(campo);
+            sessionStorage.removeItem('rhs_campo');
+        } else $(campo_atuacao).val('');
 
+        if(fase)
+        {
+            $(fase_selector).val(fase);
+            sessionStorage.removeItem('rhs_fase');
+        } else $(fase_selector).val('');
+
+        var data = { action: 'delete_new_form_tag', post_id: current_post_id };
+        $.post(acolhesus.ajax_url, data).success(function() {
+            $('.acolhesus_basic_info_selector').change();
+        });
+    }
+    
     if ($(base + ' .single input[type="submit"]').length == 0) {
         var save_btn = 'button.save_for_later';
         if ($(save_btn).length === 1) {
