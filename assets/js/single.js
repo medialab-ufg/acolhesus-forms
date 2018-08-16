@@ -269,24 +269,25 @@ jQuery( function( $ ) {
 
     if($(month).length > 0 && $(year).length > 0 && $(campo_atuacao).length > 0)
     {
-        if($(month).val() == '' || $(year).val() == '' || $(campo_atuacao).val() == '')
+        if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '')
         {
             $(":input[type=submit]").prop("disabled", true);
-        }else $(":input[type=submit]").prop("disabled", false);
+        } else $(":input[type=submit]").prop("disabled", false);
 
         var div = document.createElement('div');
+        var warning = "Já existe uma resposta para este estado com este mês e ano de ocorrência! Favor escolher outra data.";
         div.id = "cant_save";
         div.style.display = 'none';
         div.className = "data-inserida-box";
-        div.innerHTML = "<p class='h3-text text-center'>Um indicador para esse campo, mês e ano já foi inserido anteriormente</p>";
+
+        div.innerHTML = "<p class='text-center alert alert-warning'>" + warning + "</p>";
         $(div).insertAfter('.first_row');
 
         $(document).on("change", month+", "+year+", "+campo_atuacao, function () {
-            if($(month).val() == '' || $(year).val() == '' || $(campo_atuacao).val() == '')
+            if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '')
             {
                 $(":input[type=submit]").prop("disabled", true);
-            }else
-            {
+            } else {
                 if(is_new)
                 {
                     var data ={
