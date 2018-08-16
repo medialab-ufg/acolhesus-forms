@@ -129,36 +129,40 @@ class AcolheSUSReports
                             $answer_post_ids = "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$_entry'";
                             $__ids = $this->get_sql_results($answer_post_ids,"total");
 
-                            if (is_array($__ids)) {
-                                $final .= "&nbsp;&nbsp; <a data-toggle='collapse' href='#link-$conta' class='collapsed btn btn-default' aria-expanded='false'>Ver links</a>";
-                                $final .= "<div id='link-$conta' class='panel-collapse collapse' aria-expanded='false'>";
+                            if (is_array($__ids) && count($__ids) > 0) {
+                                $buffer = "&nbsp;&nbsp; <a data-toggle='collapse' href='#link-$conta' class='collapsed btn btn-default' aria-expanded='false'>Ver links</a>";
+                                $buffer .= "<div id='link-$conta' class='panel-collapse collapse' aria-expanded='false'>";
 
                                 $encontrados = 0;
+                                $remove = true;
                                 foreach($__ids as $_id) {
                                     $d = $_id->entry_id;
-                                    $subquery = "SELECT post_id FROM " . $this->postmeta . " WHERE meta_key='_entry_id' AND meta_value=$d";
+                                    $subquery = "SELECT ID FROM ". $this->posts ." p WHERE p.post_type='$formType' AND ID=(SELECT pm.post_id FROM ". $this->postmeta ." pm WHERE meta_key='_entry_id' AND meta_value=$d)";
                                     $post_id = $this->get_sql_results($subquery,"row");
                                     if (is_object($post_id)) {
+                                        $remove = false;
                                         $encontrados++;
-                                        $post_id = $post_id->post_id;
+                                        $post_id = $post_id->ID;
+
+                                        $link = get_permalink($post_id);
+                                        $title = get_the_title($post_id);
+
+                                        $buffer .= "<p> <a href='$link' target='_blank'>$title</a></p>";
+                                        $conta++;
                                     }
-
-                                    $link = get_permalink($post_id);
-                                    $title = get_the_title($post_id);
-
-                                    $final .= "<p> <a href='$link' target='_blank'>$title</a></p>";
                                 }
-
-                                $final .= "</div>";
                             }
 
-                            $html .= $encontrados . " - " . $final . "<br>";
-                            $conta++;
+                            if (!$remove) {
+                                $final .= $buffer ."</div><hr>";
+                                $html .= $encontrados . " - " . $final;
+
+                            }
                         }
                     }
                 }
 
-                $e = $this->renderAnswerRow($html,"$total respostas");
+                $e = $this->renderAnswerRow($html,"$conta respostas");
                 $e .= "<td>" . $campo["label"] . "</td>";
             }
 
