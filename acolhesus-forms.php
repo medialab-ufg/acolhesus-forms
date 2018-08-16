@@ -342,13 +342,14 @@ class AcolheSUS {
 
     function ajax_callback_notify_user()
     {
-        if( current_user_can('editor') || current_user_can('administrator') )
+        if( current_user_can(self::CGPNH) )
         {
             /*global $RHSNotifications;
 
             $current_user = wp_get_current_user();
 
             $RHSNotifications->add_notification(RHSNotifications::CHANNEL_COMMENTS, );*/
+            print(get_the_author());
         }
     }
 
