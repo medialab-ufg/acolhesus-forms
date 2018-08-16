@@ -15,19 +15,20 @@ if ($is_new_form) {
 ?>
 
 <div class="acolhesus-form-container">
-    <h3>
-        <?php the_title(); ?>
-
-        <?php if (get_post_meta($post_id, 'locked', true)): ?>
-            <span class="closed-form"> preenchimento encerrado </span>
-        <?php endif; ?>
-
+    <div class="options">
         <a href="<?php echo home_url('formularios-acolhesus'); ?>" class="btn btn-default voltar-home">
             VOLTAR PARA TELA INICIAL
         </a>
 
         <?php if (current_user_can('acolhesus_cgpnh')): ?>
             <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>
+        <?php endif; ?>
+    </div>
+    <h3>
+        <?php the_title(); ?>
+
+        <?php if (get_post_meta($post_id, 'locked', true)): ?>
+            <span class="closed-form"> preenchimento encerrado </span>
         <?php endif; ?>
     </h3>
 
