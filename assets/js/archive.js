@@ -107,8 +107,9 @@ jQuery( function( $ ) {
         };
     }
 
-    function get_variable(variable = null)
+    function get_variable(variable)
     {
+        variable = variable || null;
         var $_GET = {};
         if(document.location.toString().indexOf('?') !== -1) {
             var query = document.location
@@ -123,7 +124,7 @@ jQuery( function( $ ) {
             }
         }
 
-        if(variable === null)
+        if (variable === null)
             return $_GET;
         else return $_GET[variable];
     }
@@ -139,11 +140,6 @@ jQuery( function( $ ) {
         escapeMarkup: function (markup) {
             return markup;
         }
-    });
-
-    $('.abrir-relatorios').click(function () {
-        $("#lista-formularios").toggle();
-        $("a.list-forms").toggle();
     });
 });
 
