@@ -242,6 +242,8 @@ class AcolheSUS {
 
         add_action('init', [&$this, 'init_default_data']);
 
+        add_action('init', [&$this, 'acolhesus_rewrite_reports']);
+
         add_filter('the_content', [&$this, 'filter_the_content']);
 
         add_action('caldera_forms_entry_saved', [&$this, 'saved_entry'], 10, 3);
@@ -252,11 +254,11 @@ class AcolheSUS {
 
         add_filter('single_template', [&$this, 'acolhesus_single_page']);
 
-        add_action( 'generate_rewrite_rules', array( &$this, 'rewrite_rules' ), 10, 1 );
+        add_action('generate_rewrite_rules', array( &$this, 'rewrite_rules' ), 10, 1 );
 
-        add_filter( 'query_vars', array( &$this, 'rewrite_rules_query_vars' ) );
+        add_filter('query_vars', array( &$this, 'rewrite_rules_query_vars' ) );
 
-        add_filter( 'template_include', array( &$this, 'rewrite_rule_template_include' ) );
+        add_filter('template_include', array( &$this, 'rewrite_rule_template_include' ));
 
         add_action('template_redirect', array(&$this, 'can_user_view_form'));
 
@@ -288,9 +290,9 @@ class AcolheSUS {
 
         add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_save_for_later'));
 
-        add_action( 'caldera_forms_submit_post_process', array(&$this, 'get_old_attachment'), 10, 4 );
+        add_action('caldera_forms_submit_post_process', array(&$this, 'get_old_attachment'), 10, 4 );
 
-        add_filter( 'caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
+        add_filter('caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
 
         add_action('wp_ajax_acolhesus_notify_user', array(&$this, 'ajax_callback_notify_user'));
 
@@ -673,7 +675,6 @@ class AcolheSUS {
         $form_ids = $AcolheSUSAdminForm->get_acolhesus_option('form_ids');
 
         foreach ($this->forms as $formName => $form) {
-            
             $formID = isset($form_ids[$formName]) ? $form_ids[$formName] : '';
             $this->forms[$formName]['form_id'] = $formID;
 
@@ -691,9 +692,19 @@ class AcolheSUS {
                     }
                 }
             }
-
         }
 
+    }
+
+    function acolhesus_rewrite_reports() {
+        $_uri = explode('/', $_SERVER['REQUEST_URI']);
+        if (3 === count($_uri)) {
+            list($delimeter,$form,$page) = $_uri;
+            if (is_string($page) && ("relatorio" === $page) && post_type_exists($form) && array_key_exists($form,$this->forms)) {
+                require_once (plugin_dir_path( __FILE__ ) . "relatorios.php");
+                die();
+            }
+        }
     }
 
     private function add_acolhesus_entry($title, $type, $status, $metas = []) {
@@ -1244,10 +1255,9 @@ class AcolheSUS {
     }
 
     function rewrite_rules_query_vars( $public_query_vars ) {
-
         $public_query_vars[] = "acolhe_sus";
-        return $public_query_vars;
 
+        return $public_query_vars;
     }
 
     function rewrite_rule_template_include( $template ) {
