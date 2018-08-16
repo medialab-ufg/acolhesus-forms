@@ -15,21 +15,15 @@ if (current_user_can('administrator')) {
             <h3 class="text-center">Relatórios de <?php print_r( get_post_type_object($form)->label ); ?></h3>
             <h4 style="text-align: center;border-bottom: 1px solid; padding-bottom: 10px; margin-bottom: 30px">Resultados até <?php echo date("d/m/Y G:i") ?></h4>
             <div class="text-center">
-                <form method="POST" class="reports acolhesus-reports" id="reports-filter"
-                      style="border-bottom: 1px solid #eaeaea; width: 100%; float: left; padding-bottom: 3%;">
+                <form method="POST" class="reports acolhesus-reports" id="reports-filter" style="border-bottom: 1px solid #eaeaea; width: 100%; float: left; padding-bottom: 2%; margin-bottom: 2%;">
                     <div class="col-md-12">
                         <?php $view->renderFilters(false); ?>
                     </div>
+                    <div class="col-md-12 btn-wrapper no-padding" style="margin-top: 20px">
+                        <input class="btn btn-default btn-info filter-forms" type="submit" value="Gerar Relatórios"/>
+                    </div>
                 </form>
-
-                <div class="col-md-12 btn-wrapper no-padding">
-                    <br>
-                    <input class="btn btn-default filter-forms" type="submit" value="Gerar Relatórios" form="reports-filter"/>
-                </div>
-
             </div>
-
-            <hr>
 
             <div style="margin-top: 2px;padding: 20px;">
                 <?php
@@ -48,4 +42,4 @@ if (current_user_can('administrator')) {
     echo "<p class='text-center'>Página não encontrada</p>";
 }
 
-include_once( get_theme_file_path('footer-full.php') );
+include_once (get_theme_file_path('footer-full.php'));
