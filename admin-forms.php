@@ -100,7 +100,7 @@ class AcolheSUSAdminForm {
                 $forms = $AcolheSUS->forms;
 
                 foreach ($forms as $formName => $form) {
-                    echo $form['labels']['name'] . " ";
+                    echo $form['labels']['name'] . ": ";
                     $f_name = "acolhesus[form_ids][$formName]";
                     echo "<select name='$f_name'><option></option>";
                     foreach($registered_forms as $f) {
@@ -110,7 +110,7 @@ class AcolheSUSAdminForm {
 
                         echo  "<option value='$id' $selected> $nome </option>";
                     }
-                    echo "</select><br/>";
+                    echo "</select><br>";
                 }
             }
         }    
