@@ -127,6 +127,7 @@ class AcolheSUSReports
                             $_entry = $stats->value;
                             $final = $_entry;
                             $answer_post_ids = "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$_entry'";
+
                             $__ids = $this->get_sql_results($answer_post_ids,"total");
 
                             if (is_array($__ids) && count($__ids) > 0) {
@@ -137,7 +138,24 @@ class AcolheSUSReports
                                 $remove = true;
                                 foreach($__ids as $_id) {
                                     $d = $_id->entry_id;
-                                    $subquery = "SELECT ID FROM ". $this->posts ." p WHERE p.post_type='$formType' AND ID=(SELECT pm.post_id FROM ". $this->postmeta ." pm WHERE meta_key='_entry_id' AND meta_value=$d)";
+
+                                    /*
+                                     * TODO: Quebrar esses selects em outras funções
+                                     * */
+                                    if (isset($_POST["campo"])) {
+                                        $_campo = sanitize_text_field($_POST["campo"]);
+                                        $subquery = "SELECT ID 
+                                                    FROM ". $this->posts ." p 
+                                                        INNER JOIN ". $this->postmeta ." as mt ON mt.post_id = p.ID 
+                                                        INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
+                                                    WHERE p.post_type='$formType'
+                                                    AND mt.meta_key='acolhesus_campo' AND mt.meta_value='$_campo'
+                                                    AND mta.meta_key='_entry_id' AND mta.meta_value=$d
+                                                ";
+                                    } else {
+                                        $subquery = "SELECT ID FROM ". $this->posts ." p WHERE p.post_type='$formType' AND ID=(SELECT pm.post_id FROM ". $this->postmeta ." pm WHERE meta_key='_entry_id' AND meta_value=$d)";
+                                    }
+
                                     $post_id = $this->get_sql_results($subquery,"row");
                                     if (is_object($post_id)) {
                                         $remove = false;
