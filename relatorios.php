@@ -8,14 +8,15 @@ if (current_user_can('administrator')) {
         $view = new AcolheSUSView();
         date_default_timezone_set("America/Sao_Paulo");
     ?>
-        <hr>
-        <div class="acolhesus-form-container col-md-12">
-            <h3 style="text-align: center">Relatórios de <?php print_r( get_post_type_object($form)->label ); ?></h3>
-            <h4 style="text-align: center">Resultados até <?php echo date("d/m/Y G:i") ?></h4>
-            <br>
+        <div class="acolhesus-form-container col-md-12" style="color: black">
+
+            <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($form); ?>"> Voltar </a>
+
+            <h3 class="text-center">Relatórios de <?php print_r( get_post_type_object($form)->label ); ?></h3>
+            <h4 style="text-align: center;border-bottom: 1px solid; padding-bottom: 10px; margin-bottom: 30px">Resultados até <?php echo date("d/m/Y G:i") ?></h4>
             <div class="text-center">
                 <form method="POST" class="reports acolhesus-reports" id="reports-filter"
-                      style="background: #eaeaea; width: 100%; float: left;padding: 4% 0 5% 0;">
+                      style="border-bottom: 1px solid #eaeaea; width: 100%; float: left; padding-bottom: 3%;">
                     <div class="col-md-12">
                         <?php $view->renderFilters(false); ?>
                     </div>
