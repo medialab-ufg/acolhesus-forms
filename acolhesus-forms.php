@@ -1454,22 +1454,16 @@ class AcolheSUS {
     {
         global $wpdb;
         $is_empty = "----";
-        $sql_entry_id = "
-        SELECT meta_value as entry_id FROM $wpdb->postmeta WHERE post_id = ".$id." AND meta_key = '_entry_id'";
+        $sql_entry_id = "SELECT meta_value as entry_id FROM $wpdb->postmeta WHERE post_id = ".$id." AND meta_key = '_entry_id'";
 
         $result = $wpdb->get_results($sql_entry_id);
 
         if(!empty($result))
         {
             $entry_id = $result[0]->entry_id;
-            $sql = "
-            SELECT entry_a.entry_id, entry_a.value mes, entry_b.value ano
+            $sql = "SELECT entry_a.entry_id, entry_a.value mes, entry_b.value ano
                     FROM ".$wpdb->prefix."cf_form_entry_values as entry_a join ".$wpdb->prefix."cf_form_entry_values as entry_b
-                    where entry_a.slug='mes' AND 
-                    entry_b.slug='ano' AND 
-                    entry_a.entry_id=entry_b.entry_id AND
-                    entry_a.entry_id='".$entry_id."' 
-            ";
+                    where entry_a.slug='mes' AND entry_b.slug='ano' AND entry_a.entry_id=entry_b.entry_id AND entry_a.entry_id='".$entry_id."'";
 
             $data = $wpdb->get_results($sql);
             if(!empty($data))

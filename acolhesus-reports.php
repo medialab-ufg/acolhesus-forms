@@ -119,37 +119,42 @@ class AcolheSUSReports
 
                 $html = "";
                 $total = 0;
-                if (is_array($respostas_fechadas)) {
+                if (is_array($respostas_fechadas) && count($respostas_fechadas) > 0) {
                     $conta = 0;
-                    foreach ($respostas_fechadas as $fechada) {
-                        $total += $fechada->total;
-                        $_entry = $fechada->value;
+                    foreach ($respostas_fechadas as $stats) {
+                        if (is_object($stats)) {
+                            $total += $stats->total;
+                            $_entry = $stats->value;
+                            $final = $_entry;
+                            $answer_post_ids = "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$_entry'";
+                            $__ids = $this->get_sql_results($answer_post_ids,"total");
 
-                        $answer_post_ids = "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$_entry'";
-                        $__ids = $this->get_sql_results($answer_post_ids,"total");
+                            if (is_array($__ids)) {
+                                $final .= "&nbsp;&nbsp; <a data-toggle='collapse' href='#link-$conta' class='collapsed btn btn-default' aria-expanded='false'>Ver links</a>";
+                                $final .= "<div id='link-$conta' class='panel-collapse collapse' aria-expanded='false'>";
 
-                        if (is_array($__ids)) {
-                            $_entry .= " &nbsp;&nbsp; <a data-toggle=\"collapse\" href=\"#link-$conta\" class=\"collapsed btn btn-default\" aria-expanded=\"false\">Ver links</a>";
-                            $_entry .= "<div id='link-$conta' class='panel-collapse collapse' aria-expanded='false'>";
+                                $encontrados = 0;
+                                foreach($__ids as $_id) {
+                                    $d = $_id->entry_id;
+                                    $subquery = "SELECT post_id FROM " . $this->postmeta . " WHERE meta_key='_entry_id' AND meta_value=$d";
+                                    $post_id = $this->get_sql_results($subquery,"row");
+                                    if (is_object($post_id)) {
+                                        $encontrados++;
+                                        $post_id = $post_id->post_id;
+                                    }
 
-                            foreach($__ids as $_id) {
-                                $d = $_id->entry_id;
-                                $subquery = "SELECT post_id FROM " . $this->postmeta . " WHERE meta_key='_entry_id' AND meta_value = '$d'";
-                                $post_id = $this->get_sql_results($subquery,"row");
-                                if (is_object($post_id)) {
-                                    $post_id = $post_id->post_id;
+                                    $link = get_permalink($post_id);
+                                    $title = get_the_title($post_id);
+
+                                    $final .= "<p> <a href='$link' target='_blank'>$title</a></p>";
                                 }
 
-                                $link = get_permalink($post_id);
-                                $title = get_the_title($post_id);
-
-                                $_entry .= "<p> <a href='$link' target='_blank'>$title</a></p>";
+                                $final .= "</div>";
                             }
-                            $_entry .= "</div>";
-                        }
 
-                        $html .= $fechada->total . " - " . $_entry . "<br>";
-                        $conta++;
+                            $html .= $encontrados . " - " . $final . "<br>";
+                            $conta++;
+                        }
                     }
                 }
 
@@ -204,8 +209,7 @@ class AcolheSUSReports
 
         if (is_string($field_id)) {
             if ($closed) {
-                $sql = "SELECT count(*) as total, value FROM " . $this->caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC;";
-
+                $sql = "SELECT count(*) as total, value FROM " . $this->caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC";
                 return $this->get_sql_results($sql, "total");
             } else {
                 $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
