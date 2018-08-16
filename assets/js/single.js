@@ -264,32 +264,35 @@ jQuery( function( $ ) {
         })
     }
 
+
+    /*Verificação de data em: Indicadores*/
     var month_id = 'fld_680040', year_id = "fld_637266";
     var month = "select[name="+month_id+"]", year = "select[name="+year_id+"]";
 
-    if($(month).length > 0 && $(year).length > 0 && $(campo_atuacao).length > 0)
+    if($(month).length > 0 && $(year).length > 0 && $(campo_atuacao).length > 0 && $(fase_selector).length > 0)
     {
-        if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '')
+        if(is_new)
         {
-            $(":input[type=submit]").prop("disabled", true);
-        } else $(":input[type=submit]").prop("disabled", false);
-
-        var div = document.createElement('div');
-        var warning = "Já existe uma resposta para este estado com este mês e ano de ocorrência! Favor escolher outra data.";
-        div.id = "cant_save";
-        div.style.display = 'none';
-        div.className = "data-inserida-box";
-
-        div.innerHTML = "<p class='text-center alert alert-warning'>" + warning + "</p>";
-        $(div).insertAfter('.first_row');
-
-        $(document).on("change", month+", "+year+", "+campo_atuacao, function () {
-            if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '')
+            if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '' || $(fase_selector).val() === '')
             {
                 $(":input[type=submit]").prop("disabled", true);
-            } else {
-                if(is_new)
+                $('.acolhesus_basic_info_selector').change();
+            } else $(":input[type=submit]").prop("disabled", false);
+
+            var div = document.createElement('div');
+            var warning = "Já existe uma resposta para este estado com este mês e ano de ocorrência! Favor escolher outra data.";
+            div.id = "cant_save";
+            div.style.display = 'none';
+            div.className = "data-inserida-box";
+
+            div.innerHTML = "<p class='text-center alert alert-warning'>" + warning + "</p>";
+            $(div).insertAfter('.first_row');
+
+            $(document).on("change", month+", "+year+", "+campo_atuacao+", "+fase_selector, function () {
+                if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '' || $(fase_selector).val() === '')
                 {
+                    $(":input[type=submit]").prop("disabled", true);
+                }else{
                     var data ={
                         month_id: month_id,
                         year_id: year_id,
@@ -309,14 +312,32 @@ jQuery( function( $ ) {
                             $("#cant_save").hide();
                         }else{
                             $(":input[type=submit]").prop("disabled", true);
+                            $('.acolhesus_basic_info_selector').change();
                             $("#cant_save").show();
-
                         }
                     });
                 }
-            }
+            });
+        }
+    }else if($(fase_selector).length > 0)
+    {
+        if($(fase_selector).val() === '')
+        {
+            $(":input[type=submit]").prop("disabled", true);
+            $('.acolhesus_basic_info_selector').change();
+        }else $(":input[type=submit]").prop("disabled", false);
+
+        $(document).on('change', fase_selector, function () {
+            if($(fase_selector).val() === '')
+            {
+                $(":input[type=submit]").prop("disabled", true);
+                $('.acolhesus_basic_info_selector').change();
+            }else $(":input[type=submit]").prop("disabled", false);
         });
     }
+
+
+
 });
 
 function save_for_later() {
