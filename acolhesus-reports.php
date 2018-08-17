@@ -26,23 +26,23 @@ class AcolheSUSReports
         $this->postmeta = $wpdb->prefix . 'postmeta';
     }
 
-    function get_form_fields($form)
+    private function getFormFields($form)
     {
-        $caldera_form_id = $this->form_id($form);
-        $f = $this->get_form_config($caldera_form_id);
+        $caldera_form_id = $this->formId($form);
+        $form_config = $this->getFormConfig($caldera_form_id);
 
-        if (is_array($f) && array_key_exists("fields", $f)) {
-            return $f["fields"];
+        if (is_array($form_config) && array_key_exists("fields", $form_config)) {
+            return $form_config["fields"];
         }
 
         return [];
     }
 
-    public function form_id($form_type)
+    private function formId($form_type)
     {
-        $f = get_option("acolhesus");
+        $form = get_option("acolhesus");
 
-        return $f['form_ids'][$form_type];
+        return $form['form_ids'][$form_type];
     }
 
     public function renderReports($formType, $state = null)
@@ -71,7 +71,7 @@ class AcolheSUSReports
         $c = 0;
         $total_geral = 0;
         $table_row = "";
-        foreach ($this->get_form_fields($formType) as $id => $campo ) {
+        foreach ($this->getFormFields($formType) as $id => $campo ) {
             $tipo = $campo["type"];
             $info_data = "";
 
@@ -188,7 +188,7 @@ class AcolheSUSReports
         return "<td> $total </td> <td> <span><i><small> $label </small></i></span> </td>";
     }
 
-    private function get_form_config($form_id)
+    private function getFormConfig($form_id)
     {
         $sql = "SELECT config FROM " . $this->caldera_forms . " WHERE form_id='$form_id'";
         $result = $this->getSQLResults($sql, "row");
@@ -235,7 +235,7 @@ class AcolheSUSReports
         return [];
     }
 
-    public function getStateFilter($formType,$field_id,$state) {
+    private function getStateFilter($formType,$field_id,$state) {
         $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$state';";
         $state_ids = $this->getSQLResults($sql, "total");
 
