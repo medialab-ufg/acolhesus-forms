@@ -138,12 +138,12 @@ class AcolheSUSReports
                                 $remove = true;
                                 foreach($__ids as $_id) {
                                     $entry = $_id->entry_id;
-                                    if ($this->hasStateFilter() ) {
-                                        $_campo = sanitize_text_field($_POST["campo"]);
-                                        $subquery = $this->setSubQueryForState($formType, $entry,$_campo);
+                                    if ($this->hasAllFilters()) {
+                                        $subquery = $this->setSubQueryForAllFilters($formType, $entry);
+                                    } else if ($this->hasStateFilter() ) {
+                                        $subquery = $this->setSubQueryForState($formType, $entry);
                                     } else if ($this->hasPhaseFilter()) {
-                                        $_fase = sanitize_text_field($_POST["fase"]);
-                                        $subquery = $this->setSubQueryForPhase($formType, $entry,$_fase);
+                                        $subquery = $this->setSubQueryForPhase($formType, $entry);
                                     } else {
                                         $subquery = "SELECT ID FROM ". $this->posts ." p WHERE p.post_type='$formType' AND ID=(SELECT pm.post_id FROM ". $this->postmeta ." pm WHERE meta_key='_entry_id' AND meta_value=$entry)";
                                     }
@@ -269,30 +269,57 @@ class AcolheSUSReports
         }
     }
 
-    private function setSubQueryForState($formType, $entry, $state) {
-        $query = "SELECT ID FROM ". $this->posts ." p 
-                          INNER JOIN ". $this->postmeta ." as mt ON mt.post_id = p.ID 
-                          INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
-                                     WHERE p.post_type='$formType'
-                                     AND mt.meta_key='acolhesus_campo' AND mt.meta_value='$state'
-                                     AND mta.meta_key='_entry_id' AND mta.meta_value=$entry";
-
-        return $query;
+    private function setSubQueryForState($formType, $entry) {
+        $state = sanitize_text_field($_POST["campo"]);
+        return $this->baseFilterQuery("campo",$formType, $entry, $state);
     }
 
-    private function setSubQueryForPhase($formType, $entry, $phase) {
-        $query = "SELECT ID FROM ". $this->posts ." p 
-                          INNER JOIN ". $this->postmeta ." as mt ON mt.post_id = p.ID 
-                          INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
-                                     WHERE p.post_type='$formType'
-                                     AND mt.meta_key='acolhesus_fase' AND mt.meta_value='$phase'
-                                     AND mta.meta_key='_entry_id' AND mta.meta_value=$entry";
+    private function setSubQueryForPhase($formType, $entry) {
+        $phase = sanitize_text_field($_POST["fase"]);
+        return $this->baseFilterQuery("fase",$formType, $entry, $phase);
+    }
 
-        return $query;
+    private function setSubQueryForAllFilters($formType, $entry) {
+        return $this->baseFilterQuery("all",$formType, $entry,"");
     }
 
     private function setQueryForEqualAnswers($value) {
         return "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$value'";
+    }
+
+    private function baseFilterQuery($tipo, $formType, $entry, $val) {
+        $base_sql = "SELECT ID FROM  ". $this->posts ." p 
+                          INNER JOIN ". $this->postmeta ." as mt ON mt.post_id = p.ID";
+        $sufix_sql = " AND mt.meta_key='_entry_id' AND mt.meta_value=$entry;";
+
+        if ("all" === $tipo) {
+            $state = sanitize_text_field($_POST["campo"]);
+            $phase = sanitize_text_field($_POST["fase"]);
+
+            $query = " INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
+                       INNER JOIN ". $this->postmeta ." as mtc ON mtc.post_id = p.ID 
+                            WHERE p.post_type='$formType'
+                            AND mta.meta_key='acolhesus_fase'  AND mta.meta_value='$phase'
+                            AND mtc.meta_key='acolhesus_campo' AND mtc.meta_value='$state' ";
+
+            $sql = $base_sql . $query . $sufix_sql;
+        } else {
+            if ("fase" === $tipo) {
+                $key = "acolhesus_fase";
+            } else if ("campo" === $tipo) {
+                $key = "acolhesus_campo";
+            } else {
+                return "";
+            }
+
+            $query = " INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
+                            WHERE p.post_type='$formType'
+                            AND mta.meta_key='$key' AND mta.meta_value='$val'";
+
+            $sql = $base_sql . $query . $sufix_sql;
+        }
+
+        return $sql;
     }
 
     private function hasStateFilter()
@@ -303,6 +330,11 @@ class AcolheSUSReports
     private function hasPhaseFilter()
     {
         return (isset($_POST["fase"]) && (strlen($_POST["fase"]) >= 6));
+    }
+
+    private function hasAllFilters()
+    {
+        return $this->hasPhaseFilter() && $this->hasStateFilter();
     }
 
     private function getSQLResults($sql, $type) {
