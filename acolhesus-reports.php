@@ -92,7 +92,7 @@ class AcolheSUSReports
 
                 if ($campo["type"] === "number") {
                     if ($c === 4) {
-                        $c = -1; // echo "<br>"; // $total_geral - exibir aqui?
+                        $c = -1;
                         $total_geral = 0;
                     } else {
                         $total_geral += intval($this->getAnswerStats($id));
@@ -126,9 +126,9 @@ class AcolheSUSReports
                             $total += $stats->total;
                             $_entry = $stats->value;
                             $final = $_entry;
-                            $answer_post_ids = "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$_entry'";
+                            $answer_post_ids = $this->setQueryForEqualAnswers($_entry);
 
-                            $__ids = $this->get_sql_results($answer_post_ids,"total");
+                            $__ids = $this->getSQLResults($answer_post_ids,"total");
 
                             if (is_array($__ids) && count($__ids) > 0) {
                                 $buffer = "&nbsp;&nbsp; <a data-toggle='collapse' href='#link-$conta' class='collapsed btn btn-default' aria-expanded='false'>Ver links</a>";
@@ -137,26 +137,18 @@ class AcolheSUSReports
                                 $encontrados = 0;
                                 $remove = true;
                                 foreach($__ids as $_id) {
-                                    $d = $_id->entry_id;
-
-                                    /*
-                                     * TODO: Quebrar esses selects em outras funções
-                                     * */                                    
-                                    if (isset($_POST["campo"]) && (strlen($_POST["campo"]) === 2) ) {
+                                    $entry = $_id->entry_id;
+                                    if ($this->hasStateFilter() ) {
                                         $_campo = sanitize_text_field($_POST["campo"]);
-                                        $subquery = "SELECT ID 
-                                                    FROM ". $this->posts ." p 
-                                                        INNER JOIN ". $this->postmeta ." as mt ON mt.post_id = p.ID 
-                                                        INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
-                                                    WHERE p.post_type='$formType'
-                                                    AND mt.meta_key='acolhesus_campo' AND mt.meta_value='$_campo'
-                                                    AND mta.meta_key='_entry_id' AND mta.meta_value=$d
-                                                ";
+                                        $subquery = $this->setSubQueryForState($formType, $entry,$_campo);
+                                    } else if ($this->hasPhaseFilter()) {
+                                        $_fase = sanitize_text_field($_POST["fase"]);
+                                        $subquery = $this->setSubQueryForPhase($formType, $entry,$_fase);
                                     } else {
-                                        $subquery = "SELECT ID FROM ". $this->posts ." p WHERE p.post_type='$formType' AND ID=(SELECT pm.post_id FROM ". $this->postmeta ." pm WHERE meta_key='_entry_id' AND meta_value=$d)";
+                                        $subquery = "SELECT ID FROM ". $this->posts ." p WHERE p.post_type='$formType' AND ID=(SELECT pm.post_id FROM ". $this->postmeta ." pm WHERE meta_key='_entry_id' AND meta_value=$entry)";
                                     }
 
-                                    $post_id = $this->get_sql_results($subquery,"row");
+                                    $post_id = $this->getSQLResults($subquery,"row");
                                     if (is_object($post_id)) {
                                         $remove = false;
                                         $encontrados++;
@@ -199,7 +191,7 @@ class AcolheSUSReports
     private function get_form_config($form_id)
     {
         $sql = "SELECT config FROM " . $this->caldera_forms . " WHERE form_id='$form_id'";
-        $result = $this->get_sql_results($sql, "row");
+        $result = $this->getSQLResults($sql, "row");
 
         if (is_object($result)) {
             $return = $result->config;
@@ -222,7 +214,7 @@ class AcolheSUSReports
         if (is_string($field_id)) {
             $sql = "SELECT COUNT(*) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND value='$value'";
 
-            return $this->get_sql_results($sql, "row")->total;
+            return $this->getSQLResults($sql, "row")->total;
         }
     }
 
@@ -232,11 +224,11 @@ class AcolheSUSReports
         if (is_string($field_id)) {
             if ($closed) {
                 $sql = "SELECT count(*) as total, value FROM " . $this->caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC";
-                return $this->get_sql_results($sql, "total");
+                return $this->getSQLResults($sql, "total");
             } else {
                 $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
 
-                return $this->get_sql_results($sql, "row")->total;
+                return $this->getSQLResults($sql, "row")->total;
             }
         }
 
@@ -244,9 +236,8 @@ class AcolheSUSReports
     }
 
     public function getStateFilter($formType,$field_id,$state) {
-
         $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$state';";
-        $state_ids = $this->get_sql_results($sql, "total");
+        $state_ids = $this->getSQLResults($sql, "total");
 
         $entry_ids = [];
         if (is_array($state_ids)) {
@@ -254,7 +245,7 @@ class AcolheSUSReports
                 $_id = $state->ID;
                 if (!is_null($_id)) {
                     $sql = "SELECT meta_value as total FROM $this->postmeta WHERE meta_key='_entry_id' AND post_id=$_id";
-                    $formulario = $this->get_sql_results($sql, "row");
+                    $formulario = $this->getSQLResults($sql, "row");
 
                     if (!is_null($formulario) && is_object($formulario)) {
                         $entry_ids[] = $formulario->total;
@@ -274,11 +265,47 @@ class AcolheSUSReports
             }
             $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND entry_id $condition";
 
-            return $this->get_sql_results($sql, "row")->total;
+            return $this->getSQLResults($sql, "row")->total;
         }
     }
 
-    private function get_sql_results($sql, $type) {
+    private function setSubQueryForState($formType, $entry, $state) {
+        $query = "SELECT ID FROM ". $this->posts ." p 
+                          INNER JOIN ". $this->postmeta ." as mt ON mt.post_id = p.ID 
+                          INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
+                                     WHERE p.post_type='$formType'
+                                     AND mt.meta_key='acolhesus_campo' AND mt.meta_value='$state'
+                                     AND mta.meta_key='_entry_id' AND mta.meta_value=$entry";
+
+        return $query;
+    }
+
+    private function setSubQueryForPhase($formType, $entry, $phase) {
+        $query = "SELECT ID FROM ". $this->posts ." p 
+                          INNER JOIN ". $this->postmeta ." as mt ON mt.post_id = p.ID 
+                          INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
+                                     WHERE p.post_type='$formType'
+                                     AND mt.meta_key='acolhesus_fase' AND mt.meta_value='$phase'
+                                     AND mta.meta_key='_entry_id' AND mta.meta_value=$entry";
+
+        return $query;
+    }
+
+    private function setQueryForEqualAnswers($value) {
+        return "SELECT entry_id FROM " . $this->caldera_entries . " WHERE value LIKE '$value'";
+    }
+
+    private function hasStateFilter()
+    {
+       return (isset($_POST["campo"]) && (strlen($_POST["campo"]) === 2));
+    }
+
+    private function hasPhaseFilter()
+    {
+        return (isset($_POST["fase"]) && (strlen($_POST["fase"]) >= 6));
+    }
+
+    private function getSQLResults($sql, $type) {
         global $wpdb;
 
         if ("row" === $type) {
