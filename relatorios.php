@@ -17,7 +17,7 @@ if (current_user_can('administrator')) {
             <div class="text-center">
                 <form method="POST" class="reports acolhesus-reports" id="reports-filter" style="border-bottom: 1px solid #eaeaea; width: 100%; float: left; padding-bottom: 2%; margin-bottom: 2%;">
                     <div class="col-md-12">
-                        <?php $view->renderFilters(false); ?>
+                        <?php $view->renderFilters(false,false); ?>
                     </div>
                     <div class="col-md-12 btn-wrapper no-padding" style="margin-top: 20px">
                         <input class="btn btn-default btn-info filter-forms" type="submit" value="Gerar Relatórios"/>

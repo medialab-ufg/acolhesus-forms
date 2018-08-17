@@ -61,9 +61,13 @@ class AcolheSUSView extends AcolheSUS {
     }
 
 
-    public function renderFilters($showForms = true) {
+    public function renderFilters($showForms = true, $showAxis = true) {
         $filtros = $this->filtros;
         if (!$showForms) {
+            array_pop($filtros);
+        }
+
+        if (!$showAxis) {
             array_pop($filtros);
         }
 
@@ -84,7 +88,11 @@ class AcolheSUSView extends AcolheSUS {
             if (!$showForms) {
                 $_filtered = "";
                 $style = "style='font-size: 20px; margin-bottom: 10px; color: black'";
-                $html .= "<div class='col-md-4'>";
+                $class = 4;
+                if(!$showAxis)
+                    $class = 6;
+
+                $html .= "<div class='col-md-$class'>";
             }
 
             $html .= "<h3 class='form-title' $style>" . $props['singular'] . " <span class='used_filter'>" . $_filtered . " </span></h3>";
