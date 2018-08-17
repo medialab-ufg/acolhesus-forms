@@ -141,8 +141,8 @@ class AcolheSUSReports
 
                                     /*
                                      * TODO: Quebrar esses selects em outras funções
-                                     * */
-                                    if (isset($_POST["campo"])) {
+                                     * */                                    
+                                    if (isset($_POST["campo"]) && (strlen($_POST["campo"]) === 2) ) {
                                         $_campo = sanitize_text_field($_POST["campo"]);
                                         $subquery = "SELECT ID 
                                                     FROM ". $this->posts ." p 
