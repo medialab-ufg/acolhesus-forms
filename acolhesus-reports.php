@@ -70,25 +70,25 @@ class AcolheSUSReports
     {
         $c = 0;
         $total_geral = 0;
-        $t = "";
+        $table_row = "";
         foreach ($this->get_form_fields($formType) as $id => $campo ) {
             $tipo = $campo["type"];
-            $e = "";
+            $info_data = "";
 
-            if ( in_array($tipo, $this->report_fields) ) {
+            if (in_array($tipo, $this->report_fields)) {
                 if (is_null($state)) {
-                    $v = intval($this->getAnswerStats($id));
+                    $value = intval($this->getAnswerStats($id));
                 } else if (is_string($state) && (strlen($state) === 2)) {
-                    $v = $this->getStateFilter($formType, $id, $state);
-                    if (is_string($v)) {
-                        $v = intval($v);
+                    $value = $this->getStateFilter($formType, $id, $state);
+                    if (is_string($value)) {
+                        $value = intval($value);
                     } else {
-                        $v = "---";
+                        $value = "---";
                     }
                 }
 
-                $e = $this->renderAnswerRow($v, $campo["label"]);
-                $e .= $this->renderAnswerRow(""," ");
+                $info_data = $this->renderAnswerRow($value, $campo["label"]);
+                $info_data .= $this->renderAnswerRow(""," ");
 
                 if ($campo["type"] === "number") {
                     if ($c === 4) {
@@ -103,17 +103,17 @@ class AcolheSUSReports
 
             } else if ($tipo === "html" && !in_array($id, $this->excluded_fields)) {
 
-                $e = "<td> " . $campo["config"]["default"] . "</td>";
-                $e .= $this->renderAnswerRow(""," ");
-                $e .= $this->renderAnswerRow(""," ");
+                $info_data = "<td> " . $campo["config"]["default"] . "</td>";
+                $info_data .= $this->renderAnswerRow(""," ");
+                $info_data .= $this->renderAnswerRow(""," ");
 
             } else if ($tipo === "toggle_switch") {
                 $sim = $this->getTotal($id, "Sim");
                 $nao = $this->getTotal($id, "Não");
-                $e = "<td> " . $campo["label"] . "</td>";
+                $info_data = "<td> " . $campo["label"] . "</td>";
 
-                $e .= $this->renderAnswerRow($sim," Sim");
-                $e .= $this->renderAnswerRow($nao, " Não");
+                $info_data .= $this->renderAnswerRow($sim," Sim");
+                $info_data .= $this->renderAnswerRow($nao, " Não");
             } else if ($tipo === "filtered_select2") {
                 $respostas_fechadas = $this->getAnswerStats($id, true);
 
@@ -172,16 +172,16 @@ class AcolheSUSReports
                     }
                 }
 
-                $e = $this->renderAnswerRow($html,"$conta respostas");
-                $e .= "<td>" . $campo["label"] . "</td>";
+                $info_data = $this->renderAnswerRow($html,"$conta respostas");
+                $info_data .= "<td>" . $campo["label"] . "</td>";
             }
 
-            $t .= "<tr>";
-            $t .= $e;
-            $t .= "</tr>";
+            $table_row .= "<tr>";
+            $table_row .= $info_data;
+            $table_row .= "</tr>";
         }
 
-        return $t;
+        return $table_row;
     }
 
     private function renderAnswerRow($total, $label) {
