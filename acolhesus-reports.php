@@ -196,6 +196,11 @@ class AcolheSUSReports
                 $info_data = $this->getToggleData($id,$campo["label"]);
             } else if ($tipo === "filtered_select2") {
                 $info_data = $this->getControlledSelectData($id,$campo["label"],$formType);
+            }  else {
+                if ($formType === "matriz_p_criticos" && "wysiwyg" === $tipo) {
+                    $r = $this->getAnswer($id);
+                    $info_data = $this->renderAnswerRow($campo["label"],$r);
+                }
             }
 
             $table_row .= "<tr>";
@@ -260,6 +265,18 @@ class AcolheSUSReports
         }
 
         return [];
+    }
+
+    private function getAnswer($field_id)
+    {
+        $sql = "SELECT value FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
+        $data = $this->getSQLResults($sql,"row");
+
+        if (is_object($data)) {
+            return $data->value;
+        }
+
+        return " --- ";
     }
 
     private function getFilterFor($type, $formType, $field_id, $value) {
