@@ -53,8 +53,8 @@ class AcolheSUSReports
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th> Total </th>
-                    <th> Detalhes </th>
+                    <th> Questão </th>
+                    <th> Total Geral </th>
                     <th></th>
                 </tr>
                 </thead>
@@ -81,6 +81,20 @@ class AcolheSUSReports
         return $row;
     }
 
+    private function getHTMLData($label)
+    {
+        $row = "<td> $label </td>" . $this->renderAnswerRow(""," ");
+        return $row;
+    }
+
+    private function getNumericData($label,$value)
+    {
+        $row = $this->renderAnswerRow($label, $value);
+        $row .= $this->renderAnswerRow("","");
+
+        return $row;
+    }
+
     private function generateReportData($formType, $state = null)
     {
         $c = 0;
@@ -102,8 +116,7 @@ class AcolheSUSReports
                     }
                 }
 
-                $info_data = $this->renderAnswerRow($value, $campo["label"]);
-                $info_data .= $this->renderAnswerRow(""," ");
+                $info_data = $this->getNumericData($campo["label"],$value);
 
                 if ($campo["type"] === "number") {
                     if ($c === 4) {
@@ -117,11 +130,7 @@ class AcolheSUSReports
                 }
 
             } else if ($tipo === "html" && !in_array($id, $this->excluded_fields)) {
-
-                $info_data = "<td> " . $campo["config"]["default"] . "</td>";
-                $info_data .= $this->renderAnswerRow(""," ");
-                $info_data .= $this->renderAnswerRow(""," ");
-
+                $info_data = $this->getHTMLData($campo["config"]["default"]);
             } else if ($tipo === "toggle_switch") {
                 $info_data = $this->getToggleData($id,$campo["label"]);
             } else if ($tipo === "filtered_select2") {
