@@ -61,7 +61,7 @@ class AcolheSUSView extends AcolheSUS {
     }
 
 
-    public function renderFilters($showForms = true, $showAxis = true) {
+    public function renderFilters($showForms = true, $showAxis = true, $showPhase = true) {
         $filtros = $this->filtros;
         if (!$showForms) {
             array_pop($filtros);
@@ -71,9 +71,13 @@ class AcolheSUSView extends AcolheSUS {
             array_pop($filtros);
         }
 
+        if (!$showPhase) {
+            array_pop($filtros);
+        }
+
         foreach ($filtros as $filtro => $props) {
 
-            // Deixar assim só até fechar layout dos relatórios
+            // Manter assim apenas até deliberar sobre layout dos relatórios
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $opt = (isset($_POST[$filtro]) ) ? $_POST[$filtro] : '';
             } else {
@@ -89,8 +93,10 @@ class AcolheSUSView extends AcolheSUS {
                 $_filtered = "";
                 $style = "style='font-size: 20px; margin-bottom: 10px; color: black'";
                 $class = 4;
-                if(!$showAxis)
+                if (!$showAxis)
                     $class = 6;
+                if (!$showPhase)
+                    $class = 12;
 
                 $html .= "<div class='col-md-$class'>";
             }
