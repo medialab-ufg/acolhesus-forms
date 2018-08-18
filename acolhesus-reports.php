@@ -172,11 +172,6 @@ class AcolheSUSReports
 
                 if (is_string($state) && (strlen($state) === 2)) {
                     $value = $this->getFilterFor("campo",$formType, $id, $state);
-                    if (is_string($value)) {
-                        $value = intval($value);
-                    } else {
-                        $value = "---";
-                    }
                 } else if (is_string($phase)) {
                     $value = $this->getFilterFor("fase",$formType, $id, $phase);
                 } else {
@@ -303,7 +298,13 @@ class AcolheSUSReports
             }
             $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND entry_id $condition";
 
-            return $this->getSQLResults($sql, "row")->total;
+            $res = $this->getSQLResults($sql, "row")->total;
+
+            if (is_null($res)) {
+                $res = "---";
+            }
+
+            return $res;
         }
     }
 
