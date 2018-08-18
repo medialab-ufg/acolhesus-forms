@@ -97,6 +97,68 @@ class AcolheSUSReports
         return $row;
     }
 
+    private function getControlledSelectData($field_id, $label,$formType)
+    {
+        $respostas_fechadas = $this->getAnswerStats($field_id, true);
+        if (is_array($respostas_fechadas) && count($respostas_fechadas) > 0) {
+            $conta = $total = 0;
+            $html = $label . "<hr>";
+            foreach ($respostas_fechadas as $stats) {
+                if (is_object($stats)) {
+                    $total += $stats->total;
+                    $_entry = $stats->value;
+                    $final = $_entry;
+                    $answer_post_ids = $this->setQueryForEqualAnswers($_entry);
+
+                    $__ids = $this->getSQLResults($answer_post_ids,"total");
+                    if (is_array($__ids) && count($__ids) > 0) {
+                        $buffer = "&nbsp;&nbsp; <a data-toggle='collapse' href='#link-$conta' class='collapsed btn btn-default' aria-expanded='false'>Ver links</a>";
+                        $buffer .= "<div id='link-$conta' class='panel-collapse collapse' aria-expanded='false'>";
+
+                        $_found = 0;
+                        $remove = true;
+                        foreach($__ids as $_id) {
+                            $entry = $_id->entry_id;
+                            if ($this->hasAllFilters()) {
+                                $subquery = $this->setSubQueryForAllFilters($formType, $entry);
+                            } else if ($this->hasStateFilter() ) {
+                                $subquery = $this->setSubQueryForState($formType, $entry);
+                            } else if ($this->hasPhaseFilter()) {
+                                $subquery = $this->setSubQueryForPhase($formType, $entry);
+                            } else {
+                                $subquery = $this->setDefaultSubQuery($formType,$entry);
+                            }
+
+                            $post_id = $this->getSQLResults($subquery,"row");
+                            if (is_object($post_id)) {
+                                $remove = false;
+                                $_found++;
+                                $post_id = $post_id->ID;
+
+                                $link = get_permalink($post_id);
+                                $title = get_the_title($post_id);
+
+                                $buffer .= "<p> <a href='$link' target='_blank'>$title</a></p>";
+                                $conta++;
+                            }
+                        }
+                    }
+
+                    if (!$remove) {
+                        $final .= $buffer ."</div><hr>";
+                        $html .= $_found . " - " . $final;
+
+                    }
+                }
+            }
+        }
+
+        $row = $this->renderAnswerRow($html,"$conta respostas");
+        $row .= $this->renderAnswerRow("","");
+
+        return $row;
+    }
+
     private function generateReportData($formType, $state = null)
     {
         $c = 0;
@@ -119,7 +181,6 @@ class AcolheSUSReports
                 }
 
                 $info_data = $this->getNumericData($campo["label"],$value);
-
                 if ($campo["type"] === "number") {
                     if ($c === 4) {
                         $c = -1;
@@ -136,65 +197,7 @@ class AcolheSUSReports
             } else if ($tipo === "toggle_switch") {
                 $info_data = $this->getToggleData($id,$campo["label"]);
             } else if ($tipo === "filtered_select2") {
-                $respostas_fechadas = $this->getAnswerStats($id, true);
-
-                $html = "";
-                $total = 0;
-                if (is_array($respostas_fechadas) && count($respostas_fechadas) > 0) {
-                    $conta = 0;
-                    foreach ($respostas_fechadas as $stats) {
-                        if (is_object($stats)) {
-                            $total += $stats->total;
-                            $_entry = $stats->value;
-                            $final = $_entry;
-                            $answer_post_ids = $this->setQueryForEqualAnswers($_entry);
-
-                            $__ids = $this->getSQLResults($answer_post_ids,"total");
-
-                            if (is_array($__ids) && count($__ids) > 0) {
-                                $buffer = "&nbsp;&nbsp; <a data-toggle='collapse' href='#link-$conta' class='collapsed btn btn-default' aria-expanded='false'>Ver links</a>";
-                                $buffer .= "<div id='link-$conta' class='panel-collapse collapse' aria-expanded='false'>";
-
-                                $encontrados = 0;
-                                $remove = true;
-                                foreach($__ids as $_id) {
-                                    $entry = $_id->entry_id;
-                                    if ($this->hasAllFilters()) {
-                                        $subquery = $this->setSubQueryForAllFilters($formType, $entry);
-                                    } else if ($this->hasStateFilter() ) {
-                                        $subquery = $this->setSubQueryForState($formType, $entry);
-                                    } else if ($this->hasPhaseFilter()) {
-                                        $subquery = $this->setSubQueryForPhase($formType, $entry);
-                                    } else {
-                                        $subquery = "SELECT ID FROM ". $this->posts ." p WHERE p.post_type='$formType' AND ID=(SELECT pm.post_id FROM ". $this->postmeta ." pm WHERE meta_key='_entry_id' AND meta_value=$entry)";
-                                    }
-
-                                    $post_id = $this->getSQLResults($subquery,"row");
-                                    if (is_object($post_id)) {
-                                        $remove = false;
-                                        $encontrados++;
-                                        $post_id = $post_id->ID;
-
-                                        $link = get_permalink($post_id);
-                                        $title = get_the_title($post_id);
-
-                                        $buffer .= "<p> <a href='$link' target='_blank'>$title</a></p>";
-                                        $conta++;
-                                    }
-                                }
-                            }
-
-                            if (!$remove) {
-                                $final .= $buffer ."</div><hr>";
-                                $html .= $encontrados . " - " . $final;
-
-                            }
-                        }
-                    }
-                }
-
-                $info_data = $this->renderAnswerRow($html,"$conta respostas");
-                $info_data .= "<td>" . $campo["label"] . "</td>";
+                $info_data = $this->getControlledSelectData($id,$campo["label"],$formType);
             }
 
             $table_row .= "<tr>";
@@ -307,6 +310,12 @@ class AcolheSUSReports
 
     private function setSubQueryForAllFilters($formType, $entry) {
         return $this->baseFilterQuery("all",$formType, $entry,"");
+    }
+
+    private function setDefaultSubQuery($formType,$entry)
+    {
+        $query = "SELECT ID FROM ". $this->posts ." p WHERE p.post_type='$formType' AND ID=(SELECT pm.post_id FROM ". $this->postmeta ." pm WHERE meta_key='_entry_id' AND meta_value=$entry)";
+        return $query;
     }
 
     private function setQueryForEqualAnswers($value) {
