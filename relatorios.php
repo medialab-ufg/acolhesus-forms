@@ -20,19 +20,23 @@ if (current_user_can('administrator')) {
                         <?php $view->renderFilters(false,false); ?>
                     </div>
                     <div class="col-md-12 btn-wrapper no-padding" style="margin-top: 20px">
-                        <input class="btn btn-default btn-info filter-forms" type="submit" value="Gerar Relatórios"/>
+                        <input class="btn btn-default btn-info filter-forms" type="submit" value="Gerar Relatório"/>
                     </div>
                 </form>
             </div>
 
             <div style="margin-top: 2px;padding: 20px;">
                 <?php
-                $campo = null;
-                if (isset($_POST["campo"]) && strlen($_POST["campo"]) === 2) {
+                $campo = $fase = null;
+                if ($report->hasStateFilter()) {
                     $campo = sanitize_text_field($_POST["campo"]);
                 }
 
-                $report->renderReports($form, $campo); ?>
+                if ($report->hasPhaseFilter()) {
+                    $fase = sanitize_text_field($_POST["fase"]);
+                }
+
+                $report->renderReports($form, $campo, $fase); ?>
             </div>
         </div>
 

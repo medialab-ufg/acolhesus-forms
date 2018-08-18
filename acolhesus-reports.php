@@ -47,9 +47,9 @@ class AcolheSUSReports
         return $form['form_ids'][$form_type];
     }
 
-    public function renderReports($formType, $state = null)
+    public function renderReports($formType, $state = null,$phase = null)
     {
-        $data = $this->generateReportData($formType,$state);
+        $data = $this->generateReportData($formType,$state,$phase);
         if (is_string($data) && strlen($data) > 100) {
             ?>
             <table class="table table-hover">
@@ -159,7 +159,7 @@ class AcolheSUSReports
         return $row;
     }
 
-    private function generateReportData($formType, $state = null)
+    private function generateReportData($formType, $state = null, $phase = null)
     {
         $c = 0;
         $total_geral = 0;
@@ -169,15 +169,18 @@ class AcolheSUSReports
             $info_data = "";
 
             if (in_array($tipo, $this->report_fields)) {
-                if (is_null($state)) {
-                    $value = intval($this->getAnswerStats($id));
-                } else if (is_string($state) && (strlen($state) === 2)) {
-                    $value = $this->getStateFilter($formType, $id, $state);
+
+                if (is_string($state) && (strlen($state) === 2)) {
+                    $value = $this->getFilterFor("campo",$formType, $id, $state);
                     if (is_string($value)) {
                         $value = intval($value);
                     } else {
                         $value = "---";
                     }
+                } else if (is_string($phase)) {
+                    $value = $this->getFilterFor("fase",$formType, $id, $phase);
+                } else {
+                    $value = intval($this->getAnswerStats($id));
                 }
 
                 $info_data = $this->getNumericData($campo["label"],$value);
@@ -264,8 +267,14 @@ class AcolheSUSReports
         return [];
     }
 
-    private function getStateFilter($formType,$field_id,$state) {
-        $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$state';";
+    private function getFilterFor($type, $formType, $field_id, $value) {
+        if ("fase" === $type) {
+            $key = "acolhesus_fase";
+        } else if("campo" === $type) {
+            $key = "acolhesus_campo";
+        }
+
+        $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='$key' AND pm.meta_value='$value';";
         $state_ids = $this->getSQLResults($sql, "total");
 
         $entry_ids = [];
@@ -357,12 +366,12 @@ class AcolheSUSReports
         return $sql;
     }
 
-    private function hasStateFilter()
+    public function hasStateFilter()
     {
        return (isset($_POST["campo"]) && (strlen($_POST["campo"]) === 2));
     }
 
-    private function hasPhaseFilter()
+    public function hasPhaseFilter()
     {
         return (isset($_POST["fase"]) && (strlen($_POST["fase"]) >= 6));
     }
