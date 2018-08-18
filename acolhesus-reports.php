@@ -66,12 +66,27 @@ class AcolheSUSReports
         }
     }
 
+    private function getToggleData($field_id,$label)
+    {
+        $sim = $this->getTotal($field_id, "Sim");
+        $nao = $this->getTotal($field_id, "Não");
+
+        $s = $this->formatSmall("(Sim)");
+        $n = $this->formatSmall("(Não)");
+
+        $row = "<td> $label </td>";
+        $row .= $this->renderAnswerRow($sim . " $s/ " . $nao . " $n",'');
+        $row .= $this->renderAnswerRow("", "");
+
+        return $row;
+    }
+
     private function generateReportData($formType, $state = null)
     {
         $c = 0;
         $total_geral = 0;
         $table_row = "";
-        foreach ($this->getFormFields($formType) as $id => $campo ) {
+        foreach ($this->getFormFields($formType) as $id => $campo) {
             $tipo = $campo["type"];
             $info_data = "";
 
@@ -108,12 +123,7 @@ class AcolheSUSReports
                 $info_data .= $this->renderAnswerRow(""," ");
 
             } else if ($tipo === "toggle_switch") {
-                $sim = $this->getTotal($id, "Sim");
-                $nao = $this->getTotal($id, "Não");
-                $info_data = "<td> " . $campo["label"] . "</td>";
-
-                $info_data .= $this->renderAnswerRow($sim," Sim");
-                $info_data .= $this->renderAnswerRow($nao, " Não");
+                $info_data = $this->getToggleData($id,$campo["label"]);
             } else if ($tipo === "filtered_select2") {
                 $respostas_fechadas = $this->getAnswerStats($id, true);
 
@@ -185,7 +195,12 @@ class AcolheSUSReports
     }
 
     private function renderAnswerRow($total, $label) {
-        return "<td> $total </td> <td> <span><i><small> $label </small></i></span> </td>";
+        $text = $this->formatSmall($label);
+        return "<td> $total </td> <td> $text </td>";
+    }
+
+    private function formatSmall($text) {
+        return "<span><i><small> $text </small></i></span>";
     }
 
     private function getFormConfig($form_id)
