@@ -20,7 +20,10 @@ if (current_user_can('administrator')) {
                         <?php $view->renderFilters(false,false); ?>
                     </div>
                     <div class="col-md-12 btn-wrapper no-padding" style="margin-top: 20px">
-                        <input class="btn btn-default btn-info filter-forms" type="submit" value="Gerar Relatório"/>
+                        <input type="submit" class="btn btn-default btn-info filter-forms" value="Gerar Relatório"/>
+                        <?php if (!$report->hasStateFilter() && !$report->hasPhaseFilter()) { ?>
+                            <input type="reset" class="btn btn-default" form="reports-filter"  value="Limpar Filtros" />
+                        <?php } ?>
                     </div>
                 </form>
             </div>
