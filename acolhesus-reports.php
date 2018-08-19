@@ -199,7 +199,16 @@ class AcolheSUSReports
             } else {
                 if ($formType === "matriz_p_criticos" && "wysiwyg" === $tipo) {
                     $r = $this->getAnswer($id,$formType);
-                    $info_data = $this->renderAnswerRow($campo["label"],$r);
+                    if (is_array($r)) {
+                        $result = "";
+                        foreach($r as $answer) {
+                            $result .= $answer->value . "<hr>";
+                        }
+                    } else {
+                        $result = $r;
+                    }   
+                    
+                    $info_data = $this->renderAnswerRow($campo["label"], $result);
                 }
             }
 
@@ -287,11 +296,13 @@ class AcolheSUSReports
 
         } else {
             $sql = "SELECT value FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
-            $data = $this->getSQLResults($sql,"row");            
+            $data = $this->getSQLResults($sql,"total");           
         }
 
         if (is_object($data)) {
             return $data->value;
+        } else if (is_array($data)) {
+            return $data;
         }
 
         return " --- ";
