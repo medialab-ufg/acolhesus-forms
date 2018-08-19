@@ -159,6 +159,28 @@ class AcolheSUSReports
         return $row;
     }
 
+    private function getVisualEditorData($field_id, $label,$formType)
+    {
+        if ($formType === "matriz_p_criticos") {
+            $r = $this->getAnswer($field_id,$formType);
+            if (is_array($r)) {
+                $result = "";
+                foreach($r as $answer) {
+                    $sql = "SELECT post_id FROM $this->postmeta WHERE meta_key='_entry_id' AND meta_value=$answer->entry_id";
+                    $id = $this->getSQLResults($sql,"row");
+                    $state = get_post_meta($id->post_id, "acolhesus_campo",true);
+                    $result .= "<h4>$state</h4>" . $answer->value . "<hr>";
+                }
+            } else {
+                $result = $r;
+            }   
+            
+            $row = $this->renderAnswerRow($label, $result);
+
+            return $row;
+        }
+    }
+
     private function generateReportData($formType, $state = null, $phase = null)
     {
         $c = 0;
@@ -196,20 +218,8 @@ class AcolheSUSReports
                 $info_data = $this->getToggleData($id,$campo["label"]);
             } else if ($tipo === "filtered_select2") {
                 $info_data = $this->getControlledSelectData($id,$campo["label"],$formType);
-            } else {
-                if ($formType === "matriz_p_criticos" && "wysiwyg" === $tipo) {
-                    $r = $this->getAnswer($id,$formType);
-                    if (is_array($r)) {
-                        $result = "";
-                        foreach($r as $answer) {
-                            $result .= $answer->value . "<hr>";
-                        }
-                    } else {
-                        $result = $r;
-                    }   
-                    
-                    $info_data = $this->renderAnswerRow($campo["label"], $result);
-                }
+            } else if ($tipo === "wysiwyg") {
+                $info_data = $this->getVisualEditorData($id,$campo["label"],$formType);                
             }
 
             $table_row .= "<tr>";
@@ -295,7 +305,7 @@ class AcolheSUSReports
             }
 
         } else {
-            $sql = "SELECT value FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
+            $sql = "SELECT entry_id, value FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
             $data = $this->getSQLResults($sql,"total");           
         }
 
