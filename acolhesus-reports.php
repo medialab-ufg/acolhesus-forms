@@ -196,9 +196,9 @@ class AcolheSUSReports
                 $info_data = $this->getToggleData($id,$campo["label"]);
             } else if ($tipo === "filtered_select2") {
                 $info_data = $this->getControlledSelectData($id,$campo["label"],$formType);
-            }  else {
+            } else {
                 if ($formType === "matriz_p_criticos" && "wysiwyg" === $tipo) {
-                    $r = $this->getAnswer($id);
+                    $r = $this->getAnswer($id,$formType);
                     $info_data = $this->renderAnswerRow($campo["label"],$r);
                 }
             }
@@ -267,10 +267,28 @@ class AcolheSUSReports
         return [];
     }
 
-    private function getAnswer($field_id)
+    private function getAnswer($field_id,$formType)
     {
-        $sql = "SELECT value FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
-        $data = $this->getSQLResults($sql,"row");
+        if ($this->hasStateFilter()) {
+            $key = "acolhesus_campo";
+            $campo = sanitize_text_field( $_POST["campo"] );
+            $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='$key' AND pm.meta_value='$campo';";
+            $data = $this->getSQLResults($sql,"row");
+
+            $sql = "SELECT meta_value as entry FROM $this->postmeta WHERE post_id=$data->ID AND meta_key='_entry_id'";
+            $r = $this->getSQLResults($sql,"row");
+
+            if (is_object($r)) {
+                $sql = "SELECT value FROM $this->caldera_entries WHERE field_id='$field_id' AND entry_id='$r->entry'";
+                $data = $this->getSQLResults($sql,"row");
+            } else {
+                $data = null;
+            }
+
+        } else {
+            $sql = "SELECT value FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
+            $data = $this->getSQLResults($sql,"row");            
+        }
 
         if (is_object($data)) {
             return $data->value;
