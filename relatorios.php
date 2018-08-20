@@ -34,11 +34,11 @@ if (current_user_can('administrator')) {
                 <?php
                 $campo = $fase = null;
                 if ($report->hasStateFilter()) {
-                    $campo = sanitize_text_field($_POST["campo"]);
+                    $campo = $report->getState();
                 }
 
                 if ($report->hasPhaseFilter()) {
-                    $fase = sanitize_text_field($_POST["fase"]);
+                    $fase = $report->getPhase();
                 }
 
                 $report->renderReports($form, $campo, $fase); ?>

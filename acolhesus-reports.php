@@ -68,6 +68,20 @@ class AcolheSUSReports
         }
     }
 
+    public function getState()
+    {
+        if ($this->hasStateFilter()) {
+            return sanitize_text_field($_POST["campo"]);
+        }
+    }
+
+    public function getPhase()
+    {
+        if ($this->hasPhaseFilter()) {
+            return sanitize_text_field($_POST["fase"]);
+        }
+    }
+
     private function getToggleData($field_id,$label)
     {
         $sim = $this->getTotal($field_id, "Sim");
@@ -365,12 +379,12 @@ class AcolheSUSReports
     }
 
     private function setSubQueryForState($formType, $entry) {
-        $state = sanitize_text_field($_POST["campo"]);
+        $state = $this->getState();
         return $this->baseFilterQuery("campo",$formType, $entry, $state);
     }
 
     private function setSubQueryForPhase($formType, $entry) {
-        $phase = sanitize_text_field($_POST["fase"]);
+        $phase = $this->getPhase();
         return $this->baseFilterQuery("fase",$formType, $entry, $phase);
     }
 
@@ -394,8 +408,8 @@ class AcolheSUSReports
         $sufix_sql = " AND mt.meta_key='_entry_id' AND mt.meta_value=$entry;";
 
         if ("all" === $tipo) {
-            $state = sanitize_text_field($_POST["campo"]);
-            $phase = sanitize_text_field($_POST["fase"]);
+            $state = $this->getState();
+            $phase = $this->getPhase();
 
             $query = " INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
                        INNER JOIN ". $this->postmeta ." as mtc ON mtc.post_id = p.ID 
