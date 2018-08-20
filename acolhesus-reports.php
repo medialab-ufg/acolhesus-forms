@@ -82,10 +82,10 @@ class AcolheSUSReports
         }
     }
 
-    private function getToggleData($field_id,$label)
+    private function getToggleData($field_id,$label,$type)
     {
-        $sim = $this->getTotal($field_id, "Sim");
-        $nao = $this->getTotal($field_id, "Não");
+        $sim = $this->getTotal($field_id, "Sim",$type);
+        $nao = $this->getTotal($field_id, "Não",$type);
 
         $s = $this->formatSmall("(Sim)");
         $n = $this->formatSmall("(Não)");
@@ -229,7 +229,7 @@ class AcolheSUSReports
             } else if ($tipo === "html" && !in_array($id, $this->excluded_fields)) {
                 $info_data = $this->getHTMLData($campo["config"]["default"]);
             } else if ($tipo === "toggle_switch") {
-                $info_data = $this->getToggleData($id,$campo["label"]);
+                $info_data = $this->getToggleData($id,$campo["label"],$formType);
             } else if ($tipo === "filtered_select2") {
                 $info_data = $this->getControlledSelectData($id,$campo["label"],$formType);
             } else if ($tipo === "wysiwyg") {
@@ -274,10 +274,28 @@ class AcolheSUSReports
         return "<p class='text-center'> Formulário não configurado. </p>";
     }
 
-    private function getTotal($field_id, $value)
+    private function getTotal($field_id, $value,$formType)
     {
         if (is_string($field_id)) {
-            $sql = "SELECT COUNT(*) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND value='$value'";
+            if ($this->hasStateFilter()) {
+                $key = "acolhesus_campo";
+                $campo = $this->getState();
+                $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='$key' AND pm.meta_value='$campo';";
+                $id = $this->getSQLResults($sql,"row");
+                if (is_object($id)) {
+                    $entry = get_post_meta($id->ID, '_entry_id',true);
+                    if ($entry) {
+                        $sql = "SELECT COUNT(*) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND value='$value' AND entry_id=$entry";
+                        $data = $this->getSQLResults($sql,"row");
+
+                        return $data->total;
+                    } else {
+                        return '-';
+                    }
+                }
+            } else {
+                $sql = "SELECT COUNT(*) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND value='$value'";
+            }
 
             return $this->getSQLResults($sql, "row")->total;
         }
@@ -285,14 +303,12 @@ class AcolheSUSReports
 
     private function getAnswerStats($field_id, $closed = false)
     {
-
         if (is_string($field_id)) {
             if ($closed) {
                 $sql = "SELECT count(*) as total, value FROM " . $this->caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC";
                 return $this->getSQLResults($sql, "total");
             } else {
                 $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id'";
-
                 return $this->getSQLResults($sql, "row")->total;
             }
         }
@@ -304,7 +320,7 @@ class AcolheSUSReports
     {
         if ($this->hasStateFilter()) {
             $key = "acolhesus_campo";
-            $campo = sanitize_text_field( $_POST["campo"] );
+            $campo = $this->getState();
             $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='$key' AND pm.meta_value='$campo';";
             $data = $this->getSQLResults($sql,"row");
 
