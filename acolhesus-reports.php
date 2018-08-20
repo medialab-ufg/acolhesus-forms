@@ -11,6 +11,7 @@ class AcolheSUSReports
         "fld_1473627", // "Anexar documentos" avaliacao grupos
         "fld_2690227", // "Anexar documentos" avaliacao grupos
         "fld_1093061", // "Data" avaliacao grupos
+        "fld_6620960", // "Anexos" matriz de cenários
     ];
 
     private $caldera_forms;
