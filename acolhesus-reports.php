@@ -57,7 +57,7 @@ class AcolheSUSReports
     public function getState()
     {
         if ($this->hasStateFilter()) {
-            $state = $this->filters["state"];
+            $state = $this->getCampo();
             return esc_attr(sanitize_text_field($_POST[$state]));
         }
     }
@@ -65,7 +65,7 @@ class AcolheSUSReports
     public function getPhase()
     {
         if ($this->hasPhaseFilter()) {
-            $phase = $this->filters["phase"];
+            $phase = $this->getFase();
             return esc_attr(sanitize_text_field($_POST[$phase]));
         }
     }
@@ -90,6 +90,16 @@ class AcolheSUSReports
         } else {
             echo "<p class='text-center'> Relatório não disponível para este formulário! </p>";
         }
+    }
+
+    private function getCampo()
+    {
+        return $this->filters["state"];
+    }
+
+    private function getFase()
+    {
+        return $this->filters["phase"];
     }
 
     private function getFormFields($form)
@@ -273,9 +283,9 @@ class AcolheSUSReports
             if (in_array($tipo, $this->report_fields)) {
 
                 if (is_string($state) && (strlen($state) === 2)) {
-                    $value = $this->getFilterFor("campo",$formType, $id, $state);
+                    $value = $this->getFilterFor($this->getCampo(),$formType, $id, $state);
                 } else if (is_string($phase)) {
-                    $value = $this->getFilterFor("fase",$formType, $id, $phase);
+                    $value = $this->getFilterFor($this->getFase(),$formType, $id, $phase);
                 } else {
                     $value = intval($this->getAnswerStats($id));
                 }
@@ -418,9 +428,9 @@ class AcolheSUSReports
     }
 
     private function getFilterFor($type, $formType, $field_id, $value) {
-        if ("fase" === $type) {
+        if ($this->getFase() === $type) {
             $key = "acolhesus_fase";
-        } else if("campo" === $type) {
+        } else if($this->getCampo() === $type) {
             $key = "acolhesus_campo";
         }
 
@@ -465,12 +475,12 @@ class AcolheSUSReports
 
     private function setSubQueryForState($formType, $entry) {
         $state = $this->getState();
-        return $this->baseFilterQuery("campo",$formType, $entry, $state);
+        return $this->baseFilterQuery($this->getCampo(),$formType, $entry, $state);
     }
 
     private function setSubQueryForPhase($formType, $entry) {
         $phase = $this->getPhase();
-        return $this->baseFilterQuery("fase",$formType, $entry, $phase);
+        return $this->baseFilterQuery($this->getFase(),$formType, $entry, $phase);
     }
 
     private function setSubQueryForAllFilters($formType, $entry) {
@@ -504,9 +514,9 @@ class AcolheSUSReports
 
             $sql = $base_sql . $query . $sufix_sql;
         } else {
-            if ("fase" === $tipo) {
+            if ($this->getFase() === $tipo) {
                 $key = "acolhesus_fase";
-            } else if ("campo" === $tipo) {
+            } else if ($this->getCampo() === $tipo) {
                 $key = "acolhesus_campo";
             } else {
                 return "";
