@@ -84,15 +84,19 @@ class AcolheSUSReports
 
     private function getToggleData($field_id,$label,$type)
     {
-        $sim = $this->getTotal($field_id, "Sim",$type);
-        $nao = $this->getTotal($field_id, "Não",$type);
+        if ($this->hasStateFilter()) {
+            $resposta = $this->getTotal($field_id, $type);
+        } else {
+            $sim = $this->getTotal($field_id, $type,"Sim");
+            $nao = $this->getTotal($field_id, $type,"Não");
+            $s = $this->formatSmall("(Sim)");
+            $n = $this->formatSmall("(Não)");
 
-        $s = $this->formatSmall("(Sim)");
-        $n = $this->formatSmall("(Não)");
+            $resposta = $sim . " $s/ " . $nao . " $n";
+        }
 
-        $row = "<td> $label </td>";
-        $row .= $this->renderAnswerRow($sim . " $s/ " . $nao . " $n",'');
-        $row .= $this->renderAnswerRow("", "");
+        $row = "<td style='width: 85%'> $label </td>";
+        $row .= $this->renderAnswerRow($resposta,'');
 
         return $row;
     }
@@ -274,7 +278,7 @@ class AcolheSUSReports
         return "<p class='text-center'> Formulário não configurado. </p>";
     }
 
-    private function getTotal($field_id, $value,$formType)
+    private function getTotal($field_id, $formType, $value='')
     {
         if (is_string($field_id)) {
             if ($this->hasStateFilter()) {
@@ -285,10 +289,13 @@ class AcolheSUSReports
                 if (is_object($id)) {
                     $entry = get_post_meta($id->ID, '_entry_id',true);
                     if ($entry) {
-                        $sql = "SELECT COUNT(*) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND value='$value' AND entry_id=$entry";
+                        $sql = "SELECT value FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND entry_id=$entry";
                         $data = $this->getSQLResults($sql,"row");
-
-                        return $data->total;
+                        if (is_object($data)) {
+                            return $data->value;
+                        } else {
+                            return '-';
+                        }
                     } else {
                         return '-';
                     }
