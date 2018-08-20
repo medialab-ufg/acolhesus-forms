@@ -56,9 +56,9 @@ class AcolheSUSReports
         return $form['form_ids'][$form_type];
     }
 
-    public function renderReports($formType, $state = null,$phase = null)
+    public function renderReports($formType)
     {
-        $data = $this->generateReportData($formType,$state,$phase);
+        $data = $this->generateReportData($formType);
         if (is_string($data) && strlen($data) > 100) {
             ?>
             <table class="table table-striped">
@@ -236,8 +236,17 @@ class AcolheSUSReports
         }
     }
 
-    private function generateReportData($formType, $state = null, $phase = null)
+    private function generateReportData($formType)
     {
+        $state = $phase = null;
+        if ($this->hasStateFilter()) {
+            $state = $this->getState();
+        }
+
+        if ($this->hasPhaseFilter()) {
+            $phase = $this->getPhase();
+        }
+
         $c = 0;
         $total_geral = 0;
         $table_row = "";

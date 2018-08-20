@@ -102,6 +102,8 @@
   border-radius: 10px; }
 .acolhesus-form-container .options {
   margin-top: 25px; }
+.acolhesus-form-container .options a {
+  margin-bottom: 10px; }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
   background-color: #003c46 !important; }
@@ -274,5 +276,23 @@
   text-align: center; }
   .lista-geral input.filter-forms:hover {
     background: #0b7a6f; }
+
+.reports-wrapper {
+  color: black; }
+  .reports-wrapper form.acolhesus-reports {
+    border-bottom: 1px solid #eaeaea;
+    width: 100%;
+    float: left;
+    padding-bottom: 2%;
+    margin-bottom: 2%; }
+    .reports-wrapper form.acolhesus-reports .btn-wrapper {
+      margin-top: 20px; }
+  .reports-wrapper .results-date {
+    border-bottom: 1px solid;
+    padding-bottom: 10px;
+    margin-bottom: 30px; }
+  .reports-wrapper .report-results {
+    margin-top: 2px;
+    padding: 20px; }
 
 /*# sourceMappingURL=acolhesus.css.map */
