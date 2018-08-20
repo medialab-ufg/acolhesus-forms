@@ -19,6 +19,14 @@ class AcolheSUSReports
     private $posts;
     private $postmeta;
 
+    // Apenas por enquanto
+    private $fases = [
+        'fase_1' => 'Fase | - Análise Situacional',
+        'fase_2' => 'Fase || - Elaboração e Modelização do Plano de Trabalho',
+        'fase_3' => 'Fase ||| - Implementação, Monitoramento e Avaliação',
+        'macrogestao' => 'Macrogestão'
+    ];
+
     public function __construct()
     {
         global $wpdb;
@@ -53,12 +61,13 @@ class AcolheSUSReports
         $data = $this->generateReportData($formType,$state,$phase);
         if (is_string($data) && strlen($data) > 100) {
             ?>
-            <table class="table table-hover">
-                <thead>
+            <table class="table table-striped">
+                <thead style="background: #003c46; color: white">
                 <tr>
                     <th> Questão </th>
                     <th> Total Geral </th>
-                    <th></th>
+                    <th> </th>
+                    <th> </th>
                 </tr>
                 </thead>
                 <tbody> <?php echo $data; ?> </tbody>
@@ -116,6 +125,56 @@ class AcolheSUSReports
         return $row;
     }
 
+    private function getSubTable($dados, &$_found,&$conta,&$remove,$formType)
+    {
+        $_data = "";
+        foreach ($dados as $_id) {
+            $entry = $_id->entry_id;
+            if ($this->hasAllFilters()) {
+                $subquery = $this->setSubQueryForAllFilters($formType, $entry);
+            } else if ($this->hasStateFilter() ) {
+                $subquery = $this->setSubQueryForState($formType, $entry);
+            } else if ($this->hasPhaseFilter()) {
+                $subquery = $this->setSubQueryForPhase($formType, $entry);
+            } else {
+                $subquery = $this->setDefaultSubQuery($formType,$entry);
+            }
+
+            $post_id = $this->getSQLResults($subquery,"row");
+            if (is_object($post_id)) {
+                $remove = false;
+                $_found++;
+                $post_id = $post_id->ID;
+
+                $link = get_permalink($post_id);
+                $title = get_the_title($post_id);
+
+                $a_element = "<a href='$link' target='_blank'>$title</a>";
+
+                // $autor = get_the_author_meta('display_name', $post_author_id = get_post_field( 'post_author', $post_id ));
+                $data = get_the_date('d/m/Y - G:i:s',$post_id);
+
+                $uf = get_post_meta($post_id, "acolhesus_campo",true);
+                $fase = $this->fases[get_post_meta($post_id, "acolhesus_fase",true)];
+                $_data .= "<tr> <td>$a_element </td> <td>($uf) - $fase </td> <td>$data</td> </tr>";
+                $conta++;
+            }
+
+        }
+
+        return "<table class='table table-condensed table-hover table-bordered' style='text-align: center'>
+            <thead>
+                <tr>
+                    <th> Resposta </th>
+                    <th> Dados </th>
+                    <th> Data Criação </th>                    
+                </tr>
+            </thead>
+            <tbody> $_data </tbody>
+         </table>
+        ";
+    }
+
     private function getControlledSelectData($field_id, $label,$formType)
     {
         $respostas_fechadas = $this->getAnswerStats($field_id, true);
@@ -126,41 +185,18 @@ class AcolheSUSReports
                 if (is_object($stats)) {
                     $total += $stats->total;
                     $_entry = $stats->value;
-                    $final = $_entry;
+                    $final = '';
                     $answer_post_ids = $this->setQueryForEqualAnswers($_entry);
 
                     $__ids = $this->getSQLResults($answer_post_ids,"total");
                     if (is_array($__ids) && count($__ids) > 0) {
-                        $buffer = "&nbsp;&nbsp; <a data-toggle='collapse' href='#link-$conta' class='collapsed btn btn-default' aria-expanded='false'>Ver links</a>";
+                        $buffer = "<a data-toggle='collapse' href='#link-$conta' class='collapsed' aria-expanded='false'>$_entry</a>";
                         $buffer .= "<div id='link-$conta' class='panel-collapse collapse' aria-expanded='false'>";
 
                         $_found = 0;
                         $remove = true;
-                        foreach($__ids as $_id) {
-                            $entry = $_id->entry_id;
-                            if ($this->hasAllFilters()) {
-                                $subquery = $this->setSubQueryForAllFilters($formType, $entry);
-                            } else if ($this->hasStateFilter() ) {
-                                $subquery = $this->setSubQueryForState($formType, $entry);
-                            } else if ($this->hasPhaseFilter()) {
-                                $subquery = $this->setSubQueryForPhase($formType, $entry);
-                            } else {
-                                $subquery = $this->setDefaultSubQuery($formType,$entry);
-                            }
 
-                            $post_id = $this->getSQLResults($subquery,"row");
-                            if (is_object($post_id)) {
-                                $remove = false;
-                                $_found++;
-                                $post_id = $post_id->ID;
-
-                                $link = get_permalink($post_id);
-                                $title = get_the_title($post_id);
-
-                                $buffer .= "<p> <a href='$link' target='_blank'>$title</a></p>";
-                                $conta++;
-                            }
-                        }
+                        $buffer .= $this->getSubTable($__ids,$_found,$conta,$remove,$formType);
                     }
 
                     if (!$remove) {
