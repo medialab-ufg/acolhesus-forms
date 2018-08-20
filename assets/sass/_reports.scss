@@ -23,4 +23,19 @@
     padding: 20px;
   }
 
+  table {
+    thead.reports-header {
+      background: $dark_green;
+      color: white;
+    }
+
+    td.matriz-cenario-question {
+      width: 80%;
+    }
+
+    &.subtable {
+      text-align: center;
+    }
+  }
+
 } // .reports-wrapper

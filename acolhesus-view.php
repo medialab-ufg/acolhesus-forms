@@ -122,7 +122,7 @@ class AcolheSUSView extends AcolheSUS {
                 $forms = [$_form_filter => $forms[$_form_filter]];
             } else {
                 $forms = [];
-                echo "<pre style='text-align: center'> Formulário inexistente! </pre>";
+                echo "<pre class='text-center'> Formulário inexistente! </pre>";
                 return $forms;
             }
         }

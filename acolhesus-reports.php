@@ -62,7 +62,7 @@ class AcolheSUSReports
         if (is_string($data) && strlen($data) > 100) {
             ?>
             <table class="table table-striped">
-                <thead style="background: #003c46; color: white">
+                <thead class="reports-header">
                 <tr>
                     <th> Questão </th>
                     <th> Total Geral </th>
@@ -105,7 +105,7 @@ class AcolheSUSReports
             $resposta = $sim . " $s/ " . $nao . " $n";
         }
 
-        $row = "<td style='width: 85%'> $label </td>";
+        $row = "<td class='matriz-cenario-question'> $label </td>";
         $row .= $this->renderAnswerRow($resposta,'');
 
         return $row;
@@ -162,7 +162,7 @@ class AcolheSUSReports
 
         }
 
-        return "<table class='table table-condensed table-hover table-bordered' style='text-align: center'>
+        return "<table class='table table-condensed table-hover table-bordered subtable'>
             <thead>
                 <tr>
                     <th> Resposta </th>

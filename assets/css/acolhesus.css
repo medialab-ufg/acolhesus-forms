@@ -186,6 +186,8 @@
     color: white; }
     .acolhesus-form-container .add-entry .add_acolhesus_entry:hover {
       background: #0b7a6f; }
+  .acolhesus-form-container a.abrir-relatorios {
+    float: right; }
 
 .entry-status {
   float: right;
@@ -294,5 +296,12 @@
   .reports-wrapper .report-results {
     margin-top: 2px;
     padding: 20px; }
+  .reports-wrapper table thead.reports-header {
+    background: #003c46;
+    color: white; }
+  .reports-wrapper table td.matriz-cenario-question {
+    width: 80%; }
+  .reports-wrapper table.subtable {
+    text-align: center; }
 
 /*# sourceMappingURL=acolhesus.css.map */
