@@ -14,6 +14,11 @@ class AcolheSUSReports
         "fld_6620960", // "Anexos" matriz de cenários
     ];
 
+    private $filters = [
+        "state" => "campo",
+        "phase" => "fase"
+    ];
+
     private $caldera_forms;
     private $caldera_entries;
     private $posts;
@@ -37,23 +42,32 @@ class AcolheSUSReports
         $this->postmeta = $wpdb->prefix . 'postmeta';
     }
 
-    private function getFormFields($form)
+    public function hasStateFilter()
     {
-        $caldera_form_id = $this->formId($form);
-        $form_config = $this->getFormConfig($caldera_form_id);
-
-        if (is_array($form_config) && array_key_exists("fields", $form_config)) {
-            return $form_config["fields"];
-        }
-
-        return [];
+        $state = $this->filters["state"];
+        return (isset($_POST[$state]) && (strlen($_POST[$state]) === 2));
     }
 
-    private function formId($form_type)
+    public function hasPhaseFilter()
     {
-        $form = get_option("acolhesus");
+        $phase = $this->filters["phase"];
+        return (isset($_POST[$phase]) && (strlen($_POST[$phase]) >= 6));
+    }
 
-        return $form['form_ids'][$form_type];
+    public function getState()
+    {
+        if ($this->hasStateFilter()) {
+            $state = $this->filters["state"];
+            return esc_attr(sanitize_text_field($_POST[$state]));
+        }
+    }
+
+    public function getPhase()
+    {
+        if ($this->hasPhaseFilter()) {
+            $phase = $this->filters["phase"];
+            return esc_attr(sanitize_text_field($_POST[$phase]));
+        }
     }
 
     public function renderReports($formType)
@@ -78,18 +92,23 @@ class AcolheSUSReports
         }
     }
 
-    public function getState()
+    private function getFormFields($form)
     {
-        if ($this->hasStateFilter()) {
-            return sanitize_text_field($_POST["campo"]);
+        $caldera_form_id = $this->formId($form);
+        $form_config = $this->getFormConfig($caldera_form_id);
+
+        if (is_array($form_config) && array_key_exists("fields", $form_config)) {
+            return $form_config["fields"];
         }
+
+        return [];
     }
 
-    public function getPhase()
+    private function formId($form_type)
     {
-        if ($this->hasPhaseFilter()) {
-            return sanitize_text_field($_POST["fase"]);
-        }
+        $form = get_option("acolhesus");
+
+        return $form['form_ids'][$form_type];
     }
 
     private function getToggleData($field_id,$label,$type)
@@ -119,7 +138,7 @@ class AcolheSUSReports
 
     private function getNumericData($label,$value)
     {
-        $row = $this->renderAnswerRow($label, $value);
+        $row = $this->renderAnswerRow($label, intval($value));
         $row .= $this->renderAnswerRow("","");
 
         return $row;
@@ -148,14 +167,11 @@ class AcolheSUSReports
 
                 $link = get_permalink($post_id);
                 $title = get_the_title($post_id);
-
-                $a_element = "<a href='$link' target='_blank'>$title</a>";
-
-                // $autor = get_the_author_meta('display_name', $post_author_id = get_post_field( 'post_author', $post_id ));
                 $data = get_the_date('d/m/Y - G:i:s',$post_id);
-
                 $uf = get_post_meta($post_id, "acolhesus_campo",true);
                 $fase = $this->fases[get_post_meta($post_id, "acolhesus_fase",true)];
+
+                $a_element = "<a href='$link' target='_blank'>$title</a>";
                 $_data .= "<tr> <td>$a_element </td> <td>($uf) - $fase </td> <td>$data</td> </tr>";
                 $conta++;
             }
@@ -504,16 +520,6 @@ class AcolheSUSReports
         }
 
         return $sql;
-    }
-
-    public function hasStateFilter()
-    {
-       return (isset($_POST["campo"]) && (strlen($_POST["campo"]) === 2));
-    }
-
-    public function hasPhaseFilter()
-    {
-        return (isset($_POST["fase"]) && (strlen($_POST["fase"]) >= 6));
     }
 
     private function hasAllFilters()
