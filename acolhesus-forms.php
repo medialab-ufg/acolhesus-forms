@@ -1424,6 +1424,10 @@ class AcolheSUS {
         return get_user_meta($userID, 'acolhesus_campos');
     }
 
+    public function user_can_see_states() {
+        return is_array($this->get_user_campos()) && (count($this->get_user_campos()) > 0);
+    }
+
     public function get_user_forms_perms($userID = null) {
         if (is_null($userID))
             $userID = get_current_user_id();
