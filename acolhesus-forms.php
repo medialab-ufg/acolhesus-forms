@@ -340,18 +340,32 @@ class AcolheSUS {
 
     }
 
-    function ajax_callback_notify_user()
+    /*function ajax_callback_notify_user()
     {
         if( current_user_can(self::CGPNH) )
         {
-            /*global $RHSNotifications;
+            global $wpdb, $RHSNotifications;
 
-            $current_user = wp_get_current_user();
+            $sql = "
+                SELECT user_id FROM ".$wpdb->prefix."cf_form_entries 
+                    WHERE form_id = '".$_POST['form_id']."' 
+                    LIMIT 1            
+            ";
+            $user_id = $wpdb->get_results($sql);
+            if($user_id)
+            {
+                $user_id = $user_id[0]->user_id;
+            }
 
-            $RHSNotifications->add_notification(RHSNotifications::CHANNEL_COMMENTS, );*/
-            print(get_the_author());
+
+            //print_r($RHSNotifications);
+            //$comment_ID = $RHSNotifications->lop();
+            //print "Comment ID: ". $comment_ID;
+            //$c = get_comment($comment_ID);
+
+            //$RHSNotifications->add_notification(RHSNotifications::CHANNEL_COMMENTS, );
         }
-    }
+    }*/
 
     function get_old_attachment($form, $referrer, $process_id, $entry_id)
     {
