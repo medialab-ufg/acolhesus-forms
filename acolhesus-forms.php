@@ -1373,7 +1373,7 @@ class AcolheSUS {
                 $meta_query = [];
 				
 				if (isset($_GET['campo']) && !empty($_GET['campo'])) {
-					$meta_query[] = [
+				    $meta_query[] = [
 						'key' => self::CAMPO_META,
 						'value' => $_GET['campo'],
 					];

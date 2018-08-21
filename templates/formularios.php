@@ -49,12 +49,15 @@ else:
                         $link = get_post_type_archive_link($formName);
                         $ver_todos = "Ver todas as respostas de " . $nome;
 
-                        // Essa query é modificada pelo pre_get_posts que tem na classe principal do plugin
-                        $wp_query = new WP_Query([
-                            'post_type' => $formName,
-                            'post_status' => 'publish',
-                            'posts_per_page' => -1,
-                        ]);
+                        if(!empty(get_user_meta(get_current_user_id(), 'acolhesus_campos')))
+                        {
+                            // Essa query é modificada pelo pre_get_posts que tem na classe principal do plugin
+                            $wp_query = new WP_Query([
+                                'post_type' => $formName,
+                                'post_status' => 'publish',
+                                'posts_per_page' => -1,
+                            ]);
+                        }
                         ?>
                         <h3 class="form-title"> <?php echo $nome; ?> </h3>
                         <div class="panel">
