@@ -825,7 +825,11 @@ class AcolheSUS {
             $form .= $created_form;
 
             if (!empty($created_form) && $this->can_save_incomplete($formType)) {
-                $form .= '<button class="save_for_later btn btn-info" type="button">Salvar</button>';
+                $permissions = get_user_meta(get_current_user_id(), 'acolhesus_form_perms');
+                if(in_array("editar_".$formType, $permissions))
+                {
+                    $form .= '<button class="save_for_later btn btn-info" type="button">Salvar</button>';
+                }
             }
 
             $form .= "<div id='acolhesus_form_anexos'></div>";
@@ -848,7 +852,13 @@ class AcolheSUS {
         if (isset($this->forms[$formType]) && (true !== $this->forms[$formType]['uma_entrada_por_campo']) ) {
             // Variável que caldera forms envia após submit do form
             if (!isset($_GET['cf_su'])) {
-                $is_locked = $this->is_entry_locked($_post_id);
+                $permissions = get_user_meta(get_current_user_id(), 'acolhesus_form_perms');
+                if(in_array("editar_".$formType, $permissions))
+                {
+                    $is_locked = false;
+                }else $is_locked = true;
+                //$is_locked = $this->is_entry_locked($_post_id);
+
                 $extra_info = "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
             }
         }
@@ -1108,11 +1118,17 @@ class AcolheSUS {
         $campoAtual = get_post_meta($post->ID, self::CAMPO_META, true);
         $faseAtual = get_post_meta($post->ID, 'acolhesus_fase', true);
 
-        $options = $this->get_campos_do_usuario_as_options($campoAtual);
-        $camposHtml = $this->get_fixed_select("Campo de atuação", "acolhesus_campo", $attr, $post->ID, $options);
+        if($is_locked === false || $faseAtual)
+        {
+            $options = $this->get_campos_do_usuario_as_options($campoAtual);
+            $camposHtml = $this->get_fixed_select("Campo de atuação", "acolhesus_campo", $attr, $post->ID, $options);
+        }else  $camposHtml = '';
 
-		$options = $this->get_fases_as_options($faseAtual);
-        $faseHtml = $this->get_fixed_select("Fase", "acolhesus_fase", $attr, $post->ID, $options);
+        if($faseAtual || $is_locked === false)
+        {
+            $options = $this->get_fases_as_options($faseAtual);
+            $faseHtml = $this->get_fixed_select("Fase", "acolhesus_fase", $attr, $post->ID, $options);
+        }else $faseHtml = '';
 
         if ($this->form_type_has_axis($type)) {
             $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);

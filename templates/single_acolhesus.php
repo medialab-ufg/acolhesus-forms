@@ -5,7 +5,7 @@ $post_type = get_post_type();
 $post_id = get_the_ID();
 $_sem_diligencias = ["avaliacao_grupos", "avaliacao_oficina","relatorio_oficina","memoria_reuniao", "atividades_dispersao"];
 $_possui_diligencias = !in_array($post_type, $_sem_diligencias);
-$_view_perm = "ver_" . $post_type;
+$_view_perm = "editar_" . $post_type;
 $can_user_view = in_array($_view_perm, get_user_meta(get_current_user_id(), 'acolhesus_form_perms'));
 $is_new_form = get_post_meta($post_id, 'new_form', true);
 
