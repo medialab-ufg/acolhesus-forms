@@ -710,7 +710,7 @@ class AcolheSUS {
     function acolhesus_add_entry_btn_callback($type) {
         if (!is_null($type) && $this->can_add_entry($type)) {
            $obj = get_post_type_object($type);
-           if ($obj instanceof WP_Post_Type) {
+           if ($obj instanceof WP_Post_Type && $this->can_user_edit($type)) {
                $f_name = $obj->labels->singular_name; ?>
                <div class="add-entry">
                    <button class="add_acolhesus_entry btn" data-newTitle="<?php echo $f_name ?>" data-postType="<?php echo $type; ?>">
