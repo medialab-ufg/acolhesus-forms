@@ -447,30 +447,59 @@ class AcolheSUS {
                 {//Exists
                     if(!is_array($value))
                     {//Others
-                        $return = $this->search_in_array($current_values, $index);
-                        if(is_array($return))
+                        $alt_vals = explode(",", $value);
+                        if($alt_vals[0] === "autocomplete")
                         {
-                            $old_value = $return[0];
-
-                        }
-
-                        if($old_value != $value)
-                        {
-                            if(!empty($old_value))
+                            unset($alt_vals[0]);
+                            $return = $this->search_in_array($current_values, $index);
+                            $array_diff = array_diff($return, $alt_vals);
+                            if(!empty($array_diff))
                             {
-                                $old_value .= " para ";
+                                $old_value = implode(", ", $return);
+                                $old_value .= " <u>para</u> ";
+                                $old_value .= implode(", ", $alt_vals);
+                                $msg .= $fields[$index]['label'].": $old_value <br/>";
+
+                                $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+                                $wpdb->query($delete_sql);
+
+                                foreach ($alt_vals as $alt_val){
+                                    if(!is_numeric($alt_val))
+                                    {
+                                        $alt_val = "'".$alt_val."'";
+                                    }
+
+                                    $slug = "'".$fields[$index]['slug']."'";
+                                    $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, '".$index."', $slug, $alt_val)";
+                                    $wpdb->query($sql);
+                                }
+                            }
+                        }else
+                        {
+                            $return = $this->search_in_array($current_values, $index);
+                            if(is_array($return))
+                            {
+                                $old_value = $return[0];
                             }
 
-                            $msg .= $fields[$index]['label'].": $old_value $value <br/>";
-
-                            if(!is_numeric($value))
+                            if($old_value != $value)
                             {
-                                $value = "'".$value."'";
+                                if(!empty($old_value))
+                                {
+                                    $old_value .= " <u>para</u> ";
+                                }
+
+                                $msg .= $fields[$index]['label'].": $old_value $value <br/>";
+
+                                if(!is_numeric($value))
+                                {
+                                    $value = "'".$value."'";
+                                }
+
+                                $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
+
+                                $wpdb->query($sql);
                             }
-
-                            $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
-
-                            $wpdb->query($sql);
                         }
                     }else{//Checkbox
                         $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
@@ -576,6 +605,8 @@ class AcolheSUS {
             $AcolheSUSLogger->log($_POST['_cf_cr_pst'], ' salvou o formulário ', $msg);
         }
     }
+
+
 
     function search_in_array(&$current_value, $search)
     {

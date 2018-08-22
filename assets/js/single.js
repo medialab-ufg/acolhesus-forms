@@ -386,7 +386,7 @@ function save_for_later() {
             sessionStorage.removeItem('rhs_input_file');
             swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
             setTimeout(function () {
-               window.location.reload();
+               //window.location.reload();
             }, 1000);
         }
     };
@@ -398,9 +398,20 @@ function save_for_later() {
 function get_save(query, all_inputs) {
     var nodes = document.querySelectorAll(query);
     Array.prototype.forEach.call (nodes, function (node) {
-        var name = node.name, value;
-
-        if(node.type != 'radio' || node.tagName == 'A')
+        var id = node.name, value;
+        if(query == 'select' && node.style.display == 'none')
+        {
+            id = id.substring(0, id.indexOf('['));
+            value = [];
+            value.push("autocomplete");
+            jQuery("div[id *="+id+"] ul li").each(function (index, val) {
+                var text = jQuery(val).find("div").text().trim();
+                if(text !== '')
+                {
+                    value.push(text)
+                }
+            })
+        }else if(node.type != 'radio' || node.tagName == 'A')
         {
             value = node.value;
         }
@@ -415,7 +426,7 @@ function get_save(query, all_inputs) {
 
         if(value)
         {
-            all_inputs.append(name, value);
+            all_inputs.append(id, value);
         }
     } );
 }
