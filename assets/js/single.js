@@ -68,13 +68,6 @@ jQuery( function( $ ) {
         }
     }
 
-    var current_form_id = $('.caldera-grid form').attr('id');
-    $('form#' + current_form_id).submit(function (e) {
-        e.preventDefault();
-        $($fixed_state_phase).change();
-        return false;
-    });
-
     /*
     * Ações que devem ser executadas caso usuário não possa editar aquele formulário.
     * Ou por falta de permissão (apenas pode visualizar) ou porque o mesmo já foi fechado (validado).
