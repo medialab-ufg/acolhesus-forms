@@ -427,13 +427,3 @@ jQuery(document).on('cf.validate.FormSuccess', function(event, obj) {
     jQuery('#acolhesus_form_anexos').hide();
     jQuery('#form-accordion').hide();
 });
-
-/*
-jQuery(document).on('submit', "#form-comentario", function (event) {
-    jQuery.post(acolhesus.ajax_url, {
-        action: 'acolhesus_notify_user',
-        form_id: jQuery("form.caldera_forms_form").data('cfajax')
-    }).success(function (r) {
-        console.log("Notifyed");
-    });
-});*/

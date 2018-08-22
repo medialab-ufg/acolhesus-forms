@@ -294,8 +294,6 @@ class AcolheSUS {
 
         add_filter('caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
 
-        add_action('wp_ajax_acolhesus_notify_user', array(&$this, 'ajax_callback_notify_user'));
-
         add_action('wp_ajax_acolhesus_verify_indicadores_info', array(&$this, 'ajax_callback_verify_indicadores_info'));
     }
 
@@ -339,33 +337,6 @@ class AcolheSUS {
         return;
 
     }
-
-    /*function ajax_callback_notify_user()
-    {
-        if( current_user_can(self::CGPNH) )
-        {
-            global $wpdb, $RHSNotifications;
-
-            $sql = "
-                SELECT user_id FROM ".$wpdb->prefix."cf_form_entries 
-                    WHERE form_id = '".$_POST['form_id']."' 
-                    LIMIT 1            
-            ";
-            $user_id = $wpdb->get_results($sql);
-            if($user_id)
-            {
-                $user_id = $user_id[0]->user_id;
-            }
-
-
-            //print_r($RHSNotifications);
-            //$comment_ID = $RHSNotifications->lop();
-            //print "Comment ID: ". $comment_ID;
-            //$c = get_comment($comment_ID);
-
-            //$RHSNotifications->add_notification(RHSNotifications::CHANNEL_COMMENTS, );
-        }
-    }*/
 
     function get_old_attachment($form, $referrer, $process_id, $entry_id)
     {
