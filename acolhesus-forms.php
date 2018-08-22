@@ -1209,16 +1209,24 @@ class AcolheSUS {
     function toggle_lock_form_entries() {
         $_id = sanitize_text_field($_POST['form_id']);
         $toggle = $this->is_entry_locked($_id);
-        if (update_post_meta($_id, "locked", !$toggle)) {
-            $estado = (!$toggle) ? "fechado" : "aberto";
-            echo json_encode([
-                'success' => "Formulário $estado para edição!",
-                'list' => $this->get_entry_strings($_id)
-            ]);
-            do_action('acolhesus_toggle_lock_entry', $_id, !$toggle);
-        }
+        if(get_post_meta($_id, "acolhe_sus_add_as_saved", true) == 1)
+        {
+            if (update_post_meta($_id, "locked", !$toggle)) {
+                $estado = (!$toggle) ? "fechado" : "aberto";
+                echo json_encode([
+                    'success' => "Formulário $estado para edição!",
+                    'list' => $this->get_entry_strings($_id)
+                ]);
+                do_action('acolhesus_toggle_lock_entry', $_id, !$toggle);
+            }
 
-        wp_die();
+            wp_die();
+        }else {
+            echo json_encode([
+                'warning' => "Há campos obrigratórios não preenchidos"
+            ]);
+            wp_die();
+        }
     }
 
     private function get_entry_strings($id) {

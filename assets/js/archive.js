@@ -67,6 +67,9 @@ jQuery( function( $ ) {
                     if (r.success) {
                         swal({ title: r.success });
                         toggleEntryStatus(entry.id,r.list);
+                    }else
+                    {
+                        swal({ title: r.warning });
                     }
                 });
             }

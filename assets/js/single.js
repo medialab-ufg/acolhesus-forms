@@ -276,7 +276,6 @@ jQuery( function( $ ) {
             if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '' || $(fase_selector).val() === '')
             {
                 $(":input[type=submit]").prop("disabled", true);
-                $('.acolhesus_basic_info_selector').change();
             } else $(":input[type=submit]").prop("disabled", false);
 
             var div = document.createElement('div');
@@ -312,7 +311,6 @@ jQuery( function( $ ) {
                             $("#cant_save").hide();
                         }else{
                             $(":input[type=submit]").prop("disabled", true);
-                            $('.acolhesus_basic_info_selector').change();
                             $("#cant_save").show();
                         }
                     });
@@ -324,14 +322,12 @@ jQuery( function( $ ) {
         if($(fase_selector).val() === '')
         {
             $(":input[type=submit]").prop("disabled", true);
-            $('.acolhesus_basic_info_selector').change();
         }else $(":input[type=submit]").prop("disabled", false);
 
         $(document).on('change', fase_selector, function () {
             if($(fase_selector).val() === '')
             {
                 $(":input[type=submit]").prop("disabled", true);
-                $('.acolhesus_basic_info_selector').change();
             }else $(":input[type=submit]").prop("disabled", false);
         });
     }
