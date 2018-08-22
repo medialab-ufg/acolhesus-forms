@@ -15,7 +15,7 @@ jQuery( function( $ ) {
         var field = $(this).attr('name');
         var $field_msg = '.' + field + " .fixed";
 
-        if ((0 === opt_val.length) && ("" === opt_val)) {
+        if (opt_val && (0 === opt_val.length) && ("" === opt_val)) {
             $(this).addClass('required-acolhesus');
             $($field_msg).show();
         } else {
@@ -38,13 +38,9 @@ jQuery( function( $ ) {
      * Ações que devem ser executadas caso seja um novo formulário recém criado
      */
     if (is_new) {
-        var campo = sessionStorage.getItem("rhs_campo"), fase = sessionStorage.getItem("rhs_fase");
-        if (campo)
-        {
-            $(campo_atuacao).val(campo);
-            sessionStorage.removeItem('rhs_campo');
-        } else $(campo_atuacao).val('');
+        set_state(campo_atuacao);
 
+        var fase = sessionStorage.getItem("rhs_fase");
         if (fase)
         {
             $(fase_selector).val(fase);
@@ -54,10 +50,8 @@ jQuery( function( $ ) {
         var data = { action: 'delete_new_form_tag', post_id: current_post_id };
         $.post(acolhesus.ajax_url, data).success(function() {
             $($fixed_state_phase).change();
-            if (campo) {
-                var valor = $(campo_atuacao + " option:selected").text();
-                $(campo_atuacao).empty().append('<option selected="selected" value="'+campo+'">'+valor+'</option>');
-            }
+            lock_state(campo_atuacao);
+            lock_phase(fase);
         });
     }
     
@@ -173,31 +167,6 @@ jQuery( function( $ ) {
     $(attachments).first().appendTo($(attachments_wrapper));
     if ((typeof $(attachments_wrapper + " ul").html() === "undefined") || ($(attachments_wrapper + " ul").html() === "")) {
         $(attachments_wrapper).remove();
-    }
-
-    function toggle_city(obj_evt, post_id, add) {
-        if (add) {
-            var _action = 'add_entry_city';
-        } else if ( add === false) {
-            var _action = 'remove_entry_city';
-        } else {
-            return false;
-        }
-
-        var event = obj_evt.event;
-        var data = event.params.data;
-
-        var total_cities = $($select_class).val();
-        if (total_cities && total_cities.length > 0) {
-            $('.cities-mc .field_required').hide();
-        } else {
-            $('.cities-mc .field_required').show();
-        }
-
-        if (_action && post_id && data.id) {
-            var del_data = { action: _action, city: data.id, post_id: post_id};
-            $.post(acolhesus.ajax_url, del_data);
-        }
     }
 
     $(attachments_wrapper + ' a.acolhesus-remove-file').on('click', function() {
@@ -333,6 +302,64 @@ jQuery( function( $ ) {
                 $(":input[type=submit]").prop("disabled", true);
             }else $(":input[type=submit]").prop("disabled", false);
         });
+    }
+
+    function get_state() {
+        return sessionStorage.getItem("rhs_campo");
+    }
+
+    function remove_state() {
+        sessionStorage.removeItem('rhs_campo');
+    }
+
+    function set_state(container) {
+        var campo = get_state();
+        if (campo) {
+            $(container).val(campo);
+        } else {
+            $(container).val('');
+        }
+    }
+
+    function lock_state(container) {
+        var state = get_state();
+        if (container && state) {
+            var hospital = $(container + " option:selected").text();
+            $(container).empty().append('<option selected="selected" value="'+state+'">'+hospital+'</option>');
+            remove_state();
+        }
+    }
+
+    function lock_phase(phase) {
+        if (phase) {
+            var fase = $(fase_selector + " option:selected").text();
+            $(fase_selector).empty().append('<option selected="selected" value="'+phase+'">'+fase+'</option>');
+        }
+    }
+
+    function toggle_city(obj_evt, post_id, add) {
+        if (add) {
+            var _action = 'add_entry_city';
+        } else if ( add === false) {
+            var _action = 'remove_entry_city';
+        } else {
+            return false;
+        }
+
+        var event = obj_evt.event;
+        var data = event.params.data;
+
+        var total_cities = $($select_class).val();
+        if (total_cities && total_cities.length > 0) {
+            $('.cities-mc .field_required').hide();
+        } else {
+            $('.cities-mc .field_required').show();
+        }
+
+        if (_action && post_id && data.id) {
+            var del_data = { action: _action, city: data.id, post_id: post_id};
+            $.post(acolhesus.ajax_url, del_data);
+        }
     }
 });
 
