@@ -1,13 +1,16 @@
 jQuery( function( $ ) {
     var no_edit = '.acolhesus-readonly';
     var base = '.acolhesus-form-container';
-    var cant_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
+    var can_not_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
     var campo_atuacao = '#acolhesus_campo_selector';
     var fase_selector = "#acolhesus_fase_selector";
     var eixo_selector = "#acolhesus_eixo_selector";
     var current_post_id = $(campo_atuacao).data('post_id');
+    var $fixed_state_phase = '.acolhesus_basic_info_selector';
+    var tag = 'input[name="novo_form"]';
+    var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
 
-    $('.acolhesus_basic_info_selector').change(function() {
+    $($fixed_state_phase).change(function() {
         var opt_val = $(this).val();
         var field = $(this).attr('name');
         var $field_msg = '.' + field + " .fixed";
@@ -31,17 +34,18 @@ jQuery( function( $ ) {
         }
     });
 
-    var tag = 'input[name="novo_form"]';
-    var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
+    /*
+     * Ações que devem ser executadas caso seja um novo formulário recém criado
+     */
     if (is_new) {
         var campo = sessionStorage.getItem("rhs_campo"), fase = sessionStorage.getItem("rhs_fase");
-        if(campo)
+        if (campo)
         {
             $(campo_atuacao).val(campo);
             sessionStorage.removeItem('rhs_campo');
         } else $(campo_atuacao).val('');
 
-        if(fase)
+        if (fase)
         {
             $(fase_selector).val(fase);
             sessionStorage.removeItem('rhs_fase');
@@ -49,7 +53,11 @@ jQuery( function( $ ) {
 
         var data = { action: 'delete_new_form_tag', post_id: current_post_id };
         $.post(acolhesus.ajax_url, data).success(function() {
-            $('.acolhesus_basic_info_selector').change();
+            $($fixed_state_phase).change();
+            if (campo) {
+                var valor = $(campo_atuacao + " option:selected").text();
+                $(campo_atuacao).empty().append('<option selected="selected" value="'+campo+'">'+valor+'</option>');
+            }
         });
     }
     
@@ -63,11 +71,15 @@ jQuery( function( $ ) {
     var current_form_id = $('.caldera-grid form').attr('id');
     $('form#' + current_form_id).submit(function (e) {
         e.preventDefault();
-        $('.acolhesus_basic_info_selector').change();
+        $($fixed_state_phase).change();
         return false;
     });
 
-    if (cant_edit) {
+    /*
+    * Ações que devem ser executadas caso usuário não possa editar aquele formulário.
+    * Ou por falta de permissão (apenas pode visualizar) ou porque o mesmo já foi fechado (validado).
+    */
+    if (can_not_edit) {
         $(base + ' ' + no_edit + ' input[type=\'submit\']').remove();
         $(base + ' ' + no_edit + ' button.cf-uploader-trigger').remove();
         $(no_edit + ' :radio').attr('disabled', true);
@@ -157,7 +169,7 @@ jQuery( function( $ ) {
         $('.cities-mc .field_required').hide();
     }
 
-    if (cant_edit) {
+    if (can_not_edit) {
         $($select_class).prop("disabled", true);
         $('.select2-container--classic .select2-selection--multiple').css('border', 0);
     }
@@ -264,7 +276,6 @@ jQuery( function( $ ) {
         })
     }
 
-
     /*Verificação de data em: Indicadores*/
     var month_id = 'fld_680040', year_id = "fld_637266";
     var month = "select[name="+month_id+"]", year = "select[name="+year_id+"]";
@@ -317,8 +328,7 @@ jQuery( function( $ ) {
                 }
             });
         }
-    }else if($(fase_selector).length > 0)
-    {
+     } else if($(fase_selector).length > 0) {
         if($(fase_selector).val() === '')
         {
             $(":input[type=submit]").prop("disabled", true);
@@ -331,9 +341,6 @@ jQuery( function( $ ) {
             }else $(":input[type=submit]").prop("disabled", false);
         });
     }
-
-
-
 });
 
 function save_for_later() {
