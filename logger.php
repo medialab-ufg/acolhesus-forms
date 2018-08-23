@@ -47,7 +47,6 @@ class AcolheSUSLogger {
             $action = 'criou estas respostas';
         }
         $message = $this->edit_session;
-        
         $this->log($post_id, $action, $message);
         add_post_meta($post_id, "acolhe_sus_add_as_saved", true);
     }
@@ -55,13 +54,17 @@ class AcolheSUSLogger {
     function save_field($entry, $field, $form, $entry_id) {
         $this->edit_session .= $field['label'] . ': ' . $entry . '<br/>';
         return $entry;
-
     }
 
     function update_field($newdata, $field, $form) {
-        
-        $this->edit_session .= $field['label'] . ': ' . $newdata . '<br/>';
-        
+        if(!is_array($newdata))
+        {
+            $this->edit_session .= $field['label'] . ': ' . $newdata . '<br/>';
+        }else
+        {
+            $this->edit_session .= $field['label'] . ': '. implode(", ", $newdata). "<br>";
+        }
+
         return $newdata;
     }
 
