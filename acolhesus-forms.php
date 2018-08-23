@@ -294,8 +294,6 @@ class AcolheSUS {
 
         add_filter('caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
 
-        add_action('wp_ajax_acolhesus_notify_user', array(&$this, 'ajax_callback_notify_user'));
-
         add_action('wp_ajax_acolhesus_verify_indicadores_info', array(&$this, 'ajax_callback_verify_indicadores_info'));
     }
 
@@ -338,19 +336,6 @@ class AcolheSUS {
         echo "true";
         return;
 
-    }
-
-    function ajax_callback_notify_user()
-    {
-        if( current_user_can(self::CGPNH) )
-        {
-            /*global $RHSNotifications;
-
-            $current_user = wp_get_current_user();
-
-            $RHSNotifications->add_notification(RHSNotifications::CHANNEL_COMMENTS, );*/
-            print(get_the_author());
-        }
     }
 
     function get_old_attachment($form, $referrer, $process_id, $entry_id)
@@ -462,30 +447,59 @@ class AcolheSUS {
                 {//Exists
                     if(!is_array($value))
                     {//Others
-                        $return = $this->search_in_array($current_values, $index);
-                        if(is_array($return))
+                        $alt_vals = explode(",", $value);
+                        if($alt_vals[0] === "autocomplete")
                         {
-                            $old_value = $return[0];
-
-                        }
-
-                        if($old_value != $value)
-                        {
-                            if(!empty($old_value))
+                            unset($alt_vals[0]);
+                            $return = $this->search_in_array($current_values, $index);
+                            $array_diff = array_diff($return, $alt_vals);
+                            if(!empty($array_diff))
                             {
-                                $old_value .= " para ";
+                                $old_value = implode(", ", $return);
+                                $old_value .= " <u>para</u> ";
+                                $old_value .= implode(", ", $alt_vals);
+                                $msg .= $fields[$index]['label'].": $old_value <br/>";
+
+                                $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+                                $wpdb->query($delete_sql);
+
+                                foreach ($alt_vals as $alt_val){
+                                    if(!is_numeric($alt_val))
+                                    {
+                                        $alt_val = "'".$alt_val."'";
+                                    }
+
+                                    $slug = "'".$fields[$index]['slug']."'";
+                                    $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, '".$index."', $slug, $alt_val)";
+                                    $wpdb->query($sql);
+                                }
+                            }
+                        }else
+                        {
+                            $return = $this->search_in_array($current_values, $index);
+                            if(is_array($return))
+                            {
+                                $old_value = $return[0];
                             }
 
-                            $msg .= $fields[$index]['label'].": $old_value $value <br/>";
-
-                            if(!is_numeric($value))
+                            if($old_value != $value)
                             {
-                                $value = "'".$value."'";
+                                if(!empty($old_value))
+                                {
+                                    $old_value .= " <u>para</u> ";
+                                }
+
+                                $msg .= $fields[$index]['label'].": $old_value $value <br/>";
+
+                                if(!is_numeric($value))
+                                {
+                                    $value = "'".$value."'";
+                                }
+
+                                $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
+
+                                $wpdb->query($sql);
                             }
-
-                            $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
-
-                            $wpdb->query($sql);
                         }
                     }else{//Checkbox
                         $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
@@ -592,6 +606,8 @@ class AcolheSUS {
         }
     }
 
+
+
     function search_in_array(&$current_value, $search)
     {
         $results = [];
@@ -696,7 +712,7 @@ class AcolheSUS {
     function acolhesus_add_entry_btn_callback($type) {
         if (!is_null($type) && $this->can_add_entry($type)) {
            $obj = get_post_type_object($type);
-           if ($obj instanceof WP_Post_Type) {
+           if ($obj instanceof WP_Post_Type && $this->can_user_edit($type)) {
                $f_name = $obj->labels->singular_name; ?>
                <div class="add-entry">
                    <button class="add_acolhesus_entry btn" data-newTitle="<?php echo $f_name ?>" data-postType="<?php echo $type; ?>">
@@ -811,7 +827,11 @@ class AcolheSUS {
             $form .= $created_form;
 
             if (!empty($created_form) && $this->can_save_incomplete($formType)) {
-                $form .= '<button class="save_for_later btn btn-info" type="button">Salvar</button>';
+                $permissions = get_user_meta(get_current_user_id(), 'acolhesus_form_perms');
+                if(in_array("editar_".$formType, $permissions))
+                {
+                    $form .= '<button class="save_for_later btn btn-info" type="button">Salvar</button>';
+                }
             }
 
             $form .= "<div id='acolhesus_form_anexos'></div>";
@@ -834,7 +854,13 @@ class AcolheSUS {
         if (isset($this->forms[$formType]) && (true !== $this->forms[$formType]['uma_entrada_por_campo']) ) {
             // Variável que caldera forms envia após submit do form
             if (!isset($_GET['cf_su'])) {
-                $is_locked = $this->is_entry_locked($_post_id);
+                $permissions = get_user_meta(get_current_user_id(), 'acolhesus_form_perms');
+                if(in_array("editar_".$formType, $permissions))
+                {
+                    $is_locked = false;
+                }else $is_locked = true;
+                //$is_locked = $this->is_entry_locked($_post_id);
+
                 $extra_info = "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
             }
         }
@@ -1094,11 +1120,17 @@ class AcolheSUS {
         $campoAtual = get_post_meta($post->ID, self::CAMPO_META, true);
         $faseAtual = get_post_meta($post->ID, 'acolhesus_fase', true);
 
-        $options = $this->get_campos_do_usuario_as_options($campoAtual);
-        $camposHtml = $this->get_fixed_select("Campo de atuação", "acolhesus_campo", $attr, $post->ID, $options);
+        if($is_locked === false || $faseAtual)
+        {
+            $options = $this->get_campos_do_usuario_as_options($campoAtual);
+            $camposHtml = $this->get_fixed_select("Campo de atuação", "acolhesus_campo", $attr, $post->ID, $options);
+        }else  $camposHtml = '';
 
-		$options = $this->get_fases_as_options($faseAtual);
-        $faseHtml = $this->get_fixed_select("Fase", "acolhesus_fase", $attr, $post->ID, $options);
+        if($faseAtual || $is_locked === false)
+        {
+            $options = $this->get_fases_as_options($faseAtual);
+            $faseHtml = $this->get_fixed_select("Fase", "acolhesus_fase", $attr, $post->ID, $options);
+        }else $faseHtml = '';
 
         if ($this->form_type_has_axis($type)) {
             $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);
@@ -1177,16 +1209,24 @@ class AcolheSUS {
     function toggle_lock_form_entries() {
         $_id = sanitize_text_field($_POST['form_id']);
         $toggle = $this->is_entry_locked($_id);
-        if (update_post_meta($_id, "locked", !$toggle)) {
-            $estado = (!$toggle) ? "fechado" : "aberto";
-            echo json_encode([
-                'success' => "Formulário $estado para edição!",
-                'list' => $this->get_entry_strings($_id)
-            ]);
-            do_action('acolhesus_toggle_lock_entry', $_id, !$toggle);
-        }
+        if(get_post_meta($_id, "acolhe_sus_add_as_saved", true) == 1)
+        {
+            if (update_post_meta($_id, "locked", !$toggle)) {
+                $estado = (!$toggle) ? "fechado" : "aberto";
+                echo json_encode([
+                    'success' => "Formulário $estado para edição!",
+                    'list' => $this->get_entry_strings($_id)
+                ]);
+                do_action('acolhesus_toggle_lock_entry', $_id, !$toggle);
+            }
 
-        wp_die();
+            wp_die();
+        }else {
+            echo json_encode([
+                'warning' => "Há campos obrigratórios não preenchidos"
+            ]);
+            wp_die();
+        }
     }
 
     private function get_entry_strings($id) {
@@ -1359,7 +1399,7 @@ class AcolheSUS {
                 $meta_query = [];
 				
 				if (isset($_GET['campo']) && !empty($_GET['campo'])) {
-					$meta_query[] = [
+				    $meta_query[] = [
 						'key' => self::CAMPO_META,
 						'value' => $_GET['campo'],
 					];
@@ -1408,6 +1448,10 @@ class AcolheSUS {
             $userID = get_current_user_id();
 
         return get_user_meta($userID, 'acolhesus_campos');
+    }
+
+    public function user_can_see_states() {
+        return is_array($this->get_user_campos()) && (count($this->get_user_campos()) > 0);
     }
 
     public function get_user_forms_perms($userID = null) {

@@ -1,13 +1,16 @@
 jQuery( function( $ ) {
     var no_edit = '.acolhesus-readonly';
     var base = '.acolhesus-form-container';
-    var cant_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
+    var can_not_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
     var campo_atuacao = '#acolhesus_campo_selector';
     var fase_selector = "#acolhesus_fase_selector";
     var eixo_selector = "#acolhesus_eixo_selector";
     var current_post_id = $(campo_atuacao).data('post_id');
+    var $fixed_state_phase = '.acolhesus_basic_info_selector';
+    var tag = 'input[name="novo_form"]';
+    var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
 
-    $('.acolhesus_basic_info_selector').change(function() {
+    $($fixed_state_phase).change(function() {
         var opt_val = $(this).val();
         var field = $(this).attr('name');
         var $field_msg = '.' + field + " .fixed";
@@ -31,17 +34,14 @@ jQuery( function( $ ) {
         }
     });
 
-    var tag = 'input[name="novo_form"]';
-    var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
+    /*
+     * Ações que devem ser executadas caso seja um novo formulário recém criado
+     */
     if (is_new) {
-        var campo = sessionStorage.getItem("rhs_campo"), fase = sessionStorage.getItem("rhs_fase");
-        if(campo)
-        {
-            $(campo_atuacao).val(campo);
-            sessionStorage.removeItem('rhs_campo');
-        } else $(campo_atuacao).val('');
+        set_state(campo_atuacao);
 
-        if(fase)
+        var fase = sessionStorage.getItem("rhs_fase");
+        if (fase)
         {
             $(fase_selector).val(fase);
             sessionStorage.removeItem('rhs_fase');
@@ -49,7 +49,9 @@ jQuery( function( $ ) {
 
         var data = { action: 'delete_new_form_tag', post_id: current_post_id };
         $.post(acolhesus.ajax_url, data).success(function() {
-            $('.acolhesus_basic_info_selector').change();
+            $($fixed_state_phase).change();
+            lock_state(campo_atuacao);
+            lock_phase(fase);
         });
     }
     
@@ -60,14 +62,11 @@ jQuery( function( $ ) {
         }
     }
 
-    var current_form_id = $('.caldera-grid form').attr('id');
-    $('form#' + current_form_id).submit(function (e) {
-        e.preventDefault();
-        $('.acolhesus_basic_info_selector').change();
-        return false;
-    });
-
-    if (cant_edit) {
+    /*
+    * Ações que devem ser executadas caso usuário não possa editar aquele formulário.
+    * Ou por falta de permissão (apenas pode visualizar) ou porque o mesmo já foi fechado (validado).
+    */
+    if (can_not_edit) {
         $(base + ' ' + no_edit + ' input[type=\'submit\']').remove();
         $(base + ' ' + no_edit + ' button.cf-uploader-trigger').remove();
         $(no_edit + ' :radio').attr('disabled', true);
@@ -157,7 +156,7 @@ jQuery( function( $ ) {
         $('.cities-mc .field_required').hide();
     }
 
-    if (cant_edit) {
+    if (can_not_edit) {
         $($select_class).prop("disabled", true);
         $('.select2-container--classic .select2-selection--multiple').css('border', 0);
     }
@@ -168,31 +167,6 @@ jQuery( function( $ ) {
     $(attachments).first().appendTo($(attachments_wrapper));
     if ((typeof $(attachments_wrapper + " ul").html() === "undefined") || ($(attachments_wrapper + " ul").html() === "")) {
         $(attachments_wrapper).remove();
-    }
-
-    function toggle_city(obj_evt, post_id, add) {
-        if (add) {
-            var _action = 'add_entry_city';
-        } else if ( add === false) {
-            var _action = 'remove_entry_city';
-        } else {
-            return false;
-        }
-
-        var event = obj_evt.event;
-        var data = event.params.data;
-
-        var total_cities = $($select_class).val();
-        if (total_cities && total_cities.length > 0) {
-            $('.cities-mc .field_required').hide();
-        } else {
-            $('.cities-mc .field_required').show();
-        }
-
-        if (_action && post_id && data.id) {
-            var del_data = { action: _action, city: data.id, post_id: post_id};
-            $.post(acolhesus.ajax_url, del_data);
-        }
     }
 
     $(attachments_wrapper + ' a.acolhesus-remove-file').on('click', function() {
@@ -264,7 +238,6 @@ jQuery( function( $ ) {
         })
     }
 
-
     /*Verificação de data em: Indicadores*/
     var month_id = 'fld_680040', year_id = "fld_637266";
     var month = "select[name="+month_id+"]", year = "select[name="+year_id+"]";
@@ -276,7 +249,6 @@ jQuery( function( $ ) {
             if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '' || $(fase_selector).val() === '')
             {
                 $(":input[type=submit]").prop("disabled", true);
-                $('.acolhesus_basic_info_selector').change();
             } else $(":input[type=submit]").prop("disabled", false);
 
             var div = document.createElement('div');
@@ -312,32 +284,83 @@ jQuery( function( $ ) {
                             $("#cant_save").hide();
                         }else{
                             $(":input[type=submit]").prop("disabled", true);
-                            $('.acolhesus_basic_info_selector').change();
                             $("#cant_save").show();
                         }
                     });
                 }
             });
         }
-    }else if($(fase_selector).length > 0)
-    {
+     } else if($(fase_selector).length > 0) {
         if($(fase_selector).val() === '')
         {
             $(":input[type=submit]").prop("disabled", true);
-            $('.acolhesus_basic_info_selector').change();
         }else $(":input[type=submit]").prop("disabled", false);
 
         $(document).on('change', fase_selector, function () {
             if($(fase_selector).val() === '')
             {
                 $(":input[type=submit]").prop("disabled", true);
-                $('.acolhesus_basic_info_selector').change();
             }else $(":input[type=submit]").prop("disabled", false);
         });
     }
 
+    function get_state() {
+        return sessionStorage.getItem("rhs_campo");
+    }
 
+    function remove_state() {
+        sessionStorage.removeItem('rhs_campo');
+    }
 
+    function set_state(container) {
+        var campo = get_state();
+        if (campo) {
+            $(container).val(campo);
+        } else {
+            $(container).val('');
+        }
+    }
+
+    function lock_state(container) {
+        var state = get_state();
+        if (container && state) {
+            var hospital = $(container + " option:selected").text();
+            $(container).empty().append('<option selected="selected" value="'+state+'">'+hospital+'</option>');
+            remove_state();
+        }
+    }
+
+    function lock_phase(phase) {
+        if (phase) {
+            var fase = $(fase_selector + " option:selected").text();
+            $(fase_selector).empty().append('<option selected="selected" value="'+phase+'">'+fase+'</option>');
+        }
+    }
+
+    function toggle_city(obj_evt, post_id, add) {
+        if (add) {
+            var _action = 'add_entry_city';
+        } else if ( add === false) {
+            var _action = 'remove_entry_city';
+        } else {
+            return false;
+        }
+
+        var event = obj_evt.event;
+        var data = event.params.data;
+
+        var total_cities = $($select_class).val();
+        if (total_cities && total_cities.length > 0) {
+            $('.cities-mc .field_required').hide();
+        } else {
+            $('.cities-mc .field_required').show();
+        }
+
+        if (_action && post_id && data.id) {
+            var del_data = { action: _action, city: data.id, post_id: post_id};
+            $.post(acolhesus.ajax_url, del_data);
+        }
+    }
 });
 
 function save_for_later() {
@@ -386,7 +409,7 @@ function save_for_later() {
             sessionStorage.removeItem('rhs_input_file');
             swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
             setTimeout(function () {
-               window.location.reload();
+               //window.location.reload();
             }, 1000);
         }
     };
@@ -398,9 +421,20 @@ function save_for_later() {
 function get_save(query, all_inputs) {
     var nodes = document.querySelectorAll(query);
     Array.prototype.forEach.call (nodes, function (node) {
-        var name = node.name, value;
-
-        if(node.type != 'radio' || node.tagName == 'A')
+        var id = node.name, value;
+        if(query == 'select' && node.style.display == 'none')
+        {
+            id = id.substring(0, id.indexOf('['));
+            value = [];
+            value.push("autocomplete");
+            jQuery("div[id *="+id+"] ul li").each(function (index, val) {
+                var text = jQuery(val).find("div").text().trim();
+                if(text !== '')
+                {
+                    value.push(text)
+                }
+            })
+        }else if(node.type != 'radio' || node.tagName == 'A')
         {
             value = node.value;
         }
@@ -415,7 +449,7 @@ function get_save(query, all_inputs) {
 
         if(value)
         {
-            all_inputs.append(name, value);
+            all_inputs.append(id, value);
         }
     } );
 }
@@ -426,12 +460,4 @@ jQuery(document).on('cf.validate.FormSuccess', function(event, obj) {
     jQuery('.cities-mc').hide();
     jQuery('#acolhesus_form_anexos').hide();
     jQuery('#form-accordion').hide();
-});
-
-jQuery(document).on('submit', "#form-comentario", function (event) {
-    jQuery.post(acolhesus.ajax_url, {
-        action: 'acolhesus_notify_user',
-    }).success(function (r) {
-        console.log("Notifyed");
-    });
 });

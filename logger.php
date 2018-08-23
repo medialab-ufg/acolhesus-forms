@@ -40,8 +40,7 @@ class AcolheSUSLogger {
 
     function save_entry_end($form, $referrer, $process_id, $entryid) {
         $post_id = $this->get_post_id_by_entry_id($entryid);
-        
-        
+
         if ($this->edit_session_action == 'edit') {
             $action = 'editou as respostas';
         } elseif ($this->edit_session_action == 'add') {
@@ -50,6 +49,7 @@ class AcolheSUSLogger {
         $message = $this->edit_session;
         
         $this->log($post_id, $action, $message);
+        add_post_meta($post_id, "acolhe_sus_add_as_saved", true);
     }
 
     function save_field($entry, $field, $form, $entry_id) {
