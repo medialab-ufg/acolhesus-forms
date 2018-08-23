@@ -737,12 +737,12 @@ class AcolheSUS {
 
     function acolhesus_rewrite_reports() {
         $_uri = explode('/', $_SERVER['REQUEST_URI']);
-        if (3 === count($_uri)) {
-            list($delimeter,$form,$page) = $_uri;
-            if (is_string($page) && ("relatorio" === $page) && post_type_exists($form) && array_key_exists($form,$this->forms)) {
-                require_once (plugin_dir_path( __FILE__ ) . "relatorios.php");
-                die();
-            }
+        $page = array_pop($_uri);
+        $form = array_pop($_uri);
+        
+        if (is_string($page) && ("relatorio" === $page) && post_type_exists($form) && array_key_exists($form,$this->forms)) {
+            require_once (plugin_dir_path( __FILE__ ) . "relatorios.php");
+            die();
         }
     }
 
