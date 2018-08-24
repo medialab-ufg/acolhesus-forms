@@ -409,7 +409,7 @@ function save_for_later() {
             sessionStorage.removeItem('rhs_input_file');
             swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
             setTimeout(function () {
-               //window.location.reload();
+               window.location.reload();
             }, 1000);
         }
     };

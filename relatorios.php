@@ -12,7 +12,7 @@ if (current_user_can('administrator')) {
     ?>
         <div class="acolhesus-form-container col-md-12 reports-wrapper">
 
-            <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($form); ?>"> Voltar </a>
+            <a class="btn btn-default list-entries hidden-print" href="<?php echo get_post_type_archive_link($form); ?>"> Voltar </a>
 
             <h3 class="text-center"> Relatórios de <?php echo $form_type->label; ?> </h3>
             <h4 class="text-center results-date">Resultados até <?php echo date("d/m/Y G:i") ?></h4>
@@ -23,9 +23,9 @@ if (current_user_can('administrator')) {
                     </div>
                     <div class="col-md-12 btn-wrapper no-padding">
                         <?php if (!$report->hasStateFilter() && !$report->hasPhaseFilter()) { ?>
-                            <input type="reset" class="btn btn-default" form="reports-filter"  value="Limpar Filtros" />
+                            <input type="reset" class="btn btn-default hidden-print" form="reports-filter"  value="Limpar Filtros" />
                         <?php } ?>
-                        <input type="submit" class="btn btn-default btn-info filter-forms" value="Gerar Relatório"/>
+                        <input type="submit" class="btn btn-default btn-info filter-forms hidden-print" value="Gerar Relatório"/>
                     </div>
                 </form>
             </div>
