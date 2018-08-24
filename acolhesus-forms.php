@@ -344,9 +344,7 @@ class AcolheSUS {
     {
         global $AcolheSUSLogger;
         $post_id = $AcolheSUSLogger->get_post_id_by_entry_id($entry_id);
-
-        $post = array( 'ID' => $post_id, 'post_status' => 'publish' );
-        wp_update_post($post);
+        wp_publish_post($post_id);
 
         //Add as saved
         add_post_meta($post_id, "acolhe_sus_add_as_saved", true);
@@ -427,7 +425,8 @@ class AcolheSUS {
     function ajax_callback_save_save_for_later()
     {
         global $wpdb, $AcolheSUSLogger;
-        $_entry_id = get_post_meta($_POST['_cf_cr_pst'], '_entry_id', true);
+        $post_id = sanitize_text_field($_POST['_cf_cr_pst']);
+        $_entry_id = get_post_meta($post_id, '_entry_id', true);
         if(!$_entry_id)
         {
             $new_entry = array(
@@ -439,7 +438,7 @@ class AcolheSUS {
 
             $wpdb->insert($wpdb->prefix . 'cf_form_entries', $new_entry);
             $_entry_id = $wpdb->insert_id;
-            update_post_meta($_POST['_cf_cr_pst'], '_entry_id', $_entry_id);
+            update_post_meta($post_id, '_entry_id', $_entry_id);
         }
 
         $formId = $_POST['formId'];
@@ -616,13 +615,11 @@ class AcolheSUS {
         if(!empty($msg))
         {
             $msg .= "<br><br>";
-            $AcolheSUSLogger->log($_POST['_cf_cr_pst'], ' salvou o formulário ', $msg);
+            $AcolheSUSLogger->log($post_id, ' salvou o formulário ', $msg);
         }
 
-        $post = array( 'ID' => $_POST['_cf_cr_pst'], 'post_status' => 'publish' );
-        wp_update_post($post);
+        wp_publish_post($post_id);
     }
-
 
 
     function search_in_array(&$current_value, $search)
