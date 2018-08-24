@@ -48,7 +48,6 @@ class AcolheSUSLogger {
         }
         $message = $this->edit_session;
         $this->log($post_id, $action, $message);
-        add_post_meta($post_id, "acolhe_sus_add_as_saved", true);
     }
 
     function save_field($entry, $field, $form, $entry_id) {

@@ -292,6 +292,8 @@ class AcolheSUS {
 
         add_action('caldera_forms_submit_post_process', array(&$this, 'get_old_attachment'), 10, 4 );
 
+        add_action('caldera_forms_submit_post_process', array(&$this, 'confirm_save'), 10, 4 );
+
         add_filter('caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
 
         add_action('wp_ajax_acolhesus_verify_indicadores_info', array(&$this, 'ajax_callback_verify_indicadores_info'));
@@ -336,6 +338,18 @@ class AcolheSUS {
         echo "true";
         return;
 
+    }
+
+    function confirm_save($form, $referrer, $process_id, $entry_id)
+    {
+        global $AcolheSUSLogger;
+        $post_id = $AcolheSUSLogger->get_post_id_by_entry_id($entry_id);
+
+        $post = array( 'ID' => $post_id, 'post_status' => 'publish' );
+        wp_update_post($post);
+
+        //Add as saved
+        add_post_meta($post_id, "acolhe_sus_add_as_saved", true);
     }
 
     function get_old_attachment($form, $referrer, $process_id, $entry_id)
@@ -604,6 +618,9 @@ class AcolheSUS {
             $msg .= "<br><br>";
             $AcolheSUSLogger->log($_POST['_cf_cr_pst'], ' salvou o formulário ', $msg);
         }
+
+        $post = array( 'ID' => $_POST['_cf_cr_pst'], 'post_status' => 'publish' );
+        wp_update_post($post);
     }
 
 
@@ -1184,7 +1201,7 @@ class AcolheSUS {
         $user_campos = $this->get_user_campos();
         if (is_array($user_campos) && count($user_campos) > 0) {
             $metas = ['acolhesus_campo' => array_shift($user_campos), 'new_form' => true];
-            $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'publish', $metas);
+            $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'draft', $metas);
             if ($_id) {
                 echo json_encode(['id' => $_id, 'redirect_url' => get_permalink($_id)]);
                 wp_die();
