@@ -1,7 +1,10 @@
 <?php
+require_once "acolhesus-common.php";
 
 class AcolheSUSReports
 {
+    use AcolheSusCommon;
+
     private $report_fields = ["number"];
 
     private $excluded_fields = [
@@ -23,14 +26,6 @@ class AcolheSUSReports
     private $caldera_entries;
     private $posts;
     private $postmeta;
-
-    // Apenas por enquanto
-    private $fases = [
-        'fase_1' => 'Fase | - Análise Situacional',
-        'fase_2' => 'Fase || - Elaboração e Modelização do Plano de Trabalho',
-        'fase_3' => 'Fase ||| - Implementação, Monitoramento e Avaliação',
-        'macrogestao' => 'Macrogestão'
-    ];
 
     public function __construct()
     {
@@ -154,7 +149,7 @@ class AcolheSUSReports
         return $row;
     }
 
-    private function getSubTable($dados, &$_found,&$conta,&$remove,$formType)
+    private function getSubTableData($dados, &$_found,&$conta,&$remove,$formType)
     {
         $_data = "";
         foreach ($dados as $_id) {
@@ -179,15 +174,20 @@ class AcolheSUSReports
                 $title = get_the_title($post_id);
                 $data = get_the_date('d/m/Y - G:i:s',$post_id);
                 $uf = get_post_meta($post_id, "acolhesus_campo",true);
+                $estado = $this->campos_completos[$uf];
                 $fase = $this->fases[get_post_meta($post_id, "acolhesus_fase",true)];
 
                 $a_element = "<a href='$link' target='_blank'>$title</a>";
-                $_data .= "<tr> <td>$a_element </td> <td>($uf) - $fase </td> <td>$data</td> </tr>";
+                $_data .= "<tr> <td>$a_element </td> <td> <small>($estado) <br> $fase </small></td> <td>$data</td> </tr>";
                 $conta++;
             }
-
         }
 
+        return $_data;
+    }
+
+    private function subTable($data)
+    {
         return "<table class='table table-condensed table-hover table-bordered subtable'>
             <thead>
                 <tr>
@@ -196,7 +196,7 @@ class AcolheSUSReports
                     <th> Data Criação </th>                    
                 </tr>
             </thead>
-            <tbody> $_data </tbody>
+            <tbody> $data </tbody>
          </table>
         ";
     }
@@ -222,13 +222,13 @@ class AcolheSUSReports
                         $_found = 0;
                         $remove = true;
 
-                        $buffer .= $this->getSubTable($__ids,$_found,$conta,$remove,$formType);
+                        $sub_table = $this->getSubTableData($__ids,$_found,$conta,$remove,$formType);
+                        $buffer .= $this->subTable($sub_table);
                     }
 
                     if (!$remove) {
                         $final .= $buffer ."</div><hr>";
                         $html .= $_found . " - " . $final;
-
                     }
                 }
             }

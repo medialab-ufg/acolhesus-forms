@@ -9,9 +9,11 @@
  * Text Domain: acolhesus-rhs
  */
 
-include('acolhesus-view.php');
+require_once "acolhesus-common.php";
 
 class AcolheSUS {
+
+    use AcolheSusCommon;
 
     public $campos = [
         'AC',
@@ -36,29 +38,6 @@ class AcolheSUS {
         'TO'
     ];
 
-    public $campos_completos = [
-        'AC' => 'AC - Rio Branco - Hospital de Urgência e Emergência',
-        'AL' => 'AL - Arapiraca - Hospital de Emergência Dr. Daniel Houly',
-        'AM' => 'AM - Manaus - Hospital Dr. João Lúcio Pereira Machado',
-        'AP' => 'AP - Macapá - Hospital Dr. Oswaldo Cruz',
-        'BA' => 'BA - Salvador - Hospital Geral do Estado',
-        'CE' => 'CE - Fortaleza - Hospital São José',
-        'DF' => 'DF - Brasília - Regional Macro Centro-Norte - APS',
-        'GO' => 'GO - Cristalina - Hospital Municipal de Cristalina Chaud Salles',
-        'MA' => 'MA - São Luís - UPA Itaqui Bacana',
-        'MG' => 'MG - Juiz de Fora - Hospital Regional Dr. João Penido',
-        'MS' => 'MS - Campo Grande - Hospital Regional de Mato Grosso do Sul',
-        'MT' => 'MT - Várzea Grande - Hospital e Pronto Socorre Municipal de Várzea Grande',
-        'PA' => 'PA - Belém - CAPS Renascer',
-        'PB' => 'PB - João Pessoa - Maternidade Frei Damião',
-        'PI' => 'PI - Parnaíba - Hospital Estadual Dirceu Arcoverde',
-        'RJ' => 'RJ - Duque de Caxias - Hospital Estadual Adão Pereira Nunes',
-        'RN' => 'RN - Natal - Hospital José Pedro Bezerra',
-        'RR' => 'RR - Boa Vista - Pronto Atendimento Airton Rocha',
-        'SC' => 'SC - São José - Hospital Regional de São José Dr. Homero Miranda',
-        'TO' => 'TO - Palmas - Hospital Geral de Palmas'
-    ];
-
     // Estados que não participam por enquanto do AcolheSUS
     // Deixar aqui a título de conhecimento
     private $estados_fora = [
@@ -69,13 +48,6 @@ class AcolheSUS {
         'RS' => 'RS',
         'SE' => 'SE',
         'SP' => 'SP'
-    ];
-
-    public $fases = [
-        'fase_1' => 'Fase | - Análise Situacional',
-        'fase_2' => 'Fase || - Elaboração e Modelização do Plano de Trabalho',
-        'fase_3' => 'Fase ||| - Implementação, Monitoramento e Avaliação',
-        'macrogestao' => 'Macrogestão'
     ];
 
     public $eixos = [
@@ -1545,8 +1517,11 @@ class AcolheSUS {
 
 } // class
 
+include('acolhesus-view.php');
+include('admin-forms.php');
+include('logger.php');
+
 global $AcolheSUS;
 $AcolheSUS = new AcolheSUS();
 $formView = new AcolheSUSView();
-include('admin-forms.php');
-include('logger.php');
+
