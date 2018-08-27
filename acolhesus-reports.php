@@ -175,7 +175,13 @@ class AcolheSUSReports
                 $data = get_the_date('d/m/Y - G:i:s',$post_id);
                 $uf = get_post_meta($post_id, "acolhesus_campo",true);
                 $estado = $this->campos_completos[$uf];
-                $fase = $this->fases[get_post_meta($post_id, "acolhesus_fase",true)];
+                $f = get_post_meta($post_id, "acolhesus_fase",true);
+
+                if (!empty($f)) {
+                    $fase = $this->fases[$f];
+                } else {
+                    $fase =  '';
+                }
 
                 $a_element = "<a href='$link' target='_blank'>$title</a>";
                 $_data .= "<tr> <td>$a_element </td> <td> <small>($estado) <br> $fase </small></td> <td>$data</td> </tr>";

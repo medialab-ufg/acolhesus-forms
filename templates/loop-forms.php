@@ -65,7 +65,7 @@
                 <?php endif; ?>
 
                 <td>
-                    <a href="<?php the_permalink(); ?>">
+                    <a href="<?php echo the_permalink($entry_id); ?>">
                         <?php the_title( '<h3 class="panel-title">', '</h3>' ); ?>
                     </a>
                 </td>
