@@ -51,7 +51,11 @@ class AcolheSUSLogger {
     }
 
     function save_field($entry, $field, $form, $entry_id) {
-        $this->edit_session .= $field['label'] . ': ' . $entry . '<br/>';
+        if($field['type'] != 'button')
+        {
+            $this->edit_session .= $field['label'] . ': ' . $entry . '<br/>';
+        }
+
         return $entry;
     }
 
