@@ -61,6 +61,11 @@ class AcolheSUSLogger {
             $this->edit_session .= $field['label'] . ': ' . $newdata . '<br/>';
         }else
         {
+            $position = array_search("autocomplete", $newdata);
+            if($position !== false)
+            {
+                unset($newdata[$position]);
+            }
             $this->edit_session .= $field['label'] . ': '. implode(", ", $newdata). "<br>";
         }
 
