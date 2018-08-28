@@ -1170,9 +1170,11 @@ class AcolheSUS {
         $user_campos = $this->get_user_campos();
         if (is_array($user_campos) && count($user_campos) > 0) {
             $metas = ['acolhesus_campo' => array_shift($user_campos), 'new_form' => true];
-            $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'draft', $metas);
+            $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'publish', $metas);
             if ($_id) {
                 echo json_encode(['id' => $_id, 'redirect_url' => get_permalink($_id)]);
+                $post = array( 'ID' => $_id, 'post_status' => 'draft' );
+                wp_update_post($post);
                 wp_die();
             }
         } else {
