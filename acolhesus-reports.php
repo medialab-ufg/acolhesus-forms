@@ -184,7 +184,7 @@ class AcolheSUSReports
                 }
 
                 $a_element = "<a href='$link' target='_blank'>$title</a>";
-                $_data .= "<tr> <td>$a_element </td> <td> <small>($estado) <br> $fase </small></td> <td>$data</td> </tr>";
+                $_data .= "<tr> <td>$a_element </td> <td> <small> $estado <hr> $fase </small></td> <td>$data</td> </tr>";
                 $conta++;
             }
         }
