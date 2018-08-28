@@ -1,11 +1,19 @@
 <?php
 
-trait AcolheSusCommon {
+trait AcolheSUSCommon {
     private $fases = [
         'fase_1' => 'Fase | - Análise Situacional',
         'fase_2' => 'Fase || - Elaboração e Modelização do Plano de Trabalho',
         'fase_3' => 'Fase ||| - Implementação, Monitoramento e Avaliação',
         'macrogestao' => 'Macrogestão'
+    ];
+
+    public $eixos = [
+        'Acolhimento',
+        'Qualificação Profissional',
+        'Gestão de Processos de Trabalho',
+        'Organização do Cuidado',
+        'Ambiência'
     ];
 
     private $campos_completos = [
@@ -29,5 +37,40 @@ trait AcolheSusCommon {
         'RR' => 'RR - Boa Vista - Pronto Atendimento Airton Rocha',
         'SC' => 'SC - São José - Hospital Regional de São José Dr. Homero Miranda',
         'TO' => 'TO - Palmas - Hospital Geral de Palmas'
+    ];
+
+    public $campos = [
+        'AC',
+        'AL',
+        'AM',
+        'AP',
+        'BA',
+        'CE',
+        'DF',
+        'GO',
+        'MA',
+        'MG',
+        'MS',
+        'MT',
+        'PA',
+        'PB',
+        'PI',
+        'RJ',
+        'RN',
+        'RR',
+        'SC',
+        'TO'
+    ];
+
+    // Estados que não participam por enquanto do AcolheSUS
+    // Deixar aqui a título de conhecimento
+    private $estados_fora = [
+        'ES' => 'ES',
+        'PE' => 'PE',
+        'PR' => 'PR',
+        'RO' => 'RO',
+        'RS' => 'RS',
+        'SE' => 'SE',
+        'SP' => 'SP'
     ];
 }

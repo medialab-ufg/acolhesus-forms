@@ -3,7 +3,7 @@ require_once "acolhesus-common.php";
 
 class AcolheSUSReports
 {
-    use AcolheSusCommon;
+    use AcolheSUSCommon;
 
     private $report_fields = ["number"];
 

@@ -13,50 +13,7 @@ require_once "acolhesus-common.php";
 
 class AcolheSUS {
 
-    use AcolheSusCommon;
-
-    public $campos = [
-        'AC',
-        'AL',
-        'AM',
-        'AP',
-        'BA',
-        'CE',
-        'DF',
-        'GO',
-        'MA',
-        'MG',
-        'MS',
-        'MT',
-        'PA',
-        'PB',
-        'PI',
-        'RJ',
-        'RN',
-        'RR',
-        'SC',
-        'TO'
-    ];
-
-    // Estados que não participam por enquanto do AcolheSUS
-    // Deixar aqui a título de conhecimento
-    private $estados_fora = [
-        'ES' => 'ES',
-        'PE' => 'PE',
-        'PR' => 'PR',
-        'RO' => 'RO',
-        'RS' => 'RS',
-        'SE' => 'SE',
-        'SP' => 'SP'
-    ];
-
-    public $eixos = [
-        'Acolhimento',
-        'Qualificação Profissional',
-        'Gestão de Processos de Trabalho',
-        'Organização do Cuidado',
-        'Ambiência'
-    ];
+    use AcolheSUSCommon;
 
     public $forms = [
         'matriz_cenario' => [
