@@ -104,6 +104,9 @@
   margin-top: 25px; }
 .acolhesus-form-container .options a {
   margin-bottom: 10px; }
+@media print {
+  .acolhesus-form-container a[href]:after {
+    content: none; } }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
   background-color: #003c46 !important; }

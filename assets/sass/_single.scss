@@ -155,6 +155,12 @@
   .options a{
     margin-bottom: 10px;
   }
+
+  @media print{
+    a[href]:after{
+      content:none
+    }
+  }
 } // .acolhesus-form-container
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
@@ -239,4 +245,3 @@
     }
   }
 }
-

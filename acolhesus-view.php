@@ -46,7 +46,7 @@ class AcolheSUSView extends AcolheSUS {
         $URL = $this->get_home_URL();
 
         $header = "<h1 class='list-title'> <a href='$URL'>" . $this->get_title() . "</a></h1>";
-        $header .= '<hr> <div class="logo-container">' . $this->get_logo() . '</div><hr>';
+        $header .= '<hr> <div class="logo-container hidden-print">' . $this->get_logo() . '</div><hr>';
 
         echo $header;
     }
@@ -57,7 +57,7 @@ class AcolheSUSView extends AcolheSUS {
             $_header =  'Olá, <span class="user-name">' . $name .'</span>!<br>';
         }
 
-        echo '<div class="welcome">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
+        echo '<div class="welcome hidden-print">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
     }
 
 
