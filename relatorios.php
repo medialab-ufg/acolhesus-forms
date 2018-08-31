@@ -8,13 +8,14 @@ if (current_user_can('administrator')) {
         $view = new AcolheSUSView();
         date_default_timezone_set("America/Sao_Paulo");
         $form_type = get_post_type_object($form);
+        $label = $form_type->label;
         $_hide_phase = !(isset($view->forms[$form_type->name]["uma_entrada_por_campo"]) && $view->forms[$form_type->name]["uma_entrada_por_campo"] );
     ?>
         <div class="acolhesus-form-container col-md-12 reports-wrapper">
 
             <a class="btn btn-default list-entries hidden-print" href="<?php echo get_post_type_archive_link($form); ?>"> Voltar </a>
 
-            <h3 class="text-center"> Relatórios de <?php echo $form_type->label; ?> </h3>
+            <h3 class="text-center"> Relatórios de <?php echo $label; ?> </h3>
             <h4 class="text-center results-date">Resultados até <?php echo date("d/m/Y G:i") ?></h4>
             <div class="text-center">
                 <form method="POST" class="reports acolhesus-reports" id="reports-filter">
@@ -30,7 +31,7 @@ if (current_user_can('administrator')) {
                 </form>
             </div>
 
-            <div class="report-results"> <?php $report->renderReports($form); ?> </div>
+            <div class="report-results"> <?php $report->renderReports($form,$label); ?> </div>
 
         </div>
 <?php

@@ -65,7 +65,7 @@ class AcolheSUSReports
         }
     }
 
-    public function renderReports($formType)
+    public function renderReports($formType,$desc)
     {
         $data = $this->generateReportData($formType);
         if (is_string($data) && strlen($data) > 100) {
@@ -82,9 +82,16 @@ class AcolheSUSReports
                 <tbody> <?php echo $data; ?> </tbody>
             </table>
             <?php
+            echo $this->getReportFooter($desc);
         } else {
             echo "<p class='text-center'> Relatório não disponível para este formulário! </p>";
         }
+    }
+
+    private function getReportFooter($desc)
+    {
+        $title = $this->get_title();
+        return "<h4 class='text-center'> $title - Relatórios de $desc </h4>";
     }
 
     private function getCampo()

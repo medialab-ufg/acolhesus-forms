@@ -1,7 +1,7 @@
 <?php
 
 trait AcolheSUSCommon {
-    private $fases = [
+    protected $fases = [
         'fase_1' => 'Fase | - Análise Situacional',
         'fase_2' => 'Fase || - Elaboração e Modelização do Plano de Trabalho',
         'fase_3' => 'Fase ||| - Implementação, Monitoramento e Avaliação',
@@ -73,4 +73,9 @@ trait AcolheSUSCommon {
         'SE' => 'SE',
         'SP' => 'SP'
     ];
+
+    protected function get_title()
+    {
+        return 'Plataforma de Gestão AcolheSUS';
+    }
 }

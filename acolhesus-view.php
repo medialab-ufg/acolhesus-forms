@@ -23,11 +23,6 @@ class AcolheSUSView extends AcolheSUS {
         return ACOLHESUS_URL . 'assets/images/logo-full.png';
     }
 
-    private function get_title()
-    {
-        return 'Plataforma de Gestão AcolheSUS';
-    }
-
     private function get_home_URL()
     {
        return home_url('formularios-acolhesus');
