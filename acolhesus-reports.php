@@ -91,7 +91,12 @@ class AcolheSUSReports
     private function getReportFooter($desc)
     {
         $title = $this->get_title();
-        return "<h4 class='text-center'> $title - Relatórios de $desc </h4>";
+        $_desc = "Relatórios de $desc";
+
+        $left = "<div class='col-md-6 text-left'> $title </div>";
+        $right = "<div class='col-md-6 text-right'> $_desc </div>";
+
+        return "<hr> <div class='col-md-12 report-footer no-padding'> $left $right </div>";
     }
 
     private function getCampo()

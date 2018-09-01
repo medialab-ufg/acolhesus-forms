@@ -38,4 +38,11 @@
     }
   }
 
+  .report-footer {
+    font-size: 12px;
+    font-style: italic;
+    border-bottom: 1px solid $dark_green;
+    padding-bottom: 10px !important;
+  }
+
 } // .reports-wrapper
