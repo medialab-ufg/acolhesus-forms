@@ -41,8 +41,9 @@
   .report-footer {
     font-size: 12px;
     font-style: italic;
+    border-top: 1px solid $dark_green;
     border-bottom: 1px solid $dark_green;
-    padding-bottom: 10px !important;
+    padding: 10px 0 10px 0 !important;
   }
 
 } // .reports-wrapper

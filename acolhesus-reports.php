@@ -93,10 +93,11 @@ class AcolheSUSReports
         $title = $this->get_title();
         $_desc = "Relatórios de $desc";
 
-        $left = "<div class='col-md-6 text-left'> $title </div>";
-        $right = "<div class='col-md-6 text-right'> $_desc </div>";
+        $left = "<div class='col-md-4 text-left'> $title </div>";
+        $date = date("d/m/Y G:i");
+        $right = "<div class='col-md-8 text-right'> $_desc em $date</div>";
 
-        return "<hr> <div class='col-md-12 report-footer no-padding'> $left $right </div>";
+        return "<div class='col-md-12 report-footer'> $left $right </div>";
     }
 
     private function getCampo()
