@@ -451,7 +451,14 @@ class AcolheSUSReports
                 $sql = "SELECT COUNT(*) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND value='$value'";
             }
 
-            return $this->getSQLResults($sql, "row")->total;
+            $value = $this->getSQLResults($sql, "row")->total;
+            $percent = '';
+            if($formType === 'matriz_cenario')
+            {
+                $percent = "(".$this->get_percent(count($this->campos), $value)." %)";
+            }
+
+            return $value." ".$percent;
         }
     }
 
