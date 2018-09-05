@@ -17,6 +17,10 @@ class AcolheSUSReports
         "fld_6620960", // "Anexos" matriz de cenários
     ];
 
+    private $base_percent_field = [
+        "fld_1123995"//Número de participantes da oficina
+    ];
+
     private $filters = [
         "state" => "campo",
         "phase" => "fase"
@@ -154,9 +158,15 @@ class AcolheSUSReports
         return $row;
     }
 
-    private function getNumericData($label,$value)
+    private function getNumericData($label,$value, $extra = null)
     {
-        $row = $this->renderAnswerRow($label, intval($value));
+        if($extra !== null)
+        {
+            $row = $this->renderAnswerRow($label, $value." ".$extra);
+        }else {
+            $row = $this->renderAnswerRow($label, intval($value));
+        }
+
         $row .= $this->renderAnswerRow("","");
 
         return $row;
@@ -295,7 +305,30 @@ class AcolheSUSReports
         $c = 0;
         $total_geral = 0;
         $table_row = "";
-        foreach ($this->getFormFields($formType) as $id => $campo) {
+        $base_percent = 0;
+        $percent = '';
+        $fields = $this->getFormFields($formType);
+
+        if($formType === 'avaliacao_oficina') {
+            $sum = [0, 0, 0, 0, 0];
+            $i = $j = 0;
+            foreach($fields as $id => $campo)
+            {
+                $tipo = $campo["type"];
+                if (in_array($tipo, $this->report_fields)) {
+                    $sum[$i] += intval($this->getAnswerStats($id));
+                    $j++;
+                }
+
+                if($j === 5)
+                {
+                    $i++;
+                    $j = 0;
+                }
+            }
+        }
+        $i = $j = 0;
+        foreach ($fields as $id => $campo) {
             $tipo = $campo["type"];
             $info_data = "";
 
@@ -307,9 +340,22 @@ class AcolheSUSReports
                     $value = $this->getFilterFor($this->getFase(),$formType, $id, $phase);
                 } else {
                     $value = intval($this->getAnswerStats($id));
+                    if($formType === 'avaliacao_grupos')
+                    {
+                        if(in_array($id, $this->base_percent_field))
+                        {
+                            $base_percent = $value;
+                        }else
+                        {
+                            $percent = "(".$this->get_percent($base_percent, $value)." %)";
+                        }
+                    }else if($formType === 'avaliacao_oficina') {
+                        $percent = "(".$this->get_percent($sum[$i], $value)." %)";
+                        $j++;
+                    }
                 }
 
-                $info_data = $this->getNumericData($campo["label"],$value);
+                $info_data = $this->getNumericData($campo["label"],$value, $percent);
                 if ($campo["type"] === "number") {
                     if ($c === 4) {
                         $c = -1;
@@ -323,6 +369,11 @@ class AcolheSUSReports
 
             } else if ($tipo === "html" && !in_array($id, $this->excluded_fields)) {
                 $info_data = $this->getHTMLData($campo["config"]["default"]);
+                if($j === 5)
+                {
+                    $i++;
+                    $j = 0;
+                }
             } else if ($tipo === "toggle_switch") {
                 $info_data = $this->getToggleData($id,$campo["label"],$formType);
             } else if ($tipo === "filtered_select2") {
@@ -337,6 +388,11 @@ class AcolheSUSReports
         }
 
         return $table_row;
+    }
+
+    private function get_percent($base_percent, $value)
+    {
+        return sprintf("%.1f",(100 * $value) / $base_percent);
     }
 
     private function renderAnswerRow($total, $label) {
