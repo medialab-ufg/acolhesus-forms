@@ -1,5 +1,4 @@
-$ = jQuery;
-jQuery(function () {
+jQuery( function( $ ) {
     $("#gen_charts").click(function (event) {
         jQuery.post(acolhesus.ajax_url, {
             action: 'acolhesus_reports_chart',
@@ -24,7 +23,6 @@ jQuery(function () {
             drawChart(info, where, chart_type, data_table, options);
         });
     }
-
 
     function drawChart(info, where, chart_type, data_table, options) {
         var chart;

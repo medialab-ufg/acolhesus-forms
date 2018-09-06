@@ -698,18 +698,26 @@ class AcolheSUS {
                 }
             }
         }
-
     }
 
     function acolhesus_rewrite_reports() {
-        $_uri = explode('/', $_SERVER['REQUEST_URI']);
-        $page = array_pop($_uri);
-        $form = array_pop($_uri);
-        
-        if (is_string($page) && ("relatorio" === $page) && post_type_exists($form) && array_key_exists($form,$this->forms)) {
+        if ($form = $this->is_report_page(true)) {
             require_once (plugin_dir_path( __FILE__ ) . "relatorios.php");
             die();
         }
+    }
+
+    private function is_report_page($return_form = false)
+    {
+        $_uri = explode('/', $_SERVER['REQUEST_URI']);
+        $page = array_pop($_uri);
+        $form = array_pop($_uri);
+        $is_report_page = is_string($page) && ("relatorio" === $page) && post_type_exists($form) && array_key_exists($form,$this->forms);
+
+        if ($is_report_page && $return_form)
+            return $form;
+
+        return $is_report_page;
     }
 
     private function add_acolhesus_entry($title, $type, $status, $metas = []) {
@@ -1224,14 +1232,20 @@ class AcolheSUS {
 
     function isAcolheSusPage() {
         global $post;
-        return is_object($post) && isset($post->post_type) && array_key_exists($post->post_type, $this->forms);
+        $is_plugin_home = ("formularios" === get_query_var('acolhe_sus'));
+        $is_form_page = is_object($post) && isset($post->post_type) && array_key_exists($post->post_type, $this->forms);
+        return ($is_form_page || $is_plugin_home || $this->is_report_page());
     }
 
     function load_acolhesus_assets() {
         // global $wp;  
         // $current_url = home_url(add_query_arg(array(),$wp->request));
-        if ($this->isAcolheSusPage() || "formularios" === get_query_var('acolhe_sus')) {
+        if ($this->isAcolheSusPage()) {
             wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
+        }
+
+        if ($this->is_report_page()) {
+            wp_enqueue_script( 'rhs-acolhesus-reports', plugin_dir_url( __FILE__ ) . 'assets/js/reports.js',array('jquery'));
         }
 
         $type = get_post_type();
