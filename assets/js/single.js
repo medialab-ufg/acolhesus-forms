@@ -361,103 +361,103 @@ jQuery( function( $ ) {
             $.post(acolhesus.ajax_url, del_data);
         }
     }
-});
 
-function save_for_later() {
-    swal({ showConfirmButton: false, showCancelButton: false, title: 'Salvando formulário...', icon: "warning" });
-    var all_inputs = new FormData(),
-        cr_post = get_save("input[name=_cf_cr_pst]", all_inputs);
+    function save_for_later() {
+        swal({ showConfirmButton: false, showCancelButton: false, title: 'Salvando formulário...', icon: "warning" });
+        var all_inputs = new FormData(),
+            cr_post = get_save("input[name=_cf_cr_pst]", all_inputs);
 
-    //Text, number
-    get_save('input[type=text]', all_inputs);
-    get_save('input[type=number]', all_inputs);
+        //Text, number
+        get_save('input[type=text]', all_inputs);
+        get_save('input[type=number]', all_inputs);
 
-    //Radio and checkbox
-    get_save('input:checked', all_inputs);
+        //Radio and checkbox
+        get_save('input:checked', all_inputs);
 
-    //Text areas
-    get_save('textarea', all_inputs);
+        //Text areas
+        get_save('textarea', all_inputs);
 
-    //A:btnSuccess
-    get_save('a.btn-success', all_inputs);
+        //A:btnSuccess
+        get_save('a.btn-success', all_inputs);
 
-    //Select box
-    get_save('select', all_inputs);
+        //Select box
+        get_save('select', all_inputs);
 
-    //Form ID
-    var form = document.querySelector('div.caldera-grid > form'),
+        //Form ID
+        var form = document.querySelector('div.caldera-grid > form'),
             formId = form.dataset.formId;
 
-    //Files
-    var fileInput = document.querySelector("input[type=file]");
-    if (fileInput) {
-        var input_file = JSON.parse(sessionStorage.getItem('rhs_input_file'));
+        //Files
+        var fileInput = document.querySelector("input[type=file]");
+        if (fileInput) {
+            var input_file = JSON.parse(sessionStorage.getItem('rhs_input_file'));
 
-        all_inputs.append("file_input_id", fileInput.name);
-        all_inputs.append("file_value", sessionStorage.getItem('rhs_input_file'));
+            all_inputs.append("file_input_id", fileInput.name);
+            all_inputs.append("file_value", sessionStorage.getItem('rhs_input_file'));
+        }
+
+        all_inputs.append('action', 'acolhesus_save_for_later');
+        all_inputs.append('formId', formId);
+
+        //----------------- Send by AJAX -------------------------------//
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function()
+        {
+            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            {
+                sessionStorage.removeItem('rhs_input_file');
+                swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            }
+        };
+
+        xmlHttp.open("post", acolhesus.ajax_url);
+        xmlHttp.send(all_inputs);
     }
 
-    all_inputs.append('action', 'acolhesus_save_for_later');
-    all_inputs.append('formId', formId);
-
-    //----------------- Send by AJAX -------------------------------//
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function()
-    {
-        if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
-        {
-            sessionStorage.removeItem('rhs_input_file');
-            swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
-            setTimeout(function () {
-               window.location.reload();
-            }, 1000);
-        }
-    };
-
-    xmlHttp.open("post", acolhesus.ajax_url);
-    xmlHttp.send(all_inputs);
-}
-
-function get_save(query, all_inputs) {
-    var nodes = document.querySelectorAll(query);
-    Array.prototype.forEach.call (nodes, function (node) {
-        var id = node.name, value;
-        if(query == 'select' && node.style.display == 'none')
-        {
-            id = id.substring(0, id.indexOf('['));
-            value = [];
-            value.push("autocomplete");
-            jQuery("div[id *="+id+"] ul li").each(function (index, val) {
-                var text = jQuery(val).find("div").text().trim();
-                if(text !== '')
-                {
-                    value.push(text)
-                }
-            })
-        }else if(node.type != 'radio' || node.tagName == 'A')
-        {
-            value = node.value;
-        }
-        else
-        {
-            value = node.parentNode.dataset.label;
-            if(!value)
+    function get_save(query, all_inputs) {
+        var nodes = document.querySelectorAll(query);
+        Array.prototype.forEach.call (nodes, function (node) {
+            var id = node.name, value;
+            if(query == 'select' && node.style.display == 'none')
+            {
+                id = id.substring(0, id.indexOf('['));
+                value = [];
+                value.push("autocomplete");
+                jQuery("div[id *="+id+"] ul li").each(function (index, val) {
+                    var text = jQuery(val).find("div").text().trim();
+                    if(text !== '')
+                    {
+                        value.push(text)
+                    }
+                })
+            }else if(node.type != 'radio' || node.tagName == 'A')
             {
                 value = node.value;
             }
-        }
+            else
+            {
+                value = node.parentNode.dataset.label;
+                if(!value)
+                {
+                    value = node.value;
+                }
+            }
 
-        if(value)
-        {
-            all_inputs.append(id, value);
-        }
-    } );
-}
+            if(value)
+            {
+                all_inputs.append(id, value);
+            }
+        } );
+    }
 
-jQuery(document).on('cf.validate.FormSuccess', function(event, obj) {
-    jQuery('button.save_for_later').hide();
-    jQuery('.fixed-meta').hide();
-    jQuery('.cities-mc').hide();
-    jQuery('#acolhesus_form_anexos').hide();
-    jQuery('#form-accordion').hide();
+    jQuery(document).on('cf.validate.FormSuccess', function(event, obj) {
+        jQuery('button.save_for_later').hide();
+        jQuery('.fixed-meta').hide();
+        jQuery('.cities-mc').hide();
+        jQuery('#acolhesus_form_anexos').hide();
+        jQuery('#form-accordion').hide();
+    });
 });
