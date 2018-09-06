@@ -580,6 +580,10 @@ class AcolheSUS {
     function append_content_to_mail($mail, $data, $form)
     {
         if (isset($_POST['_cf_cr_pst'])) {
+
+            /*
+             * Descomentar quando passar pra produção
+             *
             global $wpdb;
             $_entry_id = get_post_meta($_POST['_cf_cr_pst'], '_entry_id', true);
             $sql = "SELECT post.meta_value as estado from $wpdb->postmeta post JOIN $wpdb->postmeta postmeta 
@@ -602,9 +606,7 @@ class AcolheSUS {
                 $marilia  = ['AM', 'BA', 'PA'];
                 $email = '';
 
-                /*
-                 * TODO: refatorar esse tanto de if
-                 * */
+                // TODO: refatorar esse tanto de if
                 if (in_array($estado, $ailana)) {
                     $email = 'ailana.lira@saude.gov.br';
                 } else if(in_array($estado, $diego)) {
@@ -618,7 +620,7 @@ class AcolheSUS {
                 }
 
                 $mail['recipients'][] = $email;
-            }
+            } */
 
             $form_link = get_permalink($_POST['_cf_cr_pst']);
             if ($form_link) {
