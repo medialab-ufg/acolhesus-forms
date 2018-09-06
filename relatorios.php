@@ -26,7 +26,8 @@ if (current_user_can('administrator')) {
                         <?php if (!$report->hasStateFilter() && !$report->hasPhaseFilter()) { ?>
                             <input type="reset" class="btn btn-default hidden-print" form="reports-filter"  value="Limpar Filtros" />
                         <?php } ?>
-                        <input type="submit" class="btn btn-default btn-info filter-forms hidden-print" value="Gerar Relatório"/>
+                        <input type="submit" class="btn btn-info filter-forms hidden-print" value="Gerar Relatório"/>
+                        <input type="button" id="gen_charts" class="btn btn-primary filter-forms hidden-print" value="Gerar Gráfico"/>
                     </div>
                 </form>
             </div>
