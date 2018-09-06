@@ -39,6 +39,12 @@ class AcolheSUSReports
 
         $this->posts = $wpdb->prefix . 'posts';
         $this->postmeta = $wpdb->prefix . 'postmeta';
+
+        wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/reports.js');
+        wp_enqueue_script('google_charts', 'https://www.gstatic.com/charts/loader.js');
+        wp_localize_script('rhs-acolhesus', 'acolhesus', [
+            'ajax_url' => admin_url('admin-ajax.php')
+        ]);
     }
 
     public function hasStateFilter()
@@ -74,6 +80,7 @@ class AcolheSUSReports
         $data = $this->generateReportData($formType);
         if (is_string($data) && strlen($data) > 100) {
             ?>
+            <input type="hidden" id="form_type" value="<?php echo $formType; ?>">
             <table class="table table-striped">
                 <thead class="reports-header">
                 <tr>

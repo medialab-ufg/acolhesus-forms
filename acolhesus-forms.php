@@ -226,6 +226,13 @@ class AcolheSUS {
         add_filter('caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
 
         add_action('wp_ajax_acolhesus_verify_indicadores_info', array(&$this, 'ajax_callback_verify_indicadores_info'));
+
+        add_action("wp_ajax_acolhesus_reports_chart", array(&$this, "ajax_callback_reports_charts"));
+    }
+
+    function ajax_callback_reports_charts()
+    {
+        wp_die();
     }
 
     function ajax_callback_verify_indicadores_info(){
@@ -1232,7 +1239,6 @@ class AcolheSUS {
             wp_enqueue_script('jquery-ui-accordion', null, array('jquery'), null, false);
 
             if (is_single()) {
-
                 wp_enqueue_script('rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js', array('jquery', 'jquery-ui-accordion'));
 
                 if ("matriz_cenario" === $type) {
@@ -1244,8 +1250,8 @@ class AcolheSUS {
                 wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/archive.js');
                 wp_enqueue_style('select2', plugin_dir_url( __FILE__ ) . 'assets/lib/select2/select2.min.css');
                 wp_enqueue_script('select2', plugin_dir_url( __FILE__ ) . 'assets/lib/select2/select2.min.js', array('jquery'));
-
             }
+
             wp_localize_script('rhs-acolhesus', 'acolhesus', [
                 'ajax_url' => admin_url('admin-ajax.php')
             ]);
