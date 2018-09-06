@@ -580,55 +580,62 @@ class AcolheSUS {
     function append_content_to_mail($mail, $data, $form)
     {
         if (isset($_POST['_cf_cr_pst'])) {
+            $id = sanitize_text_field($_POST['_cf_cr_pst']);
 
-            /*
-             * Descomentar quando passar pra produção
-             *
-            global $wpdb;
-            $_entry_id = get_post_meta($_POST['_cf_cr_pst'], '_entry_id', true);
-            $sql = "SELECT post.meta_value as estado from $wpdb->postmeta post JOIN $wpdb->postmeta postmeta 
-                ON post.post_id = postmeta.post_id 
-                where 
-                    (post.meta_key='acolhesus_campo' and postmeta.meta_key='_entry_id') 
-                        AND 
-                    postmeta.meta_value = '$_entry_id'";
+            // $mail['recipients'][] = $this->get_forward_mail($id); # Descomentar quando passar pra produção
 
-            $results = $wpdb->get_results($sql);
-            if(!empty($results))
-            {
-                $estado = $results[0]->estado;
-
-                $ailana   = ['AL', 'MA', 'PI', 'RN'];
-                $diego    = ['MS', 'MT', 'RR'];
-                $danyelle = ['AC', 'MG', 'SC'];
-                $janaina  = ['DF', 'GO'];
-                // $hiojuma  = ['CE', 'PB']; // Saiu do projeto. Ver quem assumiu esses UFs
-                $marilia  = ['AM', 'BA', 'PA'];
-                $email = '';
-
-                // TODO: refatorar esse tanto de if
-                if (in_array($estado, $ailana)) {
-                    $email = 'ailana.lira@saude.gov.br';
-                } else if(in_array($estado, $diego)) {
-                    $email = 'diegop.santos@saude.gov.br';
-                } else if(in_array($estado, $danyelle)) {
-                    $email = 'danyelle.cavalcante@saude.gov.br';
-                } else if(in_array($estado, $marilia)) {
-                    $email = 'marilia.palacio@saude.gov.br';
-                } else if (in_array($estado, $marilia)) {
-                    $email = 'janaina.cardoso@saude.gov.br'; // Conferir este e-mail
-                }
-
-                $mail['recipients'][] = $email;
-            } */
-
-            $form_link = get_permalink($_POST['_cf_cr_pst']);
+            $form_link = get_permalink($id);
             if ($form_link) {
                 $mail['message'] = $mail['message'] . "<br><br> Veja o formulário completo no link: $form_link";
             }
                 
             return $mail;
         }
+    }
+
+    private function get_forward_mail($form_id)
+    {
+        if (is_null($form_id)) {
+            $form_id = $_POST['_cf_cr_pst'];
+        }
+
+        global $wpdb;
+        $_entry_id = get_post_meta($form_id, '_entry_id', true);
+        $sql = "SELECT post.meta_value as estado from $wpdb->postmeta post JOIN $wpdb->postmeta postmeta 
+                ON post.post_id = postmeta.post_id 
+                where 
+                    (post.meta_key='acolhesus_campo' and postmeta.meta_key='_entry_id') 
+                        AND 
+                    postmeta.meta_value = '$_entry_id'";
+
+        $results = $wpdb->get_results($sql);
+        $email = '';
+        if(!empty($results))
+        {
+            $estado = $results[0]->estado;
+
+            $ailana   = ['AL', 'MA', 'PI', 'RN'];
+            $diego    = ['MS', 'MT', 'RR'];
+            $danyelle = ['AC', 'MG', 'SC'];
+            $janaina  = ['DF', 'GO'];
+            // $hiojuma  = ['CE', 'PB']; // Saiu do projeto. Ver quem assumiu esses UFs
+            $marilia  = ['AM', 'BA', 'PA'];
+
+            // TODO: refatorar esse tanto de if
+            if (in_array($estado, $ailana)) {
+                $email = 'ailana.lira@saude.gov.br';
+            } else if(in_array($estado, $diego)) {
+                $email = 'diegop.santos@saude.gov.br';
+            } else if(in_array($estado, $danyelle)) {
+                $email = 'danyelle.cavalcante@saude.gov.br';
+            } else if(in_array($estado, $marilia)) {
+                $email = 'marilia.palacio@saude.gov.br';
+            } else if (in_array($estado, $janaina)) {
+                $email = 'janaina.cardoso@saude.gov.br'; // Conferir este e-mail
+            }
+        }
+
+        return $email;
     }
 
     function delete_new_form_tag() {
