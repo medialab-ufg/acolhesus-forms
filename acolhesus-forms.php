@@ -1228,8 +1228,9 @@ class AcolheSUS {
     }
 
     function load_acolhesus_assets() {
-
-        if ($this->isAcolheSusPage()) {
+        // global $wp;  
+        // $current_url = home_url(add_query_arg(array(),$wp->request));
+        if ($this->isAcolheSusPage() || "formularios" === get_query_var('acolhe_sus')) {
             wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
         }
 
