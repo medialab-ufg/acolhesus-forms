@@ -399,7 +399,11 @@ class AcolheSUSReports
 
     private function get_percent($base_percent, $value)
     {
-        return sprintf("%.1f",(100 * $value) / $base_percent);
+        if ($base_percent > 0) {
+            return sprintf("%.1f",(100 * $value) / $base_percent);
+        }
+
+        return $base_percent;
     }
 
     private function renderAnswerRow($total, $label) {
