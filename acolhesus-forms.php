@@ -1221,7 +1221,10 @@ class AcolheSUS {
     }
 
     function load_acolhesus_assets() {
-        wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
+
+        if ($this->isAcolheSusPage()) {
+            wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
+        }
 
         $type = get_post_type();
         if ( $type && array_key_exists($type, $this->forms)  || !empty(get_query_var('acolhe_sus')) ) {
