@@ -11,8 +11,8 @@ jQuery( function( $ ) {
         event.preventDefault();
     });
 
-    function create_chart(data, form_name, chart_type = 'bar', where = 'report-results') {
-        google.charts.load('current', {'packages':['corechart', chart_type]});
+    function create_chart(data, form_name, chart_type = 'pie', where = 'chart') {
+        google.charts.load('current', {'packages':['corechart']});
         var title = create_title(form_name);
 
         google.charts.setOnLoadCallback(function (){
@@ -27,15 +27,12 @@ jQuery( function( $ ) {
     function drawChart(info, where, chart_type, data_table, options) {
         var chart;
 
-        if(chart_type === 'bar')
+        if(chart_type === 'pie')
         {
-            chart = new google.visualization.ColumnChart(document.getElementById(where));
-        }else if (chart_type === 'line')
-        {
-            chart = new google.visualization.LineChart(document.getElementById(where));
+            chart = new google.visualization.PieChart(document.getElementById(where));
         }
 
-        chart.draw(data_table, options);
+        chart.draw(info, options);
     }
 
     function create_title(type)
@@ -48,29 +45,30 @@ jQuery( function( $ ) {
 
     function prepare_data(data, chart_type, data_type, data_table) {
         var info = [];
-        if(chart_type === 'bar')
+        if(chart_type === 'pie')
         {
-
-        }else if(chart_type === 'line')
-        {
-
+            info =[
+                ['Task', 'Hours per Day'],
+                ['Work',     11],
+                ['Eat',      2],
+                ['Commute',  2],
+                ['Watch TV', 2],
+                ['Sleep',    7]
+            ];
         }
 
-        data_table.addRows(info);
-        return info;
+        return google.visualization.arrayToDataTable(info);
     }
 
     function set_options(data_type, title) {
         var options = {};
-        var width = 800, height = 750;
+        var width = 900, height = 500;
 
         options = {
             title: title,
             width: width,
             height: height,
-            vAxis: {
-                title: 'Quantidade'
-            }
+            is3D: true
         };
 
         return options;

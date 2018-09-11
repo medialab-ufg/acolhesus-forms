@@ -33,7 +33,9 @@ if (current_user_can('administrator')) {
             </div>
 
             <div class="report-results"> <?php $report->renderReports($form,$label); ?> </div>
-
+            <div class="col-md-12">
+                <div id="chart"></div>
+            </div>
         </div>
 <?php
     endif;

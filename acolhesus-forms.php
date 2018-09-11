@@ -217,7 +217,7 @@ class AcolheSUS {
 
         add_filter('caldera_forms_mailer', array(&$this, 'append_content_to_mail'), 10, 3);
 
-        add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_save_for_later'));
+        add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_for_later'));
 
         add_action('caldera_forms_submit_post_process', array(&$this, 'get_old_attachment'), 10, 4 );
 
@@ -232,6 +232,7 @@ class AcolheSUS {
 
     function ajax_callback_reports_charts()
     {
+        $formType = $_POST['form'];
         wp_die();
     }
 
@@ -358,7 +359,7 @@ class AcolheSUS {
         return $out;
     }
 
-    function ajax_callback_save_save_for_later()
+    function ajax_callback_save_for_later()
     {
         global $wpdb, $AcolheSUSLogger;
         $post_id = sanitize_text_field($_POST['_cf_cr_pst']);
@@ -397,32 +398,9 @@ class AcolheSUS {
                     if(!is_array($value))
                     {//Others
                         $alt_vals = explode(",", $value);
-                        if($alt_vals[0] === "autocomplete")
+                        if(($index_autocomplete = array_search( "autocomplete", $alt_vals)) !== false)
                         {
-                            unset($alt_vals[0]);
-                            $return = $this->search_in_array($current_values, $index);
-                            $array_diff = array_diff($return, $alt_vals);
-                            if(!empty($array_diff))
-                            {
-                                $old_value = implode(", ", $return);
-                                $old_value .= " <u>para</u> ";
-                                $old_value .= implode(", ", $alt_vals);
-                                $msg .= $fields[$index]['label'].": $old_value <br/>";
-
-                                $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
-                                $wpdb->query($delete_sql);
-
-                                foreach ($alt_vals as $alt_val){
-                                    if(!is_numeric($alt_val))
-                                    {
-                                        $alt_val = "'".$alt_val."'";
-                                    }
-
-                                    $slug = "'".$fields[$index]['slug']."'";
-                                    $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, '".$index."', $slug, $alt_val)";
-                                    $wpdb->query($sql);
-                                }
-                            }
+                            $this->insert_autocomplete($alt_vals, $index, $index_autocomplete, $_entry_id, $msg, $fields, $wpdb, $current_values);
                         }else
                         {
                             $return = $this->search_in_array($current_values, $index);
@@ -495,17 +473,35 @@ class AcolheSUS {
 
                         if(!is_array($value))
                         {
-                            $value = "'".$value."'";
+                            $alt_vals = explode(",", $value);
+                            if(($index_autocomplete = array_search( "autocomplete", $alt_vals)) !== false)
+                            {
+                                unset($alt_vals[$index_autocomplete]);
+                                foreach ($alt_vals as $alt_val){
+                                    if(!is_numeric($alt_val))
+                                    {
+                                        $alt_val = "'".$alt_val."'";
+                                    }
 
-                            $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $value)";
-                            $wpdb->query($sql);
+                                    $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                    VALUES ($_entry_id, $index, $slug, $alt_val)";
+                                    $wpdb->query($sql);
+                                }
+                            }else{
+                                $value = "'".$value."'";
+
+                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                VALUES ($_entry_id, $index, $slug, $value)";
+                                $wpdb->query($sql);
+                            }
                         }else
                         {
                             foreach($value as $v)
                             {
                                 $msg .= "$v<br>";
                                 $v = "'".$v."'";
-                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
+                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                VALUES ($_entry_id, $index, $slug, $v)";
                                 $wpdb->query($sql);
                             }
                         }
@@ -557,6 +553,36 @@ class AcolheSUS {
         wp_publish_post($post_id);
     }
 
+    function insert_autocomplete(&$alt_vals, $index, $index_autocomplete, $_entry_id, &$msg, $fields, $wpdb, &$current_values)
+    {
+        unset($alt_vals[$index_autocomplete]);
+        $return = $this->search_in_array($current_values, $index);
+
+        $array_diff1 = array_diff($return, $alt_vals);
+        $array_diff2 = array_diff($alt_vals, $return);
+
+        if(!empty($array_diff1) || !empty($array_diff2))
+        {
+            $old_value = implode(", ", $return);
+            $old_value .= " <u>para</u> ";
+            $old_value .= implode(", ", $alt_vals);
+            $msg .= $fields[$index]['label'].": $old_value <br/>";
+
+            $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+            $wpdb->query($delete_sql);
+
+            foreach ($alt_vals as $alt_val){
+                if(!is_numeric($alt_val))
+                {
+                    $alt_val = "'".$alt_val."'";
+                }
+
+                $slug = "'".$fields[$index]['slug']."'";
+                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, '".$index."', $slug, $alt_val)";
+                $wpdb->query($sql);
+            }
+        }
+    }
 
     function search_in_array(&$current_value, $search)
     {
