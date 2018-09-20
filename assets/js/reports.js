@@ -28,9 +28,14 @@ jQuery( function($) {
     });
 
     function create_chart(data, form_name, title = '', chart_type = 'bar', where = 'chart') {
+        var to_import = ['corechart'];
+
         if(chart_type === 'bar')
-            google.charts.load('current', {'packages':['corechart', chart_type]});
-        else google.charts.load('current', {'packages':['corechart']});
+        {
+            to_import.push(chart_type);
+        }
+
+        google.charts.load('current', {'packages': to_import});
 
         if(title.length === 0)
             title = create_title(form_name);
