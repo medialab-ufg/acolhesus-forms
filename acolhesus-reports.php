@@ -5,9 +5,9 @@ class AcolheSUSReports
 {
     use AcolheSUSCommon;
 
-    private $report_fields = ["number"];
+    public $report_fields = ["number"];
 
-    private $excluded_fields = [
+    public $excluded_fields = [
         "fld_4739909", // texto ajuda avaliacao grupos
         "fld_1123995", // anexos avaliacao grupos
         "fld_7434309", // "Markup Data" avaliacao grupos
@@ -39,12 +39,6 @@ class AcolheSUSReports
 
         $this->posts = $wpdb->prefix . 'posts';
         $this->postmeta = $wpdb->prefix . 'postmeta';
-
-        wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/reports.js');
-        wp_enqueue_script('google_charts', 'https://www.gstatic.com/charts/loader.js');
-        wp_localize_script('rhs-acolhesus', 'acolhesus', [
-            'ajax_url' => admin_url('admin-ajax.php')
-        ]);
     }
 
     public function hasStateFilter()
@@ -121,7 +115,7 @@ class AcolheSUSReports
         return $this->filters["phase"];
     }
 
-    private function getFormFields($form)
+    public function getFormFields($form)
     {
         $caldera_form_id = $this->formId($form);
         $form_config = $this->getFormConfig($caldera_form_id);
@@ -466,7 +460,7 @@ class AcolheSUSReports
         }
     }
 
-    private function getAnswerStats($field_id, $closed = false)
+    public function getAnswerStats($field_id, $closed = false)
     {
         if (is_string($field_id)) {
             if ($closed) {

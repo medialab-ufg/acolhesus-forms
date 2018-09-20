@@ -27,13 +27,31 @@ if (current_user_can('administrator')) {
                             <input type="reset" class="btn btn-default hidden-print" form="reports-filter"  value="Limpar Filtros" />
                         <?php } ?>
                         <input type="submit" class="btn btn-info filter-forms hidden-print" value="Gerar Relatório"/>
-                        <input type="button" id="gen_charts" class="btn btn-primary filter-forms hidden-print" value="Gerar Gráfico"/>
+
+                        <div class="btn-group">
+                            <button type="button" id="gen_charts" class="btn btn-primary filter-forms hidden-print">Gerar Gráfico</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <span class="caret"></span> <span class="sr-only">Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="chart_type" data-value="bar"><a href="javascript:void (0);" > <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                                        Barras
+                                    </a>
+                                </li>
+                                <li class="chart_type" data-value="pie"><a href="javascript:void (0);" > <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                                        Pizza
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
                 </form>
             </div>
 
             <div class="report-results"> <?php $report->renderReports($form,$label); ?> </div>
             <div class="col-md-12">
+                <input type="hidden" id="chart_type" value="bar">
                 <div id="chart"></div>
             </div>
         </div>

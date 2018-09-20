@@ -233,7 +233,52 @@ class AcolheSUS {
     function ajax_callback_reports_charts()
     {
         $formType = $_POST['form'];
+
+        $acholheSUSReports = new AcolheSUSReports(); $result = [];
+        if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos')
+        {
+            $fields = $acholheSUSReports->getFormFields($formType);
+            $index = 'total';
+            foreach ($fields as $id => $campo) {
+                $tipo = $campo["type"];
+                if ($tipo === "html" && !in_array($id, $acholheSUSReports->excluded_fields)) {
+                    $index = $campo["config"]["default"];
+                } else if (in_array($tipo, $acholheSUSReports->report_fields)) {
+                    $result[$index][$campo['label']] = intval($acholheSUSReports->getAnswerStats($id));
+                }
+            }
+        }
+
+        $this->get_percent($result, $formType);
+        echo json_encode($result);
         wp_die();
+    }
+
+    function get_percent(&$data, $formType)
+    {
+        if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos' )
+        {
+            if ($formType === 'avaliacao_grupos') {
+                $sum = $data['total'];
+                $sum = current($sum);
+                unset($data['total']);
+            }
+
+            foreach ($data as $piece_name => $piace)
+            {
+                if($formType === 'avaliacao_oficina')
+                {
+                    $sum = array_sum($piace);
+                }
+
+                foreach ($piace as $option_name => $option)
+                {
+                    $data[$piece_name][$option_name] = [];
+                    $data[$piece_name][$option_name]['total'] = $option;
+                    $data[$piece_name][$option_name]['percent'] = doubleval(sprintf("%.1f",(100 * $option) / $sum));
+                }
+            }
+        }
     }
 
     function ajax_callback_verify_indicadores_info(){
@@ -1283,6 +1328,10 @@ class AcolheSUS {
 
         if ($this->is_report_page()) {
             wp_enqueue_script( 'rhs-acolhesus-reports', plugin_dir_url( __FILE__ ) . 'assets/js/reports.js',array('jquery'));
+            wp_enqueue_script('google_charts', 'https://www.gstatic.com/charts/loader.js');
+            wp_localize_script('rhs-acolhesus-reports', 'acolhesus', [
+                'ajax_url' => admin_url('admin-ajax.php')
+            ]);
         }
 
         $type = get_post_type();
