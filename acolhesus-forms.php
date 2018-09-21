@@ -165,6 +165,8 @@ class AcolheSUS {
     const CAMPO_META = 'acolhesus_campo';
 
     const CGPNH = 'acolhesus_cgpnh';
+
+    const ANSWER_ID = '_cf_cr_pst';
     
     function __construct() {
         add_action('init', [&$this, 'register_post_types']);
@@ -242,7 +244,7 @@ class AcolheSUS {
             foreach ($fields as $id => $campo) {
                 $tipo = $campo["type"];
                 if ($tipo === "html" && !in_array($id, $acholheSUSReports->excluded_fields)) {
-                    $index = $campo["config"]["default"];
+                    $index = strip_tags($campo["config"]["default"]);
                 } else if (in_array($tipo, $acholheSUSReports->report_fields)) {
                     $result[$index][$campo['label']] = intval($acholheSUSReports->getAnswerStats($id));
                 }
@@ -407,7 +409,7 @@ class AcolheSUS {
     function ajax_callback_save_for_later()
     {
         global $wpdb, $AcolheSUSLogger;
-        $post_id = sanitize_text_field($_POST['_cf_cr_pst']);
+        $post_id = sanitize_text_field($_POST[self::ANSWER_ID]);
         $_entry_id = get_post_meta($post_id, '_entry_id', true);
         if(!$_entry_id)
         {
@@ -650,8 +652,8 @@ class AcolheSUS {
 
     function append_content_to_mail($mail, $data, $form)
     {
-        if (isset($_POST['_cf_cr_pst'])) {
-            $id = sanitize_text_field($_POST['_cf_cr_pst']);
+        if (isset($_POST[self::ANSWER_ID])) {
+            $id = sanitize_text_field($_POST[self::ANSWER_ID]);
 
             // $mail['recipients'][] = $this->get_forward_mail($id); # Descomentar quando passar pra produção
 
@@ -667,7 +669,7 @@ class AcolheSUS {
     private function get_forward_mail($form_id)
     {
         if (is_null($form_id)) {
-            $form_id = $_POST['_cf_cr_pst'];
+            $form_id = $_POST[self::ANSWER_ID];
         }
 
         global $wpdb;
