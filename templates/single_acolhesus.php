@@ -25,9 +25,22 @@ if ($is_new_form) {
             <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>
         <?php endif; ?>
 
-        <button id="gen_charts" class="btn btn-primary" type="button"> <i class="fa fa-bar-chart" aria-hidden="true"></i>
-            Gerar gráfico
-        </button>
+        <?php
+        if($post_type === 'avaliacao_grupos' || $post_type === 'avaliacao_oficina')
+        {
+            ?>
+            <div class="chart_options pull-right">
+                <button id="show_form" class="btn btn-primary" type="button">
+                    Ver formulário
+                </button>
+
+                <button id="gen_charts" class="btn btn-primary" type="button"> <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                    Gerar gráfico
+                </button>
+            </div>
+            <?php
+        }
+        ?>
     </div>
     <h3>
         <?php the_title(); ?>
@@ -42,7 +55,9 @@ if ($is_new_form) {
     <div id="the_content">
         <?php the_content(); ?>
     </div>
-    <div id="chart"></div>
+    <div id="charts_set">
+        <div id="chart"></div>
+    </div>
 
     <div id="form-accordion">
 

@@ -15,7 +15,7 @@ jQuery( function( $ ) {
         var field = $(this).attr('name');
         var $field_msg = '.' + field + " .fixed";
 
-        if ((0 === opt_val.length) && ("" === opt_val)) {
+        if (opt_val && (0 === opt_val.length) && ("" === opt_val)) {
             $(this).addClass('required-acolhesus');
             $($field_msg).show();
         } else {

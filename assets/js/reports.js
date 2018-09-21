@@ -31,7 +31,13 @@ jQuery( function($) {
             }
         });
 
+        $("#charts_set").show();
         event.preventDefault();
+    });
+
+    $("#show_form").click(function () {
+        $("#the_content").show();
+        $("#charts_set").hide();
     });
 
     function create_chart(data, form_name, title = '', chart_type = 'bar', where = 'chart') {
