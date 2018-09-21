@@ -5,12 +5,19 @@ jQuery( function($) {
     });
 
     $("#gen_charts").click(function (event) {
+        var post_id = $("input[name=_cf_cr_pst]").val();
         $.post(acolhesus.ajax_url, {
             action: 'acolhesus_reports_chart',
-            form: $("#form_type").val()
+            form: $("#form_type").val(),
+            post_id: post_id
         }).success(function (r) {
-            $("table.table").hide();
-            $(".report-footer").hide();
+            if(!post_id)
+            {
+                $("table.table").hide();
+                $(".report-footer").hide();
+            }else {
+                $("#the_content").hide();
+            }
 
             var data = JSON.parse(r);
 

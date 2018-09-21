@@ -460,10 +460,16 @@ class AcolheSUSReports
         }
     }
 
-    public function getAnswerStats($field_id, $closed = false)
+    public function getAnswerStats($field_id, $closed = false, $post_id = false)
     {
         if (is_string($field_id)) {
-            if ($closed) {
+            if($post_id)
+            {
+                global $wpdb;
+                $_entry_id = get_post_meta($post_id, '_entry_id', true);
+                $sql_current_values = "SELECT value as value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."' AND field_id = '".$field_id."'";
+                return $wpdb->get_results($sql_current_values, 'ARRAY_A')[0]['value'];
+            }else if ($closed) {
                 $sql = "SELECT count(*) as total, value FROM " . $this->caldera_entries . " WHERE field_id='$field_id' GROUP BY value ORDER BY total DESC";
                 return $this->getSQLResults($sql, "total");
             } else {

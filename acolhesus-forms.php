@@ -235,18 +235,20 @@ class AcolheSUS {
     function ajax_callback_reports_charts()
     {
         $formType = $_POST['form'];
+        $post_id = sanitize_text_field($_POST['post_id']);
 
         $acholheSUSReports = new AcolheSUSReports(); $result = [];
         if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos')
         {
             $fields = $acholheSUSReports->getFormFields($formType);
+
             $index = 'total';
             foreach ($fields as $id => $campo) {
                 $tipo = $campo["type"];
                 if ($tipo === "html" && !in_array($id, $acholheSUSReports->excluded_fields)) {
                     $index = strip_tags($campo["config"]["default"]);
                 } else if (in_array($tipo, $acholheSUSReports->report_fields)) {
-                    $result[$index][$campo['label']] = intval($acholheSUSReports->getAnswerStats($id));
+                    $result[$index][$campo['label']] = intval($acholheSUSReports->getAnswerStats($id, false, $post_id));
                 }
             }
         }
@@ -1328,7 +1330,7 @@ class AcolheSUS {
             wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
         }
 
-        if ($this->is_report_page()) {
+        if ($this->is_report_page() || $this->isAcolheSusPage()) {
             wp_enqueue_script( 'rhs-acolhesus-reports', plugin_dir_url( __FILE__ ) . 'assets/js/reports.js',array('jquery'));
             wp_enqueue_script('google_charts', 'https://www.gstatic.com/charts/loader.js');
             wp_localize_script('rhs-acolhesus-reports', 'acolhesus', [

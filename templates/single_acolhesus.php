@@ -15,6 +15,7 @@ if ($is_new_form) {
 ?>
 
 <div class="acolhesus-form-container">
+    <input type="hidden" id="form_type" value="<?php echo $post_type;?>">
     <div class="options">
         <a href="<?php echo home_url('formularios-acolhesus'); ?>" class="btn btn-default voltar-home">
             VOLTAR PARA TELA INICIAL
@@ -23,6 +24,10 @@ if ($is_new_form) {
         <?php if (current_user_can('acolhesus_cgpnh')): ?>
             <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>
         <?php endif; ?>
+
+        <button id="gen_charts" class="btn btn-primary" type="button"> <i class="fa fa-bar-chart" aria-hidden="true"></i>
+            Gerar gráfico
+        </button>
     </div>
     <h3>
         <?php the_title(); ?>
@@ -34,7 +39,10 @@ if ($is_new_form) {
 
     <?php $formView->get_entry_attachments(); ?>
 
-    <?php the_content(); ?>
+    <div id="the_content">
+        <?php the_content(); ?>
+    </div>
+    <div id="chart"></div>
 
     <div id="form-accordion">
 
