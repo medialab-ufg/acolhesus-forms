@@ -27,12 +27,23 @@ class AcolheSUS {
             'fase' => 'fase_1',
             'eixo' => 0
         ],
-        'indicadores' => [
+        'ind_materno_infantil' => [
             'labels' => [
-                'name' => 'Indicadores',
-                'singular_name' => 'Indicadores'
+                'name' => 'Indicadores Materno-Infantil',
+                'singular_name' => 'Indicadores Materno-Infantil'
             ],
-            'slug' => 'indicadores',
+            'slug' => 'ind_materno_infantil',
+            'uma_entrada_por_campo' => false,
+            'fase' => 'fase_1',
+            'eixo' => 0,
+            'omitir_macrogestao' => true
+        ],
+        'indicadores_caps' => [
+            'labels' => [
+                'name' => 'Indicadores CAPS',
+                'singular_name' => 'Indicadores CAPS'
+            ],
+            'slug' => 'indicadores_caps',
             'uma_entrada_por_campo' => false,
             'fase' => 'fase_1',
             'eixo' => 0,
