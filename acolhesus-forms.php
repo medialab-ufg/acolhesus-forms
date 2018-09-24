@@ -49,6 +49,17 @@ class AcolheSUS {
             'eixo' => 0,
             'omitir_macrogestao' => true
         ],
+	'indicadores' => [
+	    'labels' => [
+                'name' => 'Indicadores Hospital Geral',
+                'singular_name' => 'Indicadores Hospital Geral'
+            ],
+            'slug' => 'indicadores_caps',
+            'uma_entrada_por_campo' => false,
+            'fase' => 'fase_1',
+            'eixo' => 0,
+            'omitir_macrogestao' => true
+	],
         'visita_guiada' => [
             'labels' => [
                 'name' => 'Roteiro de Visita Guiada',
