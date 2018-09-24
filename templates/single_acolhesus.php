@@ -25,22 +25,28 @@ if ($is_new_form) {
             <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>
         <?php endif; ?>
 
-        <?php
-        if($post_type === 'avaliacao_grupos' || $post_type === 'avaliacao_oficina')
-        {
-            ?>
-            <div class="chart_options pull-right">
-                <button id="show_form" class="btn btn-primary" type="button">
-                    Ver formulário
-                </button>
-
+        <div class="chart_options pull-right">
+            <button id="show_form" class="btn btn-primary" type="button">
+                Ver formulário
+            </button>
+            <?php
+            if($post_type === 'avaliacao_grupos' || $post_type === 'avaliacao_oficina')
+            {
+                ?>
                 <button id="gen_charts" class="btn btn-primary" type="button"> <i class="fa fa-bar-chart" aria-hidden="true"></i>
                     Gerar gráfico
                 </button>
-            </div>
-            <?php
-        }
-        ?>
+                <?php
+            } else if($post_type === 'matriz_p_criticos')
+            {
+                ?>
+                <button id="gen_report" class="btn btn-primary" type="button"> <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                    Gerar relatório
+                </button>
+                <?php
+            }
+            ?>
+        </div>
     </div>
     <h3>
         <?php the_title(); ?>

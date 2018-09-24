@@ -230,6 +230,8 @@ class AcolheSUS {
         add_action('wp_ajax_acolhesus_verify_indicadores_info', array(&$this, 'ajax_callback_verify_indicadores_info'));
 
         add_action("wp_ajax_acolhesus_reports_chart", array(&$this, "ajax_callback_reports_charts"));
+
+        add_action("wp_ajax_acolhesus_reports_report", array(&$this, "ajax_callback_reports_report"));
     }
 
     function ajax_callback_reports_charts()
@@ -283,6 +285,45 @@ class AcolheSUS {
                 }
             }
         }
+    }
+
+    function ajax_callback_reports_report()
+    {
+        $formType = $_POST['form'];
+        $post_id = sanitize_text_field($_POST['post_id']);
+
+        $result = $this->get_specific_form_data($formType, $post_id);
+
+        echo json_encode($result);
+        wp_die();
+    }
+
+    function get_specific_form_data($formType, $post_id)
+    {
+        $acholheSUSReports = new AcolheSUSReports(); $result = [];
+        if($formType === 'matriz_p_criticos')
+        {
+            $fields = $acholheSUSReports->getFormFields($formType);
+            $index = '';
+            foreach ($fields as $id => $campo) {
+                $tipo = $campo["type"];
+                if ($tipo === "html" && !in_array($id, $acholheSUSReports->excluded_fields)) {
+                    $result['causes'][] = strip_tags($campo["config"]["default"]);
+                } else if ($tipo === "wysiwyg") {
+                    preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
+                    $index = $index[0];
+                    if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
+                    {
+                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
+                    }else
+                    {
+                        $result[$index][] = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($id,$post_id)];
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 
     function ajax_callback_verify_indicadores_info(){

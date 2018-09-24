@@ -270,7 +270,7 @@ class AcolheSUSReports
         return $row;
     }
 
-    private function getVisualEditorData($field_id, $label,$formType)
+    public function getVisualEditorData($field_id, $label,$formType)
     {
         if ($formType === "matriz_p_criticos") {
             $r = $this->getAnswer($field_id,$formType);
@@ -460,6 +460,15 @@ class AcolheSUSReports
         }
     }
 
+
+    public function getAnswerToEspecific($field_id, $post_id)
+    {
+        global $wpdb;
+        $_entry_id = get_post_meta($post_id, '_entry_id', true);
+        $sql_current_values = "SELECT value as value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."' AND field_id = '".$field_id."'";
+        return $wpdb->get_results($sql_current_values, 'ARRAY_A')[0]['value'];
+    }
+
     public function getAnswerStats($field_id, $closed = false, $post_id = false)
     {
         if (is_string($field_id)) {
@@ -481,7 +490,7 @@ class AcolheSUSReports
         return [];
     }
 
-    private function getAnswer($field_id,$formType)
+    public function getAnswer($field_id,$formType)
     {
         if ($this->hasStateFilter()) {
             $key = "acolhesus_campo";

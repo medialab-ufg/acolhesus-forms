@@ -4,6 +4,35 @@ jQuery( function($) {
         $("#gen_charts").click();
     });
 
+    $("#gen_report").click(function (event) {
+        var post_id = $("input[name=_cf_cr_pst]").val();
+
+        $.post(acolhesus.ajax_url, {
+            action: 'acolhesus_reports_report',
+            form: $("#form_type").val(),
+            post_id: post_id
+        }).success(function (r) {
+            /*if(!post_id)
+            {
+                $("table.table").hide();
+                $(".report-footer").hide();
+            }else {
+                $("#the_content").hide();
+            }*/
+
+            var data = JSON.parse(r);
+
+            prepare_divs(Object.size(data));
+
+            var i = 1;
+            for(var index in data)
+            {
+                var chart_div = $('div[id="chart"]');
+                //create_chart(data[index], $("#form_type").val(), index, $('#chart_type').val(), 'chart'+i++);
+            }
+        });
+    });
+
     $("#gen_charts").click(function (event) {
         var post_id = $("input[name=_cf_cr_pst]").val();
         $.post(acolhesus.ajax_url, {
