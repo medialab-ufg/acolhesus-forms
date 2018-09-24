@@ -26,7 +26,7 @@ if ($is_new_form) {
         <?php endif; ?>
 
         <div class="chart_options pull-right">
-            <button id="show_form" class="btn btn-primary" type="button">
+            <button id="show_form" class="btn btn-primary" style="display: none;" type="button">
                 Ver formulário
             </button>
             <?php

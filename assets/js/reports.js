@@ -60,6 +60,9 @@ jQuery( function($) {
             }
         });
 
+        $("#gen_charts").toggle();
+        $("#show_form").toggle();
+
         $("#charts_set").show();
         event.preventDefault();
     });
@@ -67,6 +70,9 @@ jQuery( function($) {
     $("#show_form").click(function () {
         $("#the_content").show();
         $("#charts_set").hide();
+
+        $("#gen_charts").toggle();
+        $("#show_form").toggle();
     });
 
     function create_chart(data, form_name, title = '', chart_type = 'bar', where = 'chart') {
@@ -80,7 +86,9 @@ jQuery( function($) {
         google.charts.load('current', {'packages': to_import});
 
         if(title.length === 0)
+        {
             title = create_title(form_name);
+        }
 
         google.charts.setOnLoadCallback(function (){
             var data_table = new google.visualization.DataTable();
@@ -96,14 +104,37 @@ jQuery( function($) {
 
         if(chart_type === 'bar')
         {
-            chart = new google.charts.Bar(document.getElementById(where));
-            options = google.charts.Bar.convertOptions(options);
+            var view = new google.visualization.DataView(info);
+
+            view.setColumns([0,
+                1,
+                {
+                    calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                },
+                2,
+                {
+                    calc: "stringify",
+                    sourceColumn: 2,
+                    type: "string",
+                    role: "annotation"
+                }]);
+
+            var columnWrapper = new google.visualization.ChartWrapper({
+                chartType: 'ColumnChart',
+                containerId: where,
+                dataTable: view,
+                options: options
+            });
+
+            columnWrapper.draw();
         }else if(chart_type === 'pie')
         {
             chart = new google.visualization.PieChart(document.getElementById(where));
+            chart.draw(info, options);
         }
-
-        chart.draw(info, options);
     }
 
     function create_title(form_name)
@@ -124,7 +155,7 @@ jQuery( function($) {
         var info = [], titles = [], lines = [];
         if(chart_type === 'bar')
         {
-            info.push(["Avaliação", "Total", "Porcentagem"]);
+            info.push(["Avaliação", "Total", "Porcentagem"] );
             for(var index in data)
             {
                 info.push([index, data[index].total, data[index].percent]);
@@ -150,7 +181,8 @@ jQuery( function($) {
             options = {
                 title: title,
                 width: width,
-                height: height
+                height: height,
+                colors: ['#00b4b4', '#134074']
             };
         }else if(chart_type === 'pie')
         {
@@ -158,7 +190,8 @@ jQuery( function($) {
                 title: title,
                 width: width,
                 height: height,
-                is3D: true
+                is3D: true,
+                colors: ['#00b4b4', '#134074', 'green', 'red', 'gold']
             };
         }
 
