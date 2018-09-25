@@ -315,9 +315,81 @@ class AcolheSUS {
         $post_id = sanitize_text_field($_POST['post_id']);
 
         $result = $this->get_specific_form_data($formType, $post_id);
+        $html = $this->wrap_in_html($formType, $result);
 
-        echo json_encode($result);
+        echo json_encode($html);
         wp_die();
+    }
+
+    function wrap_in_html($form_type, $result)
+    {
+        ob_start();
+        if($form_type === 'matriz_p_criticos')
+        {
+            foreach ($result as $ponto_critico_name => $ponto_critico_info)
+            {
+                ?>
+                <div class="ponto-critico">
+                    <div class="box-info">
+                        <h3 class="text-center"><?php echo $ponto_critico_name?></h3>
+                        <div class="text-center box-details">
+                            <?php echo $ponto_critico_info['name']; ?>
+                        </div>
+                    </div>
+
+                    <div class="box-info">
+                        <h3 class="text-center">Caracterização</h3>
+                        <div class="box-details">
+                            <?php  echo $this->get_info_in_result($ponto_critico_info, "Caracterização do ".$ponto_critico_name)[0];?>
+                        </div>
+                    </div>
+
+                    <div class="box-info">
+                        <h3 class="text-center">Diretrizes/dispositivos</h3>
+                        <div class="box-details">
+                            <?php echo $this->get_info_in_result($ponto_critico_info, "Diretrizes do ".$ponto_critico_name)[0];?>
+                        </div>
+                    </div>
+
+                    <div class="box-info">
+                        <h3 class="text-center">Causas</h3>
+                        <div class="box-details">
+                            <?php
+                            $result = $this->get_info_in_result($ponto_critico_info, "Causas do ".$ponto_critico_name);
+                            foreach ($result as $cause)
+                            {
+                                ?>
+                                <div class="cause">
+                                    <?php echo $cause; ?>
+                                </div>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+        }
+
+        return ob_get_clean();
+    }
+
+    function get_info_in_result($result, $needle)
+    {
+        $needle = strtolower($needle);
+        foreach ($result as $information)
+        {
+            if(is_array($information))
+            {
+                if(strpos(strtolower($information['title']), $needle) !== false)
+                {
+                    $return[] = $information['value'];
+                }
+            }
+        }
+
+        return $return;
     }
 
     function get_specific_form_data($formType, $post_id)
@@ -329,9 +401,7 @@ class AcolheSUS {
             $index = '';
             foreach ($fields as $id => $campo) {
                 $tipo = $campo["type"];
-                if ($tipo === "html" && !in_array($id, $acholheSUSReports->excluded_fields)) {
-                    $result['causes'][] = strip_tags($campo["config"]["default"]);
-                } else if ($tipo === "wysiwyg") {
+                if ($tipo === "wysiwyg") {
                     preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
                     $index = $index[0];
                     if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)

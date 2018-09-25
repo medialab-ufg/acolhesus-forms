@@ -20,16 +20,23 @@ jQuery( function($) {
                 $("#the_content").hide();
             }*/
 
-            var data = JSON.parse(r);
+            $("#the_content").hide();
+            $("#show_form").toggle();
 
-            prepare_divs(Object.size(data));
+            $("#gen_report").toggle();
+            $("#charts_set").show();
+
+            var data = JSON.parse(r);
+            $("#chart").html(data);
+
+            /*prepare_divs(Object.size(data));
 
             var i = 1;
             for(var index in data)
             {
                 var chart_div = $('div[id="chart"]');
                 //create_chart(data[index], $("#form_type").val(), index, $('#chart_type').val(), 'chart'+i++);
-            }
+            }*/
         });
     });
 
@@ -72,6 +79,7 @@ jQuery( function($) {
         $("#charts_set").hide();
 
         $("#gen_charts").toggle();
+        $("#gen_report").toggle();
         $("#show_form").toggle();
     });
 
