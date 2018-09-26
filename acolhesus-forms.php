@@ -323,54 +323,80 @@ class AcolheSUS {
 
     function wrap_in_html($form_type, $result)
     {
-        ob_start();
+        $html = '';
         if($form_type === 'matriz_p_criticos')
         {
             foreach ($result as $ponto_critico_name => $ponto_critico_info)
             {
-                ?>
-                <div class="ponto-critico">
-                    <div class="box-info">
-                        <h3 class="text-center"><?php echo $ponto_critico_name?></h3>
-                        <div class="text-center box-details">
-                            <?php echo $ponto_critico_info['name']; ?>
-                        </div>
-                    </div>
-
-                    <div class="box-info">
-                        <h3 class="text-center">Caracterização</h3>
-                        <div class="box-details">
-                            <?php  echo $this->get_info_in_result($ponto_critico_info, "Caracterização do ".$ponto_critico_name)[0];?>
-                        </div>
-                    </div>
-
-                    <div class="box-info">
-                        <h3 class="text-center">Diretrizes/dispositivos</h3>
-                        <div class="box-details">
-                            <?php echo $this->get_info_in_result($ponto_critico_info, "Diretrizes do ".$ponto_critico_name)[0];?>
-                        </div>
-                    </div>
-
-                    <div class="box-info">
-                        <h3 class="text-center">Causas</h3>
-                        <div class="box-details">
-                            <?php
-                            $result = $this->get_info_in_result($ponto_critico_info, "Causas do ".$ponto_critico_name);
-                            foreach ($result as $cause)
-                            {
-                                ?>
-                                <div class="cause">
-                                    <?php echo $cause; ?>
-                                </div>
-                                <?php
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-                <?php
+                $html .= $this->wrap_specific_in_html($ponto_critico_name, $ponto_critico_info);
             }
         }
+
+        return $html;
+    }
+
+
+    public function wrap_specific_in_html($ponto_critico_name, $ponto_critico_info)
+    {
+        ob_start();
+        ?>
+        <div class="ponto-critico">
+            <div class="box-info">
+                <h3 class="text-center"><?php echo $ponto_critico_name?></h3>
+                <div class="text-center box-details">
+                    <?php
+                    if(!empty($ponto_critico_info['name']))
+                        echo $ponto_critico_info['name'];
+                    else echo "<i>Nome não cadastrado</i>";
+                    ?>
+                </div>
+            </div>
+
+            <div class="box-info">
+                <h3 class="text-center">Caracterização</h3>
+                <div class="box-details">
+                    <?php
+                    $caracterizacao = $this->get_info_in_result($ponto_critico_info, "Caracterização do ".$ponto_critico_name)[0];
+                    if(!empty($caracterizacao))
+                        echo $caracterizacao;
+                    else echo "<i>Caracterização não cadastrada</i>";
+                    ?>
+                </div>
+            </div>
+
+            <div class="box-info">
+                <h3 class="text-center">Diretrizes/dispositivos</h3>
+                <div class="box-details">
+                    <?php
+                    $diretrizes = $this->get_info_in_result($ponto_critico_info, "Diretrizes do ".$ponto_critico_name)[0];
+                    if(!empty($diretrizes))
+                        echo $diretrizes;
+                    else echo "<i>Diretrizes/dispositivos não cadastradas</i>";
+                    ?>
+                </div>
+            </div>
+
+            <div class="box-info">
+                <h3 class="text-center">Causas</h3>
+                <div class="box-details">
+                    <?php
+                    $result = $this->get_info_in_result($ponto_critico_info, "Causas do ".$ponto_critico_name);
+                    foreach ($result as $cause)
+                    {
+                        echo '<div class="cause">';
+                        if(!empty($cause))
+                        {
+                            ?>
+                            <?php echo $cause; ?>
+                            <?php
+                        }else echo "<i>Sem causas cadstradas</i>";
+                        echo '</div>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <?php
 
         return ob_get_clean();
     }

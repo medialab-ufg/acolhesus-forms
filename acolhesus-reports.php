@@ -93,6 +93,32 @@ class AcolheSUSReports
         }
     }
 
+    public function renderMatrizCriticosReport($formType, $label)
+    {
+        $data = $this->generateMatrizCriticosReportData($formType);
+        if (is_string($data) && strlen($data) > 100) {
+            ?>
+            <input type="hidden" id="form_type" value="<?php echo $formType; ?>">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="reports-header">
+                    <tr>
+                        <th> Estado </th>
+                        <th> Ponto Critíco </th>
+                        <th> Detalhes </th>
+                        <th> </th>
+                    </tr>
+                    </thead>
+                    <tbody> <?php echo $data; ?> </tbody>
+                </table>
+            </div>
+            <?php
+            echo $this->getReportFooter($label);
+        } else {
+            echo "<p class='text-center'> Relatório não disponível para este formulário! </p>";
+        }
+    }
+
     private function getReportFooter($desc)
     {
         $title = $this->get_title();
@@ -292,6 +318,50 @@ class AcolheSUSReports
         }
     }
 
+    private function generateMatrizCriticosReportData($formType)
+    {
+        global $wpdb;
+        $sql = "SELECT post_title, ID FROM $wpdb->posts WHERE post_type = 'matriz_p_criticos' order by post_title";
+        $ids = $wpdb->get_results($sql, ARRAY_A);
+        $acolheSUS = new AcolheSUS();
+        ob_start();
+        foreach ($ids as $post)
+        {
+
+            $state = '';
+            $id = $post['ID'];
+            $post_title = $post['post_title'];
+            preg_match('#\((.*?)\)#', $post_title, $state);
+            $state =  $state[1];
+
+            ?>
+            <tr>
+                <td rowspan="3"><?php echo $state; ?></td>
+            <?php
+            $info = $acolheSUS->get_specific_form_data($formType, $id);
+            $print_tr = false;
+            foreach ($info as $ponto_critico_name => $ponto_critico_info)
+            {
+                if($print_tr)
+                {
+                    ?>
+                    <tr>
+                    <?php
+                }
+
+                ?>
+                <td><?php echo $ponto_critico_name; ?></td>
+                <td> <?php echo $acolheSUS->wrap_specific_in_html($ponto_critico_name, $ponto_critico_info); ?></td>
+                </tr>
+                <?php
+
+                $print_tr = true;
+            }
+        }
+
+        return ob_get_clean();
+    }
+
     private function generateReportData($formType)
     {
         $state = $phase = null;
@@ -466,7 +536,10 @@ class AcolheSUSReports
         global $wpdb;
         $_entry_id = get_post_meta($post_id, '_entry_id', true);
         $sql_current_values = "SELECT value as value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."' AND field_id = '".$field_id."'";
-        return $wpdb->get_results($sql_current_values, 'ARRAY_A')[0]['value'];
+        $result = $wpdb->get_results($sql_current_values, 'ARRAY_A');
+        if(!empty($result))
+            return $result[0]['value'];
+        else return false;
     }
 
     public function getAnswerStats($field_id, $closed = false, $post_id = false)

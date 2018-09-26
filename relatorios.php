@@ -11,6 +11,7 @@ if (current_user_can('administrator')) {
         $label = $form_type->label;
         $_hide_phase = !(isset($view->forms[$form_type->name]["uma_entrada_por_campo"]) && $view->forms[$form_type->name]["uma_entrada_por_campo"] );
     ?>
+    <div class="row">
         <div class="acolhesus-form-container col-md-12 reports-wrapper">
 
             <a class="btn btn-default list-entries hidden-print" href="<?php echo get_post_type_archive_link($form); ?>"> Voltar </a>
@@ -55,12 +56,27 @@ if (current_user_can('administrator')) {
                 </form>
             </div>
 
-            <div class="report-results"> <?php $report->renderReports($form,$label); ?> </div>
-            <div class="col-md-12">
-                <input type="hidden" id="chart_type" value="bar">
-                <div id="chart"></div>
+            <div class="row">
+                <div class="report-results col-md-12">
+                    <?php
+                    if($form === 'matriz_p_criticos'){
+                        $report->renderMatrizCriticosReport($form, $label);
+                    }
+                    else {
+                        $report->renderReports($form,$label);
+                    }
+                    ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="hidden" id="chart_type" value="bar">
+                    <div id="chart"></div>
+                </div>
             </div>
         </div>
+    </div>
 <?php
     endif;
 } else {

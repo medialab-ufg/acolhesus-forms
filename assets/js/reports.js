@@ -12,14 +12,6 @@ jQuery( function($) {
             form: $("#form_type").val(),
             post_id: post_id
         }).success(function (r) {
-            /*if(!post_id)
-            {
-                $("table.table").hide();
-                $(".report-footer").hide();
-            }else {
-                $("#the_content").hide();
-            }*/
-
             $("#the_content").hide();
             $("#show_form").toggle();
 
@@ -28,15 +20,6 @@ jQuery( function($) {
 
             var data = JSON.parse(r);
             $("#chart").html(data);
-
-            /*prepare_divs(Object.size(data));
-
-            var i = 1;
-            for(var index in data)
-            {
-                var chart_div = $('div[id="chart"]');
-                //create_chart(data[index], $("#form_type").val(), index, $('#chart_type').val(), 'chart'+i++);
-            }*/
         });
     });
 
