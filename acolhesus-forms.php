@@ -160,8 +160,8 @@ class AcolheSUS {
         ],
         'memoria_reuniao' => [
             'labels' => [
-                'name' => 'Memória de Reunião',
-                'singular_name' => 'Memória de Reunião/Vídeo'
+                'name' => 'Videoconferências/Reunião da Gestão ou da Coordenação',
+                'singular_name' => 'Videoconferências/Reunião da Gestão ou da Coordenação'
             ],
             'slug' => 'memoria_reuniao',
             'uma_entrada_por_campo' => false,
