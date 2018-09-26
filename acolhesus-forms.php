@@ -389,7 +389,7 @@ class AcolheSUS {
                             ?>
                             <?php echo $cause; ?>
                             <?php
-                        }else echo "<i>Sem causas cadstradas</i>";
+                        }else echo "<i>Sem causas cadastradas</i>";
                         echo '</div>';
                     }
                     ?>
