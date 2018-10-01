@@ -30,7 +30,7 @@ if (current_user_can('administrator')) {
                         <input type="submit" class="btn btn-info filter-forms hidden-print" value="Gerar Relatório"/>
 
                         <?php
-                        if($form === 'avaliacao_grupos' || $form === 'avaliacao_oficina')
+                        if($form === 'avaliacao_grupos' || $form === 'avaliacao_oficina' || $form === 'matriz_cenario')
                         {
                             ?>
                             <div class="btn-group">

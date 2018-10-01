@@ -28,6 +28,7 @@ jQuery( function($) {
         $.post(acolhesus.ajax_url, {
             action: 'acolhesus_reports_chart',
             form: $("#form_type").val(),
+            chart_type: $("#chart_type").val(),
             post_id: post_id
         }).success(function (r) {
             if(!post_id)
@@ -50,8 +51,11 @@ jQuery( function($) {
             }
         });
 
-        $("#gen_charts").toggle();
-        $("#show_form").toggle();
+        if(post_id)
+        {
+            $("#gen_charts").toggle();
+            $("#show_form").toggle();
+        }
 
         $("#charts_set").show();
         event.preventDefault();

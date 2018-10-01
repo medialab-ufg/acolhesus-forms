@@ -260,9 +260,10 @@ class AcolheSUS {
     {
         $formType = $_POST['form'];
         $post_id = sanitize_text_field($_POST['post_id']);
+        $chart_type = $_POST['chart_type'];
 
         $acholheSUSReports = new AcolheSUSReports(); $result = [];
-        if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos')
+        if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos' || $formType === 'matriz_cenario')
         {
             $fields = $acholheSUSReports->getFormFields($formType);
 
@@ -277,12 +278,13 @@ class AcolheSUS {
             }
         }
 
-        $this->get_percent($result, $formType);
+        $this->get_percent($result, $formType, $chart_type);
+
         echo json_encode($result);
         wp_die();
     }
 
-    function get_percent(&$data, $formType)
+    function get_percent(&$data, $formType, $chart_type)
     {
         if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos' )
         {
@@ -303,7 +305,13 @@ class AcolheSUS {
                 {
                     $data[$piece_name][$option_name] = [];
                     $data[$piece_name][$option_name]['total'] = $option;
-                    $data[$piece_name][$option_name]['percent'] = doubleval(sprintf("%.1f",(100 * $option) / $sum));
+                    if($chart_type !== 'pie')
+                    {
+                        $data[$piece_name][$option_name]['percent'] = doubleval(sprintf("%.1f",(100 * $option) / $sum));
+                    }
+                    else{
+                        $data[$piece_name][$option_name]['percent'] = doubleval($option);
+                    }
                 }
             }
         }
