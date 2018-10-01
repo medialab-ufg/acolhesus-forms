@@ -427,6 +427,7 @@ class AcolheSUSReports
                 }
 
                 $info_data = $this->getNumericData($campo["label"],$value, $percent);
+
                 if ($campo["type"] === "number") {
                     if ($c === 4) {
                         $c = -1;
@@ -635,6 +636,56 @@ class AcolheSUSReports
 
             if (is_null($res)) {
                 $res = "---";
+            }
+
+            return $res;
+        }
+    }
+
+    public function getFilterForCharts($state, $phase, $formType, $field_id) {
+        if(!empty($state))
+        {
+            $state_sql = "AND pm.meta_key='acolhesus_campo' AND pm.meta_value='".$state."'";
+        }
+
+        if(!empty($phase))
+        {
+            $phase_sql = "AND pm.meta_key='acolhesus_fase' AND pm.meta_value='".$phase."'";
+        }
+
+        $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' $state_sql $phase_sql;";
+        $state_ids = $this->getSQLResults($sql, "total");
+
+        $entry_ids = [];
+        if (is_array($state_ids)) {
+            foreach ($state_ids as $state) {
+                $_id = $state->ID;
+                if (!is_null($_id)) {
+                    $sql = "SELECT meta_value as total FROM $this->postmeta WHERE meta_key='_entry_id' AND post_id=$_id";
+                    $formulario = $this->getSQLResults($sql, "row");
+
+                    if (!is_null($formulario) && is_object($formulario)) {
+                        $entry_ids[] = $formulario->total;
+                    }
+                }
+            }
+        }
+
+        if (count($entry_ids) > 0) {
+            $field_id = trim($field_id);
+
+            if (count($entry_ids) == 1) {
+                $el = $entry_ids[0];
+                $condition = "='$el'";
+            } else {
+                $condition = "IN (" . implode( ',' ,$entry_ids) . ")";
+            }
+            $sql = "SELECT SUM(value) as total FROM " . $this->caldera_entries . " WHERE field_id='$field_id' AND entry_id $condition";
+
+            $res = $this->getSQLResults($sql, "row")->total;
+
+            if (is_null($res)) {
+                $res = 0;
             }
 
             return $res;

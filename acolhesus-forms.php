@@ -272,6 +272,8 @@ class AcolheSUS {
         $formType = $_POST['form'];
         $post_id = sanitize_text_field($_POST['post_id']);
         $chart_type = $_POST['chart_type'];
+        $phase = $_POST['phase'];
+        $state = $_POST['field'];
 
         $acholheSUSReports = new AcolheSUSReports(); $result = [];
         $fields = $acholheSUSReports->getFormFields($formType);
@@ -281,15 +283,25 @@ class AcolheSUS {
             $index = 'total'; $switch_index = '';
             foreach ($fields as $id => $campo) {
                 $tipo = $campo["type"];
-                if ($tipo === "html" && !in_array($id, $acholheSUSReports->excluded_fields)) {
+                if (in_array($tipo, $acholheSUSReports->report_fields))
+                {
+                    if (is_string($state) && (strlen($state) === 2) || is_string($phase))
+                    {
+                        $value = $acholheSUSReports->getFilterForCharts($state, $phase,$formType, $id);
+                    }else
+                    {
+                        $value = intval($acholheSUSReports->getAnswerStats($id, false, $post_id));
+                    }
+
+                    $result[$index][$campo['label']] = $value;
+                }else if ($tipo === "html" && !in_array($id, $acholheSUSReports->excluded_fields))
+                {
                     $index = strip_tags($campo["config"]["default"]);
                     $switch_index = strip_tags($campo["config"]["default"])[0];
                 }else if($tipo === "toggle_switch")
                 {
                     $result[$switch_index][$campo['label']]['Sim'] = intval($acholheSUSReports->getTotal($id, $tipo,"Sim"));
                     $result[$switch_index][$campo['label']]['Não'] = intval($acholheSUSReports->getTotal($id, $tipo,"Não"));
-                } else if (in_array($tipo, $acholheSUSReports->report_fields)) {
-                    $result[$index][$campo['label']] = intval($acholheSUSReports->getAnswerStats($id, false, $post_id));
                 }
             }
         }

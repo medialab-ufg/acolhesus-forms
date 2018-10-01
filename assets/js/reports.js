@@ -26,10 +26,16 @@ jQuery( function($) {
     $("#gen_charts").click(function (event) {
         var post_id = $("input[name=_cf_cr_pst]").val();
         var form = $("#form_type").val();
+
+        var campo_atuacao = $("select[name='campo']").val();
+        var fase = $("select[name='fase']").val();
+
         $.post(acolhesus.ajax_url, {
             action: 'acolhesus_reports_chart',
             form: form,
             chart_type: $("#chart_type").val(),
+            field: campo_atuacao,
+            phase: fase,
             post_id: post_id
         }).success(function (r) {
             if(!post_id)
