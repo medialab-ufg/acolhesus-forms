@@ -263,15 +263,20 @@ class AcolheSUS {
         $chart_type = $_POST['chart_type'];
 
         $acholheSUSReports = new AcolheSUSReports(); $result = [];
+        $fields = $acholheSUSReports->getFormFields($formType);
+
         if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos' || $formType === 'matriz_cenario')
         {
-            $fields = $acholheSUSReports->getFormFields($formType);
-
-            $index = 'total';
+            $index = 'total'; $switch_index = '';
             foreach ($fields as $id => $campo) {
                 $tipo = $campo["type"];
                 if ($tipo === "html" && !in_array($id, $acholheSUSReports->excluded_fields)) {
                     $index = strip_tags($campo["config"]["default"]);
+                    $switch_index = strip_tags($campo["config"]["default"])[0];
+                }else if($tipo === "toggle_switch")
+                {
+                    $result[$switch_index][$campo['label']]['Sim'] = intval($acholheSUSReports->getTotal($id, $tipo,"Sim"));
+                    $result[$switch_index][$campo['label']]['Não'] = intval($acholheSUSReports->getTotal($id, $tipo,"Não"));
                 } else if (in_array($tipo, $acholheSUSReports->report_fields)) {
                     $result[$index][$campo['label']] = intval($acholheSUSReports->getAnswerStats($id, false, $post_id));
                 }
@@ -286,7 +291,7 @@ class AcolheSUS {
 
     function get_percent(&$data, $formType, $chart_type)
     {
-        if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos' )
+        if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos' || $formType = 'matriz_cenario' )
         {
             if ($formType === 'avaliacao_grupos') {
                 $sum = $data['total'];
@@ -304,13 +309,22 @@ class AcolheSUS {
                 foreach ($piace as $option_name => $option)
                 {
                     $data[$piece_name][$option_name] = [];
-                    $data[$piece_name][$option_name]['total'] = $option;
+                    if(!is_array($option))
+                    {
+                        $data[$piece_name][$option_name]['total'] = $option;
+                    }
+
                     if($chart_type !== 'pie')
                     {
                         $data[$piece_name][$option_name]['percent'] = doubleval(sprintf("%.1f",(100 * $option) / $sum));
                     }
                     else{
-                        $data[$piece_name][$option_name]['percent'] = doubleval($option);
+                        if(!is_array($option))
+                        {
+                            $data[$piece_name][$option_name]['percent'] = doubleval($option);
+                        }else {
+                            $data[$piece_name][$option_name] = $option;/*YES or NOT*/
+                        }
                     }
                 }
             }

@@ -39,14 +39,22 @@ if (current_user_can('administrator')) {
                                     <span class="caret"></span> <span class="sr-only">Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li class="chart_type" data-value="bar"><a href="javascript:void (0);" > <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                                            Barras
-                                        </a>
-                                    </li>
                                     <li class="chart_type" data-value="pie"><a href="javascript:void (0);" > <i class="fa fa-pie-chart" aria-hidden="true"></i>
                                             Pizza
                                         </a>
                                     </li>
+                                    <?php
+                                    if($form !== 'matriz_cenario') {
+                                        ?>
+                                        <li class="chart_type" data-value="bar">
+                                            <a href="javascript:void (0);">
+                                                <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                                                Barras
+                                            </a>
+                                        </li>
+                                        <?php
+                                    }
+                                    ?>
                                 </ul>
                             </div>
                             <?php
@@ -71,7 +79,7 @@ if (current_user_can('administrator')) {
 
             <div class="row">
                 <div class="col-md-12">
-                    <input type="hidden" id="chart_type" value="bar">
+                    <input type="hidden" id="chart_type" value="pie">
                     <div id="chart"></div>
                 </div>
             </div>

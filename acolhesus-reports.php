@@ -500,7 +500,7 @@ class AcolheSUSReports
         return "<p class='text-center'> Formulário não configurado. </p>";
     }
 
-    private function getTotal($field_id, $formType, $value='')
+    public function getTotal($field_id, $formType, $value='')
     {
         if (is_string($field_id)) {
             if ($this->hasStateFilter()) {

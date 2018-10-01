@@ -25,9 +25,10 @@ jQuery( function($) {
 
     $("#gen_charts").click(function (event) {
         var post_id = $("input[name=_cf_cr_pst]").val();
+        var form = $("#form_type").val();
         $.post(acolhesus.ajax_url, {
             action: 'acolhesus_reports_chart',
-            form: $("#form_type").val(),
+            form: form,
             chart_type: $("#chart_type").val(),
             post_id: post_id
         }).success(function (r) {
@@ -41,13 +42,32 @@ jQuery( function($) {
 
             var data = JSON.parse(r);
 
-            prepare_divs(Object.size(data));
-
-            var i = 1;
-            for(var index in data)
-            {
-                var chart_div = $('div[id="chart"]');
-                create_chart(data[index], $("#form_type").val(), index, $('#chart_type').val(), 'chart'+i++);
+            var divs_count = 1;
+            if(form === 'matriz_cenario'){
+                divs_count = Object.size(data[1]) + Object.size(data[2]) + Object.size(data[3]) + Object.size(data[4]);
+                prepare_divs(divs_count);
+                var i = 1;
+                for(var index in data)
+                {
+                    for(var i_index in data[index])
+                    {
+                        var chart_div = $('div[id="chart"]');
+                        var int = parseInt(index, 10);
+                        if(Number.isInteger(int))
+                        {
+                            create_chart(data[index][i_index], $("#form_type").val(), i_index, $('#chart_type').val(), 'chart'+i++);
+                        }
+                    }
+                }
+            }else{
+                divs_count = Object.size(data);
+                prepare_divs(divs_count);
+                var i = 1;
+                for(var index in data)
+                {
+                    var chart_div = $('div[id="chart"]');
+                    create_chart(data[index], $("#form_type").val(), index, $('#chart_type').val(), 'chart'+i++);
+                }
             }
         });
 
@@ -87,7 +107,7 @@ jQuery( function($) {
 
         google.charts.setOnLoadCallback(function (){
             var data_table = new google.visualization.DataTable();
-            var info = prepare_data(data, chart_type, form_name, data_table);
+            var info = prepare_data(data, chart_type, form_name);
 
             var options = set_options(chart_type, title);
             drawChart(info, where, chart_type, data_table, options);
@@ -146,7 +166,7 @@ jQuery( function($) {
         return title+tail;
     }
 
-    function prepare_data(data, chart_type, data_source, data_table) {
+    function prepare_data(data, chart_type, form_type) {
         var info = [], titles = [], lines = [];
         if(chart_type === 'bar')
         {
@@ -158,9 +178,18 @@ jQuery( function($) {
         }else if(chart_type === 'pie')
         {
             info.push(["Classificação", "Porcentagem"]);
-            for(var index in data)
+            if(form_type === 'matriz_cenario')
             {
-                info.push([index, data[index].percent]);
+                for(var index in data)
+                {
+                    info.push([index, data[index]]);
+                }
+            }
+            else {
+                for(var index in data)
+                {
+                    info.push([index, data[index].percent]);
+                }
             }
         }
 
