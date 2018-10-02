@@ -404,7 +404,6 @@ class AcolheSUSReports
             $info_data = "";
 
             if (in_array($tipo, $this->report_fields)) {
-
                 if (is_string($state) && (strlen($state) === 2)) {
                     $value = $this->getFilterFor($this->getCampo(),$formType, $id, $state);
                 } else if (is_string($phase)) {
@@ -654,6 +653,7 @@ class AcolheSUSReports
         }
 
         $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' $state_sql $phase_sql;";
+
         $state_ids = $this->getSQLResults($sql, "total");
 
         $entry_ids = [];
