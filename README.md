@@ -12,3 +12,6 @@ A partir da raiz do plugin, navegar para a seguinte pasta: `cd assets/saas/`.
 Depois, basta deixar o [SASS](https://sass-lang.com/) observando as alterações no código fonte: 
 
 `sass --watch index.scss:../css/acolhesus.css`
+
+### Script para compilar sass
+Opcionalmente, execute o arquivo `scripts/compile-sass.sh` para compilar o sass de uma única vez.

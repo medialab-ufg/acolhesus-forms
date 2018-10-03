@@ -2,7 +2,9 @@ jQuery( function( $ ) {
     $('.add_acolhesus_entry').click(function() {
         var post_title = $(this).attr('data-newTitle');
         var post_type  = $(this).attr('data-postType');
-
+        var campo = get_variable('campo'), fase = get_variable('fase');
+        sessionStorage.setItem("rhs_campo", campo);
+        sessionStorage.setItem("rhs_fase", fase);
         var data = {
             title: post_title,
             action: 'acolhesus_add_form_entry',
@@ -65,10 +67,25 @@ jQuery( function( $ ) {
                     if (r.success) {
                         swal({ title: r.success });
                         toggleEntryStatus(entry.id,r.list);
+                    }else
+                    {
+                        swal({ title: r.warning });
                     }
                 });
             }
         });
+    });
+
+    $('.remove-form-entry').click(function () {
+        var _id = $(this).attr('data-id');
+        var data = { id: _id, action: "remove_form_entry" };
+        var title = $(this).attr('data-title');
+        if (confirm("Deseja apagar esta resposta de " + title + "?")) {
+            $.post(acolhesus.ajax_url, data).success(function(res) {
+                $("tr#entry-"+_id).remove();
+                alert('Resposta removida com sucesso!');
+            });
+        }
     });
 
     function toggleEntryStatus(_id, new_data) {
@@ -93,6 +110,27 @@ jQuery( function( $ ) {
         };
     }
 
+    function get_variable(variable)
+    {
+        variable = variable || null;
+        var $_GET = {};
+        if(document.location.toString().indexOf('?') !== -1) {
+            var query = document.location
+                .toString()
+                .replace(/^.*?\?/, '')
+                .replace(/#.*$/, '')
+                .split('&');
+
+            for(var i=0, l=query.length; i<l; i++) {
+                var aux = decodeURIComponent(query[i]).split('=');
+                $_GET[aux[0]] = aux[1];
+            }
+        }
+
+        if (variable === null)
+            return $_GET;
+        else return $_GET[variable];
+    }
 
     $('.acolhesus_filter_forms').select2({
         width: '100%',

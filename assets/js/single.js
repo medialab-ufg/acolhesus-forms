@@ -1,24 +1,21 @@
 jQuery( function( $ ) {
     var no_edit = '.acolhesus-readonly';
     var base = '.acolhesus-form-container';
-    var cant_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
+    var can_not_edit = ($(".acolhesus-form-container " + no_edit).length > 0);
     var campo_atuacao = '#acolhesus_campo_selector';
+    var fase_selector = "#acolhesus_fase_selector";
+    var eixo_selector = "#acolhesus_eixo_selector";
     var current_post_id = $(campo_atuacao).data('post_id');
-
+    var $fixed_state_phase = '.acolhesus_basic_info_selector';
     var tag = 'input[name="novo_form"]';
     var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
-    if (is_new) {
-        $(campo_atuacao).val('');
-        $.post(acolhesus.ajax_url, { action: 'delete_new_form_tag', post_id: current_post_id });
-    }
 
-
-    $('.acolhesus_basic_info_selector').change(function() {
+    $($fixed_state_phase).change(function() {
         var opt_val = $(this).val();
         var field = $(this).attr('name');
         var $field_msg = '.' + field + " .fixed";
 
-        if ((0 === opt_val.length) && ("" === opt_val)) {
+        if (opt_val && (0 === opt_val.length) && ("" === opt_val)) {
             $(this).addClass('required-acolhesus');
             $($field_msg).show();
         } else {
@@ -26,8 +23,8 @@ jQuery( function( $ ) {
             $.post(acolhesus.ajax_url, {
                 action: 'acolhesus_save_post_basic_info',
                 acolhesus_campo: $(campo_atuacao).val(),
-                acolhesus_fase: $('#acolhesus_fase_selector').val(),
-                acolhesus_eixo: $('#acolhesus_eixo_selector').val(),
+                acolhesus_fase:  $(fase_selector).val(),
+                acolhesus_eixo:  $(eixo_selector).val(),
                 post_id: current_post_id
             }).success(function (r) {
                 $(self).find("option[value='']").remove();
@@ -37,7 +34,27 @@ jQuery( function( $ ) {
         }
     });
 
+    /*
+     * Ações que devem ser executadas caso seja um novo formulário recém criado
+     */
+    if (is_new) {
+        set_state(campo_atuacao);
 
+        var fase = sessionStorage.getItem("rhs_fase");
+        if (fase)
+        {
+            $(fase_selector).val(fase);
+            sessionStorage.removeItem('rhs_fase');
+        } else $(fase_selector).val('');
+
+        var data = { action: 'delete_new_form_tag', post_id: current_post_id };
+        $.post(acolhesus.ajax_url, data).success(function() {
+            $($fixed_state_phase).change();
+            lock_state(campo_atuacao);
+            lock_phase(fase);
+        });
+    }
+    
     if ($(base + ' .single input[type="submit"]').length == 0) {
         var save_btn = 'button.save_for_later';
         if ($(save_btn).length === 1) {
@@ -45,14 +62,11 @@ jQuery( function( $ ) {
         }
     }
 
-    var current_form_id = $('.caldera-grid form').attr('id');
-    $('form#' + current_form_id).submit(function (e) {
-        e.preventDefault();
-        $('.acolhesus_basic_info_selector').change();
-        return false;
-    });
-
-    if (cant_edit) {
+    /*
+    * Ações que devem ser executadas caso usuário não possa editar aquele formulário.
+    * Ou por falta de permissão (apenas pode visualizar) ou porque o mesmo já foi fechado (validado).
+    */
+    if (can_not_edit) {
         $(base + ' ' + no_edit + ' input[type=\'submit\']').remove();
         $(base + ' ' + no_edit + ' button.cf-uploader-trigger').remove();
         $(no_edit + ' :radio').attr('disabled', true);
@@ -142,7 +156,7 @@ jQuery( function( $ ) {
         $('.cities-mc .field_required').hide();
     }
 
-    if (cant_edit) {
+    if (can_not_edit) {
         $($select_class).prop("disabled", true);
         $('.select2-container--classic .select2-selection--multiple').css('border', 0);
     }
@@ -153,31 +167,6 @@ jQuery( function( $ ) {
     $(attachments).first().appendTo($(attachments_wrapper));
     if ((typeof $(attachments_wrapper + " ul").html() === "undefined") || ($(attachments_wrapper + " ul").html() === "")) {
         $(attachments_wrapper).remove();
-    }
-
-    function toggle_city(obj_evt, post_id, add) {
-        if (add) {
-            var _action = 'add_entry_city';
-        } else if ( add === false) {
-            var _action = 'remove_entry_city';
-        } else {
-            return false;
-        }
-
-        var event = obj_evt.event;
-        var data = event.params.data;
-
-        var total_cities = $($select_class).val();
-        if (total_cities && total_cities.length > 0) {
-            $('.cities-mc .field_required').hide();
-        } else {
-            $('.cities-mc .field_required').show();
-        }
-
-        if (_action && post_id && data.id) {
-            var del_data = { action: _action, city: data.id, post_id: post_id};
-            $.post(acolhesus.ajax_url, del_data);
-        }
     }
 
     $(attachments_wrapper + ' a.acolhesus-remove-file').on('click', function() {
@@ -211,11 +200,7 @@ jQuery( function( $ ) {
         });
     });
 
-    $(document).on('click', 'input[type=submit]', function (event) {
-        window.onbeforeunload = '';
-    });
-
-    $(document).on('click', 'button[type=submit]', function (event) {
+    $(document).on('click', 'input[type=submit], button[type=submit]', function (event) {
         window.onbeforeunload = '';
     });
 
@@ -223,91 +208,256 @@ jQuery( function( $ ) {
         window.onbeforeunload = '';
         save_for_later();
     });
-});
 
-function save_for_later() {
-    var all_inputs = new FormData(),
-        cr_post = get_save("input[name=_cf_cr_pst]", all_inputs);
+    var fileInput = document.querySelector("input[type=file]");
+    if (fileInput) {
+        fileInput.addEventListener('change', function (e) {
+            var result = sessionStorage.getItem('rhs_input_file');
+            if(!result)
+            {
+                result = [];
+            }else{
+                result = JSON.parse(result);
+            }
 
-    //Text, number
-    get_save('input[type=text]', all_inputs);
-    get_save('input[type=number]', all_inputs);
+            for(var file of fileInput.files)
+            {
+                (function (file) {
+                    var reader = new FileReader();
+                    reader.onload = (function (file) {
+                        var name = file.name;
+                        return function (e){
+                            result.push({name: name, file: reader.result});
+                            sessionStorage.setItem('rhs_input_file', JSON.stringify(result));
+                        }
+                    })(file);
 
-    //Radio and checkbox
-    get_save('input:checked', all_inputs);
+                    var fileInfo = reader.readAsDataURL(file);
+                })(file)
+            }
+        })
+    }
 
-    //Text areas
-    get_save('textarea', all_inputs);
+    /*Verificação de data em: Indicadores*/
+    var month_id = 'fld_680040', year_id = "fld_637266";
+    var month = "select[name="+month_id+"]", year = "select[name="+year_id+"]";
 
-    //A:btnSuccess
-    get_save('a.btn-success', all_inputs);
+    if($(month).length > 0 && $(year).length > 0 && $(campo_atuacao).length > 0 && $(fase_selector).length > 0)
+    {
+        if(is_new)
+        {
+            if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '' || $(fase_selector).val() === '')
+            {
+                $(":input[type=submit]").prop("disabled", true);
+            } else $(":input[type=submit]").prop("disabled", false);
 
-    //Select box
-    get_save('select', all_inputs);
+            var div = document.createElement('div');
+            var warning = "Já existe uma resposta para este estado com este mês e ano de ocorrência! Favor escolher outra data.";
+            div.id = "cant_save";
+            div.style.display = 'none';
+            div.className = "data-inserida-box";
 
-    //Form ID
-    var form = document.querySelector('div.caldera-grid > form'),
+            div.innerHTML = "<p class='text-center alert alert-warning'>" + warning + "</p>";
+            $(div).insertAfter('.first_row');
+
+            $(document).on("change", month+", "+year+", "+campo_atuacao+", "+fase_selector, function () {
+                if($(month).val() === '' || $(year).val() === '' || $(campo_atuacao).val() === '' || $(fase_selector).val() === '')
+                {
+                    $(":input[type=submit]").prop("disabled", true);
+                }else{
+                    var data ={
+                        month_id: month_id,
+                        year_id: year_id,
+                        month_val: $(month).val(),
+                        year_val: $(year).val(),
+                        state: $(campo_atuacao).val()
+                    };
+
+                    jQuery.post(acolhesus.ajax_url, {
+                        action: 'acolhesus_verify_indicadores_info',
+                        data: data
+                    }).success(function (result) {
+                        result = result.substr(0, result.length-1);
+                        if(result == 'true')
+                        {
+                            $(":input[type=submit]").prop("disabled", false);
+                            $("#cant_save").hide();
+                        }else{
+                            $(":input[type=submit]").prop("disabled", true);
+                            $("#cant_save").show();
+                        }
+                    });
+                }
+            });
+        }
+     } else if($(fase_selector).length > 0) {
+        if($(fase_selector).val() === '')
+        {
+            $(":input[type=submit]").prop("disabled", true);
+        }else $(":input[type=submit]").prop("disabled", false);
+
+        $(document).on('change', fase_selector, function () {
+            if($(fase_selector).val() === '')
+            {
+                $(":input[type=submit]").prop("disabled", true);
+            }else $(":input[type=submit]").prop("disabled", false);
+        });
+    }
+
+    function get_state() {
+        return sessionStorage.getItem("rhs_campo");
+    }
+
+    function remove_state() {
+        sessionStorage.removeItem('rhs_campo');
+    }
+
+    function set_state(container) {
+        var campo = get_state();
+        if (campo) {
+            $(container).val(campo);
+        } else {
+            $(container).val('');
+        }
+    }
+
+    function lock_state(container) {
+        var state = get_state();
+        if (container && state) {
+            var hospital = $(container + " option:selected").text();
+            $(container).empty().append('<option selected="selected" value="'+state+'">'+hospital+'</option>');
+            remove_state();
+        }
+    }
+
+    function lock_phase(phase) {
+        if (phase) {
+            var fase = $(fase_selector + " option:selected").text();
+            $(fase_selector).empty().append('<option selected="selected" value="'+phase+'">'+fase+'</option>');
+        }
+    }
+
+    function toggle_city(obj_evt, post_id, add) {
+        if (add) {
+            var _action = 'add_entry_city';
+        } else if ( add === false) {
+            var _action = 'remove_entry_city';
+        } else {
+            return false;
+        }
+
+        var event = obj_evt.event;
+        var data = event.params.data;
+
+        var total_cities = $($select_class).val();
+        if (total_cities && total_cities.length > 0) {
+            $('.cities-mc .field_required').hide();
+        } else {
+            $('.cities-mc .field_required').show();
+        }
+
+        if (_action && post_id && data.id) {
+            var del_data = { action: _action, city: data.id, post_id: post_id};
+            $.post(acolhesus.ajax_url, del_data);
+        }
+    }
+
+    function save_for_later() {
+        swal({ showConfirmButton: false, showCancelButton: false, title: 'Salvando formulário...', icon: "warning" });
+        var all_inputs = new FormData(),
+            cr_post = get_save("input[name=_cf_cr_pst]", all_inputs);
+
+        //Text, number
+        get_save('input[type=text]', all_inputs);
+        get_save('input[type=number]', all_inputs);
+
+        //Radio and checkbox
+        get_save('input:checked', all_inputs);
+
+        //Text areas
+        get_save('textarea', all_inputs);
+
+        //A:btnSuccess
+        get_save('a.btn-success', all_inputs);
+
+        //Select box
+        get_save('select', all_inputs);
+
+        //Form ID
+        var form = document.querySelector('div.caldera-grid > form'),
             formId = form.dataset.formId;
 
-    all_inputs.append('action', 'acolhesus_save_for_later');
-    all_inputs.append('formId', formId);
+        //Files
+        var fileInput = document.querySelector("input[type=file]");
+        if (fileInput) {
+            var input_file = JSON.parse(sessionStorage.getItem('rhs_input_file'));
 
-    //----------------- Send by AJAX -------------------------------//
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function()
-    {
-        if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
-        {
-            swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
-            setTimeout(function () {
-               window.location.reload();
-            }, 1000);
+            all_inputs.append("file_input_id", fileInput.name);
+            all_inputs.append("file_value", sessionStorage.getItem('rhs_input_file'));
         }
-    };
 
-    xmlHttp.open("post", acolhesus.ajax_url);
-    xmlHttp.send(all_inputs);
-}
+        all_inputs.append('action', 'acolhesus_save_for_later');
+        all_inputs.append('formId', formId);
 
-function get_save(query, all_inputs) {
-    var nodes = document.querySelectorAll(query);
-    Array.prototype.forEach.call (nodes, function (node) {
-        var name = node.name, value;
-
-        if(node.type != 'radio' || node.tagName == 'A')
+        //----------------- Send by AJAX -------------------------------//
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function()
         {
-            value = node.value;
-        }
-        else
-        {
-            value = node.parentNode.dataset.label;
-            if(!value)
+            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            {
+                sessionStorage.removeItem('rhs_input_file');
+                swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            }
+        };
+
+        xmlHttp.open("post", acolhesus.ajax_url);
+        xmlHttp.send(all_inputs);
+    }
+
+    function get_save(query, all_inputs) {
+        var nodes = document.querySelectorAll(query);
+        Array.prototype.forEach.call (nodes, function (node) {
+            var id = node.name, value;
+            if(query == 'select' && node.style.display == 'none')
+            {
+                id = id.substring(0, id.indexOf('['));
+                value = [];
+                value.push("autocomplete");
+                jQuery("div[id *="+id+"] ul li").each(function (index, val) {
+                    var text = jQuery(val).find("div").text().trim();
+                    if(text !== '')
+                    {
+                        value.push(text)
+                    }
+                })
+            }else if(node.type != 'radio' || node.tagName == 'A')
             {
                 value = node.value;
             }
-        }
+            else
+            {
+                value = node.parentNode.dataset.label;
+                if(!value)
+                {
+                    value = node.value;
+                }
+            }
 
-        if(value)
-        {
-            all_inputs.append(name, value);
-        }
-    } );
-}
+            if(value)
+            {
+                all_inputs.append(id, value);
+            }
+        } );
+    }
 
-jQuery( document ).on(  'cf.validate.FormSuccess', function( event, obj ){
-
-    jQuery('button.save_for_later').hide();
-    jQuery('.fixed-meta').hide();
-    jQuery('.cities-mc').hide();
-    jQuery('#acolhesus_form_anexos').hide();
-    jQuery('#form-accordion').hide();
-});
-
-jQuery(document).on('submit', "#form-comentario", function (event) {
-    //event.preventDefault();
-    jQuery.post(acolhesus.ajax_url, {
-        action: 'acolhesus_notify_user',
-    }).success(function (r) {
-        console.log("Notifyed");
+    jQuery(document).on('cf.validate.FormSuccess', function(event, obj) {
+        jQuery('button.save_for_later').hide();
+        jQuery('.fixed-meta').hide();
+        jQuery('.cities-mc').hide();
+        jQuery('#acolhesus_form_anexos').hide();
+        jQuery('#form-accordion').hide();
     });
 });

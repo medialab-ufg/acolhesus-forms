@@ -87,28 +87,33 @@ class AcolheSUSAdminForm {
 	}
 
 	function render_acolhesus_field() {
-
 		// Retrieve data from the database.
         global $AcolheSUS;
 
-        $registered_forms = Caldera_Forms::get_forms();
-        if(is_array($registered_forms) && count($registered_forms) > 0 ) {
-            $forms = $AcolheSUS->forms;
+        if (!class_exists('Caldera_Forms')) {
+            $link = "<a href='https://wordpress.org/plugins/caldera-forms/' target='_blank'> Caldera Forms </a>";
+            echo "Antes de continuar, certifique-se de que o $link esteja instalado e ativo!";
+            wp_die();
+        } else {
+            $registered_forms = Caldera_Forms::get_forms();
+            if(is_array($registered_forms) && count($registered_forms) > 0 ) {
+                $forms = $AcolheSUS->forms;
 
-            foreach ($forms as $formName => $form) {
-                echo $form['labels']['name'] . " ";
-                $f_name = "acolhesus[form_ids][$formName]";
-                echo "<select name='$f_name'><option></option>";
-                foreach($registered_forms as $f) {
-                    $id = $f['ID'];
-                    $nome = $f['name'];
-                    $selected = ($form['form_id'] == $id) ? "selected" : "";
+                foreach ($forms as $formName => $form) {
+                    echo $form['labels']['name'] . ": ";
+                    $f_name = "acolhesus[form_ids][$formName]";
+                    echo "<select name='$f_name'><option></option>";
+                    foreach($registered_forms as $f) {
+                        $id = $f['ID'];
+                        $nome = $f['name'];
+                        $selected = ($form['form_id'] == $id) ? "selected" : "";
 
-                    echo  "<option value='$id' $selected> $nome </option>";
+                        echo  "<option value='$id' $selected> $nome </option>";
+                    }
+                    echo "</select><br>";
                 }
-                echo "</select><br/>";
             }
-        }
+        }    
     }
 
     // OPTION HELPER

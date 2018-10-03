@@ -27,7 +27,10 @@
 
   h1.list-title {
     text-align: center;
-    color: black !important;
+
+    a {
+      color: black !important;
+    }
   }
 
   .list-forms {
@@ -43,8 +46,10 @@
         background: $green;
       }
     }
-    //margin-bottom: 40px;
-    //border-bottom: 1px solid $light_gray;
+  }
+
+  a.abrir-relatorios {
+    float: right;
   }
 } // .acolhesus-form-container
 
@@ -184,5 +189,4 @@
       background: $green;
     }
   }
-
 } // .lista-geral
