@@ -403,15 +403,15 @@ class AcolheSUSReports
             global $wpdb;
 
             $form_id = $this->getFormId($formType, $state);
-            $populacao = 0;
+
             if($form_id)
             {
                 $sql = "SELECT sum(populacao) populacao from municipio where id in
                   (SELECT meta_value from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id)";
-                $populacao = $wpdb->get_results($sql, ARRAY_A);
-
-                if(!empty($populacao))
-                    $populacao = $populacao[0]['populacao'];
+                $r = $wpdb->get_results($sql, ARRAY_A);
+                $populacao = 0;
+                if(!empty(r))
+                    $populacao = $r[0]['populacao'];
 
                 $table_row = "
                 <tr>
