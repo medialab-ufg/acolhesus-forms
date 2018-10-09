@@ -397,7 +397,18 @@ class AcolheSUSReports
                     $j = 0;
                 }
             }
+        }else if($formType === 'matriz_cenario')
+        {
+            $populacao = 0;
+            $table_row = "
+            <tr>
+                <td>
+                    <h3>População</h3>
+                </td>
+                <td>$populacao</td>
+            </tr>";
         }
+
         $i = $j = 0;
         foreach ($fields as $id => $campo) {
             $tipo = $campo["type"];
