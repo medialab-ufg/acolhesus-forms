@@ -399,7 +399,16 @@ class AcolheSUSReports
             }
         }else if($formType === 'matriz_cenario')
         {
-            $populacao = 0;
+            global $wpdb;
+            $form_id = $this->getFormId($formType, $state);
+            $sql = "SELECT sum(populacao) populacao from municipio where id in
+                  (SELECT meta_value from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id)";
+            $populacao = $wpdb->get_results($sql, ARRAY_A);
+
+            if(empty($populacao))
+                $populacao = 0;
+            else $populacao = $populacao[0]['populacao'];
+
             $table_row = "
             <tr>
                 <td>
@@ -604,6 +613,14 @@ class AcolheSUSReports
         }
 
         return " --- ";
+    }
+
+    private function getFormId($formType, $value)
+    {
+        $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$value';";
+        $state_ids = $this->getSQLResults($sql, "total");
+
+        return $state_ids[0]->ID;
     }
 
     private function getFilterFor($type, $formType, $field_id, $value) {
