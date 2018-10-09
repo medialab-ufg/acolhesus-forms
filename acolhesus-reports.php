@@ -410,7 +410,7 @@ class AcolheSUSReports
                   (SELECT meta_value from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id)";
                 $r = $wpdb->get_results($sql, ARRAY_A);
                 $populacao = 0;
-                if(!empty(r))
+                if(!empty($r))
                     $populacao = $r[0]['populacao'];
 
                 $table_row = "
