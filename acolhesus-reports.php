@@ -620,7 +620,7 @@ class AcolheSUSReports
         return " --- ";
     }
 
-    private function getFormId($formType, $value)
+    public function getFormId($formType, $value)
     {
         $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='acolhesus_campo' AND pm.meta_value='$value';";
         $state_ids = $this->getSQLResults($sql, "total");

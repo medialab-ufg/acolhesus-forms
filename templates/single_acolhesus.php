@@ -49,7 +49,7 @@ if ($is_new_form) {
         </div>
     </div>
     <h3>
-        <?php the_title(); ?>
+        <span id="form-title"><?php the_title(); ?></span>
 
         <?php if (get_post_meta($post_id, 'locked', true)): ?>
             <span class="closed-form"> preenchimento encerrado </span>

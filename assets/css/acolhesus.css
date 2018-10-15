@@ -338,5 +338,7 @@
     border-top: 1px solid #003c46;
     border-bottom: 1px solid #003c46;
     padding: 10px 0 10px 0 !important; }
+  .reports-wrapper .matriz-cenario-single-report h4 {
+    font-size: 20px; }
 
 /*# sourceMappingURL=acolhesus.css.map */

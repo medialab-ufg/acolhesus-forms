@@ -6,11 +6,17 @@ jQuery( function($) {
 
     $("#gen_report").click(function (event) {
         var post_id = $("input[name=_cf_cr_pst]").val();
+        var state = $("#form-title").text().match(/\((.*)\)/);
+        if (state)
+        {
+            state = state[1];
+        }
 
         $.post(acolhesus.ajax_url, {
             action: 'acolhesus_reports_report',
             form: $("#form_type").val(),
-            post_id: post_id
+            post_id: post_id,
+            state: state
         }).success(function (r) {
             $("#the_content").hide();
             $("#show_form").toggle();

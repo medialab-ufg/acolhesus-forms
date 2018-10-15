@@ -360,13 +360,13 @@ class AcolheSUS {
         $post_id = sanitize_text_field($_POST['post_id']);
 
         $result = $this->get_specific_form_data($formType, $post_id);
-        $html = $this->wrap_in_html($formType, $result);
+        $html = $this->wrap_in_html($formType, $result, $post_id);
 
         echo json_encode($html);
         wp_die();
     }
 
-    function wrap_in_html($form_type, $result)
+    function wrap_in_html($form_type, $result, $post_id)
     {
         $html = '';
         if($form_type === 'matriz_p_criticos')
@@ -377,7 +377,7 @@ class AcolheSUS {
             }
         }else if($form_type === 'matriz_cenario')
         {
-            $html = $this->wrap_matriz_cenario_html($result);
+            $html = $this->wrap_matriz_cenario_html($result, $form_type, $post_id);
         }
 
         return $html;
@@ -449,12 +449,38 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
-    public function wrap_matriz_cenario_html($data)
+    public function wrap_matriz_cenario_html($data, $formType, $form_id)
     {
+        global $wpdb;
         ob_start();
-        //print_r($data);
+
+        if($form_id)
+        {
+            $sql = "SELECT sum(populacao) populacao from municipio where id in
+                  (SELECT meta_value from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id)";
+            $r = $wpdb->get_results($sql, ARRAY_A);
+            $populacao = 0;
+            if(!empty($r))
+            {
+                $populacao = $r[0]['populacao'];
+            }
+
+            $sql = "SELECT count(*) as count from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id";
+            $r = $wpdb->get_results($sql, ARRAY_A);
+            $count_cities = 0;
+            if(!empty($r))
+            {
+                $count_cities = $r[0]['count'];
+            }
+
+
+        }
         ?>
-        <div>
+        <div class="matriz-cenario-single-report">
+            <p>A referência técnica da CGPNH/SAS/MS para este campo é <?php echo $_POST['state']; ?>.
+            O campo de atuação atinge um total de <?php echo $count_cities; ?> municípios, que, em conjunto, representam uma população de <?php echo $populacao; ?> habitantes.
+            <?php echo $data['C'] ;?> profissionais estão alocados neste serviço.</p>
+
             <h1 class="text-center">1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h1>
             <h3 class="text-center">1.1 Acolhimento</h3>
 
@@ -572,7 +598,7 @@ class AcolheSUS {
                     {
                         $result[$index][] = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($id,$post_id)];
                     }
-                }else if($tipo === 'toggle_switch' || $tipo === 'text')
+                }else if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number')
                 {
                     $label = explode(' ', $campo['label'])[0];
                     $result[$label] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
