@@ -37,7 +37,7 @@ if ($is_new_form) {
                     Gerar gráfico
                 </button>
                 <?php
-            } else if($post_type === 'matriz_p_criticos')
+            } else if($post_type === 'matriz_p_criticos' || $post_type === 'matriz_cenario')
             {
                 ?>
                 <button id="gen_report" class="btn btn-primary" type="button"> <i class="fa fa-file-text-o" aria-hidden="true"></i>

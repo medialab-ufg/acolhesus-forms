@@ -375,6 +375,9 @@ class AcolheSUS {
             {
                 $html .= $this->wrap_specific_in_html($ponto_critico_name, $ponto_critico_info);
             }
+        }else if($form_type === 'matriz_cenario')
+        {
+            $html = $this->wrap_matriz_cenario_html($result);
         }
 
         return $html;
@@ -446,6 +449,92 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
+    public function wrap_matriz_cenario_html($data)
+    {
+        ob_start();
+        //print_r($data);
+        ?>
+        <div>
+            <h1 class="text-center">1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h1>
+            <h3 class="text-center">1.1 Acolhimento</h3>
+
+            <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no Estado [1.1.1].
+            A referência é <?php echo $data['1.1.1.1']; ?>.</p>
+
+            <p>Foi implantado processo de Acolhimento no(s) serviço(s) que compõe(m) o projeto [1.1.2].
+            Em  <?php echo $data['1.1.2.1'];?>.
+            A implantação foi parcial [1.1.2.2].
+            Foram capacitados: gestores, trabalhadores, <?php echo $data['1.1.2.3.1'].'; '.$data['1.1.2.3.1.1'].'; '.$data['1.1.2.3.1.2']; ?> .
+            Foram construídos os fluxos internos do Acolhimento <?php echo $data['1.1.2.4']?>.
+            De forma pactuada com as seguintes categorias profissionais: <?php echo $data['1.1.2.4.1.1']?>.</p>
+
+            <p>O usuário foi incluído no processo de implantação/implementação do Acolhimento [1.1.3].
+            Existe avaliação de satisfação do usuário a partir das ações de Acolhimento implantadas [1.14].
+            Observações pertinentes:  <?php echo $data['1.1.4.1']?>.</p>
+
+            <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) ____________ (construída pelo estado; construída pela gestão municipal; construída pelo estado e municípios; construída pelo serviço) [1.1.5].
+            A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde [1.1.5.1]. Observações pertinentes <?php echo $data['1.1.5.1.1']?>.
+            *Existe listagem para as seguintes Unidades de Saúde: ________________________ (Atenção Básica (AB); Hospitalar Unidade Pronto Atendimento (UPA); Centro Especializado em Reabilitação (CRER); Centro de Atenção Psicossocial (CAPS); <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1'];?>).
+            A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): ______________ (Em formato de cartilha para distribuição; Impressões da lista na recepção; Mídia instalada na recepção (televisão); Informações prestadas pela recepção/posso ajudar; <?php echo $data['1.1.5.3']."; ".$data['1.1.5.3.1'];?>).</p>
+
+
+            <h4>1.2 Classificação de Risco</h4>
+
+            <p>Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada [1.2.1]. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['']?> [1.2.1.1 Campo aberto].
+            Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco: <?php echo $data['']?> (gestores; trabalhadores; <?php echo $data['1.2.2.1'].'; '. $data['1.2.2.1.1']?>).
+            O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde [1.2.3].
+            A estratégia de monitoramento e avaliação dos indicadores de classificação/avaliação de risco e vulnerabilidade de risco utilizada é: <?php echo $data['1.2.4.1']?>. Observações pertinentes: <?php echo $data['1.2.4.2']?>.</p>
+
+            <h3>2 Eixo 2: Ambiência</h3>
+
+            <p>Os seguintes projetos de reforma ou adequações de layout e de mudanças de fluxos, que envolvem o serviço, foram construídos de forma cogerida e a partir da diretriz Ambiência da PNH: <?php echo $data['2.1.1']?>.
+            Os profissionais da engenharia e arquitetura da SES foram qualificados na diretriz ambiência da PNH [2.2.].
+            Foram realizadas avaliações de satisfação dos usuários [2.3]. Foram realizadas avaliações de satisfação dos trabalhadores [2.4]. Foram realizadas avaliações de satisfação dos gestores [2.5].</p>
+
+
+            <h3>3 Eixo 3: Qualificação Profissional</h3>
+
+
+            <p>Existe mecanismo de educação permanente no Estado para gestores e trabalhadores, com ampliação de métodos de discussão e produção coletiva de conhecimento e qualificação do trabalho [3.1].
+
+            A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <?php echo $data['']?> (inserido/alinhado com o plano de educação permanente Estadual; inserido/alinhado parcialmente com o plano de educação permanente Estadual; não inserido/alinhado com o plano de educação permanente Estadual [3.2].
+
+            A SES conta com apoiadores institucionais do Estado formados na PNH [3.3].
+
+            Existe uma rede/grupos para intercâmbio entre os níveis de atenção para compartilhamento das experiências [3.4].</p>
+
+            <h3>4 Eixo 4: Gestão e Organização do Cuidado</h3>
+
+            <h4>4.1 Gestão compartilhada</h4>
+
+            <p>Existem os seguintes espaços coletivos/colegiados instituídos e com funcionamento sistemático efetivo na SES com plano de trabalho elaborado: <?php echo $data['4.1.1.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.1.2']?>.
+
+            Existem os seguintes espaços coletivos/colegiados instituídos nos serviços de saúde com plano de trabalho elaborado: <?php echo $data['4.1.2.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.2.2']?>.
+
+            Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <?php echo $data['4.1.3.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.3.2']?>.</p>
+
+            <h4>4.2 Garantia dos direitos dos usuários</h4>
+
+            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações na SES [4.2.1].
+
+            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações nas unidades de saúde [4.2.2].
+
+            <h4>4.3 Continuidade do cuidado</h4>
+
+            Existe articulação entre o campo de atuação e os demais pontos da RAS [4.3.1]. A articulação é feita entre as seguintes unidades e da seguinte forma: <?php echo $data['4.3.1.1']?>.
+
+            Existem instrumentos de referência e transferência do cuidado construídos e pactuados entre os municípios para a conformação da RAS [4.3.2]. A construção e pactuação de instrumentos de referência e transferência foram produzidos com a participação dos gestores e trabalhadores dos serviços [4.3.2.1].
+
+            <h4>4.4 Monitoramento e avaliação</h4>
+
+            Existe núcleo/coordenação de monitoramento e avaliação na SES [4.4.1]. O processo de trabalho é realizado de forma articulada e alinhada com as áreas /coordenações da SES com encontros programáticos [4.4.1.1]. O processo metodológico de monitoramento e avaliação dos indicadores que compõem o planejamento da SES é o seguinte: <?php echo $data['4.4.1.2']?>.
+            O processo de trabalho é realizado de forma articulada e alinhada com a Coordenação Estadual de Humanização com encontros programáticos [4.4.1.3]. Por fim, agenda de encontros com a coordenação de humanização está acontecendo dentro do que foi pactuado [4.4.1.3.1].
+        </div>
+        <?php
+
+        return ob_get_clean();
+    }
+
     function get_info_in_result($result, $needle)
     {
         $needle = strtolower($needle);
@@ -466,9 +555,10 @@ class AcolheSUS {
     function get_specific_form_data($formType, $post_id)
     {
         $acholheSUSReports = new AcolheSUSReports(); $result = [];
-        if($formType === 'matriz_p_criticos')
+        $fields = $acholheSUSReports->getFormFields($formType);
+
+        if($formType === 'matriz_p_criticos' || $formType === 'matriz_cenario')
         {
-            $fields = $acholheSUSReports->getFormFields($formType);
             $index = '';
             foreach ($fields as $id => $campo) {
                 $tipo = $campo["type"];
@@ -482,6 +572,10 @@ class AcolheSUS {
                     {
                         $result[$index][] = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($id,$post_id)];
                     }
+                }else if($tipo === 'toggle_switch' || $tipo === 'text')
+                {
+                    $label = explode(' ', $campo['label'])[0];
+                    $result[$label] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
                 }
             }
         }
