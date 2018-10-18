@@ -7,7 +7,7 @@
  * Version: 0.1
  * Author URI: https://github.com/medialab-ufg/
  * Text Domain: acolhesus-rhs
- */
+ *///
 
 require_once "acolhesus-common.php";
 
