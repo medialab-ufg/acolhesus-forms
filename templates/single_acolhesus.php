@@ -5,7 +5,7 @@ $post_type = get_post_type();
 $post_id = get_the_ID();
 $_sem_diligencias = ["avaliacao_grupos", "avaliacao_oficina","relatorio_oficina","memoria_reuniao", "atividades_dispersao"];
 $_possui_diligencias = !in_array($post_type, $_sem_diligencias);
-$_view_perm = "ver_" . $post_type;
+$_view_perm = "editar_" . $post_type;
 $can_user_view = in_array($_view_perm, get_user_meta(get_current_user_id(), 'acolhesus_form_perms'));
 $is_new_form = get_post_meta($post_id, 'new_form', true);
 
@@ -15,21 +15,55 @@ if ($is_new_form) {
 ?>
 
 <div class="acolhesus-form-container">
+    <input type="hidden" id="form_type" value="<?php echo $post_type;?>">
+    <div class="options">
+        <a href="<?php echo home_url('formularios-acolhesus'); ?>" class="btn btn-default voltar-home">
+            VOLTAR PARA TELA INICIAL
+        </a>
+
+        <?php if (current_user_can('acolhesus_cgpnh')): ?>
+            <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>
+        <?php endif; ?>
+
+        <div class="chart_options pull-right">
+            <button id="show_form" class="btn btn-primary" style="display: none;" type="button">
+                Ver formulário
+            </button>
+            <?php
+            if($post_type === 'avaliacao_grupos' || $post_type === 'avaliacao_oficina')
+            {
+                ?>
+                <button id="gen_charts" class="btn btn-primary" type="button"> <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                    Gerar gráfico
+                </button>
+                <?php
+            } else if($post_type === 'matriz_p_criticos' || $post_type === 'matriz_cenario')
+            {
+                ?>
+                <button id="gen_report" class="btn btn-primary" type="button"> <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                    Gerar relatório
+                </button>
+                <?php
+            }
+            ?>
+        </div>
+    </div>
     <h3>
-        <?php the_title(); ?>
+        <span id="form-title"><?php the_title(); ?></span>
 
         <?php if (get_post_meta($post_id, 'locked', true)): ?>
             <span class="closed-form"> preenchimento encerrado </span>
-        <?php endif; ?>
-
-        <?php if (current_user_can('acolhesus_cgpnh')): ?>
-            <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODAS RESPOSTAS </a>
         <?php endif; ?>
     </h3>
 
     <?php $formView->get_entry_attachments(); ?>
 
-    <?php the_content(); ?>
+    <div id="the_content">
+        <?php the_content(); ?>
+    </div>
+    <div id="charts_set">
+        <div id="chart"></div>
+    </div>
 
     <div id="form-accordion">
 
@@ -50,7 +84,7 @@ if ($is_new_form) {
                     $logs = get_comments($log_opts);
 
                     if (count($logs) <= 0) {
-                        echo "<center> Formulário ainda sem dados no histórico. </center>";
+                        echo "<p class='text-center'> Formulário ainda sem dados no histórico. </p>";
                     } else {
                         foreach ($logs as $log): ?>
                             <div class="acolhesus-log">

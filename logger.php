@@ -40,28 +40,39 @@ class AcolheSUSLogger {
 
     function save_entry_end($form, $referrer, $process_id, $entryid) {
         $post_id = $this->get_post_id_by_entry_id($entryid);
-        
-        
+
         if ($this->edit_session_action == 'edit') {
             $action = 'editou as respostas';
         } elseif ($this->edit_session_action == 'add') {
             $action = 'criou estas respostas';
         }
         $message = $this->edit_session;
-        
         $this->log($post_id, $action, $message);
     }
 
     function save_field($entry, $field, $form, $entry_id) {
-        $this->edit_session .= $field['label'] . ': ' . $entry . '<br/>';
-        return $entry;
+        if($field['type'] != 'button')
+        {
+            $this->edit_session .= $field['label'] . ': ' . $entry . '<br/>';
+        }
 
+        return $entry;
     }
 
     function update_field($newdata, $field, $form) {
-        
-        $this->edit_session .= $field['label'] . ': ' . $newdata . '<br/>';
-        
+        if(!is_array($newdata))
+        {
+            $this->edit_session .= $field['label'] . ': ' . $newdata . '<br/>';
+        }else
+        {
+            $position = array_search("autocomplete", $newdata);
+            if($position !== false)
+            {
+                unset($newdata[$position]);
+            }
+            $this->edit_session .= $field['label'] . ': '. implode(", ", $newdata). "<br>";
+        }
+
         return $newdata;
     }
 

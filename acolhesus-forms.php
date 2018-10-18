@@ -9,82 +9,11 @@
  * Text Domain: acolhesus-rhs
  */
 
-include('acolhesus-view.php');
+require_once "acolhesus-common.php";
 
 class AcolheSUS {
 
-    public $campos = [
-        'AC',
-        'AL',
-        'AM',
-        'AP',
-        'BA',
-        'CE',
-        'DF',
-        'GO',
-        'MA',
-        'MG',
-        'MS',
-        'MT',
-        'PA',
-        'PB',
-        'PI',
-        'RJ',
-        'RN',
-        'RR',
-        'SC',
-        'TO'
-    ];
-
-    public $campos_completos = [
-        'AC' => 'AC - Rio Branco - Hospital de Urgência e Emergência',
-        'AL' => 'AL - Arapiraca - Hospital de Emergência Dr. Daniel Houly',
-        'AM' => 'AM - Manaus - Hospital Dr. João Lúcio Pereira Machado',
-        'AP' => 'AP - Macapá - Hospital Dr. Oswaldo Cruz',
-        'BA' => 'BA - Salvador - Hospital Geral do Estado',
-        'CE' => 'CE - Fortaleza - Hospital São José',
-        'DF' => 'DF - Brasília - Regional Macro Centro-Norte - APS',
-        'GO' => 'GO - Cristalina - Hospital Municipal de Cristalina Chaud Salles',
-        'MA' => 'MA - São Luís - UPA Itaqui Bacana',
-        'MG' => 'MG - Juiz de Fora - Hospital Regional Dr. João Penido',
-        'MS' => 'MS - Campo Grande - Hospital Regional de Mato Grosso do Sul',
-        'MT' => 'MT - Várzea Grande - Hospital e Pronto Socorre Municipal de Várzea Grande',
-        'PA' => 'PA - Belém - CAPS Renascer',
-        'PB' => 'PB - João Pessoa - Maternidade Frei Damião',
-        'PI' => 'PI - Parnaíba - Hospital Estadual Dirceu Arcoverde',
-        'RJ' => 'RJ - Duque de Caxias - Hospital Estadual Adão Pereira Nunes',
-        'RN' => 'RN - Natal - Hospital José Pedro Bezerra',
-        'RR' => 'RR - Boa Vista - Pronto Atendimento Airton Rocha',
-        'SC' => 'SC - São José - Hospital Regional de São José Dr. Homero Miranda',
-        'TO' => 'TO - Palmas - Hospital Geral de Palmas'
-    ];
-
-    // Estados que não participam por enquanto do AcolheSUS
-    // Deixar aqui a título de conhecimento
-    private $estados_fora = [
-        'ES' => 'ES',
-        'PE' => 'PE',
-        'PR' => 'PR',
-        'RO' => 'RO',
-        'RS' => 'RS',
-        'SE' => 'SE',
-        'SP' => 'SP'
-    ];
-
-    public $fases = [
-        'fase_1' => 'Fase | - Análise Situacional',
-        'fase_2' => 'Fase || - Elaboração e Modelização do Plano de Trabalho',
-        'fase_3' => 'Fase ||| - Implementação, Monitoramento e Avaliação',
-        'macrogestao' => 'Macrogestão'
-    ];
-
-    public $eixos = [
-        'Acolhimento',
-        'Qualificação Profissional',
-        'Gestão de Processos de Trabalho',
-        'Organização do Cuidado',
-        'Ambiência'
-    ];
+    use AcolheSUSCommon;
 
     public $forms = [
         'matriz_cenario' => [
@@ -98,16 +27,49 @@ class AcolheSUS {
             'fase' => 'fase_1',
             'eixo' => 0
         ],
-        'indicadores' => [
+        'ind_materno_infantil' => [
             'labels' => [
-                'name' => 'Indicadores',
-                'singular_name' => 'Indicadores'
+                'name' => 'Indicadores Materno-Infantil',
+                'singular_name' => 'Indicadores Materno-Infantil'
             ],
-            'slug' => 'indicadores',
+            'slug' => 'ind_materno_infantil',
             'uma_entrada_por_campo' => false,
             'fase' => 'fase_1',
             'eixo' => 0,
             'omitir_macrogestao' => true
+        ],
+        'indicadores_caps' => [
+            'labels' => [
+                'name' => 'Indicadores CAPS',
+                'singular_name' => 'Indicadores CAPS'
+            ],
+            'slug' => 'indicadores_caps',
+            'uma_entrada_por_campo' => false,
+            'fase' => 'fase_1',
+            'eixo' => 0,
+            'omitir_macrogestao' => true
+        ],
+        'indicadores' => [
+            'labels' => [
+                    'name' => 'Indicadores Hospital Geral',
+                    'singular_name' => 'Indicadores Hospital Geral'
+                ],
+                'slug' => 'indicadores',
+                'uma_entrada_por_campo' => false,
+                'fase' => 'fase_1',
+                'eixo' => 0,
+                'omitir_macrogestao' => true
+        ],
+        'indicadores_basica' => [
+            'labels' => [
+                    'name' => 'Indicadores da Atenção Básica',
+                    'singular_name' => 'Indicadores da Atenção Básica'
+                ],
+                'slug' => 'indicadores_basica',
+                'uma_entrada_por_campo' => false,
+                'fase' => 'fase_1',
+                'eixo' => 0,
+                'omitir_macrogestao' => true
         ],
         'visita_guiada' => [
             'labels' => [
@@ -209,8 +171,8 @@ class AcolheSUS {
         ],
         'memoria_reuniao' => [
             'labels' => [
-                'name' => 'Memória de Reunião',
-                'singular_name' => 'Memória de Reunião/Vídeo'
+                'name' => 'Videoconferências/Reunião da Gestão ou da Coordenação',
+                'singular_name' => 'Videoconferências/Reunião da Gestão ou da Coordenação'
             ],
             'slug' => 'memoria_reuniao',
             'uma_entrada_por_campo' => false,
@@ -234,11 +196,17 @@ class AcolheSUS {
     ];
 
     const CAMPO_META = 'acolhesus_campo';
+
+    const CGPNH = 'acolhesus_cgpnh';
+
+    const ANSWER_ID = '_cf_cr_pst';
     
     function __construct() {
-
         add_action('init', [&$this, 'register_post_types']);
+
         add_action('init', [&$this, 'init_default_data']);
+
+        add_action('init', [&$this, 'acolhesus_rewrite_reports']);
 
         add_filter('the_content', [&$this, 'filter_the_content']);
 
@@ -247,11 +215,14 @@ class AcolheSUS {
         add_action('wp_enqueue_scripts', [&$this, 'load_acolhesus_assets']);
 
         add_filter('archive_template', [&$this, 'acolhesus_archive_page']);
+
         add_filter('single_template', [&$this, 'acolhesus_single_page']);
 
-        add_action( 'generate_rewrite_rules', array( &$this, 'rewrite_rules' ), 10, 1 );
-        add_filter( 'query_vars', array( &$this, 'rewrite_rules_query_vars' ) );
-        add_filter( 'template_include', array( &$this, 'rewrite_rule_template_include' ) );
+        add_action('generate_rewrite_rules', array( &$this, 'rewrite_rules' ), 10, 1 );
+
+        add_filter('query_vars', array( &$this, 'rewrite_rules_query_vars' ) );
+
+        add_filter('template_include', array( &$this, 'rewrite_rule_template_include' ));
 
         add_action('template_redirect', array(&$this, 'can_user_view_form'));
 
@@ -269,6 +240,8 @@ class AcolheSUS {
 
         add_action('wp_ajax_remove_entry_city', array(&$this, 'remove_entry_city'));
 
+        add_action('wp_ajax_remove_form_entry', array(&$this, 'remove_form_entry'));
+
         add_action('wp_ajax_delete_new_form_tag', array(&$this, 'delete_new_form_tag'));
 
         add_action('wp_ajax_delete_form_attachment', array(&$this, 'delete_form_attachment'));
@@ -279,25 +252,412 @@ class AcolheSUS {
 
         add_filter('caldera_forms_mailer', array(&$this, 'append_content_to_mail'), 10, 3);
 
-        add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_save_for_later'));
+        add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_for_later'));
 
-        add_action( 'caldera_forms_submit_post_process', array(&$this, 'get_old_attachment'), 10, 4 );
+        add_action('caldera_forms_submit_post_process', array(&$this, 'get_old_attachment'), 10, 4 );
 
-        add_filter( 'caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
+        add_action('caldera_forms_submit_post_process', array(&$this, 'confirm_save'), 10, 4 );
 
-        add_action('wp_ajax_acolhesus_notify_user', array(&$this, 'ajax_callback_notify_user'));
+        add_filter('caldera_forms_ajax_return', array(&$this, 'filter_caldera_forms_ajax_return'), 10, 2 );
+
+        add_action('wp_ajax_acolhesus_verify_indicadores_info', array(&$this, 'ajax_callback_verify_indicadores_info'));
+
+        add_action("wp_ajax_acolhesus_reports_chart", array(&$this, "ajax_callback_reports_charts"));
+
+        add_action("wp_ajax_acolhesus_reports_report", array(&$this, "ajax_callback_reports_report"));
     }
 
-    function ajax_callback_notify_user()
+    function ajax_callback_reports_charts()
     {
-        if( current_user_can('editor') || current_user_can('administrator') )
+        $formType = $_POST['form'];
+        $post_id = sanitize_text_field($_POST['post_id']);
+        $chart_type = $_POST['chart_type'];
+        $phase = $_POST['phase'];
+        $state = $_POST['field'];
+
+        $acholheSUSReports = new AcolheSUSReports(); $result = [];
+        $fields = $acholheSUSReports->getFormFields($formType);
+
+        if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos' || $formType === 'matriz_cenario')
         {
-            /*global $RHSNotifications;
+            $index = 'total'; $switch_index = '';
+            foreach ($fields as $id => $campo) {
+                $tipo = $campo["type"];
+                if (in_array($tipo, $acholheSUSReports->report_fields))
+                {
+                    if (is_string($state) && (strlen($state) === 2) || is_string($phase))
+                    {
+                        $value = $acholheSUSReports->getFilterForCharts($state, $phase,$formType, $id);
+                    }else
+                    {
+                        $value = intval($acholheSUSReports->getAnswerStats($id, false, $post_id));
+                    }
 
-            $current_user = wp_get_current_user();
-
-            $RHSNotifications->add_notification(RHSNotifications::CHANNEL_COMMENTS, );*/
+                    $result[$index][$campo['label']] = $value;
+                }else if ($tipo === "html" && !in_array($id, $acholheSUSReports->excluded_fields))
+                {
+                    $index = strip_tags($campo["config"]["default"]);
+                    $switch_index = strip_tags($campo["config"]["default"])[0];
+                }else if($tipo === "toggle_switch")
+                {
+                    $result[$switch_index][$campo['label']]['Sim'] = intval($acholheSUSReports->getTotal($id, $tipo,"Sim"));
+                    $result[$switch_index][$campo['label']]['Não'] = intval($acholheSUSReports->getTotal($id, $tipo,"Não"));
+                }
+            }
         }
+
+        $this->get_percent($result, $formType, $chart_type);
+
+        echo json_encode($result);
+        wp_die();
+    }
+
+    function get_percent(&$data, $formType, $chart_type)
+    {
+        if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos' || $formType = 'matriz_cenario' )
+        {
+            if ($formType === 'avaliacao_grupos') {
+                $sum = $data['total'];
+                $sum = current($sum);
+                unset($data['total']);
+            }
+
+            foreach ($data as $piece_name => $piace)
+            {
+                if($formType === 'avaliacao_oficina')
+                {
+                    $sum = array_sum($piace);
+                }
+
+                foreach ($piace as $option_name => $option)
+                {
+                    $data[$piece_name][$option_name] = [];
+                    if(!is_array($option))
+                    {
+                        $data[$piece_name][$option_name]['total'] = $option;
+                    }
+
+                    if($chart_type !== 'pie')
+                    {
+                        $data[$piece_name][$option_name]['percent'] = doubleval(sprintf("%.1f",(100 * $option) / $sum));
+                    }
+                    else{
+                        if(!is_array($option))
+                        {
+                            $data[$piece_name][$option_name]['percent'] = doubleval($option);
+                        }else {
+                            $data[$piece_name][$option_name] = $option;/*YES or NOT*/
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function ajax_callback_reports_report()
+    {
+        $formType = $_POST['form'];
+        $post_id = sanitize_text_field($_POST['post_id']);
+
+        $result = $this->get_specific_form_data($formType, $post_id);
+        $html = $this->wrap_in_html($formType, $result, $post_id);
+
+        echo json_encode($html);
+        wp_die();
+    }
+
+    function wrap_in_html($form_type, $result, $post_id)
+    {
+        $html = '';
+        if($form_type === 'matriz_p_criticos')
+        {
+            foreach ($result as $ponto_critico_name => $ponto_critico_info)
+            {
+                $html .= $this->wrap_specific_in_html($ponto_critico_name, $ponto_critico_info);
+            }
+        }else if($form_type === 'matriz_cenario')
+        {
+            $html = $this->wrap_matriz_cenario_html($result, $form_type, $post_id);
+        }
+
+        return $html;
+    }
+
+
+    public function wrap_specific_in_html($ponto_critico_name, $ponto_critico_info)
+    {
+        ob_start();
+        ?>
+        <div class="ponto-critico">
+            <div class="box-info">
+                <h3 class="text-center"><?php echo $ponto_critico_name?></h3>
+                <div class="text-center box-details">
+                    <?php
+                    if(!empty($ponto_critico_info['name']))
+                        echo $ponto_critico_info['name'];
+                    else echo "<i>Nome não cadastrado</i>";
+                    ?>
+                </div>
+            </div>
+
+            <div class="box-info">
+                <h3 class="text-center">Caracterização</h3>
+                <div class="box-details">
+                    <?php
+                    $caracterizacao = $this->get_info_in_result($ponto_critico_info, "Caracterização do ".$ponto_critico_name)[0];
+                    if(!empty($caracterizacao))
+                        echo $caracterizacao;
+                    else echo "<i>Caracterização não cadastrada</i>";
+                    ?>
+                </div>
+            </div>
+
+            <div class="box-info">
+                <h3 class="text-center">Diretrizes/dispositivos</h3>
+                <div class="box-details">
+                    <?php
+                    $diretrizes = $this->get_info_in_result($ponto_critico_info, "Diretrizes do ".$ponto_critico_name)[0];
+                    if(!empty($diretrizes))
+                        echo $diretrizes;
+                    else echo "<i>Diretrizes/dispositivos não cadastradas</i>";
+                    ?>
+                </div>
+            </div>
+
+            <div class="box-info">
+                <h3 class="text-center">Causas</h3>
+                <div class="box-details">
+                    <?php
+                    $result = $this->get_info_in_result($ponto_critico_info, "Causas do ".$ponto_critico_name);
+                    foreach ($result as $cause)
+                    {
+                        echo '<div class="cause">';
+                        if(!empty($cause))
+                        {
+                            ?>
+                            <?php echo $cause; ?>
+                            <?php
+                        }else echo "<i>Sem causas cadastradas</i>";
+                        echo '</div>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <?php
+
+        return ob_get_clean();
+    }
+
+    public function wrap_matriz_cenario_html($data, $formType, $form_id)
+    {
+        global $wpdb;
+        ob_start();
+
+        if($form_id)
+        {
+            $sql = "SELECT sum(populacao) populacao from municipio where id in
+                  (SELECT meta_value from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id)";
+            $r = $wpdb->get_results($sql, ARRAY_A);
+            $populacao = 0;
+            if(!empty($r))
+            {
+                $populacao = $r[0]['populacao'];
+            }
+
+            $sql = "SELECT count(*) as count from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id";
+            $r = $wpdb->get_results($sql, ARRAY_A);
+            $count_cities = 0;
+            if(!empty($r))
+            {
+                $count_cities = $r[0]['count'];
+            }
+
+
+        }
+        ?>
+        <div class="matriz-cenario-single-report">
+            <p>A referência técnica da CGPNH/SAS/MS para este campo é <?php echo $_POST['state']; ?>.
+            O campo de atuação atinge um total de <?php echo $count_cities; ?> municípios, que, em conjunto, representam uma população de <?php echo $populacao; ?> habitantes.
+            <?php echo $data['C'] ;?> profissionais estão alocados neste serviço.</p>
+
+            <h1 class="text-center">1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h1>
+            <h3 class="text-center">1.1 Acolhimento</h3>
+
+            <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no Estado [1.1.1].
+            A referência é <?php echo $data['1.1.1.1']; ?>.</p>
+
+            <p>Foi implantado processo de Acolhimento no(s) serviço(s) que compõe(m) o projeto [1.1.2].
+            Em  <?php echo $data['1.1.2.1'];?>.
+            A implantação foi parcial [1.1.2.2].
+            Foram capacitados: gestores, trabalhadores, <?php echo $data['1.1.2.3.1'].'; '.$data['1.1.2.3.1.1'].'; '.$data['1.1.2.3.1.2']; ?> .
+            Foram construídos os fluxos internos do Acolhimento <?php echo $data['1.1.2.4']; ?>.
+            De forma pactuada com as seguintes categorias profissionais: <?php echo $data['1.1.2.4.1.1']; ?>.</p>
+
+            <p>O usuário foi incluído no processo de implantação/implementação do Acolhimento [1.1.3].
+            Existe avaliação de satisfação do usuário a partir das ações de Acolhimento implantadas [1.14].
+            Observações pertinentes:  <?php echo $data['1.1.4.1']; ?>.</p>
+
+            <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) ____________ (construída pelo estado; construída pela gestão municipal; construída pelo estado e municípios; construída pelo serviço) [1.1.5].
+            A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde [1.1.5.1]. Observações pertinentes <?php echo $data['1.1.5.1.1']; ?>.
+            *Existe listagem para as seguintes Unidades de Saúde: ________________________ (Atenção Básica (AB); Hospitalar Unidade Pronto Atendimento (UPA); Centro Especializado em Reabilitação (CRER); Centro de Atenção Psicossocial (CAPS); <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1']; ?>).
+            A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): ______________ (Em formato de cartilha para distribuição; Impressões da lista na recepção; Mídia instalada na recepção (televisão); Informações prestadas pela recepção/posso ajudar; <?php echo $data['1.1.5.3']."; ".$data['1.1.5.3.1']; ?>).</p>
+
+
+            <h4>1.2 Classificação de Risco</h4>
+
+            <p>Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada [1.2.1]. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['1.2.1.1']; ?>.
+            Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco: <?php echo $data['']?> (gestores; trabalhadores; <?php echo $data['1.2.2.1'].'; '. $data['1.2.2.1.1']; ?>).
+            O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde [1.2.3].
+            A estratégia de monitoramento e avaliação dos indicadores de classificação/avaliação de risco e vulnerabilidade de risco utilizada é: <?php echo $data['1.2.4.1']; ?>. Observações pertinentes: <?php echo $data['1.2.4.2']; ?>.</p>
+
+            <h3>2 Eixo 2: Ambiência</h3>
+
+            <p>Os seguintes projetos de reforma ou adequações de layout e de mudanças de fluxos, que envolvem o serviço, foram construídos de forma cogerida e a partir da diretriz Ambiência da PNH: <?php echo $data['2.1.1']; ?>.
+            Os profissionais da engenharia e arquitetura da SES foram qualificados na diretriz ambiência da PNH [2.2.].
+            Foram realizadas avaliações de satisfação dos usuários [2.3]. Foram realizadas avaliações de satisfação dos trabalhadores [2.4]. Foram realizadas avaliações de satisfação dos gestores [2.5].</p>
+
+
+            <h3>3 Eixo 3: Qualificação Profissional</h3>
+
+
+            <p>Existe mecanismo de educação permanente no Estado para gestores e trabalhadores, com ampliação de métodos de discussão e produção coletiva de conhecimento e qualificação do trabalho [3.1].
+
+            A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <?php echo $data['']?> (inserido/alinhado com o plano de educação permanente Estadual; inserido/alinhado parcialmente com o plano de educação permanente Estadual; não inserido/alinhado com o plano de educação permanente Estadual [3.2].
+
+            A SES conta com apoiadores institucionais do Estado formados na PNH [3.3].
+
+            Existe uma rede/grupos para intercâmbio entre os níveis de atenção para compartilhamento das experiências [3.4].</p>
+
+            <h3>4 Eixo 4: Gestão e Organização do Cuidado</h3>
+
+            <h4>4.1 Gestão compartilhada</h4>
+
+            <p>Existem os seguintes espaços coletivos/colegiados instituídos e com funcionamento sistemático efetivo na SES com plano de trabalho elaborado: <?php echo $data['4.1.1.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.1.2']; ?>.
+
+            Existem os seguintes espaços coletivos/colegiados instituídos nos serviços de saúde com plano de trabalho elaborado: <?php echo $data['4.1.2.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.2.2']; ?>.
+
+            Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <?php echo $data['4.1.3.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.3.2']; ?>.</p>
+
+            <h4>4.2 Garantia dos direitos dos usuários</h4>
+
+            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações na SES [4.2.1].
+
+            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações nas unidades de saúde [4.2.2].
+
+            <h4>4.3 Continuidade do cuidado</h4>
+
+            Existe articulação entre o campo de atuação e os demais pontos da RAS [4.3.1]. A articulação é feita entre as seguintes unidades e da seguinte forma: <?php echo $data['4.3.1.1']; ?>.
+
+            Existem instrumentos de referência e transferência do cuidado construídos e pactuados entre os municípios para a conformação da RAS [4.3.2]. A construção e pactuação de instrumentos de referência e transferência foram produzidos com a participação dos gestores e trabalhadores dos serviços [4.3.2.1].
+
+            <h4>4.4 Monitoramento e avaliação</h4>
+
+            Existe núcleo/coordenação de monitoramento e avaliação na SES [4.4.1]. O processo de trabalho é realizado de forma articulada e alinhada com as áreas /coordenações da SES com encontros programáticos [4.4.1.1]. O processo metodológico de monitoramento e avaliação dos indicadores que compõem o planejamento da SES é o seguinte: <?php echo $data['4.4.1.2']?>.
+            O processo de trabalho é realizado de forma articulada e alinhada com a Coordenação Estadual de Humanização com encontros programáticos [4.4.1.3]. Por fim, agenda de encontros com a coordenação de humanização está acontecendo dentro do que foi pactuado [4.4.1.3.1].
+        </div>
+        <?php
+
+        return ob_get_clean();
+    }
+
+    function get_info_in_result($result, $needle)
+    {
+        $needle = strtolower($needle);
+        foreach ($result as $information)
+        {
+            if(is_array($information))
+            {
+                if(strpos(strtolower($information['title']), $needle) !== false)
+                {
+                    $return[] = $information['value'];
+                }
+            }
+        }
+
+        return $return;
+    }
+
+    function get_specific_form_data($formType, $post_id)
+    {
+        $acholheSUSReports = new AcolheSUSReports(); $result = [];
+        $fields = $acholheSUSReports->getFormFields($formType);
+
+        if($formType === 'matriz_p_criticos' || $formType === 'matriz_cenario')
+        {
+            $index = '';
+            foreach ($fields as $id => $campo) {
+                $tipo = $campo["type"];
+                if ($tipo === "wysiwyg") {
+                    preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
+                    $index = $index[0];
+                    if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
+                    {
+                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
+                    }else
+                    {
+                        $result[$index][] = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($id,$post_id)];
+                    }
+                }else if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number')
+                {
+                    $label = explode(' ', $campo['label'])[0];
+                    $result[$label] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    function ajax_callback_verify_indicadores_info(){
+        global $wpdb;
+        $month_id = $_POST['data']['month_id']; $year_id = $_POST['data']['year_id']; $state = $_POST['data']['state'];
+        $month_val = $_POST['data']['month_val']; $year_val = $_POST['data']['year_val'];
+
+        $sql = "
+        SELECT mesano.*, state.estado from
+            (SELECT entry_a.entry_id, entry_a.value mes, entry_b.value ano
+                FROM ".$wpdb->prefix."cf_form_entry_values as entry_a join ".$wpdb->prefix."cf_form_entry_values as entry_b
+                where entry_a.field_id='".$month_id."' AND entry_b.field_id='".$year_id."' AND entry_a.entry_id=entry_b.entry_id
+            )
+            as mesano
+        JOIN
+            (SELECT post.meta_value as estado, postmeta.meta_value as entry_id from $wpdb->postmeta post JOIN $wpdb->postmeta postmeta 
+                ON post.post_id = postmeta.post_id 
+                where 
+                    (post.meta_key='acolhesus_campo' and postmeta.meta_key='_entry_id') 
+                        AND
+                    post.post_id IN 
+                        (SELECT ID FROM $wpdb->posts where post_type='indicadores')
+            ) 
+            as state
+        ON mesano.entry_id = state.entry_id
+        ";
+
+        $results = $wpdb->get_results($sql);
+
+        foreach ($results as $result)
+        {
+            if($state == $result->estado && $month_val == $result->mes && $year_val == $result->ano)
+            {
+                echo "false";
+                return;
+            }
+        }
+
+        echo "true";
+        return;
+
+    }
+
+    function confirm_save($form, $referrer, $process_id, $entry_id)
+    {
+        global $AcolheSUSLogger;
+        $post_id = $AcolheSUSLogger->get_post_id_by_entry_id($entry_id);
+        wp_publish_post($post_id);
+
+        //Add as saved
+        add_post_meta($post_id, "acolhe_sus_add_as_saved", true);
     }
 
     function get_old_attachment($form, $referrer, $process_id, $entry_id)
@@ -336,7 +696,6 @@ class AcolheSUS {
     function filter_caldera_forms_ajax_return( $out, $form )
     {
         $old_attach = get_option('rhs_old_attachment');
-
         if(!empty($old_attach))
         {
             foreach ($form['fields'] as $field)
@@ -373,10 +732,11 @@ class AcolheSUS {
         return $out;
     }
 
-    function ajax_callback_save_save_for_later()
+    function ajax_callback_save_for_later()
     {
         global $wpdb, $AcolheSUSLogger;
-        $_entry_id = get_post_meta($_POST['_cf_cr_pst'], '_entry_id', true);
+        $post_id = sanitize_text_field($_POST[self::ANSWER_ID]);
+        $_entry_id = get_post_meta($post_id, '_entry_id', true);
         if(!$_entry_id)
         {
             $new_entry = array(
@@ -388,7 +748,7 @@ class AcolheSUS {
 
             $wpdb->insert($wpdb->prefix . 'cf_form_entries', $new_entry);
             $_entry_id = $wpdb->insert_id;
-            update_post_meta($_POST['_cf_cr_pst'], '_entry_id', $_entry_id);
+            update_post_meta($post_id, '_entry_id', $_entry_id);
         }
 
         $formId = $_POST['formId'];
@@ -406,35 +766,40 @@ class AcolheSUS {
             {
                 $sql_exists = "SELECT count(field_id) AS count FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='$index' AND entry_id=$_entry_id";
                 $count = $wpdb->get_results($sql_exists, 'ARRAY_A')[0]['count'];
-
                 if($count > 0)
                 {//Exists
                     if(!is_array($value))
                     {//Others
-                        $return = $this->search_in_array($current_values, $index);
-                        if(is_array($return))
+                        $alt_vals = explode(",", $value);
+                        if(($index_autocomplete = array_search( "autocomplete", $alt_vals)) !== false)
                         {
-                            $old_value = $return[0];
-
-                        }
-
-                        if($old_value != $value)
+                            $this->insert_autocomplete($alt_vals, $index, $index_autocomplete, $_entry_id, $msg, $fields, $wpdb, $current_values);
+                        }else
                         {
-                            if(!empty($old_value))
+                            $return = $this->search_in_array($current_values, $index);
+                            if(is_array($return))
                             {
-                                $old_value .= " para ";
+                                $old_value = $return[0];
                             }
 
-                            $msg .= $fields[$index]['label'].": $old_value $value <br/>";
-
-                            if(!is_numeric($value))
+                            if($old_value != $value)
                             {
-                                $value = "'".$value."'";
+                                if(!empty($old_value))
+                                {
+                                    $old_value .= " <u>para</u> ";
+                                }
+
+                                $msg .= $fields[$index]['label'].": $old_value $value <br/>";
+
+                                if(!is_numeric($value))
+                                {
+                                    $value = "'".$value."'";
+                                }
+
+                                $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
+
+                                $wpdb->query($sql);
                             }
-
-                            $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
-
-                            $wpdb->query($sql);
                         }
                     }else{//Checkbox
                         $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
@@ -481,29 +846,114 @@ class AcolheSUS {
 
                         if(!is_array($value))
                         {
-                            $value = "'".$value."'";
+                            $alt_vals = explode(",", $value);
+                            if(($index_autocomplete = array_search( "autocomplete", $alt_vals)) !== false)
+                            {
+                                unset($alt_vals[$index_autocomplete]);
+                                foreach ($alt_vals as $alt_val){
+                                    if(!is_numeric($alt_val))
+                                    {
+                                        $alt_val = "'".$alt_val."'";
+                                    }
 
-                            $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $value)";
-                            $wpdb->query($sql);
+                                    $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                    VALUES ($_entry_id, $index, $slug, $alt_val)";
+                                    $wpdb->query($sql);
+                                }
+                            }else{
+                                $value = "'".$value."'";
+
+                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                VALUES ($_entry_id, $index, $slug, $value)";
+                                $wpdb->query($sql);
+                            }
                         }else
                         {
                             foreach($value as $v)
                             {
                                 $msg .= "$v<br>";
                                 $v = "'".$v."'";
-                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
+                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                VALUES ($_entry_id, $index, $slug, $v)";
                                 $wpdb->query($sql);
                             }
                         }
                     }
                 }
+            }else if($index == 'file_value') {//Saving files
+                $files = json_decode(stripslashes($value));
+
+                foreach ($files as $file)
+                {
+                    $upload_dir = wp_upload_dir();
+                    $file_name = $file->name;
+                    $file_content = end(explode("base64,", $file->file));
+                    $file_content = base64_decode($file_content);
+                    $path = $upload_dir['path']."/$file_name";
+
+                    $i = 1;
+                    while (file_exists($path))
+                    {
+                        $name = pathinfo($file_name, PATHINFO_FILENAME);
+                        $extension = pathinfo($file_name,PATHINFO_EXTENSION);
+                        $path = $upload_dir['path']."/$name-$i.$extension";
+                        $url_path = $upload_dir['url']."/$name-$i.$extension";
+                        $i++;
+                    }
+
+                    if(file_put_contents($path, $file_content))
+                    {
+                        $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                        $file_input_id = $_POST['file_input_id'];
+                        $slug = "'".$fields[$file_input_id]['slug']."'";
+                        if(!empty($slug))
+                        {
+                            $sql_insert = "INSERT INTO $caldera_entries (entry_id, field_id, slug, value) VALUES ('$_entry_id', '$file_input_id', $slug, '$url_path')";
+                            $wpdb->query($sql_insert);
+                        }
+                    }
+                }
             }
+
         }
 
         if(!empty($msg))
         {
             $msg .= "<br><br>";
-            $AcolheSUSLogger->log($_POST['_cf_cr_pst'], ' salvou o formulário ', $msg);
+            $AcolheSUSLogger->log($post_id, ' salvou o formulário ', $msg);
+        }
+
+        wp_publish_post($post_id);
+    }
+
+    function insert_autocomplete(&$alt_vals, $index, $index_autocomplete, $_entry_id, &$msg, $fields, $wpdb, &$current_values)
+    {
+        unset($alt_vals[$index_autocomplete]);
+        $return = $this->search_in_array($current_values, $index);
+
+        $array_diff1 = array_diff($return, $alt_vals);
+        $array_diff2 = array_diff($alt_vals, $return);
+
+        if(!empty($array_diff1) || !empty($array_diff2))
+        {
+            $old_value = implode(", ", $return);
+            $old_value .= " <u>para</u> ";
+            $old_value .= implode(", ", $alt_vals);
+            $msg .= $fields[$index]['label'].": $old_value <br/>";
+
+            $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+            $wpdb->query($delete_sql);
+
+            foreach ($alt_vals as $alt_val){
+                if(!is_numeric($alt_val))
+                {
+                    $alt_val = "'".$alt_val."'";
+                }
+
+                $slug = "'".$fields[$index]['slug']."'";
+                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, '".$index."', $slug, $alt_val)";
+                $wpdb->query($sql);
+            }
         }
     }
 
@@ -528,14 +978,63 @@ class AcolheSUS {
 
     function append_content_to_mail($mail, $data, $form)
     {
-        if (isset($_POST['_cf_cr_pst'])) {            
-            $form_link = get_permalink($_POST['_cf_cr_pst']);
+        if (isset($_POST[self::ANSWER_ID])) {
+            $id = sanitize_text_field($_POST[self::ANSWER_ID]);
+
+            // $mail['recipients'][] = $this->get_forward_mail($id); # Descomentar quando passar pra produção
+
+            $form_link = get_permalink($id);
             if ($form_link) {
-                $mail['message'] = $mail['message'] . "<br><br> Link: $form_link";    
+                $mail['message'] = $mail['message'] . "<br><br> Veja o formulário completo no link: $form_link";
             }
                 
             return $mail;
         }
+    }
+
+    private function get_forward_mail($form_id)
+    {
+        if (is_null($form_id)) {
+            $form_id = $_POST[self::ANSWER_ID];
+        }
+
+        global $wpdb;
+        $_entry_id = get_post_meta($form_id, '_entry_id', true);
+        $sql = "SELECT post.meta_value as estado from $wpdb->postmeta post JOIN $wpdb->postmeta postmeta 
+                ON post.post_id = postmeta.post_id 
+                where 
+                    (post.meta_key='acolhesus_campo' and postmeta.meta_key='_entry_id') 
+                        AND 
+                    postmeta.meta_value = '$_entry_id'";
+
+        $results = $wpdb->get_results($sql);
+        $email = '';
+        if(!empty($results))
+        {
+            $estado = $results[0]->estado;
+
+            $ailana   = ['AL', 'MA', 'PI', 'RN'];
+            $diego    = ['MS', 'MT', 'RR'];
+            $danyelle = ['AC', 'MG', 'SC'];
+            $janaina  = ['DF', 'GO'];
+            // $hiojuma  = ['CE', 'PB']; // Saiu do projeto. Ver quem assumiu esses UFs
+            $marilia  = ['AM', 'BA', 'PA'];
+
+            // TODO: refatorar esse tanto de if
+            if (in_array($estado, $ailana)) {
+                $email = 'ailana.lira@saude.gov.br';
+            } else if(in_array($estado, $diego)) {
+                $email = 'diegop.santos@saude.gov.br';
+            } else if(in_array($estado, $danyelle)) {
+                $email = 'danyelle.cavalcante@saude.gov.br';
+            } else if(in_array($estado, $marilia)) {
+                $email = 'marilia.palacio@saude.gov.br';
+            } else if (in_array($estado, $janaina)) {
+                $email = 'janaina.cardoso@saude.gov.br'; // Conferir este e-mail
+            }
+        }
+
+        return $email;
     }
 
     function delete_new_form_tag() {
@@ -573,7 +1072,7 @@ class AcolheSUS {
     function acolhesus_add_entry_btn_callback($type) {
         if (!is_null($type) && $this->can_add_entry($type)) {
            $obj = get_post_type_object($type);
-           if ($obj instanceof WP_Post_Type) {
+           if ($obj instanceof WP_Post_Type && $this->can_user_edit($type)) {
                $f_name = $obj->labels->singular_name; ?>
                <div class="add-entry">
                    <button class="add_acolhesus_entry btn" data-newTitle="<?php echo $f_name ?>" data-postType="<?php echo $type; ?>">
@@ -591,7 +1090,6 @@ class AcolheSUS {
         $form_ids = $AcolheSUSAdminForm->get_acolhesus_option('form_ids');
 
         foreach ($this->forms as $formName => $form) {
-            
             $formID = isset($form_ids[$formName]) ? $form_ids[$formName] : '';
             $this->forms[$formName]['form_id'] = $formID;
 
@@ -609,9 +1107,27 @@ class AcolheSUS {
                     }
                 }
             }
-
         }
+    }
 
+    function acolhesus_rewrite_reports() {
+        if ($form = $this->is_report_page(true)) {
+            require_once (plugin_dir_path( __FILE__ ) . "relatorios.php");
+            die();
+        }
+    }
+
+    private function is_report_page($return_form = false)
+    {
+        $_uri = explode('/', $_SERVER['REQUEST_URI']);
+        $page = array_pop($_uri);
+        $form = array_pop($_uri);
+        $is_report_page = is_string($page) && ("relatorio" === $page) && post_type_exists($form) && array_key_exists($form,$this->forms);
+
+        if ($is_report_page && $return_form)
+            return $form;
+
+        return $is_report_page;
     }
 
     private function add_acolhesus_entry($title, $type, $status, $metas = []) {
@@ -679,7 +1195,11 @@ class AcolheSUS {
             $form .= $created_form;
 
             if (!empty($created_form) && $this->can_save_incomplete($formType)) {
-                $form .= '<button class="save_for_later btn btn-info" type="button">Salvar</button>';
+                $permissions = get_user_meta(get_current_user_id(), 'acolhesus_form_perms');
+                if(in_array("editar_".$formType, $permissions))
+                {
+                    $form .= '<button class="save_for_later btn btn-info" type="button">Salvar</button>';
+                }
             }
 
             $form .= "<div id='acolhesus_form_anexos'></div>";
@@ -702,7 +1222,13 @@ class AcolheSUS {
         if (isset($this->forms[$formType]) && (true !== $this->forms[$formType]['uma_entrada_por_campo']) ) {
             // Variável que caldera forms envia após submit do form
             if (!isset($_GET['cf_su'])) {
-                $is_locked = $this->is_entry_locked($_post_id);
+                $permissions = get_user_meta(get_current_user_id(), 'acolhesus_form_perms');
+                if(in_array("editar_".$formType, $permissions))
+                {
+                    $is_locked = false;
+                }else $is_locked = true;
+                //$is_locked = $this->is_entry_locked($_post_id);
+
                 $extra_info = "<div class='col-md-12 fixed-meta'>" . $this->get_basic_info_form($is_locked) . "</div>";
             }
         }
@@ -834,6 +1360,16 @@ class AcolheSUS {
             delete_post_meta($_POST['post_id'], 'acolhesus_form_municipio', $_POST['city']);
         }
     }
+
+    function remove_form_entry() {
+        if (current_user_can(self::CGPNH) && isset($_POST['id'])) {
+            $r = wp_delete_post(sanitize_text_field($_POST['id']));
+
+            if ($r) {
+                return json_encode(['success' => 'Resposta apagada com sucesso!']);
+            }
+        }
+    }
 	
 	function get_campos_do_usuario_as_options($selected = '') {
 		$camposDoUsuario = $this->get_user_campos();
@@ -952,11 +1488,17 @@ class AcolheSUS {
         $campoAtual = get_post_meta($post->ID, self::CAMPO_META, true);
         $faseAtual = get_post_meta($post->ID, 'acolhesus_fase', true);
 
-        $options = $this->get_campos_do_usuario_as_options($campoAtual);
-        $camposHtml = $this->get_fixed_select("Campo de atuação", "acolhesus_campo", $attr, $post->ID, $options);
+        if($is_locked === false || $faseAtual)
+        {
+            $options = $this->get_campos_do_usuario_as_options($campoAtual);
+            $camposHtml = $this->get_fixed_select("Campo de atuação", "acolhesus_campo", $attr, $post->ID, $options);
+        }else  $camposHtml = '';
 
-		$options = $this->get_fases_as_options($faseAtual);
-        $faseHtml = $this->get_fixed_select("Fase", "acolhesus_fase", $attr, $post->ID, $options);
+        if($faseAtual || $is_locked === false)
+        {
+            $options = $this->get_fases_as_options($faseAtual);
+            $faseHtml = $this->get_fixed_select("Fase", "acolhesus_fase", $attr, $post->ID, $options);
+        }else $faseHtml = '';
 
         if ($this->form_type_has_axis($type)) {
             $eixoAtual = get_post_meta($post->ID, 'acolhesus_eixo', true);
@@ -970,8 +1512,13 @@ class AcolheSUS {
     }
 
     private function get_fixed_select($title, $name, $attr, $post_id, $options=[]) {
+        $num_rows = 6;
+        if ($this->form_type_has_axis(get_post_type())) {
+            $num_rows = 4;
+        }
+
         $id = $name . "_selector";
-        $html  = "<div class='col-md-4 $name'> $title " . $this->span_required();
+        $html  = "<div class='col-md-$num_rows $name'> $title " . $this->span_required();
         $html .= "<select id='$id' $attr class='acolhesus_basic_info_selector' name='$name' data-post_id='$post_id'>";
         $html .= $options . " </select>";
         $html .= $this->required_field();
@@ -1008,6 +1555,8 @@ class AcolheSUS {
             $_id = $this->add_acolhesus_entry($_POST['title'], $_POST['type'], 'publish', $metas);
             if ($_id) {
                 echo json_encode(['id' => $_id, 'redirect_url' => get_permalink($_id)]);
+                $post = array( 'ID' => $_id, 'post_status' => 'draft' );
+                wp_update_post($post);
                 wp_die();
             }
         } else {
@@ -1018,7 +1567,7 @@ class AcolheSUS {
     }
 
     function ajax_callback_lock_form() {
-        if (current_user_can('acolhesus_cgpnh')) {
+        if (current_user_can(self::CGPNH)) {
             $key = 'acolhesus_' . sanitize_text_field($_POST['type']);
             update_option($key, 'locked');
             do_action('acolhesus_lock_form', $key);
@@ -1030,16 +1579,24 @@ class AcolheSUS {
     function toggle_lock_form_entries() {
         $_id = sanitize_text_field($_POST['form_id']);
         $toggle = $this->is_entry_locked($_id);
-        if (update_post_meta($_id, "locked", !$toggle)) {
-            $estado = (!$toggle) ? "fechado" : "aberto";
-            echo json_encode([
-                'success' => "Formulário $estado para edição!",
-                'list' => $this->get_entry_strings($_id)
-            ]);
-            do_action('acolhesus_toggle_lock_entry', $_id, !$toggle);
-        }
+        if(get_post_meta($_id, "acolhe_sus_add_as_saved", true) == 1)
+        {
+            if (update_post_meta($_id, "locked", !$toggle)) {
+                $estado = (!$toggle) ? "fechado" : "aberto";
+                echo json_encode([
+                    'success' => "Formulário $estado para edição!",
+                    'list' => $this->get_entry_strings($_id)
+                ]);
+                do_action('acolhesus_toggle_lock_entry', $_id, !$toggle);
+            }
 
-        wp_die();
+            wp_die();
+        }else {
+            echo json_encode([
+                'warning' => "Há campos obrigratórios não preenchidos"
+            ]);
+            wp_die();
+        }
     }
 
     private function get_entry_strings($id) {
@@ -1085,11 +1642,25 @@ class AcolheSUS {
 
     function isAcolheSusPage() {
         global $post;
-        return is_object($post) && isset($post->post_type) && array_key_exists($post->post_type, $this->forms);
+        $is_plugin_home = ("formularios" === get_query_var('acolhe_sus'));
+        $is_form_page = is_object($post) && isset($post->post_type) && array_key_exists($post->post_type, $this->forms);
+        return ($is_form_page || $is_plugin_home || $this->is_report_page());
     }
 
     function load_acolhesus_assets() {
-        wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
+        // global $wp;  
+        // $current_url = home_url(add_query_arg(array(),$wp->request));
+        if ($this->isAcolheSusPage()) {
+            wp_enqueue_style( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/css/acolhesus.css');
+        }
+
+        if ($this->is_report_page() || $this->isAcolheSusPage()) {
+            wp_enqueue_script( 'rhs-acolhesus-reports', plugin_dir_url( __FILE__ ) . 'assets/js/reports.js',array('jquery'));
+            wp_enqueue_script('google_charts', 'https://www.gstatic.com/charts/loader.js');
+            wp_localize_script('rhs-acolhesus-reports', 'acolhesus', [
+                'ajax_url' => admin_url('admin-ajax.php')
+            ]);
+        }
 
         $type = get_post_type();
         if ( $type && array_key_exists($type, $this->forms)  || !empty(get_query_var('acolhe_sus')) ) {
@@ -1097,7 +1668,6 @@ class AcolheSUS {
             wp_enqueue_script('jquery-ui-accordion', null, array('jquery'), null, false);
 
             if (is_single()) {
-
                 wp_enqueue_script('rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/single.js', array('jquery', 'jquery-ui-accordion'));
 
                 if ("matriz_cenario" === $type) {
@@ -1109,8 +1679,8 @@ class AcolheSUS {
                 wp_enqueue_script( 'rhs-acolhesus', plugin_dir_url( __FILE__ ) . 'assets/js/archive.js');
                 wp_enqueue_style('select2', plugin_dir_url( __FILE__ ) . 'assets/lib/select2/select2.min.css');
                 wp_enqueue_script('select2', plugin_dir_url( __FILE__ ) . 'assets/lib/select2/select2.min.js', array('jquery'));
-
             }
+
             wp_localize_script('rhs-acolhesus', 'acolhesus', [
                 'ajax_url' => admin_url('admin-ajax.php')
             ]);
@@ -1147,10 +1717,9 @@ class AcolheSUS {
     }
 
     function rewrite_rules_query_vars( $public_query_vars ) {
-
         $public_query_vars[] = "acolhe_sus";
-        return $public_query_vars;
 
+        return $public_query_vars;
     }
 
     function rewrite_rule_template_include( $template ) {
@@ -1213,7 +1782,7 @@ class AcolheSUS {
                 $meta_query = [];
 				
 				if (isset($_GET['campo']) && !empty($_GET['campo'])) {
-					$meta_query[] = [
+				    $meta_query[] = [
 						'key' => self::CAMPO_META,
 						'value' => $_GET['campo'],
 					];
@@ -1264,6 +1833,10 @@ class AcolheSUS {
         return get_user_meta($userID, 'acolhesus_campos');
     }
 
+    public function user_can_see_states() {
+        return is_array($this->get_user_campos()) && (count($this->get_user_campos()) > 0);
+    }
+
     public function get_user_forms_perms($userID = null) {
         if (is_null($userID))
             $userID = get_current_user_id();
@@ -1293,6 +1866,10 @@ class AcolheSUS {
 
         echo "<div class='status-$entry_id'><span class='$class'> $status </span></div>";
     }
+    public function remove_entry($entry_id) {
+        $title = get_the_title($entry_id);
+        return "<a class='remove-form-entry btn btn-default btn-danger' data-id='$entry_id' data-title='$title' style='color: white'> Excluir </a>";
+    }
 
     public function get_entry_phase($id) {
         $fase_slug = get_post_meta($id, 'acolhesus_fase', true);
@@ -1301,18 +1878,47 @@ class AcolheSUS {
         return $fase;
     }
 
+    public function get_entry_date($id)
+    {
+        global $wpdb;
+        $is_empty = "----";
+        $sql_entry_id = "SELECT meta_value as entry_id FROM $wpdb->postmeta WHERE post_id = ".$id." AND meta_key = '_entry_id'";
+
+        $result = $wpdb->get_results($sql_entry_id);
+
+        if(!empty($result))
+        {
+            $entry_id = $result[0]->entry_id;
+            $sql = "SELECT entry_a.entry_id, entry_a.value mes, entry_b.value ano
+                    FROM ".$wpdb->prefix."cf_form_entry_values as entry_a join ".$wpdb->prefix."cf_form_entry_values as entry_b
+                    where entry_a.slug='mes' AND entry_b.slug='ano' AND entry_a.entry_id=entry_b.entry_id AND entry_a.entry_id='".$entry_id."'";
+
+            $data = $wpdb->get_results($sql);
+            if(!empty($data))
+            {
+                echo $data[0]->mes."/".$data[0]->ano;
+            } else echo $is_empty;
+
+        } else echo $is_empty;
+    }
+
     public function get_entry_axis($id) {
         return get_post_meta($id, 'acolhesus_eixo', true);
     }
 
     public function form_type_has_axis($type) {
-        return (isset($this->forms[$type]) && $this->forms[$type]['eixo']);
+        if ($type) {
+            return (isset($this->forms[$type]) && $this->forms[$type]['eixo']);
+        }
     }
 
 } // class
 
+include('acolhesus-view.php');
+include('admin-forms.php');
+include('logger.php');
+
 global $AcolheSUS;
 $AcolheSUS = new AcolheSUS();
 $formView = new AcolheSUSView();
-include('admin-forms.php');
-include('logger.php');
+

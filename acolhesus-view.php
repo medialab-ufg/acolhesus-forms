@@ -23,23 +23,25 @@ class AcolheSUSView extends AcolheSUS {
         return ACOLHESUS_URL . 'assets/images/logo-full.png';
     }
 
-    private function get_title()
+    private function get_home_URL()
     {
-        return 'Plataforma de Gestão AcolheSUS';
+       return home_url('formularios-acolhesus');
     }
 
     private function get_logo()
     {
         $src = $this->get_logo_URL();
         $alt = $title = "Logo " . $this->get_title();
-        $_home_url = home_url('formularios-acolhesus');
+        $_home_url = $this->get_home_URL();
 
         return "<a href='$_home_url'><img src='$src' alt='$alt' title='$title'/></a>";
     }
 
     public function renderFormHeader() {
-        $header = '<h1 class="list-title">' . $this->get_title() . '</h1>';
-        $header .= '<hr> <div class="logo-container">' . $this->get_logo() . '</div><hr>';
+        $URL = $this->get_home_URL();
+
+        $header = "<h1 class='list-title'> <a href='$URL'>" . $this->get_title() . "</a></h1>";
+        $header .= '<hr> <div class="logo-container hidden-print">' . $this->get_logo() . '</div><hr>';
 
         echo $header;
     }
@@ -50,20 +52,59 @@ class AcolheSUSView extends AcolheSUS {
             $_header =  'Olá, <span class="user-name">' . $name .'</span>!<br>';
         }
 
-        echo '<div class="welcome">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
+        echo '<div class="welcome hidden-print">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
     }
 
-    public function renderFilters() {
-        foreach ($this->filtros as $filtro => $props) {
-            $opt = isset($_GET[$filtro]) ? $_GET[$filtro] : '';
+
+    public function renderFilters($showForms = true, $showAxis = true, $showPhase = true) {
+        $filtros = $this->filtros;
+        if (!$showForms) {
+            array_pop($filtros);
+        }
+
+        if (!$showAxis) {
+            array_pop($filtros);
+        }
+
+        if (!$showPhase) {
+            array_pop($filtros);
+        }
+
+        foreach ($filtros as $filtro => $props) {
+
+            // Manter assim apenas até deliberar sobre layout dos relatórios
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $opt = (isset($_POST[$filtro]) ) ? $_POST[$filtro] : '';
+            } else {
+                $opt = (isset($_GET[$filtro]) ) ? $_GET[$filtro] : '';
+            }
 
             $_filtered = $this->get_filter_selected($filtro, $opt);
 
-            $html  = "<h3 class='form-title'>" . $props['singular'] . " <span class='used_filter'>" . $_filtered . " </span></h3>";
+            $html = "";
+            $style = "";
+
+            if (!$showForms) {
+                $_filtered = "";
+                $style = "style='font-size: 20px; margin-bottom: 10px; color: black'";
+                $class = 4;
+                if (!$showAxis)
+                    $class = 6;
+                if (!$showPhase)
+                    $class = 12;
+
+                $html .= "<div class='col-md-$class'>";
+            }
+
+            $html .= "<h3 class='form-title' $style>" . $props['singular'] . " <span class='used_filter'>" . $_filtered . " </span></h3>";
             $html .= "<div><select name='$filtro' class='acolhesus_filter_forms' id='acolhesus_filter_forms_campos'>";
             $html .= "<option value=''>" . $props['plural'] . "</option>";
             $html .= $this->get_filter_options($filtro, $opt);
             $html .= "</select></div>";
+
+            if (!$showForms) {
+                $html .= "</div>";
+            }
 
             echo $html;
         }
@@ -76,7 +117,7 @@ class AcolheSUSView extends AcolheSUS {
                 $forms = [$_form_filter => $forms[$_form_filter]];
             } else {
                 $forms = [];
-                echo "<pre style='text-align: center'> Formulário inexistente! </pre>";
+                echo "<pre class='text-center'> Formulário inexistente! </pre>";
                 return $forms;
             }
         }
@@ -113,7 +154,7 @@ class AcolheSUSView extends AcolheSUS {
     }
 
     public function renderFormsDenied() {
-        echo '<center> Usuário sem permissão para acessar esta página! </center>';
+        echo '<p class="text-center"> Usuário sem permissão para acessar esta página! </p>';
     }
 
     function get_entry_attachments() {
