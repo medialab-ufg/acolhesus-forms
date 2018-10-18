@@ -7,7 +7,7 @@
  * Version: 0.1
  * Author URI: https://github.com/medialab-ufg/
  * Text Domain: acolhesus-rhs
- *///
+ */
 
 require_once "acolhesus-common.php";
 
@@ -24,7 +24,7 @@ class AcolheSUS {
             'form_id' => '', // Setado via admin
             'slug' => 'matriz_cenario',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => 0
         ],
         'ind_materno_infantil' => [
@@ -34,7 +34,7 @@ class AcolheSUS {
             ],
             'slug' => 'ind_materno_infantil',
             'uma_entrada_por_campo' => false,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => 0,
             'omitir_macrogestao' => true
         ],
@@ -45,31 +45,31 @@ class AcolheSUS {
             ],
             'slug' => 'indicadores_caps',
             'uma_entrada_por_campo' => false,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => 0,
             'omitir_macrogestao' => true
         ],
         'indicadores' => [
             'labels' => [
-                    'name' => 'Indicadores Hospital Geral',
-                    'singular_name' => 'Indicadores Hospital Geral'
-                ],
-                'slug' => 'indicadores',
-                'uma_entrada_por_campo' => false,
-                'fase' => 'fase_1',
-                'eixo' => 0,
-                'omitir_macrogestao' => true
+                'name' => 'Indicadores Hospital Geral',
+                'singular_name' => 'Indicadores Hospital Geral'
+            ],
+            'slug' => 'indicadores',
+            'uma_entrada_por_campo' => false,
+            'fase' => ['fase_1'],
+            'eixo' => 0,
+            'omitir_macrogestao' => true
         ],
         'indicadores_basica' => [
             'labels' => [
-                    'name' => 'Indicadores da Atenção Básica',
-                    'singular_name' => 'Indicadores da Atenção Básica'
-                ],
-                'slug' => 'indicadores_basica',
-                'uma_entrada_por_campo' => false,
-                'fase' => 'fase_1',
-                'eixo' => 0,
-                'omitir_macrogestao' => true
+                'name' => 'Indicadores da Atenção Básica',
+                'singular_name' => 'Indicadores da Atenção Básica'
+            ],
+            'slug' => 'indicadores_basica',
+            'uma_entrada_por_campo' => false,
+            'fase' => ['fase_1'],
+            'eixo' => 0,
+            'omitir_macrogestao' => true
         ],
         'visita_guiada' => [
             'labels' => [
@@ -78,7 +78,7 @@ class AcolheSUS {
             ],
             'slug' => 'visita_guiada',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => false,
             'can_not_save_incomplete' => true
         ],
@@ -89,7 +89,7 @@ class AcolheSUS {
             ],
             'slug' => 'fluxograma',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => false,
             'can_not_save_incomplete' => true
         ],
@@ -100,7 +100,7 @@ class AcolheSUS {
             ],
             'slug' => 'matriz_p_criticos',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => 'todos'
         ],
         'matriz_objetivos' => [
@@ -120,7 +120,7 @@ class AcolheSUS {
             ],
             'slug' => 'plano_trabalho',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_2',
+            'fase' => ['fase_2'],
             'eixo' => 'todos'
         ],
         'efeitos_esperados' => [
@@ -140,7 +140,7 @@ class AcolheSUS {
             ],
             'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
-            'fase' => 'macrogestao',
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -152,7 +152,7 @@ class AcolheSUS {
             ],
             'slug' => 'avaliacao_oficina',
             'uma_entrada_por_campo' => false,
-            'fase' => 'macrogestao',
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -164,7 +164,7 @@ class AcolheSUS {
             ],
             'slug' => 'relatorio_oficina',
             'uma_entrada_por_campo' => false,
-            'fase' => 'macrogestao',
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -176,7 +176,7 @@ class AcolheSUS {
             ],
             'slug' => 'memoria_reuniao',
             'uma_entrada_por_campo' => false,
-            'fase' => 'macrogestao',
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -188,7 +188,7 @@ class AcolheSUS {
             ],
             'slug' => 'atividades_dispersao',
             'uma_entrada_por_campo' => false,
-            'fase' => 0,
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -200,7 +200,7 @@ class AcolheSUS {
     const CGPNH = 'acolhesus_cgpnh';
 
     const ANSWER_ID = '_cf_cr_pst';
-    
+
     function __construct() {
         add_action('init', [&$this, 'register_post_types']);
 
@@ -478,44 +478,44 @@ class AcolheSUS {
         ?>
         <div class="matriz-cenario-single-report">
             <p>A referência técnica da CGPNH/SAS/MS para este campo é <?php echo $_POST['state']; ?>.
-            O campo de atuação atinge um total de <?php echo $count_cities; ?> municípios, que, em conjunto, representam uma população de <?php echo $populacao; ?> habitantes.
-            <?php echo $data['C'] ;?> profissionais estão alocados neste serviço.</p>
+                O campo de atuação atinge um total de <?php echo $count_cities; ?> municípios, que, em conjunto, representam uma população de <?php echo $populacao; ?> habitantes.
+                <?php echo $data['C'] ;?> profissionais estão alocados neste serviço.</p>
 
             <h1 class="text-center">1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h1>
             <h3 class="text-center">1.1 Acolhimento</h3>
 
             <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no Estado [1.1.1].
-            A referência é <?php echo $data['1.1.1.1']; ?>.</p>
+                A referência é <?php echo $data['1.1.1.1']; ?>.</p>
 
             <p>Foi implantado processo de Acolhimento no(s) serviço(s) que compõe(m) o projeto [1.1.2].
-            Em  <?php echo $data['1.1.2.1'];?>.
-            A implantação foi parcial [1.1.2.2].
-            Foram capacitados: gestores, trabalhadores, <?php echo $data['1.1.2.3.1'].'; '.$data['1.1.2.3.1.1'].'; '.$data['1.1.2.3.1.2']; ?> .
-            Foram construídos os fluxos internos do Acolhimento <?php echo $data['1.1.2.4']; ?>.
-            De forma pactuada com as seguintes categorias profissionais: <?php echo $data['1.1.2.4.1.1']; ?>.</p>
+                Em  <?php echo $data['1.1.2.1'];?>.
+                A implantação foi parcial [1.1.2.2].
+                Foram capacitados: gestores, trabalhadores, <?php echo $data['1.1.2.3.1'].'; '.$data['1.1.2.3.1.1'].'; '.$data['1.1.2.3.1.2']; ?> .
+                Foram construídos os fluxos internos do Acolhimento <?php echo $data['1.1.2.4']; ?>.
+                De forma pactuada com as seguintes categorias profissionais: <?php echo $data['1.1.2.4.1.1']; ?>.</p>
 
             <p>O usuário foi incluído no processo de implantação/implementação do Acolhimento [1.1.3].
-            Existe avaliação de satisfação do usuário a partir das ações de Acolhimento implantadas [1.14].
-            Observações pertinentes:  <?php echo $data['1.1.4.1']; ?>.</p>
+                Existe avaliação de satisfação do usuário a partir das ações de Acolhimento implantadas [1.14].
+                Observações pertinentes:  <?php echo $data['1.1.4.1']; ?>.</p>
 
             <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) ____________ (construída pelo estado; construída pela gestão municipal; construída pelo estado e municípios; construída pelo serviço) [1.1.5].
-            A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde [1.1.5.1]. Observações pertinentes <?php echo $data['1.1.5.1.1']; ?>.
-            *Existe listagem para as seguintes Unidades de Saúde: ________________________ (Atenção Básica (AB); Hospitalar Unidade Pronto Atendimento (UPA); Centro Especializado em Reabilitação (CRER); Centro de Atenção Psicossocial (CAPS); <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1']; ?>).
-            A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): ______________ (Em formato de cartilha para distribuição; Impressões da lista na recepção; Mídia instalada na recepção (televisão); Informações prestadas pela recepção/posso ajudar; <?php echo $data['1.1.5.3']."; ".$data['1.1.5.3.1']; ?>).</p>
+                A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde [1.1.5.1]. Observações pertinentes <?php echo $data['1.1.5.1.1']; ?>.
+                *Existe listagem para as seguintes Unidades de Saúde: ________________________ (Atenção Básica (AB); Hospitalar Unidade Pronto Atendimento (UPA); Centro Especializado em Reabilitação (CRER); Centro de Atenção Psicossocial (CAPS); <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1']; ?>).
+                A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): ______________ (Em formato de cartilha para distribuição; Impressões da lista na recepção; Mídia instalada na recepção (televisão); Informações prestadas pela recepção/posso ajudar; <?php echo $data['1.1.5.3']."; ".$data['1.1.5.3.1']; ?>).</p>
 
 
             <h4>1.2 Classificação de Risco</h4>
 
             <p>Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada [1.2.1]. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['1.2.1.1']; ?>.
-            Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco: <?php echo $data['']?> (gestores; trabalhadores; <?php echo $data['1.2.2.1'].'; '. $data['1.2.2.1.1']; ?>).
-            O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde [1.2.3].
-            A estratégia de monitoramento e avaliação dos indicadores de classificação/avaliação de risco e vulnerabilidade de risco utilizada é: <?php echo $data['1.2.4.1']; ?>. Observações pertinentes: <?php echo $data['1.2.4.2']; ?>.</p>
+                Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco: <?php echo $data['']?> (gestores; trabalhadores; <?php echo $data['1.2.2.1'].'; '. $data['1.2.2.1.1']; ?>).
+                O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde [1.2.3].
+                A estratégia de monitoramento e avaliação dos indicadores de classificação/avaliação de risco e vulnerabilidade de risco utilizada é: <?php echo $data['1.2.4.1']; ?>. Observações pertinentes: <?php echo $data['1.2.4.2']; ?>.</p>
 
             <h3>2 Eixo 2: Ambiência</h3>
 
             <p>Os seguintes projetos de reforma ou adequações de layout e de mudanças de fluxos, que envolvem o serviço, foram construídos de forma cogerida e a partir da diretriz Ambiência da PNH: <?php echo $data['2.1.1']; ?>.
-            Os profissionais da engenharia e arquitetura da SES foram qualificados na diretriz ambiência da PNH [2.2.].
-            Foram realizadas avaliações de satisfação dos usuários [2.3]. Foram realizadas avaliações de satisfação dos trabalhadores [2.4]. Foram realizadas avaliações de satisfação dos gestores [2.5].</p>
+                Os profissionais da engenharia e arquitetura da SES foram qualificados na diretriz ambiência da PNH [2.2.].
+                Foram realizadas avaliações de satisfação dos usuários [2.3]. Foram realizadas avaliações de satisfação dos trabalhadores [2.4]. Foram realizadas avaliações de satisfação dos gestores [2.5].</p>
 
 
             <h3>3 Eixo 3: Qualificação Profissional</h3>
@@ -523,11 +523,11 @@ class AcolheSUS {
 
             <p>Existe mecanismo de educação permanente no Estado para gestores e trabalhadores, com ampliação de métodos de discussão e produção coletiva de conhecimento e qualificação do trabalho [3.1].
 
-            A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <?php echo $data['']?> (inserido/alinhado com o plano de educação permanente Estadual; inserido/alinhado parcialmente com o plano de educação permanente Estadual; não inserido/alinhado com o plano de educação permanente Estadual [3.2].
+                A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <?php echo $data['']?> (inserido/alinhado com o plano de educação permanente Estadual; inserido/alinhado parcialmente com o plano de educação permanente Estadual; não inserido/alinhado com o plano de educação permanente Estadual [3.2].
 
-            A SES conta com apoiadores institucionais do Estado formados na PNH [3.3].
+                A SES conta com apoiadores institucionais do Estado formados na PNH [3.3].
 
-            Existe uma rede/grupos para intercâmbio entre os níveis de atenção para compartilhamento das experiências [3.4].</p>
+                Existe uma rede/grupos para intercâmbio entre os níveis de atenção para compartilhamento das experiências [3.4].</p>
 
             <h3>4 Eixo 4: Gestão e Organização do Cuidado</h3>
 
@@ -535,9 +535,9 @@ class AcolheSUS {
 
             <p>Existem os seguintes espaços coletivos/colegiados instituídos e com funcionamento sistemático efetivo na SES com plano de trabalho elaborado: <?php echo $data['4.1.1.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.1.2']; ?>.
 
-            Existem os seguintes espaços coletivos/colegiados instituídos nos serviços de saúde com plano de trabalho elaborado: <?php echo $data['4.1.2.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.2.2']; ?>.
+                Existem os seguintes espaços coletivos/colegiados instituídos nos serviços de saúde com plano de trabalho elaborado: <?php echo $data['4.1.2.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.2.2']; ?>.
 
-            Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <?php echo $data['4.1.3.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.3.2']; ?>.</p>
+                Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <?php echo $data['4.1.3.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.3.2']; ?>.</p>
 
             <h4>4.2 Garantia dos direitos dos usuários</h4>
 
@@ -987,7 +987,7 @@ class AcolheSUS {
             if ($form_link) {
                 $mail['message'] = $mail['message'] . "<br><br> Veja o formulário completo no link: $form_link";
             }
-                
+
             return $mail;
         }
     }
@@ -1071,16 +1071,16 @@ class AcolheSUS {
 
     function acolhesus_add_entry_btn_callback($type) {
         if (!is_null($type) && $this->can_add_entry($type)) {
-           $obj = get_post_type_object($type);
-           if ($obj instanceof WP_Post_Type && $this->can_user_edit($type)) {
-               $f_name = $obj->labels->singular_name; ?>
-               <div class="add-entry">
-                   <button class="add_acolhesus_entry btn" data-newTitle="<?php echo $f_name ?>" data-postType="<?php echo $type; ?>">
-                       Adicionar <?php echo $f_name ?>
-                   </button>
-               </div>
-               <?php
-           }
+            $obj = get_post_type_object($type);
+            if ($obj instanceof WP_Post_Type && $this->can_user_edit($type)) {
+                $f_name = $obj->labels->singular_name; ?>
+                <div class="add-entry">
+                    <button class="add_acolhesus_entry btn" data-newTitle="<?php echo $f_name ?>" data-postType="<?php echo $type; ?>">
+                        Adicionar <?php echo $f_name ?>
+                    </button>
+                </div>
+                <?php
+            }
         }
     }
 
@@ -1101,7 +1101,7 @@ class AcolheSUS {
                         $metas = [
                             'acolhesus_campo'=> $uf,
                             'acolhesus_eixo' => $form['eixo'],
-                            'acolhesus_fase' => $form['fase']
+                            'acolhesus_fase' => (is_array($form['fase']))? implode(',', $form['fase']) : $form['fase']
                         ];
                         $this->add_acolhesus_entry($title, $formName, 'publish', $metas);
                     }
@@ -1139,11 +1139,11 @@ class AcolheSUS {
 
         return $new_id;
     }
-    
+
     function register_post_types() {
-        
+
         foreach ($this->forms as $formName => $form) {
-            
+
             register_post_type($formName, array(
                 'labels' => $form['labels'],
                 'public' => true,
@@ -1210,7 +1210,7 @@ class AcolheSUS {
         return $content;
     }
 
-    private function can_save_incomplete($formType) {   
+    private function can_save_incomplete($formType) {
         $flag = 'can_not_save_incomplete';
         $form = $this->forms[$formType];
 
@@ -1370,10 +1370,10 @@ class AcolheSUS {
             }
         }
     }
-	
-	function get_campos_do_usuario_as_options($selected = '') {
-		$camposDoUsuario = $this->get_user_campos();
-		$options = '';
+
+    function get_campos_do_usuario_as_options($selected = '') {
+        $camposDoUsuario = $this->get_user_campos();
+        $options = '';
         if (is_single()) {
             $options = "<option value=''></option>";
         }
@@ -1386,23 +1386,23 @@ class AcolheSUS {
                 $options .= "> $campo_completo </option>\n";
             }
         }
-		return $options;
-	}
-	
-	function get_eixos_as_options($selected = '') {
+        return $options;
+    }
+
+    function get_eixos_as_options($selected = '') {
         $options = '';
         if (is_single()) {
             $options = "<option value=''></option>";
         }
-		foreach ($this->eixos as $eixo) {
+        foreach ($this->eixos as $eixo) {
             $options .= "<option value='$eixo'";
             $options .= selected($selected, $eixo, false);
             $options .= ">$eixo</option>\n";
         }
-		return $options;
-	}
+        return $options;
+    }
 
-	function get_forms_as_options($selected = '') {
+    function get_forms_as_options($selected = '') {
         $options = '';
         foreach ($this->forms as $_f) {
             $slug = $_f['slug'];
@@ -1417,9 +1417,9 @@ class AcolheSUS {
         return $options;
     }
 
-	function get_fases_as_options($selected = '') {
+    function get_fases_as_options($selected = '') {
         $options = '';
-		if (is_single()) {
+        if (is_single()) {
             $options = "<option value=''></option>";
 
             $type = get_post_type();
@@ -1428,15 +1428,15 @@ class AcolheSUS {
             }
         }
 
-		foreach ($this->fases as $slug => $fase) {
+        foreach ($this->fases as $slug => $fase) {
             $options .= "<option value='$slug'";
             $options .= selected($selected, $slug, false);
             $options .= "> $fase </option>\n";
         }
-		return $options;
-	}
+        return $options;
+    }
 
-	function get_filter_options($filter, $selected = '') {
+    function get_filter_options($filter, $selected = '') {
         $options = '';
         switch ($filter) {
             case 'campo':
@@ -1477,10 +1477,10 @@ class AcolheSUS {
             return $selected;
         }
     }
-	
+
     private function get_basic_info_form($is_locked = false) {
         global $post;
-        
+
         $attr  = ($is_locked) ? "disabled='disabled'": '';
         $attr .= " required";
         $type = get_post_type();
@@ -1508,7 +1508,7 @@ class AcolheSUS {
             $eixoHtml = "";
         }
 
-		return $camposHtml . $faseHtml . $eixoHtml;
+        return $camposHtml . $faseHtml . $eixoHtml;
     }
 
     private function get_fixed_select($title, $name, $attr, $post_id, $options=[]) {
@@ -1708,7 +1708,7 @@ class AcolheSUS {
     }
 
     function rewrite_rules( &$wp_rewrite ) {
-        
+
         $new_rules = array(
             'formularios-acolhesus' . "/?$" => "index.php?acolhe_sus=formularios",
         );
@@ -1780,43 +1780,43 @@ class AcolheSUS {
 
                 $camposDoUsuario = $this->get_user_campos();
                 $meta_query = [];
-				
-				if (isset($_GET['campo']) && !empty($_GET['campo'])) {
-				    $meta_query[] = [
-						'key' => self::CAMPO_META,
-						'value' => $_GET['campo'],
-					];
-				} else {
-					$meta_query[] = [
-						'key' => self::CAMPO_META,
-						'value' => $camposDoUsuario,
-						'compare' => 'IN'
-					];
-				}
 
-				/*
-				 * Comentar por enquanto, até definirmos exatamente como vai funcionar essa questão dos eixos
-				 * Até o momento, apenas dois forms terão eixo, e este valor não será armazenado no banco de dados
-				 *
-				if (isset($_GET['eixo']) && !empty($_GET['eixo'])) {
-					$meta_query[] = [
-						'key' => 'acolhesus_eixo',
-						'value' => $_GET['eixo'],
-					];
-				}
-				*/
-				
-				if (isset($_GET['fase']) && !empty($_GET['fase'])) {
-					$meta_query[] = [
-						'key' => 'acolhesus_fase',
-						'value' => $_GET['fase'],
-					];
-				}
-				
-				if (isset($_GET['usuario']) && !empty($_GET['usuario'])) {
-					$query->set( 'author', $_GET['usuario'] );
-				}
-				
+                if (isset($_GET['campo']) && !empty($_GET['campo'])) {
+                    $meta_query[] = [
+                        'key' => self::CAMPO_META,
+                        'value' => $_GET['campo'],
+                    ];
+                } else {
+                    $meta_query[] = [
+                        'key' => self::CAMPO_META,
+                        'value' => $camposDoUsuario,
+                        'compare' => 'IN'
+                    ];
+                }
+
+                /*
+                 * Comentar por enquanto, até definirmos exatamente como vai funcionar essa questão dos eixos
+                 * Até o momento, apenas dois forms terão eixo, e este valor não será armazenado no banco de dados
+                 *
+                if (isset($_GET['eixo']) && !empty($_GET['eixo'])) {
+                    $meta_query[] = [
+                        'key' => 'acolhesus_eixo',
+                        'value' => $_GET['eixo'],
+                    ];
+                }
+                */
+
+                if (isset($_GET['fase']) && !empty($_GET['fase'])) {
+                    $meta_query[] = [
+                        'key' => 'acolhesus_fase',
+                        'value' => $_GET['fase'],
+                    ];
+                }
+
+                if (isset($_GET['usuario']) && !empty($_GET['usuario'])) {
+                    $query->set( 'author', $_GET['usuario'] );
+                }
+
                 $query->set( 'posts_per_page', -1 );
 
                 $query->set('meta_query', $meta_query);
@@ -1850,7 +1850,7 @@ class AcolheSUS {
             "class" => $strings['button']['class'],
             "title" => $title,
             "status" => $strings['button']['text']
-        ];        
+        ];
 
         $_html  = "<a id='entry-$entry_id' class='toggle_lock_form_entries entry-status btn btn-default btn-" . $_attrs['class'] . "'";
         $_html .= "data-status='". $_attrs['status'] ."'  data-id='" . $entry_id . "' data-txt='" . $title . "' href='#'>";
