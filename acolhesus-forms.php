@@ -484,32 +484,53 @@ class AcolheSUS {
             <h1 class="text-center">1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h1>
             <h3 class="text-center">1.1 Acolhimento</h3>
 
-            <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no Estado [1.1.1].
-            A referência é <?php echo $data['1.1.1.1']; ?>.</p>
+            <?php if($data['1.1.1'] == 'Sim'){?>
+            <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no Estado.
+            A referência é <?php echo $data['1.1.1.1'];?>.</p>
+            <?php } ?>
 
-            <p>Foi implantado processo de Acolhimento no(s) serviço(s) que compõe(m) o projeto [1.1.2].
+            <?php if($data['1.1.2'] == 'Sim'){?>
+            <p>Foi implantado processo de Acolhimento no(s) serviço(s) que compõe(m) o projeto.
             Em  <?php echo $data['1.1.2.1'];?>.
-            A implantação foi parcial [1.1.2.2].
+            <?php if($data['1.1.2.2'] == 'Sim') {?>
+            A implantação foi parcial.
+            <?php } ?>
             Foram capacitados: gestores, trabalhadores, <?php echo $data['1.1.2.3.1'].'; '.$data['1.1.2.3.1.1'].'; '.$data['1.1.2.3.1.2']; ?> .
             Foram construídos os fluxos internos do Acolhimento <?php echo $data['1.1.2.4']; ?>.
             De forma pactuada com as seguintes categorias profissionais: <?php echo $data['1.1.2.4.1.1']; ?>.</p>
+            <?php } ?>
 
-            <p>O usuário foi incluído no processo de implantação/implementação do Acolhimento [1.1.3].
-            Existe avaliação de satisfação do usuário a partir das ações de Acolhimento implantadas [1.14].
+            <p>
+            <?php if($data['1.1.3'] == 'Sim') { ?>O usuário foi incluído no processo de implantação/implementação do Acolhimento. <?php } ?>
+            <?php if($data['1.1.4'] == "Sim"){ ?>
+            Existe avaliação de satisfação do usuário a partir das ações de Acolhimento implantadas.
             Observações pertinentes:  <?php echo $data['1.1.4.1']; ?>.</p>
+            <?php } ?>
 
-            <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) ____________ (construída pelo estado; construída pela gestão municipal; construída pelo estado e municípios; construída pelo serviço) [1.1.5].
-            A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde [1.1.5.1]. Observações pertinentes <?php echo $data['1.1.5.1.1']; ?>.
-            *Existe listagem para as seguintes Unidades de Saúde: ________________________ (Atenção Básica (AB); Hospitalar Unidade Pronto Atendimento (UPA); Centro Especializado em Reabilitação (CRER); Centro de Atenção Psicossocial (CAPS); <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1']; ?>).
-            A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): ______________ (Em formato de cartilha para distribuição; Impressões da lista na recepção; Mídia instalada na recepção (televisão); Informações prestadas pela recepção/posso ajudar; <?php echo $data['1.1.5.3']."; ".$data['1.1.5.3.1']; ?>).</p>
+            <?php if($data['1.1.5'] != 'Não'){?>
+            <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) <?php echo $data['1.1.5']; ?>.
+            <?php if($data['1.1.5.1'] == 'Sim'){ ?>A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde. <?php } ?>
+            <?php if(!empty($data['1.1.5.1.1'])){?> Observações pertinentes <?php echo $data['1.1.5.1.1'].'.'; }?>
+            *Existe listagem para as seguintes Unidades de Saúde: <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1']; ?> .
+            A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): <?php echo $data['1.1.5.3']."; ".$data['1.1.5.3.1']; ?>.</p>
+            <?php } ?>
 
 
             <h4>1.2 Classificação de Risco</h4>
 
-            <p>Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada [1.2.1]. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['1.2.1.1']; ?>.
-            Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco: <?php echo $data['']?> (gestores; trabalhadores; <?php echo $data['1.2.2.1'].'; '. $data['1.2.2.1.1']; ?>).
-            O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde [1.2.3].
-            A estratégia de monitoramento e avaliação dos indicadores de classificação/avaliação de risco e vulnerabilidade de risco utilizada é: <?php echo $data['1.2.4.1']; ?>. Observações pertinentes: <?php echo $data['1.2.4.2']; ?>.</p>
+            <p>
+            <?php if($data['1.2.1'] == 'Sim'){?>
+                Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['1.2.1.1']; } ?>.
+            <?php if($data['1.2.2'] == 'Sim'){ ?>
+                Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco:  <?php echo $data['1.2.2.1'].'; '. $data['1.2.2.1.1']; } ?>.
+            <?php if($data['1.2.3'] == 'Sim'){ ?>
+                O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde.
+            <?php } ?>
+            <?php if($data['1.2.4'] == 'Sim'){ ?>
+                A estratégia de monitoramento e avaliação dos indicadores de classificação/avaliação de risco e vulnerabilidade de risco utilizada é: <?php echo $data['1.2.4.1']; ?>.
+                <?php if(!empty($data['1.2.4.2'])){ ?>Observações pertinentes: <?php echo $data['1.2.4.2'].'.'; } ?>
+            <?php } ?>
+            </p>
 
             <h3>2 Eixo 2: Ambiência</h3>
 
