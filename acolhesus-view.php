@@ -130,7 +130,7 @@ class AcolheSUSView extends AcolheSUS {
             $phase = sanitize_text_field($_GET['fase']);
             if (in_array($phase, array_keys($this->fases))) {
                 $forms = array_filter($forms, function($form) {
-                    return (in_array(sanitize_text_field($_GET['fase']), $form["fase"]));
+                    return (is_array($form["fase"]) ? in_array(sanitize_text_field($_GET['fase']), $form["fase"]) : ($form["fase"] === sanitize_text_field($_GET['fase'])));
                 });
             }
         }
