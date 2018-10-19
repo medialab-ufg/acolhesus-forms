@@ -534,48 +534,102 @@ class AcolheSUS {
 
             <h3>2 Eixo 2: Ambiência</h3>
 
-            <p>Os seguintes projetos de reforma ou adequações de layout e de mudanças de fluxos, que envolvem o serviço, foram construídos de forma cogerida e a partir da diretriz Ambiência da PNH: <?php echo $data['2.1.1']; ?>.
+            <p>
+            <?php if($data['2.1'] == 'Sim'){?>
+            Os seguintes projetos de reforma ou adequações de layout e de mudanças de fluxos, que envolvem o serviço, foram construídos de forma cogerida e a partir da diretriz Ambiência da PNH: <?php echo $data['2.1.1']; ?>.
+            <?php } ?>
+            <?php if($data['2.2'] == 'Sim'){?>
             Os profissionais da engenharia e arquitetura da SES foram qualificados na diretriz ambiência da PNH [2.2.].
-            Foram realizadas avaliações de satisfação dos usuários [2.3]. Foram realizadas avaliações de satisfação dos trabalhadores [2.4]. Foram realizadas avaliações de satisfação dos gestores [2.5].</p>
+            <?php } ?>
+            <?php if($data['2.3'] == 'Sim'){?>
+            Foram realizadas avaliações de satisfação dos usuários.
+            <?php } ?>
+            <?php if($data['2.4'] == 'Sim'){?>
+            Foram realizadas avaliações de satisfação dos trabalhadores.
+            <?php } ?>
+            <?php if($data['2.5'] == 'Sim'){?>
+            Foram realizadas avaliações de satisfação dos gestores.
+            <?php } ?>
+            </p>
 
 
             <h3>3 Eixo 3: Qualificação Profissional</h3>
 
 
-            <p>Existe mecanismo de educação permanente no Estado para gestores e trabalhadores, com ampliação de métodos de discussão e produção coletiva de conhecimento e qualificação do trabalho [3.1].
+            <p>
+            <?php if($data['3.1'] == 'Sim'){?>
+            Existe mecanismo de educação permanente no Estado para gestores e trabalhadores, com ampliação de métodos de discussão e produção coletiva de conhecimento e qualificação do trabalho.
+            <?php } ?>
 
-            A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <?php echo $data['']?> (inserido/alinhado com o plano de educação permanente Estadual; inserido/alinhado parcialmente com o plano de educação permanente Estadual; não inserido/alinhado com o plano de educação permanente Estadual [3.2].
+            <?php if($data['3.1'] != 'Não'){?>
+            A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <?php echo $data['3.2']?>.
+            <?php } ?>
 
-            A SES conta com apoiadores institucionais do Estado formados na PNH [3.3].
+            <?php if($data['3.3'] == 'Sim'){?>
+            A SES conta com apoiadores institucionais do Estado formados na PNH.
+            <?php } ?>
 
-            Existe uma rede/grupos para intercâmbio entre os níveis de atenção para compartilhamento das experiências [3.4].</p>
+            <?php if($data['3.1'] == 'Sim'){?>
+            Existe uma rede/grupos para intercâmbio entre os níveis de atenção para compartilhamento das experiências.
+            <?php } ?>
+            </p>
 
             <h3>4 Eixo 4: Gestão e Organização do Cuidado</h3>
 
             <h4>4.1 Gestão compartilhada</h4>
 
-            <p>Existem os seguintes espaços coletivos/colegiados instituídos e com funcionamento sistemático efetivo na SES com plano de trabalho elaborado: <?php echo $data['4.1.1.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.1.2']; ?>.
-
+            <p>
+            <?php if($data['4.1.1'] == 'Sim'){?>
+            Existem os seguintes espaços coletivos/colegiados instituídos e com funcionamento sistemático efetivo na SES com plano de trabalho elaborado: <?php echo $data['4.1.1.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.1.2']; ?>.
+            <?php } ?>
+            <?php if($data['4.1.2'] == 'Sim'){?>
             Existem os seguintes espaços coletivos/colegiados instituídos nos serviços de saúde com plano de trabalho elaborado: <?php echo $data['4.1.2.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.2.2']; ?>.
-
-            Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <?php echo $data['4.1.3.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.3.2']; ?>.</p>
+            <?php } ?>
+            <?php if($data['4.1.1'] == 'Sim'){?>
+            Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <?php echo $data['4.1.3.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.3.2']; ?>.
+            <?php } ?>
+            </p>
 
             <h4>4.2 Garantia dos direitos dos usuários</h4>
 
-            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações na SES [4.2.1].
-
-            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações nas unidades de saúde [4.2.2].
+            <?php if($data['4.2.1'] == 'Sim'){?>
+            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações na SES.
+            <?php } ?>
+            <?php if($data['4.1.2'] == 'Sim'){?>
+            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações nas unidades de saúde.
+            <?php } ?>
 
             <h4>4.3 Continuidade do cuidado</h4>
 
-            Existe articulação entre o campo de atuação e os demais pontos da RAS [4.3.1]. A articulação é feita entre as seguintes unidades e da seguinte forma: <?php echo $data['4.3.1.1']; ?>.
+            <?php if($data['4.3.1'] == 'Sim'){?>
+            Existe articulação entre o campo de atuação e os demais pontos da RAS.
+            A articulação é feita entre as seguintes unidades e da seguinte forma: <?php echo $data['4.3.1.1']; ?>.
+            <?php } ?>
 
-            Existem instrumentos de referência e transferência do cuidado construídos e pactuados entre os municípios para a conformação da RAS [4.3.2]. A construção e pactuação de instrumentos de referência e transferência foram produzidos com a participação dos gestores e trabalhadores dos serviços [4.3.2.1].
+            <?php if($data['4.3.2'] == 'Sim'){?>
+            Existem instrumentos de referência e transferência do cuidado construídos e pactuados entre os municípios para a conformação da RAS.
+            <?php } ?>
+            <?php if($data['4.3.2.1'] == 'Sim'){?>
+            A construção e pactuação de instrumentos de referência e transferência foram produzidos com a participação dos gestores e trabalhadores dos serviços.
+            <?php } ?>
 
             <h4>4.4 Monitoramento e avaliação</h4>
 
-            Existe núcleo/coordenação de monitoramento e avaliação na SES [4.4.1]. O processo de trabalho é realizado de forma articulada e alinhada com as áreas /coordenações da SES com encontros programáticos [4.4.1.1]. O processo metodológico de monitoramento e avaliação dos indicadores que compõem o planejamento da SES é o seguinte: <?php echo $data['4.4.1.2']?>.
-            O processo de trabalho é realizado de forma articulada e alinhada com a Coordenação Estadual de Humanização com encontros programáticos [4.4.1.3]. Por fim, agenda de encontros com a coordenação de humanização está acontecendo dentro do que foi pactuado [4.4.1.3.1].
+            <?php if($data['4.4.1'] == 'Sim'){?>
+            Existe núcleo/coordenação de monitoramento e avaliação na SES.
+            <?php } ?>
+            <?php if($data['4.4.1.1'] == 'Sim'){?>
+            O processo de trabalho é realizado de forma articulada e alinhada com as áreas /coordenações da SES com encontros programáticos.
+            <?php } ?>
+
+            O processo metodológico de monitoramento e avaliação dos indicadores que compõem o planejamento da SES é o seguinte: <?php echo $data['4.4.1.2']?>.
+
+            <?php if($data['4.4.1.3'] == 'Sim'){?>
+            O processo de trabalho é realizado de forma articulada e alinhada com a Coordenação Estadual de Humanização com encontros programáticos.
+            <?php } ?>
+            <?php if($data['4.4.1.3.1'] == 'Sim'){?>
+            Por fim, agenda de encontros com a coordenação de humanização está acontecendo dentro do que foi pactuado.
+            <?php } ?>
         </div>
         <?php
 
