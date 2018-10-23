@@ -103,16 +103,6 @@ class AcolheSUS {
             'fase' => ['fase_1'],
             'eixo' => 'todos'
         ],
-        'matriz_objetivos' => [
-            'labels' => [
-                'name' => 'Matriz de Objetivos e Atividades',
-                'singular_name' => 'Matriz de Objetivos e Atividades'
-            ],
-            'slug' => 'matriz_objetivos',
-            'uma_entrada_por_campo' => true,
-            'fase' => 0,
-            'eixo' => 0
-        ],
         'plano_trabalho' => [
             'labels' => [
                 'name' => 'Plano de Trabalho',
@@ -122,16 +112,6 @@ class AcolheSUS {
             'uma_entrada_por_campo' => true,
             'fase' => ['fase_2'],
             'eixo' => 'todos'
-        ],
-        'efeitos_esperados' => [
-            'labels' => [
-                'name' => 'Monitoramento do Efeito Esperado e Inesperado',
-                'singular_name' => 'Efeitos Esperados e Inesperados'
-            ],
-            'slug' => 'efeitos_esperados',
-            'uma_entrada_por_campo' => true,
-            'fase' => 0,
-            'eixo' => 0
         ],
         'avaliacao_grupos' => [
             'labels' => [
