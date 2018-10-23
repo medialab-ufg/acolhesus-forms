@@ -9,6 +9,17 @@ $_view_perm = "editar_" . $post_type;
 $can_user_view = in_array($_view_perm, get_user_meta(get_current_user_id(), 'acolhesus_form_perms'));
 $is_new_form = get_post_meta($post_id, 'new_form', true);
 
+$forms_to_report = [
+    'matriz_p_criticos',
+    'matriz_cenario',
+    'plano_trabalho'
+];
+
+$forms_chart = [
+    'avaliacao_grupos',
+    'avaliacao_oficina'
+];
+
 if ($is_new_form) {
     echo "<input type='hidden' name='novo_form' value='true'>";
 }
@@ -30,14 +41,14 @@ if ($is_new_form) {
                 Ver formulário
             </button>
             <?php
-            if($post_type === 'avaliacao_grupos' || $post_type === 'avaliacao_oficina')
+            if(in_array($post_type, $forms_chart))
             {
                 ?>
                 <button id="gen_charts" class="btn btn-primary" type="button"> <i class="fa fa-bar-chart" aria-hidden="true"></i>
                     Gerar gráfico
                 </button>
                 <?php
-            } else if($post_type === 'matriz_p_criticos' || $post_type === 'matriz_cenario')
+            } else if(in_array($post_type, $forms_to_report))
             {
                 ?>
                 <button id="gen_report" class="btn btn-primary" type="button"> <i class="fa fa-file-text-o" aria-hidden="true"></i>

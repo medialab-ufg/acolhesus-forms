@@ -351,7 +351,7 @@ class AcolheSUSReports
 
                 ?>
                 <td><?php echo $ponto_critico_name; ?></td>
-                <td> <?php echo $acolheSUS->wrap_specific_in_html($ponto_critico_name, $ponto_critico_info); ?></td>
+                <td> <?php echo $acolheSUS->wrap_matriz_pontos_criticos_in_html($ponto_critico_name, $ponto_critico_info); ?></td>
                 </tr>
                 <?php
 

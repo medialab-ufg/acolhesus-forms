@@ -13,7 +13,7 @@ jQuery( function($) {
         }
 
         $.post(acolhesus.ajax_url, {
-            action: 'acolhesus_reports_report',
+            action: 'acolhesus_report_one',
             form: $("#form_type").val(),
             post_id: post_id,
             state: state
