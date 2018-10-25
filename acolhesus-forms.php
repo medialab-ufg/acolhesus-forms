@@ -687,11 +687,52 @@ class AcolheSUS {
     {
         $data = $this->prepare_plano_trabalho($data);
         ob_start();
-        /*echo "<pre>";
-        print_r($data);
-        echo "</pre>";*/
         ?>
-
+        <div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="reports-header">
+                        <tr>
+                            <th> Atividades </th>
+                            <th> Responsavel </th>
+                            <th> Cronograma </th>
+                            <th> Situação </th>
+                            <th> Status </th>
+                            <th> Desempenho </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    foreach ($data as $goal_name => $goal)
+                    {
+                        foreach ($goal as $activity_name => $activity)
+                        {
+                            ?>
+                            <tr>
+                                <td><?php echo $activity_name;?></td>
+                                <td><?php echo $activity['Responsável'];?></td>
+                                <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
+                                <td><?php echo $activity['Situação'];?></td>
+                                <td><?php echo $activity['Status'];?></td>
+                                <td>
+                                    <?php
+                                    $date_now = date("Y-m-d");
+                                    if ($date_now > $activity['Data final']) {
+                                        echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
+                                    }else{
+                                        echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <?php
 
         return ob_get_clean();
