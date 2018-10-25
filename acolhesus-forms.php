@@ -369,31 +369,40 @@ class AcolheSUS {
         if(in_array($formType, $forms_to_report))
         {
             $index = '';
-            foreach ($fields as $id => $campo) {
+            $types = [
+                'toggle_switch',
+                'text',
+                'number',
+                'date_picker',
+                'dropdown'
+            ];
+            foreach ($fields as $field_id => $campo) {
                 $tipo = $campo["type"];
                 if ($tipo === "wysiwyg") {
                     preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
                     $index = $index[0];
                     if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
                     {
-                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
+                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($field_id,$post_id);
                     }else
                     {
-                        $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($id,$post_id)];
+                        $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
                         if(!empty($index))
                             $result[$index][] = $data;
                         else $result[] = $data;
                     }
-                }else if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number')
+                }else if(in_array($tipo, $types))
                 {
-                    $label = explode(' ', $campo['label'])[0];
-                    $result[$label] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
-                }else if($tipo == 'date_picker')
-                {
+                    if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number')
+                    {
+                        $label = explode(' ', $campo['label'])[0];
+                    }
+                    elseif ($tipo == 'date_picker' || $tipo == 'dropdown')
+                    {
+                        $label = $campo['label'].'-'.$field_id;
+                    }
 
-                }else if($tipo == 'dropdown')
-                {
-
+                    $result[$label] = $acholheSUSReports->getAnswerToEspecific($field_id,$post_id);
                 }
             }
         }
@@ -676,9 +685,9 @@ class AcolheSUS {
     public function wrap_plano_trabalho_html($result)
     {
         ob_start();
-        /*echo "<pre>";
+        echo "<pre>";
         print_r($result);
-        echo "</pre>";*/
+        echo "</pre>";
         ?>
 
         <?php

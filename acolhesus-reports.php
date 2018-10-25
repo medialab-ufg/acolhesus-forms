@@ -564,7 +564,7 @@ class AcolheSUSReports
         $result = $wpdb->get_results($sql_current_values, 'ARRAY_A');
         if(!empty($result))
             return $result[0]['value'];
-        else return false;
+        else return $sql_current_values;
     }
 
     public function getAnswerStats($field_id, $closed = false, $post_id = false)
