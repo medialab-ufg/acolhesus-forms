@@ -399,10 +399,11 @@ class AcolheSUS {
                     }
                     elseif ($tipo == 'date_picker' || $tipo == 'dropdown')
                     {
-                        $label = $campo['label'].'-'.$field_id;
+                        $label = $campo['label'];
                     }
 
-                    $result[$label] = $acholheSUSReports->getAnswerToEspecific($field_id,$post_id);
+                    $data = ['title' => $label, 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
+                    $result[] = $data;
                 }
             }
         }
@@ -682,17 +683,39 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
-    public function wrap_plano_trabalho_html($result)
+    public function wrap_plano_trabalho_html($data)
     {
+        $data = $this->prepare_plano_trabalho($data);
         ob_start();
-        echo "<pre>";
-        print_r($result);
-        echo "</pre>";
+        /*echo "<pre>";
+        print_r($data);
+        echo "</pre>";*/
         ?>
 
         <?php
 
         return ob_get_clean();
+    }
+
+    private function prepare_plano_trabalho($data)
+    {
+        $result = [];
+        $goal = $activity = false;
+        foreach ($data as $statement)
+        {
+            if(preg_match("/Objetivo/", $statement['title']))
+            {
+                $goal = $statement['value'];
+            }else if(preg_match("/Atividade/", $statement['title']))
+            {
+                $activity = $statement['value'];
+            }else if($goal && $activity)
+            {
+                $result[$goal][$activity][$statement['title']] = $statement['value'];
+            }
+        }
+
+        return $result;
     }
 
     function get_info_in_result($result, $needle)
