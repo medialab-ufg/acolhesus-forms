@@ -426,7 +426,7 @@ class AcolheSUS {
                 $html = $this->wrap_matriz_cenario_html($result, $post_id);
                 break;
             case 'plano_trabalho':
-                $html = $this->wrap_plano_trabalho_html($result);
+                $html = $this->wrap_plano_trabalho_html($result, $_POST['report_type']);
                 break;
         }
 
@@ -683,15 +683,16 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
-    public function wrap_plano_trabalho_html($data)
+    public function wrap_plano_trabalho_html($data, $report_type)
     {
         $data = $this->prepare_plano_trabalho($data);
         ob_start();
-        ?>
-        <div>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead class="reports-header">
+        if($report_type === 'complete'){
+            ?>
+            <div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="reports-header">
                         <tr>
                             <th> Atividades </th>
                             <th> Responsavel </th>
@@ -700,40 +701,98 @@ class AcolheSUS {
                             <th> Status </th>
                             <th> Desempenho </th>
                         </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    foreach ($data as $goal_name => $goal)
-                    {
-                        foreach ($goal as $activity_name => $activity)
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($data as $goal_name => $goal)
+                        {
+                            foreach ($goal as $activity_name => $activity)
+                            {
+                                ?>
+                                <tr>
+                                    <td><?php echo $activity_name;?></td>
+                                    <td><?php echo $activity['Responsável'];?></td>
+                                    <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
+                                    <td><?php echo $activity['Situação'];?></td>
+                                    <td><?php echo $activity['Status'];?></td>
+                                    <td>
+                                        <?php
+                                        $date_now = date("Y-m-d");
+                                        if ($date_now > $activity['Data final']) {
+                                            echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
+                                        }else{
+                                            echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php
+        }else {
+            ?>
+            <div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="reports-header">
+                        <tr>
+                            <th> Objetivo </th>
+                            <th> Atividades </th>
+                            <th> Responsavel </th>
+                            <th> Cronograma </th>
+                            <th> Situação </th>
+                            <th> Status </th>
+                            <th> Desempenho </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($data as $goal_name => $goal)
                         {
                             ?>
                             <tr>
-                                <td><?php echo $activity_name;?></td>
-                                <td><?php echo $activity['Responsável'];?></td>
-                                <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
-                                <td><?php echo $activity['Situação'];?></td>
-                                <td><?php echo $activity['Status'];?></td>
-                                <td>
-                                    <?php
-                                    $date_now = date("Y-m-d");
-                                    if ($date_now > $activity['Data final']) {
-                                        echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
-                                    }else{
-                                        echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
-                                    }
-                                    ?>
-                                </td>
-                            </tr>
+                                <td rowspan="<?php echo count($goal);?>"><?php echo $goal_name;?></td>
                             <?php
+                            $showtr = false;
+                            foreach ($goal as $activity_name => $activity)
+                            {
+                                if($showtr)
+                                {
+                                    echo "<tr>";
+                                }else $showtr = true;
+                                ?>
+                                    <td><?php echo $activity_name;?></td>
+                                    <td><?php echo $activity['Responsável'];?></td>
+                                    <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
+                                    <td><?php echo $activity['Situação'];?></td>
+                                    <td><?php echo $activity['Status'];?></td>
+                                    <td>
+                                        <?php
+                                        $date_now = date("Y-m-d");
+                                        if ($date_now > $activity['Data final']) {
+                                            echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
+                                        }else{
+                                            echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
                         }
-                    }
-                    ?>
-                    </tbody>
-                </table>
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        <?php
+            <?php
+        }
 
         return ob_get_clean();
     }

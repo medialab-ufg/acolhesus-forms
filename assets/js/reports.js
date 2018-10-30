@@ -4,6 +4,11 @@ jQuery( function($) {
         $("#gen_charts").click();
     });
 
+    $(".report_type").click(function () {
+        $("#report_type").val($(this).data('value'));
+        $("#gen_report").click();
+    });
+
     $("#gen_report").click(function (event) {
         var post_id = $("input[name=_cf_cr_pst]").val();
         var state = $("#form-title").text().match(/\((.*)\)/);
@@ -16,11 +21,13 @@ jQuery( function($) {
             action: 'acolhesus_report_one',
             form: $("#form_type").val(),
             post_id: post_id,
+            report_type: $("#report_type").val(),
             state: state
         }).success(function (r) {
             $("#the_content").hide();
             $("#show_form").toggle();
 
+            $(".gen-report").toggle();
             $("#gen_report").toggle();
             $("#charts_set").show();
 
@@ -98,6 +105,7 @@ jQuery( function($) {
         $("#charts_set").hide();
 
         $("#gen_charts").toggle();
+        $(".gen-report").toggle();
         $("#gen_report").toggle();
         $("#show_form").toggle();
     });
