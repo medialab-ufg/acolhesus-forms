@@ -1107,24 +1107,30 @@ class AcolheSUS {
         {
             $estado = $results[0]->estado;
 
+            // Membros CGPNH do MS
             $ailana   = ['AL', 'MA', 'PI', 'RN'];
-            $diego    = ['MS', 'MT', 'RR'];
-            $danyelle = ['AC', 'MG', 'SC'];
-            $janaina  = ['DF', 'GO'];
+            $diego    = ['AL', 'AM', 'BA'];
+            $danyelle = ['AC', 'TO', 'SC'];
+            $janaina  = ['DF'];
             // $hiojuma  = ['CE', 'PB']; // Saiu do projeto. Ver quem assumiu esses UFs
-            $marilia  = ['AM', 'BA', 'PA'];
+            $marilia  = ['MT', 'PA'];
+            $julimar = ['MG'];
 
             // TODO: refatorar esse tanto de if
             if (in_array($estado, $ailana)) {
                 $email = 'ailana.lira@saude.gov.br';
             } else if(in_array($estado, $diego)) {
-                $email = 'diegop.santos@saude.gov.br';
+                // $email = 'diegop.santos@saude.gov.br';
+                $email = 'dpscarao@hotmail.com';
             } else if(in_array($estado, $danyelle)) {
                 $email = 'danyelle.cavalcante@saude.gov.br';
             } else if(in_array($estado, $marilia)) {
-                $email = 'marilia.palacio@saude.gov.br';
+                // $email = 'marilia.palacio@saude.gov.br';
+                $email = 'mariliabpalacio@gmail.com';
             } else if (in_array($estado, $janaina)) {
-                $email = 'janaina.cardoso@saude.gov.br'; // Conferir este e-mail
+                $email = 'janarcardoso@gmail.com';
+            } else if (in_array($estado,$julimar)) {
+                $email = 'julimar.barros@saude.gov.br';
             }
         }
 
