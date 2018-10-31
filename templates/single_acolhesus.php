@@ -50,11 +50,39 @@ if ($is_new_form) {
                 <?php
             } else if(in_array($post_type, $forms_to_report))
             {
-                ?>
-                <button id="gen_report" class="btn btn-primary" type="button"> <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                    Gerar relatório
-                </button>
-                <?php
+                if($post_type == 'plano_trabalho')
+                {
+                    ?>
+                    <div class="btn-group gen-report">
+                        <button id="gen_report" class="btn btn-primary" type="button"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                            Gerar relatório
+                        </button>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span> <span class="sr-only">Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="report_type" data-value="complete">
+                                <a href="javascript:void (0);" >
+                                    <i class="fa fa-file-text" aria-hidden="true"></i>
+                                    Completo
+                                </a>
+                            </li>
+                            <li class="report_type" data-value="compact">
+                                <a href="javascript:void (0);">
+                                    <i class="fa fa-file-o" aria-hidden="true"></i>
+                                    Compacto
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <?php
+                }else {
+                    ?>
+                    <button id="gen_report" class="btn btn-primary" type="button"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        Gerar relatório
+                    </button>
+                    <?php
+                }
             }
             ?>
         </div>
@@ -73,6 +101,7 @@ if ($is_new_form) {
         <?php the_content(); ?>
     </div>
     <div id="charts_set">
+        <input id="report_type" type="hidden" value="complete">
         <div id="chart"></div>
     </div>
 

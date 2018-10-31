@@ -369,31 +369,41 @@ class AcolheSUS {
         if(in_array($formType, $forms_to_report))
         {
             $index = '';
-            foreach ($fields as $id => $campo) {
+            $types = [
+                'toggle_switch',
+                'text',
+                'number',
+                'date_picker',
+                'dropdown'
+            ];
+            foreach ($fields as $field_id => $campo) {
                 $tipo = $campo["type"];
                 if ($tipo === "wysiwyg") {
                     preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
                     $index = $index[0];
                     if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
                     {
-                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
+                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($field_id,$post_id);
                     }else
                     {
-                        $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($id,$post_id)];
+                        $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
                         if(!empty($index))
                             $result[$index][] = $data;
                         else $result[] = $data;
                     }
-                }else if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number')
+                }else if(in_array($tipo, $types))
                 {
-                    $label = explode(' ', $campo['label'])[0];
-                    $result[$label] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
-                }else if($tipo == 'date_picker')
-                {
+                    if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number')
+                    {
+                        $label = explode(' ', $campo['label'])[0];
+                    }
+                    elseif ($tipo == 'date_picker' || $tipo == 'dropdown')
+                    {
+                        $label = $campo['label'];
+                    }
 
-                }else if($tipo == 'dropdown')
-                {
-
+                    $data = ['title' => $label, 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
+                    $result[] = $data;
                 }
             }
         }
@@ -416,7 +426,7 @@ class AcolheSUS {
                 $html = $this->wrap_matriz_cenario_html($result, $post_id);
                 break;
             case 'plano_trabalho':
-                $html = $this->wrap_plano_trabalho_html($result);
+                $html = $this->wrap_plano_trabalho_html($result, $_POST['report_type']);
                 break;
         }
 
@@ -673,17 +683,139 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
-    public function wrap_plano_trabalho_html($result)
+    public function wrap_plano_trabalho_html($data, $report_type)
     {
+        $data = $this->prepare_plano_trabalho($data);
         ob_start();
-        /*echo "<pre>";
-        print_r($result);
-        echo "</pre>";*/
-        ?>
-
-        <?php
+        if($report_type === 'complete'){
+            ?>
+            <div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="reports-header">
+                        <tr>
+                            <th> Atividades </th>
+                            <th> Responsavel </th>
+                            <th> Cronograma </th>
+                            <th> Situação </th>
+                            <th> Status </th>
+                            <th> Desempenho </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($data as $goal_name => $goal)
+                        {
+                            foreach ($goal as $activity_name => $activity)
+                            {
+                                ?>
+                                <tr>
+                                    <td><?php echo $activity_name;?></td>
+                                    <td><?php echo $activity['Responsável'];?></td>
+                                    <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
+                                    <td><?php echo $activity['Situação'];?></td>
+                                    <td><?php echo $activity['Status'];?></td>
+                                    <td>
+                                        <?php
+                                        $date_now = date("Y-m-d");
+                                        if ($date_now > $activity['Data final']) {
+                                            echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
+                                        }else{
+                                            echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php
+        }else {
+            ?>
+            <div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="reports-header">
+                        <tr>
+                            <th> Objetivo </th>
+                            <th> Atividades </th>
+                            <th> Responsavel </th>
+                            <th> Cronograma </th>
+                            <th> Situação </th>
+                            <th> Status </th>
+                            <th> Desempenho </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($data as $goal_name => $goal)
+                        {
+                            ?>
+                            <tr>
+                                <td rowspan="<?php echo count($goal);?>"><?php echo $goal_name;?></td>
+                            <?php
+                            $showtr = false;
+                            foreach ($goal as $activity_name => $activity)
+                            {
+                                if($showtr)
+                                {
+                                    echo "<tr>";
+                                }else $showtr = true;
+                                ?>
+                                    <td><?php echo $activity_name;?></td>
+                                    <td><?php echo $activity['Responsável'];?></td>
+                                    <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
+                                    <td><?php echo $activity['Situação'];?></td>
+                                    <td><?php echo $activity['Status'];?></td>
+                                    <td>
+                                        <?php
+                                        $date_now = date("Y-m-d");
+                                        if ($date_now > $activity['Data final']) {
+                                            echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
+                                        }else{
+                                            echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php
+        }
 
         return ob_get_clean();
+    }
+
+    private function prepare_plano_trabalho($data)
+    {
+        $result = [];
+        $goal = $activity = false;
+        foreach ($data as $statement)
+        {
+            if(preg_match("/Objetivo/", $statement['title']))
+            {
+                $goal = $statement['value'];
+            }else if(preg_match("/Atividade/", $statement['title']))
+            {
+                $activity = $statement['value'];
+            }else if($goal && $activity)
+            {
+                $result[$goal][$activity][$statement['title']] = $statement['value'];
+            }
+        }
+
+        return $result;
     }
 
     function get_info_in_result($result, $needle)

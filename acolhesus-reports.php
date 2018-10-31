@@ -224,7 +224,11 @@ class AcolheSUSReports
                 $title = get_the_title($post_id);
                 $data = get_the_date('d/m/Y - G:i:s',$post_id);
                 $uf = get_post_meta($post_id, "acolhesus_campo",true);
-                $estado = $this->campos_completos[$uf];
+
+                if($uf)
+                    $estado = $this->campos_completos[$uf];
+                else $estado = '';
+
                 $f = get_post_meta($post_id, "acolhesus_fase",true);
 
                 if (!empty($f)) {
