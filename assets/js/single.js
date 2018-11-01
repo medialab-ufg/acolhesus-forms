@@ -10,6 +10,27 @@ jQuery( function( $ ) {
     var tag = 'input[name="novo_form"]';
     var is_new = ( $(tag).length > 0 && $(tag).val() === "true" );
 
+    /*
+     * Ações que devem ser executadas caso seja um novo formulário recém criado
+     */
+    if (is_new) {
+        set_state(campo_atuacao);
+
+        var fase = sessionStorage.getItem("rhs_fase");
+        if (fase.length > 0)
+        {
+            $(fase_selector).val(fase);
+            sessionStorage.removeItem('rhs_fase');
+        }else $(fase_selector).val("fase_1");
+
+        var data = { action: 'delete_new_form_tag', post_id: current_post_id };
+        $.post(acolhesus.ajax_url, data).success(function() {
+            $($fixed_state_phase).change();
+            lock_state(campo_atuacao);
+            lock_phase(fase);
+        });
+    }
+
     $($fixed_state_phase).change(function() {
         var opt_val = $(this).val();
         var field = $(this).attr('name');
@@ -33,27 +54,6 @@ jQuery( function( $ ) {
             });
         }
     });
-
-    /*
-     * Ações que devem ser executadas caso seja um novo formulário recém criado
-     */
-    if (is_new) {
-        set_state(campo_atuacao);
-
-        var fase = sessionStorage.getItem("rhs_fase");
-        if (fase)
-        {
-            $(fase_selector).val(fase);
-            sessionStorage.removeItem('rhs_fase');
-        } else $(fase_selector).val('');
-
-        var data = { action: 'delete_new_form_tag', post_id: current_post_id };
-        $.post(acolhesus.ajax_url, data).success(function() {
-            $($fixed_state_phase).change();
-            lock_state(campo_atuacao);
-            lock_phase(fase);
-        });
-    }
     
     if ($(base + ' .single input[type="submit"]').length == 0) {
         var save_btn = 'button.save_for_later';
@@ -314,11 +314,9 @@ jQuery( function( $ ) {
 
     function set_state(container) {
         var campo = get_state();
-        if (campo) {
+        if (campo.length > 0) {
             $(container).val(campo);
-        } else {
-            $(container).val('');
-        }
+        }else $(container).val('AC');
     }
 
     function lock_state(container) {
