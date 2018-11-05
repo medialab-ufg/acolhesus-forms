@@ -27,6 +27,17 @@ class AcolheSUS {
             'fase' => ['fase_1'],
             'eixo' => 0
         ],
+        'elaboracao_poster' => [
+            'labels' => [
+                'name' => 'Elaboração de Pôster',
+                'singular_name' => 'Elaboração de Pôster'
+            ],
+            //'form_id' => '', // Setado via admin
+            'slug' => 'elaboracao_poster',
+            'uma_entrada_por_campo' => true,
+            'fase' => ['fase_1'],
+            'eixo' => 0
+        ],
         'ind_materno_infantil' => [
             'labels' => [
                 'name' => 'Indicadores Materno-Infantil',
