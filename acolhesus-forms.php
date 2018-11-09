@@ -27,15 +27,14 @@ class AcolheSUS {
             'fase' => ['fase_1'],
             'eixo' => 0
         ],
-        'elaboracao_poster' => [
+        'poster' => [
             'labels' => [
-                'name' => 'Elaboração de Pôster',
-                'singular_name' => 'Elaboração de Pôster'
+                'name' => 'Pôster Seminário AcolheSUS',
+                'singular_name' => 'Pôster Seminário AcolheSUS'
             ],
-            //'form_id' => '', // Setado via admin
-            'slug' => 'elaboracao_poster',
+            'slug' => 'poster',
             'uma_entrada_por_campo' => true,
-            'fase' => ['fase_1'],
+            'fase' => [],
             'eixo' => 0
         ],
         'ind_materno_infantil' => [
