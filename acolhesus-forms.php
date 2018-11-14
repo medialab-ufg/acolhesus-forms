@@ -35,7 +35,8 @@ class AcolheSUS {
             'slug' => 'poster',
             'uma_entrada_por_campo' => true,
             'fase' => [],
-            'eixo' => 0
+            'eixo' => 0,
+			'diligencias' => 'Curadoria'
         ],
         'ind_materno_infantil' => [
             'labels' => [

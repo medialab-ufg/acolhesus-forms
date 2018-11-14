@@ -108,7 +108,7 @@ if ($is_new_form) {
     <div id="form-accordion">
 
         <?php if ($_possui_diligencias && (comments_open() || get_comments_number()) ) : ?>
-            <h3> Diligências </h3>
+            <h3> <?php echo $formView->getDiligencesTitle($post_type); ?> </h3>
             <div class="panel hidden-print">
                 <div class="panel-footer panel-comentarios"> <?php comments_template(); ?> </div>
             </div>

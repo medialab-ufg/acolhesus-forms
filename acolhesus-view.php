@@ -174,6 +174,10 @@ class AcolheSUSView extends AcolheSUS {
         return $field;
     }
 
+	public function getDiligencesTitle($form) {
+		return isset($this->forms[$form]['diligencias']) ? $this->forms[$form]['diligencias'] : 'Diligências';
+	}
+	
     private function attach_style($id,$url) {
         if (!empty($id) && !empty($url)) {
             $filename = basename($url);
