@@ -178,6 +178,18 @@ class AcolheSUSView extends AcolheSUS {
 		return isset($this->forms[$form]['diligencias']) ? $this->forms[$form]['diligencias'] : 'Diligências';
 	}
 	
+	public function getBackButtonURL($form) {
+		if ( "poster" === $form ) {
+			return get_post_type_archive_link($form);
+		}
+		
+		return home_url('formularios-acolhesus');
+	}
+	
+	public function canUserSeeAllStateLink($form) {
+		return current_user_can('acolhesus_cgpnh') && ("poster" != $form);
+	}
+	
     private function attach_style($id,$url) {
         if (!empty($id) && !empty($url)) {
             $filename = basename($url);
