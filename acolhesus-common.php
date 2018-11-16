@@ -28,7 +28,7 @@ trait AcolheSUSCommon {
         'MA' => 'MA - São Luís - UPA Itaqui Bacana',
         'MG' => 'MG - Juiz de Fora - Hospital Regional Dr. João Penido',
         'MS' => 'MS - Campo Grande - Hospital Regional de Mato Grosso do Sul',
-        'MT' => 'MT - Várzea Grande - Hospital e Pronto Socorre Municipal de Várzea Grande',
+        'MT' => 'MT - Várzea Grande - Hospital e Pronto Socorro Municipal de Várzea Grande',
         'PA' => 'PA - Belém - CAPS Renascer',
         'PB' => 'PB - João Pessoa - Maternidade Frei Damião',
         'PI' => 'PI - Parnaíba - Hospital Estadual Dirceu Arcoverde',
