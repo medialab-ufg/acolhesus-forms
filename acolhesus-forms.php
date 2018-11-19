@@ -1218,7 +1218,7 @@ class AcolheSUS {
         if (isset($_POST[self::ANSWER_ID])) {
             $id = sanitize_text_field($_POST[self::ANSWER_ID]);
 
-            $mail['recipients'][] = $this->get_forward_mail($id);
+            $mail['recipients'][] = $this->get_forward_mail($id); # Descomentar quando passar pra produção
 
             $form_link = get_permalink($id);
             if ($form_link) {
@@ -1274,6 +1274,67 @@ class AcolheSUS {
                 $email = 'janarcardoso@gmail.com';
             } else if (in_array($estado,$julimar)) {
                 $email = 'julimar.barros@saude.gov.br';
+            }
+
+            $sql = "SELECT * FROM $wpdb->post WHERE post_type='poster' and ID=$form_id;";
+            $poster = $wpdb->get_results($sql);
+
+            if(!empty($poster))
+            {
+                switch ($estado)
+                {
+                    case 'AC':
+                        $email = "janarcardoso@gmail.com; gilbertoscarazatti7@gmail.com";
+                        break;
+                    case 'AL':
+                        $email = "danyelle.cavalcante@saude.gov.br; drricardovolpe@globo.com";
+                        break;
+                    case 'AM':
+                        $email = "ailana.lira@saude.gov.br; flaviaborgesleite@gmail.com";
+                        break;
+                    case 'AP':
+                        $email = "dorigica@gmail.com; gilbertoscarazatti7@gmail.com";
+                        break;
+                    case 'BA':
+                        $email = "julimar.barros@saude.gov.br; drricardovolpe@globo.com";
+                        break;
+                    case 'CE':
+                        $email = "diegop.santos@saude.gov.br; flaviaborgesleite@gmail.com";
+                        break;
+                    case 'DF':
+                        $email = "thania.arruda@hotmail.com; gilbertoscarazatti7@gmail.com";
+                        break;
+                    case 'MA':
+                        $email = "janarcardoso@gmail.com; drricardovolpe@globo.com";
+                        break;
+                    case 'MG':
+                        $email = "ailana.lira@saude.gov.br; flaviaborgesleite@gmail.com";
+                        break;
+                    case 'MS':
+                        $email = "danyelle.cavalcante@saude.gov.br; gilbertoscarazatti7@gmail.com";
+                        break;
+                    case 'MT':
+                        $email = "dorigica@gmail.com; drricardovolpe@globo.com";
+                        break;
+                    case 'PA':
+                        $email = "diegop.santos@saude.gov.br; flaviaborgesleite@gmail.com";
+                        break;
+                    case 'PB':
+                        $email = "julimar.barros@saude.gov.br; drricardovolpe@globo.com";
+                        break;
+                    case 'PI':
+                        $email = "thania.arruda@hotmail.com; gilbertoscarazatti7@gmail.com";
+                        break;
+                    case 'SC':
+                        $email = "mariliabpalacio@gmail.com; flaviaborgesleite@gmail.com";
+                        break;
+                    case 'RN':
+                        $email = "mariliabpalacio@gmail.com; gilbertoscarazatti7@gmail.com";
+                        break;
+                    case 'TO':
+                        $email = "janarcardoso@gmail.com; drricardovolpe@globo.com";
+                        break;
+                }
             }
         }
 
