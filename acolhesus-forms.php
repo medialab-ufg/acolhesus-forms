@@ -1218,7 +1218,7 @@ class AcolheSUS {
         if (isset($_POST[self::ANSWER_ID])) {
             $id = sanitize_text_field($_POST[self::ANSWER_ID]);
 
-            // $mail['recipients'][] = $this->get_forward_mail($id); # Descomentar quando passar pra produção
+            $mail['recipients'][] = $this->get_forward_mail($id);
 
             $form_link = get_permalink($id);
             if ($form_link) {
