@@ -110,7 +110,7 @@ class AcolheSUSLogger {
             'comment_author_url' => $user->user_url,
             'comment_author_email' => $user->user_email,
             'comment_type' => $this->comment_type,
-            'comment_approved' => 0,
+            'comment_approved' => 1,
         ] );
         
 
