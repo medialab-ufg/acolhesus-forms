@@ -256,6 +256,22 @@ class AcolheSUS {
         add_action("wp_ajax_acolhesus_reports_chart", array(&$this, "ajax_callback_reports_charts"));
 
         add_action("wp_ajax_acolhesus_report_one", array(&$this, "ajax_callback_report_one"));
+
+        add_filter('restrict_manage_users', array(&$this, 'filter_users_cgpnh'));
+    }
+
+    function filter_users_cgpnh(){
+        global $pagenow;
+
+        if( is_admin() && $pagenow == 'users.php') {
+            print "<button style='margin-left: 5px' class='button'>
+                    <a style='color: #555; text-decoration: none' href='users.php?role=acolhesus_cgpnh'>CGPNH</a>
+                </button>";
+
+            print "<button style='margin-left: 5px' class='button'>
+                    <a style='color: #555; text-decoration: none' href='users.php?role=view_acolhesus'>View AcolheSUS</a>
+                </button>";
+        }
     }
 
     /* Charts */
