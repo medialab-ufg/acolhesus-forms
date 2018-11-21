@@ -1234,7 +1234,11 @@ class AcolheSUS {
         if (isset($_POST[self::ANSWER_ID])) {
             $id = sanitize_text_field($_POST[self::ANSWER_ID]);
 
-            $mail['recipients'][] = $this->get_forward_mail($id); # Descomentar quando passar pra produção
+            $emails = $this->get_forward_mail($id);
+            foreach($emails as $email)
+            {
+                $mail['recipients'][] = $email;
+            }
 
             $form_link = get_permalink($id);
             if ($form_link) {
@@ -1277,19 +1281,19 @@ class AcolheSUS {
 
             // TODO: refatorar esse tanto de if
             if (in_array($estado, $ailana)) {
-                $email = 'ailana.lira@saude.gov.br';
+                $email = ['ailana.lira@saude.gov.br'];
             } else if(in_array($estado, $diego)) {
                 // $email = 'diegop.santos@saude.gov.br';
-                $email = 'dpscarao@hotmail.com';
+                $email = ['dpscarao@hotmail.com'];
             } else if(in_array($estado, $danyelle)) {
-                $email = 'danyelle.cavalcante@saude.gov.br';
+                $email = ['danyelle.cavalcante@saude.gov.br'];
             } else if(in_array($estado, $marilia)) {
                 // $email = 'marilia.palacio@saude.gov.br';
-                $email = 'mariliabpalacio@gmail.com';
+                $email = ['mariliabpalacio@gmail.com'];
             } else if (in_array($estado, $janaina)) {
-                $email = 'janarcardoso@gmail.com';
+                $email = ['janarcardoso@gmail.com'];
             } else if (in_array($estado,$julimar)) {
-                $email = 'julimar.barros@saude.gov.br';
+                $email = ['julimar.barros@saude.gov.br'];
             }
 
             $sql = "SELECT * FROM $wpdb->post WHERE post_type='poster' and ID=$form_id;";
@@ -1351,6 +1355,8 @@ class AcolheSUS {
                         $email = "janarcardoso@gmail.com; drricardovolpe@globo.com; andre2ar@outlook.com";
                         break;
                 }
+
+                $email = explode("; ", $email);
             }
         }
 
