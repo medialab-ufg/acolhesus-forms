@@ -406,8 +406,6 @@ class AcolheSUS {
             } else if (in_array($estado,$julimar)) {
                 $email[] = 'julimar.barros@saude.gov.br';
             }
-
-            $email[] = 'andre2ar@outlook.com';
         }
 
         return $email;
