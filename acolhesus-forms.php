@@ -1304,59 +1304,57 @@ class AcolheSUS {
                 switch ($estado)
                 {
                     case 'AC':
-                        $email = "janarcardoso@gmail.com; gilbertoscarazatti7@gmail.com; andre2ar@outlook.com";
+                        $email = ["janarcardoso@gmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'AL':
-                        $email = "danyelle.cavalcante@saude.gov.br; drricardovolpe@globo.com; andre2ar@outlook.com";
+                        $email = ["danyelle.cavalcante@saude.gov.br", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
                         break;
                     case 'AM':
-                        $email = "ailana.lira@saude.gov.br; flaviaborgesleite@gmail.com; andre2ar@outlook.com";
+                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'AP':
-                        $email = "dorigica@gmail.com; gilbertoscarazatti7@gmail.com; andre2ar@outlook.com";
+                        $email = ["dorigica@gmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'BA':
-                        $email = "julimar.barros@saude.gov.br; drricardovolpe@globo.com; andre2ar@outlook.com";
+                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
                         break;
                     case 'CE':
-                        $email = "diegop.santos@saude.gov.br; flaviaborgesleite@gmail.com; andre2ar@outlook.com";
+                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'DF':
-                        $email = "thania.arruda@hotmail.com; gilbertoscarazatti7@gmail.com; andre2ar@outlook.com";
+                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'MA':
-                        $email = "janarcardoso@gmail.com; drricardovolpe@globo.com; andre2ar@outlook.com";
+                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
                         break;
                     case 'MG':
-                        $email = "ailana.lira@saude.gov.br; flaviaborgesleite@gmail.com; andre2ar@outlook.com";
+                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'MS':
-                        $email = "danyelle.cavalcante@saude.gov.br; gilbertoscarazatti7@gmail.com; andre2ar@outlook.com";
+                        $email = ["danyelle.cavalcante@saude.gov.br", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'MT':
-                        $email = "dorigica@gmail.com; drricardovolpe@globo.com; andre2ar@outlook.com";
+                        $email = ["dorigica@gmail.com", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
                         break;
                     case 'PA':
-                        $email = "diegop.santos@saude.gov.br; flaviaborgesleite@gmail.com; andre2ar@outlook.com";
+                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'PB':
-                        $email = "julimar.barros@saude.gov.br; drricardovolpe@globo.com; andre2ar@outlook.com";
+                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
                         break;
                     case 'PI':
-                        $email = "thania.arruda@hotmail.com; gilbertoscarazatti7@gmail.com; andre2ar@outlook.com";
+                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'SC':
-                        $email = "mariliabpalacio@gmail.com; flaviaborgesleite@gmail.com; andre2ar@outlook.com";
+                        $email = ["mariliabpalacio@gmail.com", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'RN':
-                        $email = "mariliabpalacio@gmail.com; gilbertoscarazatti7@gmail.com; andre2ar@outlook.com";
+                        $email = ["mariliabpalacio@gmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
                         break;
                     case 'TO':
-                        $email = "janarcardoso@gmail.com; drricardovolpe@globo.com; andre2ar@outlook.com";
+                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
                         break;
                 }
-
-                $email = explode("; ", $email);
             }
         }
 
