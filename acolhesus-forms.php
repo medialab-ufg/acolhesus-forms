@@ -420,7 +420,7 @@ class AcolheSUS {
                 </button>";
 
             print "<button style='margin-left: 5px' class='button'>
-                    <a style='color: #555; text-decoration: none' href='users.php?role=view_acolhesus'>View AcolheSUS</a>
+                    <a style='color: #555; text-decoration: none' href='users.php?role=view_acolhesus'>GEL/GEE</a>
                 </button>";
         }
     }
