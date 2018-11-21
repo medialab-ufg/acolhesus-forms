@@ -1265,10 +1265,72 @@ class AcolheSUS {
                     postmeta.meta_value = '$_entry_id'";
 
         $results = $wpdb->get_results($sql);
-        $email = '';
+        $email = [];
+
         if(!empty($results))
         {
             $estado = $results[0]->estado;
+
+            $sql = "SELECT * FROM $wpdb->post WHERE post_type='poster' and ID=$form_id;";
+            $poster = $wpdb->get_results($sql);
+
+            if(!empty($poster))
+            {
+                switch ($estado)
+                {
+                    case 'AC':
+                        $email = ["janarcardoso@gmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'AL':
+                        $email = ["danyelle.cavalcante@saude.gov.br", "drricardovolpe@globo.com"];
+                        break;
+                    case 'AM':
+                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'AP':
+                        $email = ["dorigica@gmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'BA':
+                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com"];
+                        break;
+                    case 'CE':
+                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'DF':
+                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'MA':
+                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com"];
+                        break;
+                    case 'MG':
+                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'MS':
+                        $email = ["danyelle.cavalcante@saude.gov.br", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'MT':
+                        $email = ["dorigica@gmail.com", "drricardovolpe@globo.com"];
+                        break;
+                    case 'PA':
+                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'PB':
+                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com"];
+                        break;
+                    case 'PI':
+                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'SC':
+                        $email = ["mariliabpalacio@gmail.com", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'RN':
+                        $email = ["mariliabpalacio@gmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'TO':
+                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com"];
+                        break;
+                }
+            }
 
             // Membros CGPNH do MS
             $ailana   = ['AL', 'MA', 'PI', 'RN'];
@@ -1281,81 +1343,20 @@ class AcolheSUS {
 
             // TODO: refatorar esse tanto de if
             if (in_array($estado, $ailana)) {
-                $email = ['ailana.lira@saude.gov.br'];
+                $email[] = 'ailana.lira@saude.gov.br';
             } else if(in_array($estado, $diego)) {
-                // $email = 'diegop.santos@saude.gov.br';
-                $email = ['dpscarao@hotmail.com'];
+                $email[] = 'dpscarao@hotmail.com';
             } else if(in_array($estado, $danyelle)) {
-                $email = ['danyelle.cavalcante@saude.gov.br'];
+                $email[] = 'danyelle.cavalcante@saude.gov.br';
             } else if(in_array($estado, $marilia)) {
-                // $email = 'marilia.palacio@saude.gov.br';
-                $email = ['mariliabpalacio@gmail.com'];
+                $email[] = 'mariliabpalacio@gmail.com';
             } else if (in_array($estado, $janaina)) {
-                $email = ['janarcardoso@gmail.com'];
+                $email[] = 'janarcardoso@gmail.com';
             } else if (in_array($estado,$julimar)) {
-                $email = ['julimar.barros@saude.gov.br'];
+                $email[] = 'julimar.barros@saude.gov.br';
             }
 
-            $sql = "SELECT * FROM $wpdb->post WHERE post_type='poster' and ID=$form_id;";
-            $poster = $wpdb->get_results($sql);
-
-            if(!empty($poster))
-            {
-                switch ($estado)
-                {
-                    case 'AC':
-                        $email = ["janarcardoso@gmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'AL':
-                        $email = ["danyelle.cavalcante@saude.gov.br", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'AM':
-                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'AP':
-                        $email = ["dorigica@gmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'BA':
-                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'CE':
-                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'DF':
-                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'MA':
-                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'MG':
-                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'MS':
-                        $email = ["danyelle.cavalcante@saude.gov.br", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'MT':
-                        $email = ["dorigica@gmail.com", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'PA':
-                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'PB':
-                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'PI':
-                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'SC':
-                        $email = ["mariliabpalacio@gmail.com", "flaviaborgesleite@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'RN':
-                        $email = ["mariliabpalacio@gmail.com", "gilbertoscarazatti7@gmail.com", "andre2ar@outlook.com"];
-                        break;
-                    case 'TO':
-                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com", "andre2ar@outlook.com"];
-                        break;
-                }
-            }
+            $email[] = 'andre2ar@outlook.com';
         }
 
         return $email;
