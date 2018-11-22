@@ -212,14 +212,6 @@ jQuery( function( $ ) {
     var fileInput = document.querySelector("input[type=file]");
     if (fileInput) {
         fileInput.addEventListener('change', function (e) {
-            var result = sessionStorage.getItem('rhs_input_file');
-            if(!result)
-            {
-                result = [];
-            }else{
-                result = JSON.parse(result);
-            }
-
             for(var file of fileInput.files)
             {
                 (function (file) {
@@ -227,8 +219,41 @@ jQuery( function( $ ) {
                     reader.onload = (function (file) {
                         var name = file.name;
                         return function (e){
-                            result.push({name: name, file: reader.result});
-                            sessionStorage.setItem('rhs_input_file', JSON.stringify(result));
+                            window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+                            window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+                            window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+                            if (window.indexedDB) {
+                                const dbname = "rhs_files", dbversion = 1, tbname = "rhs_attachements";
+                                var request = indexedDB.open(dbname, dbversion);
+
+                                /**** Adiciona a imagem de um arquivo pdf ao banco quando ele é criado ****/
+                                request.onupgradeneeded = function(event) {
+                                    var db = event.target.result;
+
+                                    var objectStore = db.createObjectStore(tbname, { keyPath: "name" });
+                                    objectStore.createIndex("file", "file", { unique: false });
+
+                                    objectStore.transaction.oncomplete = function(event) {
+                                        // Armazenando valores no novo objectStore.
+                                        var ObjectStore = db.transaction(tbname, "readwrite").objectStore(tbname);
+                                    }
+                                };
+
+                                //Banco aberto com sucesso
+                                request.onsuccess = function(event)
+                                {
+                                    var db = event.target.result;
+                                    var transaction = db.transaction([tbname], "readwrite");
+                                    var objectStore = transaction.objectStore(tbname);
+
+                                    var addObject = objectStore.add({name: name, file: reader.result});
+                                    addObject.onsuccess = function()
+                                    {
+                                        console.log("saved")
+                                    };
+                                };
+                            }
                         }
                     })(file);
 
@@ -385,34 +410,53 @@ jQuery( function( $ ) {
         var form = document.querySelector('div.caldera-grid > form'),
             formId = form.dataset.formId;
 
-        //Files
-        var fileInput = document.querySelector("input[type=file]");
-        if (fileInput) {
-            var input_file = JSON.parse(sessionStorage.getItem('rhs_input_file'));
-
-            all_inputs.append("file_input_id", fileInput.name);
-            all_inputs.append("file_value", sessionStorage.getItem('rhs_input_file'));
-        }
-
         all_inputs.append('action', 'acolhesus_save_for_later');
         all_inputs.append('formId', formId);
 
-        //----------------- Send by AJAX -------------------------------//
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function()
-        {
-            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            {
-                sessionStorage.removeItem('rhs_input_file');
-                swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000);
-            }
-        };
+        //Files
+        var fileInput = document.querySelector("input[type=file]");
+        if (fileInput) {
+            //IndexedDB
+            window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+            window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+            window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
-        xmlHttp.open("post", acolhesus.ajax_url);
-        xmlHttp.send(all_inputs);
+            if(window.indexedDB)
+            {
+                const dbname = "rhs_files", dbversion = 1, tbname = "rhs_attachements";
+                var request = indexedDB.open(dbname, dbversion);
+
+                request.onsuccess = function (event) {
+                    db = event.target.result;
+
+                    var transaction = db.transaction([tbname], "readwrite");
+                    var objectStore = transaction.objectStore(tbname);
+
+                    var IDBRequest = objectStore.getAll();
+                    IDBRequest.onsuccess = function (event) {
+                        all_inputs.append("file_input_id", fileInput.name);
+                        all_inputs.append("file_value", JSON.stringify(IDBRequest.result));
+
+                        //----------------- Send by AJAX -------------------------------//
+                        var xmlHttp = new XMLHttpRequest();
+                        xmlHttp.onreadystatechange = function()
+                        {
+                            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                            {
+                                swal("Formulário salvo com sucesso!", "Você pode continuar a preenchê-lo posteriormente antes de enviar", "success");
+                                setTimeout(function () {
+                                    //TODO: Delete previously elements
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        };
+
+                        xmlHttp.open("post", acolhesus.ajax_url);
+                        xmlHttp.send(all_inputs);
+                    }
+                }
+            }
+        }
     }
 
     function get_save(query, all_inputs) {

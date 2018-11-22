@@ -10,7 +10,6 @@
  */
 
 require_once "acolhesus-common.php";
-
 class AcolheSUS {
 
     use AcolheSUSCommon;
