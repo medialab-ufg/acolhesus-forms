@@ -287,7 +287,8 @@ class AcolheSUS {
     function email_message($notify_message, $comment_id){
         $post = get_post($_POST['comment_post_ID']);
         $post_title = $post->post_title;
-        $author_name = get_the_author_meta('display_name', $post->post_author);
+        $comment = get_comment($comment_id);
+        $author_name = $comment->comment_author;
         $form_link = get_permalink($_POST['comment_post_ID']);
         ob_start();
         ?>
