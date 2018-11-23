@@ -262,6 +262,10 @@ class AcolheSUS {
         add_filter( 'comment_moderation_recipients', array(&$this, 'send_email'), 11, 2 );
 
         add_filter( 'comment_notification_recipients', array(&$this, 'send_email'), 11, 2 );
+
+        add_filter('comment_moderation_text', array(&$this, 'email_message'), 11, 2);
+
+        add_filter('comment_notification_text', array(&$this, 'email_message'), 11, 2);
     }
 
     function send_email($emails, $comment_id)
@@ -280,25 +284,22 @@ class AcolheSUS {
         return $emails;
     }
 
-    /*function append_content_to_mail($mail, $data, $form)
-    {
-        if (isset($_POST[self::ANSWER_ID])) {
-            $id = sanitize_text_field($_POST[self::ANSWER_ID]);
+    function email_message($notify_message, $comment_id){
+        $post = get_post($_POST['comment_post_ID']);
+        $post_title = $post->post_title;
+        $author_name = get_the_author_meta('display_name', $post->post_author);
+        $form_link = get_permalink($_POST['comment_post_ID']);
+        ob_start();
+        ?>
+        <h3>Novo comentário</h3>
+        <p>
+            O usuário <?php echo $author_name;?> comentou <strong><?php echo $_POST['comment']?></strong> na postagem <a href="<?php echo $form_link;?>"> "<?php echo $post_title; ?>"</a>.
+        </p>
+        <?php
+        $notify_message = ob_get_clean();
 
-            $emails = $this->get_forward_mail($id);
-            foreach($emails as $email)
-            {
-                $mail['recipients'][] = $email;
-            }
-
-            $form_link = get_permalink($id);
-            if ($form_link) {
-                $mail['message'] = $mail['message'] . "<br><br> Veja o formulário completo no link: $form_link";
-            }
-
-            return $mail;
-        }
-    }*/
+        return $notify_message;
+    }
 
     private function get_forward_mail($form_id)
     {
