@@ -644,7 +644,7 @@ class AcolheSUS {
         }
         ?>
         <div class="matriz-cenario-single-report">
-            <p>A referência técnica da CGPNH/SAS/MS para este campo é <?php echo $_POST['state']; ?>.
+            <p>A referência técnica da CGPNH/SAS/MS para este campo é <?php echo $data['A Referência estadual da CGPNH/SAS/MS']; ?>.
                 O campo de atuação atinge um total de <?php echo $count_cities; ?> municípios, que, em conjunto, representam uma população de <?php echo $populacao; ?> habitantes.
                 <?php echo $data['C'] ;?> profissionais estão alocados neste serviço.</p>
 
