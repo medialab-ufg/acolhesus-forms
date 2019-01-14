@@ -603,7 +603,12 @@ class AcolheSUS {
                 }
                 break;
             case 'matriz_cenario':
-                $html = $this->wrap_matriz_cenario_html($result, $post_id);
+                $new_result = [];
+                foreach($result as $r)
+                {
+                    $new_result[$r['title']] = $r['value'];
+                }
+                $html = $this->wrap_matriz_cenario_html($new_result, $post_id);
                 break;
             case 'plano_trabalho':
                 $html = $this->wrap_plano_trabalho_html($result, $_POST['report_type']);
@@ -636,8 +641,6 @@ class AcolheSUS {
             {
                 $count_cities = $r[0]['count'];
             }
-
-
         }
         ?>
         <div class="matriz-cenario-single-report">
