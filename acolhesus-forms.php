@@ -1299,6 +1299,7 @@ class AcolheSUS {
                     $file_content = end(explode("base64,", $file->file));
                     $file_content = base64_decode($file_content);
                     $path = $upload_dir['path']."/$file_name";
+                    $url_path = $path;
 
                     $i = 1;
                     while (file_exists($path))
