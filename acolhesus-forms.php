@@ -686,8 +686,12 @@ class AcolheSUS {
                 <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) <?php echo $data['1.1.5']."."; ?>
                     <?php if($data['1.1.5.1'] == 'Sim'){ ?>A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde. <?php } ?>
                     <?php if(!empty($data['1.1.5.1.1'])){?> Observações pertinentes <?php echo $data['1.1.5.1.1'].'.'; }?>
-                    *Existe listagem para as seguintes Unidades de Saúde: <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1']."."; ?>
-                    A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): <?php echo $data['1.1.5.3']."; ".$data['1.1.5.3.1']; ?>.</p>
+                    <?php if($data['1.1.5.2']){?>
+                    *Existe listagem para as seguintes Unidades de Saúde: <?php echo $data['1.1.5.2']; ?> <?php if($data['1.1.5.2.1']) { echo "; ".$data['1.1.5.2.1']; }?> .
+                    <?php } ?>
+                    <?php if($data['1.1.5.3']) {?>
+                    A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): <?php echo $data['1.1.5.3']; ?> <?php if($data['1.1.5.3.1']){ echo "; ".$data['1.1.5.3.1']; }?>.</p>
+                    <?php } ?>
             <?php } ?>
 
             <h4>1.2 Classificação de Risco</h4>
