@@ -694,9 +694,9 @@ class AcolheSUS {
 
             <p>
                 <?php if($data['1.2.1'] == 'Sim'){?>
-                    Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['1.2.1.1']; } ?>.
+                    Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['1.2.1.1']."."; } ?>
                 <?php if($data['1.2.2'] == 'Sim'){ ?>
-                    Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco:  <?php echo $data['1.2.2.1'] ?> <?php if($data['1.2.2.1.1']) echo '; '.$data['1.2.2.1.1']; } ?>.
+                    Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco:  <?php echo $data['1.2.2.1'] ?> <?php if($data['1.2.2.1.1']) echo '; '.$data['1.2.2.1.1']."."; } ?>
                 <?php if($data['1.2.3'] == 'Sim'){ ?>
                     O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde.
                 <?php } ?>
