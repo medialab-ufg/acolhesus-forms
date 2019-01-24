@@ -626,9 +626,6 @@ class AcolheSUS {
     {
         global $wpdb;
         ob_start();
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
 
         if($form_id)
         {
