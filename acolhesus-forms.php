@@ -648,8 +648,8 @@ class AcolheSUS {
         }
         ?>
         <div class="matriz-cenario-single-report">
-            <p>A referência técnica da CGPNH/SAS/MS para este campo é <?php echo $data['A Referência estadual da CGPNH/SAS/MS']; ?>.
-                O campo de atuação atinge um total de <?php echo $count_cities; ?> municípios, que, em conjunto, representam uma população de <?php echo $populacao; ?> habitantes.
+            <p>A referência técnica da CGPNH/SAS/MS para este campo é <strong><?php echo $data['A Referência estadual da CGPNH/SAS/MS']; ?></strong>.
+                O campo de atuação atinge um total de <strong><?php echo $count_cities; ?> municípios</strong>, que, em conjunto, representam uma população de <strong><?php echo $populacao; ?> habitantes</strong>.
                 <?php echo $data['C'] ;?> profissionais estão alocados neste serviço.</p>
 
             <h1 class="text-center">1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h1>
@@ -657,21 +657,21 @@ class AcolheSUS {
 
             <?php if($data['1.1.1'] == 'Sim'){?>
                 <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no Estado.
-                    A referência é <?php echo $data['1.1.1.1'];?>.</p>
+                    A referência é <strong><?php echo $data['1.1.1.1'];?></strong>.</p>
             <?php } ?>
 
             <?php if($data['1.1.2'] == 'Sim'){?>
                 <p>Foi implantado processo de Acolhimento no(s) serviço(s) que compõe(m) o projeto.
-                    Em  <?php echo $data['1.1.2.1'];?>.
+                    Em  <strong><?php echo $data['1.1.2.1'];?></strong>.
                     <?php if($data['1.1.2.2'] == 'Sim') {?>
                         A implantação foi parcial.
                     <?php } ?>
                     <?php if($data['1.1.2.3'] == 'Sim'){ ?>
                     Foram capacitados: <?php echo $data['1.1.2.3.1']; ?> <?php if($data['1.1.2.3.1.1']){ echo '; '.$data['1.1.2.3.1.1']; } ?> <?php if($data['1.1.2.3.1.2']){ echo '; '.$data['1.1.2.3.1.2'];} ?>.
                     <?php } ?>
-                    Foram construídos os fluxos internos do Acolhimento: <?php echo $data['1.1.2.4']; ?>.
+                    Foram construídos os fluxos internos do Acolhimento: <strong><?php echo $data['1.1.2.4']; ?></strong>.
                     <?php if($data['1.1.2.4.1.1']){?>
-                    De forma pactuada com as seguintes categorias profissionais: <?php echo $data['1.1.2.4.1.1']; ?>.</p>
+                    De forma pactuada com as seguintes categorias profissionais: <strong><?php echo $data['1.1.2.4.1.1']; ?></strong>.</p>
                     <?php } ?>
             <?php } ?>
 
@@ -683,10 +683,10 @@ class AcolheSUS {
         <?php } ?>
 
             <?php if($data['1.1.5'] != 'Não'){?>
-                <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) <?php echo $data['1.1.5']; ?>.
+                <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) <?php echo $data['1.1.5']."."; ?>
                     <?php if($data['1.1.5.1'] == 'Sim'){ ?>A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde. <?php } ?>
                     <?php if(!empty($data['1.1.5.1.1'])){?> Observações pertinentes <?php echo $data['1.1.5.1.1'].'.'; }?>
-                    *Existe listagem para as seguintes Unidades de Saúde: <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1']; ?> .
+                    *Existe listagem para as seguintes Unidades de Saúde: <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1']."."; ?>
                     A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): <?php echo $data['1.1.5.3']."; ".$data['1.1.5.3.1']; ?>.</p>
             <?php } ?>
 
@@ -710,7 +710,7 @@ class AcolheSUS {
 
             <p>
                 <?php if($data['2.1'] == 'Sim'){?>
-                    Os seguintes projetos de reforma ou adequações de layout e de mudanças de fluxos, que envolvem o serviço, foram construídos de forma cogerida e a partir da diretriz Ambiência da PNH: <?php echo $data['2.1.1']; ?>.
+                    Os seguintes projetos de reforma ou adequações de layout e de mudanças de fluxos, que envolvem o serviço, foram construídos de forma cogerida e a partir da diretriz Ambiência da PNH: <strong><?php echo $data['2.1.1']; ?></strong>.
                 <?php } ?>
                 <?php if($data['2.2'] == 'Sim'){?>
                     Os profissionais da engenharia e arquitetura da SES foram qualificados na diretriz ambiência da PNH [2.2.].
@@ -735,7 +735,7 @@ class AcolheSUS {
                 <?php } ?>
 
                 <?php if($data['3.1'] != 'Não'){?>
-                    A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <?php echo $data['3.2']?>.
+                    A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <strong><?php echo $data['3.2']?></strong>.
                 <?php } ?>
 
                 <?php if($data['3.3'] == 'Sim'){?>
@@ -753,13 +753,13 @@ class AcolheSUS {
 
             <p>
                 <?php if($data['4.1.1'] == 'Sim'){?>
-                    Existem os seguintes espaços coletivos/colegiados instituídos e com funcionamento sistemático efetivo na SES com plano de trabalho elaborado: <?php echo $data['4.1.1.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.1.2']; ?>.
+                    Existem os seguintes espaços coletivos/colegiados instituídos e com funcionamento sistemático efetivo na SES com plano de trabalho elaborado: <strong><?php echo $data['4.1.1.1']?></strong>. Sua forma de funcionamento é: <strong><?php echo $data['4.1.1.2']; ?></strong>.
                 <?php } ?>
                 <?php if($data['4.1.2'] == 'Sim'){?>
-                    Existem os seguintes espaços coletivos/colegiados instituídos nos serviços de saúde com plano de trabalho elaborado: <?php echo $data['4.1.2.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.2.2']; ?>.
+                    Existem os seguintes espaços coletivos/colegiados instituídos nos serviços de saúde com plano de trabalho elaborado: <strong><?php echo $data['4.1.2.1']?></strong>. Sua forma de funcionamento é: <strong><?php echo $data['4.1.2.2']; ?></strong>.
                 <?php } ?>
                 <?php if($data['4.1.1'] == 'Sim'){?>
-                    Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <?php echo $data['4.1.3.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.3.2']; ?>.
+                    Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <strong><?php echo $data['4.1.3.1']?></strong>. Sua forma de funcionamento é: <strong><?php echo $data['4.1.3.2']; ?></strong>.
                 <?php } ?>
             </p>
 
@@ -776,7 +776,7 @@ class AcolheSUS {
 
             <?php if($data['4.3.1'] == 'Sim'){?>
                 Existe articulação entre o campo de atuação e os demais pontos da RAS.
-                A articulação é feita entre as seguintes unidades e da seguinte forma: <?php echo $data['4.3.1.1']; ?>.
+                A articulação é feita entre as seguintes unidades e da seguinte forma: <strong><?php echo $data['4.3.1.1']; ?></strong>.
             <?php } ?>
 
             <?php if($data['4.3.2'] == 'Sim'){?>
@@ -795,7 +795,7 @@ class AcolheSUS {
                 O processo de trabalho é realizado de forma articulada e alinhada com as áreas /coordenações da SES com encontros programáticos.
             <?php } ?>
 
-            O processo metodológico de monitoramento e avaliação dos indicadores que compõem o planejamento da SES é o seguinte: <?php echo $data['4.4.1.2']?>.
+            O processo metodológico de monitoramento e avaliação dos indicadores que compõem o planejamento da SES é o seguinte: <strong><?php echo $data['4.4.1.2']?></strong>.
 
             <?php if($data['4.4.1.3'] == 'Sim'){?>
                 O processo de trabalho é realizado de forma articulada e alinhada com a Coordenação Estadual de Humanização com encontros programáticos.
