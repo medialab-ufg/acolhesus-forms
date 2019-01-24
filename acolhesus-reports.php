@@ -567,7 +567,18 @@ class AcolheSUSReports
         $sql_current_values = "SELECT value as value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."' AND field_id = '".$field_id."'";
         $result = $wpdb->get_results($sql_current_values, 'ARRAY_A');
         if(!empty($result))
-            return $result[0]['value'];
+        {
+            if(count($result) == 1)
+                return $result[0]['value'];
+            else {
+                foreach ($result as $r)
+                {
+                   $results_v[] = $r['value'];
+                }
+
+                return implode(', ', $results_v);
+            }
+        }
         else return false;
     }
 

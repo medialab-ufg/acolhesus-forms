@@ -555,7 +555,8 @@ class AcolheSUS {
                 'number',
                 'date_picker',
                 'dropdown',
-                'paragraph'
+                'paragraph',
+                'checkbox'
             ];
             foreach ($fields as $field_id => $campo) {
                 $tipo = $campo["type"];
@@ -574,7 +575,8 @@ class AcolheSUS {
                     }
                 }else if(in_array($tipo, $types))
                 {
-                    if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number' || $tipo === 'paragraph')
+                    if($tipo === 'toggle_switch' || $tipo === 'text' ||
+                        $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox')
                     {
                         $label = explode(' ', $campo['label'])[0];
                     }
@@ -665,7 +667,9 @@ class AcolheSUS {
                     <?php } ?>
                     Foram capacitados: gestores, trabalhadores, <?php echo $data['1.1.2.3.1'].'; '.$data['1.1.2.3.1.1'].'; '.$data['1.1.2.3.1.2']; ?> .
                     Foram construídos os fluxos internos do Acolhimento <?php echo $data['1.1.2.4']; ?>.
+                    <?php if($data['1.1.2.4.1.1']){?>
                     De forma pactuada com as seguintes categorias profissionais: <?php echo $data['1.1.2.4.1.1']; ?>.</p>
+                    <?php } ?>
             <?php } ?>
 
             <p>
@@ -689,7 +693,7 @@ class AcolheSUS {
                 <?php if($data['1.2.1'] == 'Sim'){?>
                     Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['1.2.1.1']; } ?>.
                 <?php if($data['1.2.2'] == 'Sim'){ ?>
-                    Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco:  <?php echo $data['1.2.2.1'].'; '. $data['1.2.2.1.1']; } ?>.
+                    Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco:  <?php echo $data['1.2.2.1'] ?> <?php if($data['1.2.2.1.1']) echo '; '.$data['1.2.2.1.1']; } ?>.
                 <?php if($data['1.2.3'] == 'Sim'){ ?>
                     O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde.
                 <?php } ?>
