@@ -665,8 +665,10 @@ class AcolheSUS {
                     <?php if($data['1.1.2.2'] == 'Sim') {?>
                         A implantação foi parcial.
                     <?php } ?>
-                    Foram capacitados: gestores, trabalhadores, <?php echo $data['1.1.2.3.1'].'; '.$data['1.1.2.3.1.1'].'; '.$data['1.1.2.3.1.2']; ?> .
-                    Foram construídos os fluxos internos do Acolhimento <?php echo $data['1.1.2.4']; ?>.
+                    <?php if($data['1.1.2.3'] == 'Sim'){ ?>
+                    Foram capacitados: <?php echo $data['1.1.2.3.1']; ?> <?php if($data['1.1.2.3.1.1']){ echo '; '.$data['1.1.2.3.1.1']; } ?> <?php if($data['1.1.2.3.1.2']){ echo '; '.$data['1.1.2.3.1.2'];} ?>.
+                    <?php } ?>
+                    Foram construídos os fluxos internos do Acolhimento: <?php echo $data['1.1.2.4']; ?>.
                     <?php if($data['1.1.2.4.1.1']){?>
                     De forma pactuada com as seguintes categorias profissionais: <?php echo $data['1.1.2.4.1.1']; ?>.</p>
                     <?php } ?>
