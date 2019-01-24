@@ -556,7 +556,8 @@ class AcolheSUS {
                 'date_picker',
                 'dropdown',
                 'paragraph',
-                'checkbox'
+                'checkbox',
+                'radio'
             ];
             foreach ($fields as $field_id => $campo) {
                 $tipo = $campo["type"];
@@ -576,7 +577,7 @@ class AcolheSUS {
                 }else if(in_array($tipo, $types))
                 {
                     if($tipo === 'toggle_switch' || $tipo === 'text' ||
-                        $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox')
+                        $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox' || $tipo === 'radio')
                     {
                         $label = explode(' ', $campo['label'])[0];
                     }
@@ -625,6 +626,9 @@ class AcolheSUS {
     {
         global $wpdb;
         ob_start();
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
 
         if($form_id)
         {
