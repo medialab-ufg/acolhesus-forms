@@ -554,7 +554,8 @@ class AcolheSUS {
                 'text',
                 'number',
                 'date_picker',
-                'dropdown'
+                'dropdown',
+                'paragraph'
             ];
             foreach ($fields as $field_id => $campo) {
                 $tipo = $campo["type"];
@@ -573,7 +574,7 @@ class AcolheSUS {
                     }
                 }else if(in_array($tipo, $types))
                 {
-                    if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number')
+                    if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number' || $tipo === 'paragraph')
                     {
                         $label = explode(' ', $campo['label'])[0];
                     }
