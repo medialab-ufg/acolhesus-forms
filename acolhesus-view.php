@@ -25,7 +25,7 @@ class AcolheSUSView extends AcolheSUS {
 
     private function get_home_URL()
     {
-       return home_url('formularios-acolhesus');
+        return home_url('formularios-acolhesus');
     }
 
     private function get_logo()
@@ -130,7 +130,7 @@ class AcolheSUSView extends AcolheSUS {
             $phase = sanitize_text_field($_GET['fase']);
             if (in_array($phase, array_keys($this->fases))) {
                 $forms = array_filter($forms, function($form) {
-                    return ($form["fase"] === sanitize_text_field($_GET['fase']));
+                    return (is_array($form["fase"]) ? in_array(sanitize_text_field($_GET['fase']), $form["fase"]) : ($form["fase"] === sanitize_text_field($_GET['fase'])));
                 });
             }
         }
@@ -140,9 +140,9 @@ class AcolheSUSView extends AcolheSUS {
 
     public function filterSelectedAxis(&$forms=[]) {
         if (isset($_GET['eixo']) && !empty($_GET['eixo'])) {
-             $eixo = sanitize_text_field($_GET['eixo']);
-             if (in_array($eixo, $this->eixos)) {
-                 $forms = array_filter($forms, function($f) { return $f["eixo"] === "todos"; });
+            $eixo = sanitize_text_field($_GET['eixo']);
+            if (in_array($eixo, $this->eixos)) {
+                $forms = array_filter($forms, function($f) { return $f["eixo"] === "todos"; });
             }
         }
 
@@ -166,7 +166,7 @@ class AcolheSUSView extends AcolheSUS {
             $anexos = $this->get_attachments($field["ID"]);
             if (is_array($anexos)) {
                 echo "<ul class='form_attachments cf-adv-preview-list'>";
-                    array_map(function($e) { $this->attach_style($e['id'],$e['value']); }, $anexos);
+                array_map(function($e) { $this->attach_style($e['id'],$e['value']); }, $anexos);
                 echo "</ul>";
             }
         }
@@ -174,6 +174,22 @@ class AcolheSUSView extends AcolheSUS {
         return $field;
     }
 
+	public function getDiligencesTitle($form) {
+		return isset($this->forms[$form]['diligencias']) ? $this->forms[$form]['diligencias'] : 'Diligências';
+	}
+	
+	public function getBackButtonURL($form) {
+		if ( "poster" === $form ) {
+			return get_post_type_archive_link($form);
+		}
+		
+		return home_url('formularios-acolhesus');
+	}
+	
+	public function canUserSeeAllStateLink($form) {
+		return current_user_can('acolhesus_cgpnh') && ("poster" != $form);
+	}
+	
     private function attach_style($id,$url) {
         if (!empty($id) && !empty($url)) {
             $filename = basename($url);

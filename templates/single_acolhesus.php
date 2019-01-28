@@ -9,6 +9,17 @@ $_view_perm = "editar_" . $post_type;
 $can_user_view = in_array($_view_perm, get_user_meta(get_current_user_id(), 'acolhesus_form_perms'));
 $is_new_form = get_post_meta($post_id, 'new_form', true);
 
+$forms_to_report = [
+    'matriz_p_criticos',
+    'matriz_cenario',
+    'plano_trabalho'
+];
+
+$forms_chart = [
+    'avaliacao_grupos',
+    'avaliacao_oficina'
+];
+
 if ($is_new_form) {
     echo "<input type='hidden' name='novo_form' value='true'>";
 }
@@ -17,11 +28,11 @@ if ($is_new_form) {
 <div class="acolhesus-form-container">
     <input type="hidden" id="form_type" value="<?php echo $post_type;?>">
     <div class="options">
-        <a href="<?php echo home_url('formularios-acolhesus'); ?>" class="btn btn-default voltar-home">
+        <a href="<?php echo $formView->getBackButtonURL($post_type); ?>" class="btn btn-default voltar-home">
             VOLTAR PARA TELA INICIAL
         </a>
 
-        <?php if (current_user_can('acolhesus_cgpnh')): ?>
+        <?php if ($formView->canUserSeeAllStateLink($post_type)): ?>
             <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>
         <?php endif; ?>
 
@@ -30,20 +41,48 @@ if ($is_new_form) {
                 Ver formulário
             </button>
             <?php
-            if($post_type === 'avaliacao_grupos' || $post_type === 'avaliacao_oficina')
+            if(in_array($post_type, $forms_chart))
             {
                 ?>
                 <button id="gen_charts" class="btn btn-primary" type="button"> <i class="fa fa-bar-chart" aria-hidden="true"></i>
                     Gerar gráfico
                 </button>
                 <?php
-            } else if($post_type === 'matriz_p_criticos' || $post_type === 'matriz_cenario')
+            } else if(in_array($post_type, $forms_to_report))
             {
-                ?>
-                <button id="gen_report" class="btn btn-primary" type="button"> <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                    Gerar relatório
-                </button>
-                <?php
+                if($post_type == 'plano_trabalho')
+                {
+                    ?>
+                    <div class="btn-group gen-report">
+                        <button id="gen_report" class="btn btn-primary" type="button"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                            Gerar relatório
+                        </button>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span> <span class="sr-only">Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="report_type" data-value="complete">
+                                <a href="javascript:void (0);" >
+                                    <i class="fa fa-file-text" aria-hidden="true"></i>
+                                    Completo
+                                </a>
+                            </li>
+                            <li class="report_type" data-value="compact">
+                                <a href="javascript:void (0);">
+                                    <i class="fa fa-file-o" aria-hidden="true"></i>
+                                    Compacto
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <?php
+                }else {
+                    ?>
+                    <button id="gen_report" class="btn btn-primary" type="button"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        Gerar relatório
+                    </button>
+                    <?php
+                }
             }
             ?>
         </div>
@@ -62,13 +101,14 @@ if ($is_new_form) {
         <?php the_content(); ?>
     </div>
     <div id="charts_set">
+        <input id="report_type" type="hidden" value="complete">
         <div id="chart"></div>
     </div>
 
     <div id="form-accordion">
 
         <?php if ($_possui_diligencias && (comments_open() || get_comments_number()) ) : ?>
-            <h3> Diligências </h3>
+            <h3> <?php echo $formView->getDiligencesTitle($post_type); ?> </h3>
             <div class="panel hidden-print">
                 <div class="panel-footer panel-comentarios"> <?php comments_template(); ?> </div>
             </div>

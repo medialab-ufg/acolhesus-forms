@@ -224,7 +224,11 @@ class AcolheSUSReports
                 $title = get_the_title($post_id);
                 $data = get_the_date('d/m/Y - G:i:s',$post_id);
                 $uf = get_post_meta($post_id, "acolhesus_campo",true);
-                $estado = $this->campos_completos[$uf];
+
+                if($uf)
+                    $estado = $this->campos_completos[$uf];
+                else $estado = '';
+
                 $f = get_post_meta($post_id, "acolhesus_fase",true);
 
                 if (!empty($f)) {
@@ -351,7 +355,7 @@ class AcolheSUSReports
 
                 ?>
                 <td><?php echo $ponto_critico_name; ?></td>
-                <td> <?php echo $acolheSUS->wrap_specific_in_html($ponto_critico_name, $ponto_critico_info); ?></td>
+                <td> <?php echo $acolheSUS->wrap_matriz_pontos_criticos_in_html($ponto_critico_name, $ponto_critico_info); ?></td>
                 </tr>
                 <?php
 
@@ -563,7 +567,18 @@ class AcolheSUSReports
         $sql_current_values = "SELECT value as value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."' AND field_id = '".$field_id."'";
         $result = $wpdb->get_results($sql_current_values, 'ARRAY_A');
         if(!empty($result))
-            return $result[0]['value'];
+        {
+            if(count($result) == 1)
+                return $result[0]['value'];
+            else {
+                foreach ($result as $r)
+                {
+                   $results_v[] = $r['value'];
+                }
+
+                return implode(', ', $results_v);
+            }
+        }
         else return false;
     }
 
@@ -637,7 +652,7 @@ class AcolheSUSReports
             $key = "acolhesus_campo";
         }
 
-        $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='$key' AND pm.meta_value='$value';";
+        $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' AND pm.meta_key='$key' AND pm.meta_value LIKE '%$value%';";
         $state_ids = $this->getSQLResults($sql, "total");
 
         $entry_ids = [];
@@ -684,7 +699,7 @@ class AcolheSUSReports
 
         if(!empty($phase))
         {
-            $phase_sql = "AND pm.meta_key='acolhesus_fase' AND pm.meta_value='".$phase."'";
+            $phase_sql = "AND pm.meta_key='acolhesus_fase' AND pm.meta_value LIKE '%".$phase."%'";
         }
 
         $sql = "SELECT ID FROM $this->posts p INNER JOIN $this->postmeta pm ON p.ID=pm.post_id AND p.post_type='$formType' $state_sql $phase_sql;";
@@ -763,7 +778,7 @@ class AcolheSUSReports
             $query = " INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
                        INNER JOIN ". $this->postmeta ." as mtc ON mtc.post_id = p.ID 
                             WHERE p.post_type='$formType'
-                            AND mta.meta_key='acolhesus_fase'  AND mta.meta_value='$phase'
+                            AND mta.meta_key ='acolhesus_fase'  AND mta.meta_value='%$phase%'
                             AND mtc.meta_key='acolhesus_campo' AND mtc.meta_value='$state' ";
 
             $sql = $base_sql . $query . $sufix_sql;
@@ -778,7 +793,7 @@ class AcolheSUSReports
 
             $query = " INNER JOIN ". $this->postmeta ." as mta ON mta.post_id = p.ID 
                             WHERE p.post_type='$formType'
-                            AND mta.meta_key='$key' AND mta.meta_value='$val'";
+                            AND mta.meta_key='$key' AND mta.meta_value LIKE '%$val%'";
 
             $sql = $base_sql . $query . $sufix_sql;
         }

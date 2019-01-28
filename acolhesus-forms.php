@@ -7,7 +7,7 @@
  * Version: 0.1
  * Author URI: https://github.com/medialab-ufg/
  * Text Domain: acolhesus-rhs
- *///
+ */
 
 require_once "acolhesus-common.php";
 
@@ -24,8 +24,19 @@ class AcolheSUS {
             'form_id' => '', // Setado via admin
             'slug' => 'matriz_cenario',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => 0
+        ],
+        'poster' => [
+            'labels' => [
+                'name' => 'Pôster Seminário AcolheSUS',
+                'singular_name' => 'Pôster Seminário AcolheSUS'
+            ],
+            'slug' => 'poster',
+            'uma_entrada_por_campo' => true,
+            'fase' => [],
+            'eixo' => 0,
+			'diligencias' => 'Curadoria'
         ],
         'ind_materno_infantil' => [
             'labels' => [
@@ -34,7 +45,7 @@ class AcolheSUS {
             ],
             'slug' => 'ind_materno_infantil',
             'uma_entrada_por_campo' => false,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => 0,
             'omitir_macrogestao' => true
         ],
@@ -45,31 +56,31 @@ class AcolheSUS {
             ],
             'slug' => 'indicadores_caps',
             'uma_entrada_por_campo' => false,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => 0,
             'omitir_macrogestao' => true
         ],
         'indicadores' => [
             'labels' => [
-                    'name' => 'Indicadores Hospital Geral',
-                    'singular_name' => 'Indicadores Hospital Geral'
-                ],
-                'slug' => 'indicadores',
-                'uma_entrada_por_campo' => false,
-                'fase' => 'fase_1',
-                'eixo' => 0,
-                'omitir_macrogestao' => true
+                'name' => 'Indicadores Hospital Geral',
+                'singular_name' => 'Indicadores Hospital Geral'
+            ],
+            'slug' => 'indicadores',
+            'uma_entrada_por_campo' => false,
+            'fase' => ['fase_1'],
+            'eixo' => 0,
+            'omitir_macrogestao' => true
         ],
         'indicadores_basica' => [
             'labels' => [
-                    'name' => 'Indicadores da Atenção Básica',
-                    'singular_name' => 'Indicadores da Atenção Básica'
-                ],
-                'slug' => 'indicadores_basica',
-                'uma_entrada_por_campo' => false,
-                'fase' => 'fase_1',
-                'eixo' => 0,
-                'omitir_macrogestao' => true
+                'name' => 'Indicadores da Atenção Básica',
+                'singular_name' => 'Indicadores da Atenção Básica'
+            ],
+            'slug' => 'indicadores_basica',
+            'uma_entrada_por_campo' => false,
+            'fase' => ['fase_1'],
+            'eixo' => 0,
+            'omitir_macrogestao' => true
         ],
         'visita_guiada' => [
             'labels' => [
@@ -78,7 +89,7 @@ class AcolheSUS {
             ],
             'slug' => 'visita_guiada',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => false,
             'can_not_save_incomplete' => true
         ],
@@ -89,7 +100,7 @@ class AcolheSUS {
             ],
             'slug' => 'fluxograma',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => false,
             'can_not_save_incomplete' => true
         ],
@@ -100,18 +111,8 @@ class AcolheSUS {
             ],
             'slug' => 'matriz_p_criticos',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_1',
+            'fase' => ['fase_1'],
             'eixo' => 'todos'
-        ],
-        'matriz_objetivos' => [
-            'labels' => [
-                'name' => 'Matriz de Objetivos e Atividades',
-                'singular_name' => 'Matriz de Objetivos e Atividades'
-            ],
-            'slug' => 'matriz_objetivos',
-            'uma_entrada_por_campo' => true,
-            'fase' => 0,
-            'eixo' => 0
         ],
         'plano_trabalho' => [
             'labels' => [
@@ -120,18 +121,8 @@ class AcolheSUS {
             ],
             'slug' => 'plano_trabalho',
             'uma_entrada_por_campo' => true,
-            'fase' => 'fase_2',
+            'fase' => ['fase_2'],
             'eixo' => 'todos'
-        ],
-        'efeitos_esperados' => [
-            'labels' => [
-                'name' => 'Monitoramento do Efeito Esperado e Inesperado',
-                'singular_name' => 'Efeitos Esperados e Inesperados'
-            ],
-            'slug' => 'efeitos_esperados',
-            'uma_entrada_por_campo' => true,
-            'fase' => 0,
-            'eixo' => 0
         ],
         'avaliacao_grupos' => [
             'labels' => [
@@ -140,7 +131,7 @@ class AcolheSUS {
             ],
             'slug' => 'avaliacao_grupos',
             'uma_entrada_por_campo' => false,
-            'fase' => 'macrogestao',
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -152,7 +143,7 @@ class AcolheSUS {
             ],
             'slug' => 'avaliacao_oficina',
             'uma_entrada_por_campo' => false,
-            'fase' => 'macrogestao',
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -164,7 +155,7 @@ class AcolheSUS {
             ],
             'slug' => 'relatorio_oficina',
             'uma_entrada_por_campo' => false,
-            'fase' => 'macrogestao',
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -176,7 +167,7 @@ class AcolheSUS {
             ],
             'slug' => 'memoria_reuniao',
             'uma_entrada_por_campo' => false,
-            'fase' => 'macrogestao',
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -188,7 +179,7 @@ class AcolheSUS {
             ],
             'slug' => 'atividades_dispersao',
             'uma_entrada_por_campo' => false,
-            'fase' => 0,
+            'fase' => ['fase_1', 'fase_2', 'fase_3', 'macrogestao'],
             'eixo' => false,
             'possui_validacao' => false,
             'omitir_macrogestao' => true
@@ -200,7 +191,7 @@ class AcolheSUS {
     const CGPNH = 'acolhesus_cgpnh';
 
     const ANSWER_ID = '_cf_cr_pst';
-    
+
     function __construct() {
         add_action('init', [&$this, 'register_post_types']);
 
@@ -250,8 +241,6 @@ class AcolheSUS {
 
         add_filter('acolhesus_add_entry_btn', array(&$this, 'acolhesus_add_entry_btn_callback'));
 
-        add_filter('caldera_forms_mailer', array(&$this, 'append_content_to_mail'), 10, 3);
-
         add_action('wp_ajax_acolhesus_save_for_later', array(&$this, 'ajax_callback_save_for_later'));
 
         add_action('caldera_forms_submit_post_process', array(&$this, 'get_old_attachment'), 10, 4 );
@@ -264,9 +253,181 @@ class AcolheSUS {
 
         add_action("wp_ajax_acolhesus_reports_chart", array(&$this, "ajax_callback_reports_charts"));
 
-        add_action("wp_ajax_acolhesus_reports_report", array(&$this, "ajax_callback_reports_report"));
+        add_action("wp_ajax_acolhesus_report_one", array(&$this, "ajax_callback_report_one"));
+
+        add_filter('restrict_manage_users', array(&$this, 'filter_users_cgpnh'));
+
+        //add_filter('caldera_forms_mailer', array(&$this, 'append_content_to_mail'), 10, 3);
+
+        add_filter( 'comment_moderation_recipients', array(&$this, 'send_email'), 11, 2 );
+
+        add_filter( 'comment_notification_recipients', array(&$this, 'send_email'), 11, 2 );
+
+        add_filter('comment_moderation_text', array(&$this, 'email_message'), 11, 2);
+
+        add_filter('comment_notification_text', array(&$this, 'email_message'), 11, 2);
     }
 
+    function send_email($emails, $comment_id)
+    {
+        if(isset($_POST['comment_post_ID']))
+        {
+            $id = sanitize_text_field($_POST['comment_post_ID']);
+            $emails_list = $this->get_forward_mail($id);
+
+            foreach($emails_list as $email)
+            {
+                $emails[] = $email;
+            }
+        }
+
+        return $emails;
+    }
+
+    function email_message($notify_message, $comment_id){
+        $post = get_post($_POST['comment_post_ID']);
+        $post_title = $post->post_title;
+        $comment = get_comment($comment_id);
+        $author_name = $comment->comment_author;
+        $form_link = get_permalink($_POST['comment_post_ID']);
+        ob_start();
+        ?>
+        <h3>Novo comentário</h3>
+        <p>
+            O usuário <?php echo $author_name;?> comentou <strong><?php echo $_POST['comment']?></strong> na postagem <a href="<?php echo $form_link;?>"> "<?php echo $post_title; ?>"</a>.
+        </p>
+        <?php
+        $notify_message = ob_get_clean();
+
+        return $notify_message;
+    }
+
+    private function get_forward_mail($form_id)
+    {
+        global $wpdb;
+        if (is_null($form_id)) {
+            $form_id = $_POST[self::ANSWER_ID];
+        }
+
+        $_entry_id = get_post_meta($form_id, '_entry_id', true);
+        $sql = "SELECT post.meta_value as estado from $wpdb->postmeta post JOIN $wpdb->postmeta postmeta 
+                ON post.post_id = postmeta.post_id 
+                where 
+                    (post.meta_key='acolhesus_campo' and postmeta.meta_key='_entry_id') 
+                        AND 
+                    postmeta.meta_value = '$_entry_id'";
+
+        $results = $wpdb->get_results($sql);
+        $email = [];
+
+        if(!empty($results))
+        {
+            $estado = $results[0]->estado;
+
+            $sql = "SELECT * FROM $wpdb->posts WHERE post_type='poster' and ID=$form_id;";
+            $poster = $wpdb->get_results($sql);
+
+            if(!empty($poster))
+            {
+                switch ($estado)
+                {
+                    case 'AC':
+                        $email = ["janarcardoso@gmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'AL':
+                        $email = ["danyelle.cavalcante@saude.gov.br", "drricardovolpe@globo.com"];
+                        break;
+                    case 'AM':
+                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'AP':
+                        $email = ["dorigica@gmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'BA':
+                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com"];
+                        break;
+                    case 'CE':
+                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'DF':
+                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'MA':
+                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com"];
+                        break;
+                    case 'MG':
+                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'MS':
+                        $email = ["danyelle.cavalcante@saude.gov.br", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'MT':
+                        $email = ["dorigica@gmail.com", "drricardovolpe@globo.com"];
+                        break;
+                    case 'PA':
+                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'PB':
+                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com"];
+                        break;
+                    case 'PI':
+                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'SC':
+                        $email = ["mariliabpalacio@gmail.com", "flaviaborgesleite@gmail.com"];
+                        break;
+                    case 'RN':
+                        $email = ["mariliabpalacio@gmail.com", "gilbertoscarazatti7@gmail.com"];
+                        break;
+                    case 'TO':
+                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com"];
+                        break;
+                }
+            }
+
+            // Membros CGPNH do MS
+            $ailana   = ['AL', 'MA', 'PI', 'RN'];
+            $diego    = ['AL', 'AM', 'BA'];
+            $danyelle = ['AC', 'TO', 'SC'];
+            $janaina  = ['DF'];
+            // $hiojuma  = ['CE', 'PB']; // Saiu do projeto. Ver quem assumiu esses UFs
+            $marilia  = ['MT', 'PA'];
+            $julimar = ['MG'];
+
+            // TODO: refatorar esse tanto de if
+            if (in_array($estado, $ailana)) {
+                $email[] = 'ailana.lira@saude.gov.br';
+            } else if(in_array($estado, $diego)) {
+                $email[] = 'dpscarao@hotmail.com';
+            } else if(in_array($estado, $danyelle)) {
+                $email[] = 'danyelle.cavalcante@saude.gov.br';
+            } else if(in_array($estado, $marilia)) {
+                $email[] = 'mariliabpalacio@gmail.com';
+            } else if (in_array($estado, $janaina)) {
+                $email[] = 'janarcardoso@gmail.com';
+            } else if (in_array($estado,$julimar)) {
+                $email[] = 'julimar.barros@saude.gov.br';
+            }
+        }
+
+        return $email;
+    }
+
+    function filter_users_cgpnh(){
+        global $pagenow;
+
+        if( is_admin() && $pagenow == 'users.php') {
+            print "<button style='margin-left: 5px' class='button'>
+                    <a style='color: #555; text-decoration: none' href='users.php?role=acolhesus_cgpnh'>CGPNH</a>
+                </button>";
+
+            print "<button style='margin-left: 5px' class='button'>
+                    <a style='color: #555; text-decoration: none' href='users.php?role=view_acolhesus'>GEL/GEE</a>
+                </button>";
+        }
+    }
+
+    /* Charts */
     function ajax_callback_reports_charts()
     {
         $formType = $_POST['form'];
@@ -278,7 +439,13 @@ class AcolheSUS {
         $acholheSUSReports = new AcolheSUSReports(); $result = [];
         $fields = $acholheSUSReports->getFormFields($formType);
 
-        if($formType === 'avaliacao_oficina' || $formType === 'avaliacao_grupos' || $formType === 'matriz_cenario')
+        $forms_to_chart = [
+            'avalicao_oficina',
+            'avaliacao_grupos',
+            'matriz_cenario'
+        ];
+
+        if(in_array($formType, $forms_to_chart))
         {
             $index = 'total'; $switch_index = '';
             foreach ($fields as $id => $campo) {
@@ -354,7 +521,9 @@ class AcolheSUS {
         }
     }
 
-    function ajax_callback_reports_report()
+
+    /*Reports especifics*/
+    function ajax_callback_report_one()
     {
         $formType = $_POST['form'];
         $post_id = sanitize_text_field($_POST['post_id']);
@@ -366,25 +535,285 @@ class AcolheSUS {
         wp_die();
     }
 
+    function get_specific_form_data($formType, $post_id)
+    {
+        $acholheSUSReports = new AcolheSUSReports(); $result = [];
+        $fields = $acholheSUSReports->getFormFields($formType);
+
+        $forms_to_report = [
+            'matriz_p_criticos',
+            'matriz_cenario',
+            'plano_trabalho'
+        ];
+
+        if(in_array($formType, $forms_to_report))
+        {
+            $index = '';
+            $types = [
+                'toggle_switch',
+                'text',
+                'number',
+                'date_picker',
+                'dropdown',
+                'paragraph',
+                'checkbox',
+                'radio'
+            ];
+            foreach ($fields as $field_id => $campo) {
+                $tipo = $campo["type"];
+                if ($tipo === "wysiwyg") {
+                    preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
+                    $index = $index[0];
+                    if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
+                    {
+                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($field_id,$post_id);
+                    }else
+                    {
+                        $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
+                        if(!empty($index))
+                            $result[$index][] = $data;
+                        else $result[] = $data;
+                    }
+                }else if(in_array($tipo, $types))
+                {
+                    if($tipo === 'toggle_switch' || $tipo === 'text' ||
+                        $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox' || $tipo === 'radio')
+                    {
+                        $label = explode(' ', $campo['label'])[0];
+                    }
+                    elseif ($tipo == 'date_picker' || $tipo == 'dropdown')
+                    {
+                        $label = $campo['label'];
+                    }
+
+                    $data = ['title' => $label, 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
+                    $result[] = $data;
+                }
+            }
+        }
+
+        return $result;
+    }
+
     function wrap_in_html($form_type, $result, $post_id)
     {
         $html = '';
-        if($form_type === 'matriz_p_criticos')
+        switch ($form_type)
         {
-            foreach ($result as $ponto_critico_name => $ponto_critico_info)
-            {
-                $html .= $this->wrap_specific_in_html($ponto_critico_name, $ponto_critico_info);
-            }
-        }else if($form_type === 'matriz_cenario')
-        {
-            $html = $this->wrap_matriz_cenario_html($result, $form_type, $post_id);
+            case 'matriz_p_criticos':
+                foreach ($result as $ponto_critico_name => $ponto_critico_info)
+                {
+                    $html .= $this->wrap_matriz_pontos_criticos_in_html($ponto_critico_name, $ponto_critico_info);
+                }
+                break;
+            case 'matriz_cenario':
+                $new_result = [];
+                foreach($result as $r)
+                {
+                    $new_result[$r['title']] = $r['value'];
+                }
+                $html = $this->wrap_matriz_cenario_html($new_result, $post_id);
+                break;
+            case 'plano_trabalho':
+                $html = $this->wrap_plano_trabalho_html($result, $_POST['report_type']);
+                break;
         }
 
         return $html;
     }
 
+    public function wrap_matriz_cenario_html($data, $form_id)
+    {
+        global $wpdb;
+        ob_start();
 
-    public function wrap_specific_in_html($ponto_critico_name, $ponto_critico_info)
+        if($form_id)
+        {
+            $sql = "SELECT sum(populacao) populacao from municipio where id in
+                  (SELECT meta_value from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id)";
+            $r = $wpdb->get_results($sql, ARRAY_A);
+            $populacao = 0;
+            if(!empty($r))
+            {
+                $populacao = $r[0]['populacao'];
+            }
+
+            $sql = "SELECT count(*) as count from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id";
+            $r = $wpdb->get_results($sql, ARRAY_A);
+            $count_cities = 0;
+            if(!empty($r))
+            {
+                $count_cities = $r[0]['count'];
+            }
+        }
+        ?>
+        <div class="matriz-cenario-single-report">
+            <p>A referência técnica da CGPNH/SAS/MS para este campo é <strong><?php echo $data['A Referência estadual da CGPNH/SAS/MS']; ?></strong>.
+                O campo de atuação atinge um total de <strong><?php echo $count_cities; ?> municípios</strong>, que, em conjunto, representam uma população de <strong><?php echo $populacao; ?> habitantes</strong>.
+                <?php echo $data['C'] ;?> profissionais estão alocados neste serviço.</p>
+
+            <h1 class="text-center">1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h1>
+            <h3 class="text-center">1.1 Acolhimento</h3>
+
+            <?php if($data['1.1.1'] == 'Sim'){?>
+                <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no Estado.
+                    A referência é <strong><?php echo $data['1.1.1.1'];?></strong>.</p>
+            <?php } ?>
+
+            <?php if($data['1.1.2'] == 'Sim'){?>
+                <p>Foi implantado processo de Acolhimento no(s) serviço(s) que compõe(m) o projeto.
+                    Em  <strong><?php echo $data['1.1.2.1'];?></strong>.
+                    <?php if($data['1.1.2.2'] == 'Sim') {?>
+                        A implantação foi parcial.
+                    <?php } ?>
+                    <?php if($data['1.1.2.3'] == 'Sim'){ ?>
+                    Foram capacitados: <?php echo $data['1.1.2.3.1']; ?> <?php if($data['1.1.2.3.1.1']){ echo '; '.$data['1.1.2.3.1.1']; } ?> <?php if($data['1.1.2.3.1.2']){ echo '; '.$data['1.1.2.3.1.2'];} ?>.
+                    <?php } ?>
+                    Foram construídos os fluxos internos do Acolhimento: <strong><?php echo $data['1.1.2.4']; ?></strong>.
+                    <?php if($data['1.1.2.4.1.1']){?>
+                    De forma pactuada com as seguintes categorias profissionais: <strong><?php echo $data['1.1.2.4.1.1']; ?></strong>.</p>
+                    <?php } ?>
+            <?php } ?>
+
+            <p>
+                <?php if($data['1.1.3'] == 'Sim') { ?>O usuário foi incluído no processo de implantação/implementação do Acolhimento. <?php } ?>
+                <?php if($data['1.1.4'] == "Sim"){ ?>
+                Existe avaliação de satisfação do usuário a partir das ações de Acolhimento implantadas.
+                Observações pertinentes:  <?php echo $data['1.1.4.1']; ?>.</p>
+        <?php } ?>
+
+            <?php if($data['1.1.5'] != 'Não'){?>
+                <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) <?php echo $data['1.1.5']."."; ?>
+                    <?php if($data['1.1.5.1'] == 'Sim'){ ?>A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde. <?php } ?>
+                    <?php if(!empty($data['1.1.5.1.1'])){?> Observações pertinentes <?php echo $data['1.1.5.1.1'].'.'; }?>
+                    <?php if($data['1.1.5.2']){?>
+                    *Existe listagem para as seguintes Unidades de Saúde: <?php echo $data['1.1.5.2']; ?> <?php if($data['1.1.5.2.1']) { echo "; ".$data['1.1.5.2.1']; }?> .
+                    <?php } ?>
+                    <?php if($data['1.1.5.3']) {?>
+                    A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): <?php echo $data['1.1.5.3']; ?> <?php if($data['1.1.5.3.1']){ echo "; ".$data['1.1.5.3.1']; }?>.</p>
+                    <?php } ?>
+            <?php } ?>
+
+            <h4>1.2 Classificação de Risco</h4>
+
+            <p>
+                <?php if($data['1.2.1'] == 'Sim'){?>
+                    Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['1.2.1.1']."."; } ?>
+                <?php if($data['1.2.2'] == 'Sim'){ ?>
+                    Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco:  <?php echo $data['1.2.2.1'] ?> <?php if($data['1.2.2.1.1']) echo '; '.$data['1.2.2.1.1']."."; } ?>
+                <?php if($data['1.2.3'] == 'Sim'){ ?>
+                    O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde.
+                <?php } ?>
+                <?php if($data['1.2.4'] == 'Sim'){ ?>
+                    A estratégia de monitoramento e avaliação dos indicadores de classificação/avaliação de risco e vulnerabilidade de risco utilizada é: <?php echo $data['1.2.4.1']; ?>.
+                    <?php if(!empty($data['1.2.4.2'])){ ?>Observações pertinentes: <?php echo $data['1.2.4.2'].'.'; } ?>
+                <?php } ?>
+            </p>
+
+            <h3>2 Eixo 2: Ambiência</h3>
+
+            <p>
+                <?php if($data['2.1'] == 'Sim'){?>
+                    Os seguintes projetos de reforma ou adequações de layout e de mudanças de fluxos, que envolvem o serviço, foram construídos de forma cogerida e a partir da diretriz Ambiência da PNH: <strong><?php echo $data['2.1.1']; ?></strong>.
+                <?php } ?>
+                <?php if($data['2.2'] == 'Sim'){?>
+                    Os profissionais da engenharia e arquitetura da SES foram qualificados na diretriz ambiência da PNH [2.2.].
+                <?php } ?>
+                <?php if($data['2.3'] == 'Sim'){?>
+                    Foram realizadas avaliações de satisfação dos usuários.
+                <?php } ?>
+                <?php if($data['2.4'] == 'Sim'){?>
+                    Foram realizadas avaliações de satisfação dos trabalhadores.
+                <?php } ?>
+                <?php if($data['2.5'] == 'Sim'){?>
+                    Foram realizadas avaliações de satisfação dos gestores.
+                <?php } ?>
+            </p>
+
+            <h3>3 Eixo 3: Qualificação Profissional</h3>
+
+
+            <p>
+                <?php if($data['3.1'] == 'Sim'){?>
+                    Existe mecanismo de educação permanente no Estado para gestores e trabalhadores, com ampliação de métodos de discussão e produção coletiva de conhecimento e qualificação do trabalho.
+                <?php } ?>
+
+                <?php if($data['3.1'] != 'Não'){?>
+                    A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <strong><?php echo $data['3.2']?></strong>.
+                <?php } ?>
+
+                <?php if($data['3.3'] == 'Sim'){?>
+                    A SES conta com apoiadores institucionais do Estado formados na PNH.
+                <?php } ?>
+
+                <?php if($data['3.1'] == 'Sim'){?>
+                    Existe uma rede/grupos para intercâmbio entre os níveis de atenção para compartilhamento das experiências.
+                <?php } ?>
+            </p>
+
+            <h3>4 Eixo 4: Gestão e Organização do Cuidado</h3>
+
+            <h4>4.1 Gestão compartilhada</h4>
+
+            <p>
+                <?php if($data['4.1.1'] == 'Sim'){?>
+                    Existem os seguintes espaços coletivos/colegiados instituídos e com funcionamento sistemático efetivo na SES com plano de trabalho elaborado: <strong><?php echo $data['4.1.1.1']?></strong>. Sua forma de funcionamento é: <strong><?php echo $data['4.1.1.2']; ?></strong>.
+                <?php } ?>
+                <?php if($data['4.1.2'] == 'Sim'){?>
+                    Existem os seguintes espaços coletivos/colegiados instituídos nos serviços de saúde com plano de trabalho elaborado: <strong><?php echo $data['4.1.2.1']?></strong>. Sua forma de funcionamento é: <strong><?php echo $data['4.1.2.2']; ?></strong>.
+                <?php } ?>
+                <?php if($data['4.1.1'] == 'Sim'){?>
+                    Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <strong><?php echo $data['4.1.3.1']?></strong>. Sua forma de funcionamento é: <strong><?php echo $data['4.1.3.2']; ?></strong>.
+                <?php } ?>
+            </p>
+
+            <h4>4.2 Garantia dos direitos dos usuários</h4>
+
+            <?php if($data['4.2.1'] == 'Sim'){?>
+                Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações na SES.
+            <?php } ?>
+            <?php if($data['4.1.2'] == 'Sim'){?>
+                Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações nas unidades de saúde.
+            <?php } ?>
+
+            <h4>4.3 Continuidade do cuidado</h4>
+
+            <?php if($data['4.3.1'] == 'Sim'){?>
+                Existe articulação entre o campo de atuação e os demais pontos da RAS.
+                A articulação é feita entre as seguintes unidades e da seguinte forma: <strong><?php echo $data['4.3.1.1']; ?></strong>.
+            <?php } ?>
+
+            <?php if($data['4.3.2'] == 'Sim'){?>
+                Existem instrumentos de referência e transferência do cuidado construídos e pactuados entre os municípios para a conformação da RAS.
+            <?php } ?>
+            <?php if($data['4.3.2.1'] == 'Sim'){?>
+                A construção e pactuação de instrumentos de referência e transferência foram produzidos com a participação dos gestores e trabalhadores dos serviços.
+            <?php } ?>
+
+            <h4>4.4 Monitoramento e avaliação</h4>
+
+            <?php if($data['4.4.1'] == 'Sim'){?>
+                Existe núcleo/coordenação de monitoramento e avaliação na SES.
+            <?php } ?>
+            <?php if($data['4.4.1.1'] == 'Sim'){?>
+                O processo de trabalho é realizado de forma articulada e alinhada com as áreas /coordenações da SES com encontros programáticos.
+            <?php } ?>
+
+            O processo metodológico de monitoramento e avaliação dos indicadores que compõem o planejamento da SES é o seguinte: <strong><?php echo $data['4.4.1.2']?></strong>.
+
+            <?php if($data['4.4.1.3'] == 'Sim'){?>
+                O processo de trabalho é realizado de forma articulada e alinhada com a Coordenação Estadual de Humanização com encontros programáticos.
+            <?php } ?>
+            <?php if($data['4.4.1.3.1'] == 'Sim'){?>
+                Por fim, agenda de encontros com a coordenação de humanização está acontecendo dentro do que foi pactuado.
+            <?php } ?>
+        </div>
+        <?php
+
+        return ob_get_clean();
+    }
+
+    public function wrap_matriz_pontos_criticos_in_html($ponto_critico_name, $ponto_critico_info)
     {
         ob_start();
         ?>
@@ -449,116 +878,139 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
-    public function wrap_matriz_cenario_html($data, $formType, $form_id)
+    public function wrap_plano_trabalho_html($data, $report_type)
     {
-        global $wpdb;
+        $data = $this->prepare_plano_trabalho($data);
         ob_start();
-
-        if($form_id)
-        {
-            $sql = "SELECT sum(populacao) populacao from municipio where id in
-                  (SELECT meta_value from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id)";
-            $r = $wpdb->get_results($sql, ARRAY_A);
-            $populacao = 0;
-            if(!empty($r))
-            {
-                $populacao = $r[0]['populacao'];
-            }
-
-            $sql = "SELECT count(*) as count from $wpdb->postmeta where meta_key='acolhesus_form_municipio' and post_id=$form_id";
-            $r = $wpdb->get_results($sql, ARRAY_A);
-            $count_cities = 0;
-            if(!empty($r))
-            {
-                $count_cities = $r[0]['count'];
-            }
-
-
+        if($report_type === 'complete'){
+            ?>
+            <div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="reports-header">
+                        <tr>
+                            <th> Atividades </th>
+                            <th> Responsavel </th>
+                            <th> Cronograma </th>
+                            <th> Situação </th>
+                            <th> Status </th>
+                            <th> Desempenho </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($data as $goal_name => $goal)
+                        {
+                            foreach ($goal as $activity_name => $activity)
+                            {
+                                ?>
+                                <tr>
+                                    <td><?php echo $activity_name;?></td>
+                                    <td><?php echo $activity['Responsável'];?></td>
+                                    <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
+                                    <td><?php echo $activity['Situação'];?></td>
+                                    <td><?php echo $activity['Status'];?></td>
+                                    <td>
+                                        <?php
+                                        $date_now = date("Y-m-d");
+                                        if ($date_now > $activity['Data final']) {
+                                            echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
+                                        }else{
+                                            echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php
+        }else {
+            ?>
+            <div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="reports-header">
+                        <tr>
+                            <th> Objetivo </th>
+                            <th> Atividades </th>
+                            <th> Responsavel </th>
+                            <th> Cronograma </th>
+                            <th> Situação </th>
+                            <th> Status </th>
+                            <th> Desempenho </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($data as $goal_name => $goal)
+                        {
+                            ?>
+                            <tr>
+                                <td rowspan="<?php echo count($goal);?>"><?php echo $goal_name;?></td>
+                            <?php
+                            $showtr = false;
+                            foreach ($goal as $activity_name => $activity)
+                            {
+                                if($showtr)
+                                {
+                                    echo "<tr>";
+                                }else $showtr = true;
+                                ?>
+                                    <td><?php echo $activity_name;?></td>
+                                    <td><?php echo $activity['Responsável'];?></td>
+                                    <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
+                                    <td><?php echo $activity['Situação'];?></td>
+                                    <td><?php echo $activity['Status'];?></td>
+                                    <td>
+                                        <?php
+                                        $date_now = date("Y-m-d");
+                                        if ($date_now > $activity['Data final']) {
+                                            echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
+                                        }else{
+                                            echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php
         }
-        ?>
-        <div class="matriz-cenario-single-report">
-            <p>A referência técnica da CGPNH/SAS/MS para este campo é <?php echo $_POST['state']; ?>.
-            O campo de atuação atinge um total de <?php echo $count_cities; ?> municípios, que, em conjunto, representam uma população de <?php echo $populacao; ?> habitantes.
-            <?php echo $data['C'] ;?> profissionais estão alocados neste serviço.</p>
-
-            <h1 class="text-center">1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h1>
-            <h3 class="text-center">1.1 Acolhimento</h3>
-
-            <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no Estado [1.1.1].
-            A referência é <?php echo $data['1.1.1.1']; ?>.</p>
-
-            <p>Foi implantado processo de Acolhimento no(s) serviço(s) que compõe(m) o projeto [1.1.2].
-            Em  <?php echo $data['1.1.2.1'];?>.
-            A implantação foi parcial [1.1.2.2].
-            Foram capacitados: gestores, trabalhadores, <?php echo $data['1.1.2.3.1'].'; '.$data['1.1.2.3.1.1'].'; '.$data['1.1.2.3.1.2']; ?> .
-            Foram construídos os fluxos internos do Acolhimento <?php echo $data['1.1.2.4']; ?>.
-            De forma pactuada com as seguintes categorias profissionais: <?php echo $data['1.1.2.4.1.1']; ?>.</p>
-
-            <p>O usuário foi incluído no processo de implantação/implementação do Acolhimento [1.1.3].
-            Existe avaliação de satisfação do usuário a partir das ações de Acolhimento implantadas [1.14].
-            Observações pertinentes:  <?php echo $data['1.1.4.1']; ?>.</p>
-
-            <p>Existe listagem de ações/ofertas de serviços para os usuários (carta de serviço) ____________ (construída pelo estado; construída pela gestão municipal; construída pelo estado e municípios; construída pelo serviço) [1.1.5].
-            A oferta de serviços foi construída com os trabalhadores e gestores das unidades de saúde [1.1.5.1]. Observações pertinentes <?php echo $data['1.1.5.1.1']; ?>.
-            *Existe listagem para as seguintes Unidades de Saúde: ________________________ (Atenção Básica (AB); Hospitalar Unidade Pronto Atendimento (UPA); Centro Especializado em Reabilitação (CRER); Centro de Atenção Psicossocial (CAPS); <?php echo $data['1.1.5.2']."; ".$data['1.1.5.2.1']; ?>).
-            A(s) forma(s) de disponibilização da listagem (escopo) de ações/ofertas de serviços para os usuários é (são) a(s) seguinte(s): ______________ (Em formato de cartilha para distribuição; Impressões da lista na recepção; Mídia instalada na recepção (televisão); Informações prestadas pela recepção/posso ajudar; <?php echo $data['1.1.5.3']."; ".$data['1.1.5.3.1']; ?>).</p>
-
-
-            <h4>1.2 Classificação de Risco</h4>
-
-            <p>Os serviços têm implantado protocolo de classificação/avaliação de risco e vulnerabilidade na porta de entrada [1.2.1]. O(s) protocolo(s) utilizado(s) é (são) o(s) seguinte(s): <?php echo $data['1.2.1.1']; ?>.
-            Os seguintes profissionais foram capacitados para a implantação do protocolo de classificação/avaliação de risco e vulnerabilidade de risco: <?php echo $data['']?> (gestores; trabalhadores; <?php echo $data['1.2.2.1'].'; '. $data['1.2.2.1.1']; ?>).
-            O protocolo foi pactuado pela equipe multiprofissional da unidade de saúde [1.2.3].
-            A estratégia de monitoramento e avaliação dos indicadores de classificação/avaliação de risco e vulnerabilidade de risco utilizada é: <?php echo $data['1.2.4.1']; ?>. Observações pertinentes: <?php echo $data['1.2.4.2']; ?>.</p>
-
-            <h3>2 Eixo 2: Ambiência</h3>
-
-            <p>Os seguintes projetos de reforma ou adequações de layout e de mudanças de fluxos, que envolvem o serviço, foram construídos de forma cogerida e a partir da diretriz Ambiência da PNH: <?php echo $data['2.1.1']; ?>.
-            Os profissionais da engenharia e arquitetura da SES foram qualificados na diretriz ambiência da PNH [2.2.].
-            Foram realizadas avaliações de satisfação dos usuários [2.3]. Foram realizadas avaliações de satisfação dos trabalhadores [2.4]. Foram realizadas avaliações de satisfação dos gestores [2.5].</p>
-
-
-            <h3>3 Eixo 3: Qualificação Profissional</h3>
-
-
-            <p>Existe mecanismo de educação permanente no Estado para gestores e trabalhadores, com ampliação de métodos de discussão e produção coletiva de conhecimento e qualificação do trabalho [3.1].
-
-            A coordenação de humanização do Estado tem plano de formação e intervenção em humanização de acordo com a PNH, <?php echo $data['']?> (inserido/alinhado com o plano de educação permanente Estadual; inserido/alinhado parcialmente com o plano de educação permanente Estadual; não inserido/alinhado com o plano de educação permanente Estadual [3.2].
-
-            A SES conta com apoiadores institucionais do Estado formados na PNH [3.3].
-
-            Existe uma rede/grupos para intercâmbio entre os níveis de atenção para compartilhamento das experiências [3.4].</p>
-
-            <h3>4 Eixo 4: Gestão e Organização do Cuidado</h3>
-
-            <h4>4.1 Gestão compartilhada</h4>
-
-            <p>Existem os seguintes espaços coletivos/colegiados instituídos e com funcionamento sistemático efetivo na SES com plano de trabalho elaborado: <?php echo $data['4.1.1.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.1.2']; ?>.
-
-            Existem os seguintes espaços coletivos/colegiados instituídos nos serviços de saúde com plano de trabalho elaborado: <?php echo $data['4.1.2.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.2.2']; ?>.
-
-            Existem os seguintes espaços constituídos de gestão e deliberação na região de saúde que compõe o projeto: <?php echo $data['4.1.3.1']?>. Sua forma de funcionamento é: <?php echo $data['4.1.3.2']; ?>.</p>
-
-            <h4>4.2 Garantia dos direitos dos usuários</h4>
-
-            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações na SES [4.2.1].
-
-            Existe ouvidoria institucional ou serviço implementado para escuta dos usuários, com sistema de divulgação dos resultados/avaliações nas unidades de saúde [4.2.2].
-
-            <h4>4.3 Continuidade do cuidado</h4>
-
-            Existe articulação entre o campo de atuação e os demais pontos da RAS [4.3.1]. A articulação é feita entre as seguintes unidades e da seguinte forma: <?php echo $data['4.3.1.1']; ?>.
-
-            Existem instrumentos de referência e transferência do cuidado construídos e pactuados entre os municípios para a conformação da RAS [4.3.2]. A construção e pactuação de instrumentos de referência e transferência foram produzidos com a participação dos gestores e trabalhadores dos serviços [4.3.2.1].
-
-            <h4>4.4 Monitoramento e avaliação</h4>
-
-            Existe núcleo/coordenação de monitoramento e avaliação na SES [4.4.1]. O processo de trabalho é realizado de forma articulada e alinhada com as áreas /coordenações da SES com encontros programáticos [4.4.1.1]. O processo metodológico de monitoramento e avaliação dos indicadores que compõem o planejamento da SES é o seguinte: <?php echo $data['4.4.1.2']?>.
-            O processo de trabalho é realizado de forma articulada e alinhada com a Coordenação Estadual de Humanização com encontros programáticos [4.4.1.3]. Por fim, agenda de encontros com a coordenação de humanização está acontecendo dentro do que foi pactuado [4.4.1.3.1].
-        </div>
-        <?php
 
         return ob_get_clean();
+    }
+
+    private function prepare_plano_trabalho($data)
+    {
+        $result = [];
+        $goal = $activity = false;
+        foreach ($data as $statement)
+        {
+            if(preg_match("/Objetivo/", $statement['title']))
+            {
+                $goal = $statement['value'];
+            }else if(preg_match("/Atividade/", $statement['title']))
+            {
+                $activity = $statement['value'];
+            }else if($goal && $activity)
+            {
+                $result[$goal][$activity][$statement['title']] = $statement['value'];
+            }
+        }
+
+        return $result;
     }
 
     function get_info_in_result($result, $needle)
@@ -576,37 +1028,6 @@ class AcolheSUS {
         }
 
         return $return;
-    }
-
-    function get_specific_form_data($formType, $post_id)
-    {
-        $acholheSUSReports = new AcolheSUSReports(); $result = [];
-        $fields = $acholheSUSReports->getFormFields($formType);
-
-        if($formType === 'matriz_p_criticos' || $formType === 'matriz_cenario')
-        {
-            $index = '';
-            foreach ($fields as $id => $campo) {
-                $tipo = $campo["type"];
-                if ($tipo === "wysiwyg") {
-                    preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
-                    $index = $index[0];
-                    if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
-                    {
-                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
-                    }else
-                    {
-                        $result[$index][] = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($id,$post_id)];
-                    }
-                }else if($tipo === 'toggle_switch' || $tipo === 'text' || $tipo === 'number')
-                {
-                    $label = explode(' ', $campo['label'])[0];
-                    $result[$label] = $acholheSUSReports->getAnswerToEspecific($id,$post_id);
-                }
-            }
-        }
-
-        return $result;
     }
 
     function ajax_callback_verify_indicadores_info(){
@@ -890,6 +1311,7 @@ class AcolheSUS {
                     $file_content = end(explode("base64,", $file->file));
                     $file_content = base64_decode($file_content);
                     $path = $upload_dir['path']."/$file_name";
+                    $url_path = $path;
 
                     $i = 1;
                     while (file_exists($path))
@@ -976,67 +1398,6 @@ class AcolheSUS {
         return $results;
     }
 
-    function append_content_to_mail($mail, $data, $form)
-    {
-        if (isset($_POST[self::ANSWER_ID])) {
-            $id = sanitize_text_field($_POST[self::ANSWER_ID]);
-
-            // $mail['recipients'][] = $this->get_forward_mail($id); # Descomentar quando passar pra produção
-
-            $form_link = get_permalink($id);
-            if ($form_link) {
-                $mail['message'] = $mail['message'] . "<br><br> Veja o formulário completo no link: $form_link";
-            }
-                
-            return $mail;
-        }
-    }
-
-    private function get_forward_mail($form_id)
-    {
-        if (is_null($form_id)) {
-            $form_id = $_POST[self::ANSWER_ID];
-        }
-
-        global $wpdb;
-        $_entry_id = get_post_meta($form_id, '_entry_id', true);
-        $sql = "SELECT post.meta_value as estado from $wpdb->postmeta post JOIN $wpdb->postmeta postmeta 
-                ON post.post_id = postmeta.post_id 
-                where 
-                    (post.meta_key='acolhesus_campo' and postmeta.meta_key='_entry_id') 
-                        AND 
-                    postmeta.meta_value = '$_entry_id'";
-
-        $results = $wpdb->get_results($sql);
-        $email = '';
-        if(!empty($results))
-        {
-            $estado = $results[0]->estado;
-
-            $ailana   = ['AL', 'MA', 'PI', 'RN'];
-            $diego    = ['MS', 'MT', 'RR'];
-            $danyelle = ['AC', 'MG', 'SC'];
-            $janaina  = ['DF', 'GO'];
-            // $hiojuma  = ['CE', 'PB']; // Saiu do projeto. Ver quem assumiu esses UFs
-            $marilia  = ['AM', 'BA', 'PA'];
-
-            // TODO: refatorar esse tanto de if
-            if (in_array($estado, $ailana)) {
-                $email = 'ailana.lira@saude.gov.br';
-            } else if(in_array($estado, $diego)) {
-                $email = 'diegop.santos@saude.gov.br';
-            } else if(in_array($estado, $danyelle)) {
-                $email = 'danyelle.cavalcante@saude.gov.br';
-            } else if(in_array($estado, $marilia)) {
-                $email = 'marilia.palacio@saude.gov.br';
-            } else if (in_array($estado, $janaina)) {
-                $email = 'janaina.cardoso@saude.gov.br'; // Conferir este e-mail
-            }
-        }
-
-        return $email;
-    }
-
     function delete_new_form_tag() {
         if (is_user_logged_in() && isset($_POST['post_id']) && is_numeric($_POST['post_id'])) {
             delete_post_meta($_POST['post_id'], 'new_form');
@@ -1071,16 +1432,16 @@ class AcolheSUS {
 
     function acolhesus_add_entry_btn_callback($type) {
         if (!is_null($type) && $this->can_add_entry($type)) {
-           $obj = get_post_type_object($type);
-           if ($obj instanceof WP_Post_Type && $this->can_user_edit($type)) {
-               $f_name = $obj->labels->singular_name; ?>
-               <div class="add-entry">
-                   <button class="add_acolhesus_entry btn" data-newTitle="<?php echo $f_name ?>" data-postType="<?php echo $type; ?>">
-                       Adicionar <?php echo $f_name ?>
-                   </button>
-               </div>
-               <?php
-           }
+            $obj = get_post_type_object($type);
+            if ($obj instanceof WP_Post_Type && $this->can_user_edit($type)) {
+                $f_name = $obj->labels->singular_name; ?>
+                <div class="add-entry">
+                    <button class="add_acolhesus_entry btn" data-newTitle="<?php echo $f_name ?>" data-postType="<?php echo $type; ?>">
+                        Adicionar <?php echo $f_name ?>
+                    </button>
+                </div>
+                <?php
+            }
         }
     }
 
@@ -1101,7 +1462,7 @@ class AcolheSUS {
                         $metas = [
                             'acolhesus_campo'=> $uf,
                             'acolhesus_eixo' => $form['eixo'],
-                            'acolhesus_fase' => $form['fase']
+                            'acolhesus_fase' => (is_array($form['fase']))? implode(',', $form['fase']) : $form['fase']
                         ];
                         $this->add_acolhesus_entry($title, $formName, 'publish', $metas);
                     }
@@ -1139,11 +1500,11 @@ class AcolheSUS {
 
         return $new_id;
     }
-    
+
     function register_post_types() {
-        
+
         foreach ($this->forms as $formName => $form) {
-            
+
             register_post_type($formName, array(
                 'labels' => $form['labels'],
                 'public' => true,
@@ -1210,7 +1571,7 @@ class AcolheSUS {
         return $content;
     }
 
-    private function can_save_incomplete($formType) {   
+    private function can_save_incomplete($formType) {
         $flag = 'can_not_save_incomplete';
         $form = $this->forms[$formType];
 
@@ -1370,10 +1731,10 @@ class AcolheSUS {
             }
         }
     }
-	
-	function get_campos_do_usuario_as_options($selected = '') {
-		$camposDoUsuario = $this->get_user_campos();
-		$options = '';
+
+    function get_campos_do_usuario_as_options($selected = '') {
+        $camposDoUsuario = $this->get_user_campos();
+        $options = '';
         if (is_single()) {
             $options = "<option value=''></option>";
         }
@@ -1386,23 +1747,23 @@ class AcolheSUS {
                 $options .= "> $campo_completo </option>\n";
             }
         }
-		return $options;
-	}
-	
-	function get_eixos_as_options($selected = '') {
+        return $options;
+    }
+
+    function get_eixos_as_options($selected = '') {
         $options = '';
         if (is_single()) {
             $options = "<option value=''></option>";
         }
-		foreach ($this->eixos as $eixo) {
+        foreach ($this->eixos as $eixo) {
             $options .= "<option value='$eixo'";
             $options .= selected($selected, $eixo, false);
             $options .= ">$eixo</option>\n";
         }
-		return $options;
-	}
+        return $options;
+    }
 
-	function get_forms_as_options($selected = '') {
+    function get_forms_as_options($selected = '') {
         $options = '';
         foreach ($this->forms as $_f) {
             $slug = $_f['slug'];
@@ -1417,9 +1778,9 @@ class AcolheSUS {
         return $options;
     }
 
-	function get_fases_as_options($selected = '') {
+    function get_fases_as_options($selected = '') {
         $options = '';
-		if (is_single()) {
+        if (is_single()) {
             $options = "<option value=''></option>";
 
             $type = get_post_type();
@@ -1428,15 +1789,15 @@ class AcolheSUS {
             }
         }
 
-		foreach ($this->fases as $slug => $fase) {
+        foreach ($this->fases as $slug => $fase) {
             $options .= "<option value='$slug'";
             $options .= selected($selected, $slug, false);
             $options .= "> $fase </option>\n";
         }
-		return $options;
-	}
+        return $options;
+    }
 
-	function get_filter_options($filter, $selected = '') {
+    function get_filter_options($filter, $selected = '') {
         $options = '';
         switch ($filter) {
             case 'campo':
@@ -1477,10 +1838,10 @@ class AcolheSUS {
             return $selected;
         }
     }
-	
+
     private function get_basic_info_form($is_locked = false) {
         global $post;
-        
+
         $attr  = ($is_locked) ? "disabled='disabled'": '';
         $attr .= " required";
         $type = get_post_type();
@@ -1508,7 +1869,7 @@ class AcolheSUS {
             $eixoHtml = "";
         }
 
-		return $camposHtml . $faseHtml . $eixoHtml;
+        return $camposHtml . $faseHtml . $eixoHtml;
     }
 
     private function get_fixed_select($title, $name, $attr, $post_id, $options=[]) {
@@ -1708,7 +2069,7 @@ class AcolheSUS {
     }
 
     function rewrite_rules( &$wp_rewrite ) {
-        
+
         $new_rules = array(
             'formularios-acolhesus' . "/?$" => "index.php?acolhe_sus=formularios",
         );
@@ -1780,43 +2141,43 @@ class AcolheSUS {
 
                 $camposDoUsuario = $this->get_user_campos();
                 $meta_query = [];
-				
-				if (isset($_GET['campo']) && !empty($_GET['campo'])) {
-				    $meta_query[] = [
-						'key' => self::CAMPO_META,
-						'value' => $_GET['campo'],
-					];
-				} else {
-					$meta_query[] = [
-						'key' => self::CAMPO_META,
-						'value' => $camposDoUsuario,
-						'compare' => 'IN'
-					];
-				}
 
-				/*
-				 * Comentar por enquanto, até definirmos exatamente como vai funcionar essa questão dos eixos
-				 * Até o momento, apenas dois forms terão eixo, e este valor não será armazenado no banco de dados
-				 *
-				if (isset($_GET['eixo']) && !empty($_GET['eixo'])) {
-					$meta_query[] = [
-						'key' => 'acolhesus_eixo',
-						'value' => $_GET['eixo'],
-					];
-				}
-				*/
-				
-				if (isset($_GET['fase']) && !empty($_GET['fase'])) {
-					$meta_query[] = [
-						'key' => 'acolhesus_fase',
-						'value' => $_GET['fase'],
-					];
-				}
-				
-				if (isset($_GET['usuario']) && !empty($_GET['usuario'])) {
-					$query->set( 'author', $_GET['usuario'] );
-				}
-				
+                if (isset($_GET['campo']) && !empty($_GET['campo'])) {
+                    $meta_query[] = [
+                        'key' => self::CAMPO_META,
+                        'value' => $_GET['campo'],
+                    ];
+                } else {
+                    $meta_query[] = [
+                        'key' => self::CAMPO_META,
+                        'value' => $camposDoUsuario,
+                        'compare' => 'IN'
+                    ];
+                }
+
+                /*
+                 * Comentar por enquanto, até definirmos exatamente como vai funcionar essa questão dos eixos
+                 * Até o momento, apenas dois forms terão eixo, e este valor não será armazenado no banco de dados
+                 *
+                if (isset($_GET['eixo']) && !empty($_GET['eixo'])) {
+                    $meta_query[] = [
+                        'key' => 'acolhesus_eixo',
+                        'value' => $_GET['eixo'],
+                    ];
+                }
+                */
+
+                if (isset($_GET['fase']) && !empty($_GET['fase'])) {
+                    $meta_query[] = [
+                        'key' => 'acolhesus_fase',
+                        'value' => $_GET['fase'],
+                    ];
+                }
+
+                if (isset($_GET['usuario']) && !empty($_GET['usuario'])) {
+                    $query->set( 'author', $_GET['usuario'] );
+                }
+
                 $query->set( 'posts_per_page', -1 );
 
                 $query->set('meta_query', $meta_query);
@@ -1850,7 +2211,7 @@ class AcolheSUS {
             "class" => $strings['button']['class'],
             "title" => $title,
             "status" => $strings['button']['text']
-        ];        
+        ];
 
         $_html  = "<a id='entry-$entry_id' class='toggle_lock_form_entries entry-status btn btn-default btn-" . $_attrs['class'] . "'";
         $_html .= "data-status='". $_attrs['status'] ."'  data-id='" . $entry_id . "' data-txt='" . $title . "' href='#'>";
