@@ -1767,6 +1767,7 @@ class AcolheSUS {
         $options = '';
         foreach ($this->forms as $_f) {
             $slug = $_f['slug'];
+            if($slug === 'poster') continue;
             if ($this->can_user_see($slug)) {
                 $nome = $_f['labels']['name'];
                 $options .= "<option value='$slug'";

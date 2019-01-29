@@ -49,7 +49,7 @@ else:
                     $formView->noForms();
                 } else {
                     foreach ($forms as $formName => $formAtts):
-                        if ($AcolheSUS->can_user_see($formName)):
+                        if ($AcolheSUS->can_user_see($formName) && $formAtts['slug'] !== 'poster'):
                             global $current_acolhesus_formtype;
                             $current_acolhesus_formtype = $formName;
                             $nome = $formAtts['labels']['name'];

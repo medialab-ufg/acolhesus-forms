@@ -71,7 +71,6 @@ class AcolheSUSView extends AcolheSUS {
         }
 
         foreach ($filtros as $filtro => $props) {
-
             // Manter assim apenas até deliberar sobre layout dos relatórios
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $opt = (isset($_POST[$filtro]) ) ? $_POST[$filtro] : '';
