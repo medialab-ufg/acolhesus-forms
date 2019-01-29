@@ -145,6 +145,10 @@ jQuery( function( $ ) {
             });
     }
 
+    $("#back").click(function () {
+        location = localStorage.getItem('rhs-filter-url');
+    });
+
     var $entry_cities = $('#entry_cities');
     if ( $entry_cities.length > 0 ) {
         var _cities = JSON.parse( $entry_cities.val() );

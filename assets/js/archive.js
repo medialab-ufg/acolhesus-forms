@@ -144,5 +144,9 @@ jQuery( function( $ ) {
             return markup;
         }
     });
+
+    $("#forms-filter").submit(function (event) {
+        localStorage.setItem('rhs-filter-url', location.href);
+    });
 });
 

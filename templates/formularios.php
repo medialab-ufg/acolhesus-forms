@@ -23,7 +23,7 @@ else:
 
             <?php if ($formView->user_can_see_states()): ?>
                 <div class="col-md-12 btn-wrapper no-padding">
-                    <input class="btn btn-default filter-forms" type="submit" value="Filtrar" form="forms-filter"/>
+                    <input class="btn btn-default filter-forms" type="submit" value="Filtrar" id="dofilter" form="forms-filter"/>
                 </div>
             <?php endif; ?>
 
