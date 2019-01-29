@@ -28,9 +28,14 @@ if ($is_new_form) {
 <div class="acolhesus-form-container">
     <input type="hidden" id="form_type" value="<?php echo $post_type;?>">
     <div class="options">
+        <a href="<?php echo $formView->getBackButtonURL($post_type); ?>" class="btn btn-default voltar-home">
+            VOLTAR PARA TELA INICIAL
+        </a>
+
         <a id="back" href="#" class="btn btn-default voltar-home">
             VOLTAR
         </a>
+
 
         <?php if ($formView->canUserSeeAllStateLink($post_type)): ?>
             <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>
