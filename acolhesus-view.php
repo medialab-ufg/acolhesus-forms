@@ -12,7 +12,6 @@ class AcolheSUSView extends AcolheSUS {
         'form'  => ['plural' => 'Todos os formulários', 'singular' => 'Formulário']
     ];
 
-
     function __construct()
     {
         // Construtor vazio para evitar repetir as operações da classe pai
@@ -202,4 +201,18 @@ class AcolheSUSView extends AcolheSUS {
         }
     }
 
+    private function useAlias($form_slug) {
+        $_big_titles = ["memoria_reuniao", "atividades_dispersao"];
+
+        return in_array($form_slug, $_big_titles);
+    }
+
+    public function getFormLinkText($form_slug, $attributes) {
+        $title = $attributes['labels']['name'];
+        if ($this->useAlias($form_slug) && isset($attributes['labels']['alias'])) {
+            $title = $attributes['labels']['alias'];
+        }
+
+        return "Ver todas as respostas de $title";
+    }
 }

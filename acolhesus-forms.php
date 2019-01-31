@@ -163,7 +163,8 @@ class AcolheSUS {
         'memoria_reuniao' => [
             'labels' => [
                 'name' => 'Videoconferências/Reunião da Gestão ou da Coordenação',
-                'singular_name' => 'Videoconferências/Reunião da Gestão ou da Coordenação'
+                'singular_name' => 'Videoconferências/Reunião da Gestão ou da Coordenação',
+                'alias' => 'Videoconferências'
             ],
             'slug' => 'memoria_reuniao',
             'uma_entrada_por_campo' => false,
@@ -175,7 +176,8 @@ class AcolheSUS {
         'atividades_dispersao' => [
             'labels' => [
                 'name' => 'Memória de Reunião/Atividades de Dispersão',
-                'singular_name' => 'Memória de Reunião/Atividades de Dispersão'
+                'singular_name' => 'Memória de Reunião/Atividades de Dispersão',
+                'alias' => 'Memória de Reunião'
             ],
             'slug' => 'atividades_dispersao',
             'uma_entrada_por_campo' => false,
