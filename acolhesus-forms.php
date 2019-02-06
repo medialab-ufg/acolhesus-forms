@@ -442,7 +442,7 @@ class AcolheSUS {
         $fields = $acholheSUSReports->getFormFields($formType);
 
         $forms_to_chart = [
-            'avalicao_oficina',
+            'avaliacao_oficina',
             'avaliacao_grupos',
             'matriz_cenario'
         ];
