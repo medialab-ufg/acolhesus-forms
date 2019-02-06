@@ -57,23 +57,24 @@ jQuery( function( $ ) {
                 closeOnConfirm: true
             },
             function(isConfirm) {
-            if(entry.id && entry.status && isConfirm) {
-                var data = {
-                    action: 'toggle_lock_single_form',
-                    form_id: entry.id
-                };
-                $.post(acolhesus.ajax_url, data).success(function(res) {
-                    var r = JSON.parse(res);
-                    if (r.success) {
-                        swal({ title: r.success });
-                        toggleEntryStatus(entry.id,r.list);
-                    }else
-                    {
-                        swal({ title: r.warning });
-                    }
-                });
-            }
-        });
+                if(entry.id && entry.status && isConfirm) {
+                    var data = {
+                        action: 'toggle_lock_single_form',
+                        form_id: entry.id
+                    };
+                    $.post(acolhesus.ajax_url, data).success(function(res) {
+                        var r = JSON.parse(res);
+                        if (r.success) {
+                            swal({ title: r.success });
+                            toggleEntryStatus(entry.id,r.list);
+                        }else
+                        {
+                            alert(r.warning);
+                            //swal({ title: r.warning });
+                        }
+                    });
+                }
+            });
     });
 
     $('.remove-form-entry').click(function () {
