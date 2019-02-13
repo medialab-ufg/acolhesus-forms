@@ -146,7 +146,7 @@ jQuery( function( $ ) {
         }
     });
 
-    $(".panel-title").click(function (event) {
+    $(".panel-title, .add_acolhesus_entry").click(function (event) {
         localStorage.setItem('rhs-filter-url', location.href);
     });
 });
