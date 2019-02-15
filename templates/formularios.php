@@ -80,7 +80,7 @@ else:
                                 <?php
                                     include(plugin_dir_path(__FILE__) . "loop-forms.php");
                                     else:
-                                        echo "<p class='text-center'> Nenhuma resposta de $nome! </p>";
+                                        echo "<div class=\"clear\"></div> <p class='text-center'> Nenhuma resposta de $nome! </p>";
                                     endif;
                                     ?>
                             </div>
