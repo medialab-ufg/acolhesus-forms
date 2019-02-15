@@ -1,4 +1,11 @@
 jQuery( function($) {
+    if($(".chart_type").length > 1)
+    {
+        $("#chart_type").val('pie');
+    }else {
+        $("#chart_type").val($(".chart_type").data('value'));
+    }
+
     $(".chart_type").click(function () {
         $("#chart_type").val($(this).data('value'));
         $("#gen_charts").click();
