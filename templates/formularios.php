@@ -64,21 +64,25 @@ else:
                                     'posts_per_page' => -1,
                                 ]);
                             }
+                            $formEntries = $wp_query->found_posts;
                             ?>
                             <h3 class="form-title"> <?php echo $nome; ?> </h3>
                             <div class="panel">
+
                                 <div class="ver-todos">
-                                    <a class="btn btn-default"
-                                       href="<?php echo $link; ?>"> <?php echo $ver_todos; ?> </a>
                                     <?php apply_filters('acolhesus_add_entry_btn', $current_acolhesus_formtype); ?>
                                 </div>
+
+                                <?php if ($formEntries > 0): ?>
+                                    <div class="ver-todos">
+                                        <a class="btn btn-default" href="<?php echo $link;?>"><?php echo $ver_todos;?></a>
+                                    </div>
                                 <?php
-                                if ($wp_query->found_posts > 0) {
                                     include(plugin_dir_path(__FILE__) . "loop-forms.php");
-                                } else {
-                                    echo "<p class='text-center'> Nenhuma resposta de $nome! </p>";
-                                }
-                                ?>
+                                    else:
+                                        echo "<p class='text-center'> Nenhuma resposta de $nome! </p>";
+                                    endif;
+                                    ?>
                             </div>
                         <?php
                         endif;
