@@ -21,7 +21,7 @@ jQuery( function( $ ) {
         {
             $(fase_selector).val(fase);
             sessionStorage.removeItem('rhs_fase');
-        }else $(fase_selector).val("fase_1");
+        }//else $(fase_selector).val("fase_1");
 
         var data = { action: 'delete_new_form_tag', post_id: current_post_id };
         $.post(acolhesus.ajax_url, data).success(function() {
@@ -320,7 +320,7 @@ jQuery( function( $ ) {
         var campo = get_state();
         if (campo.length > 0) {
             $(container).val(campo);
-        }else $(container).val('AC');
+        }//else $(container).val('AC');
     }
 
     function lock_state(container) {
