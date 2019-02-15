@@ -1525,7 +1525,7 @@ class AcolheSUS {
     }
 
     function limit_paragraphs_input($attrs) {
-        $attrs[ 'maxlength' ] = 500;
+        $attrs[ 'maxlength' ] = 6000;
         return $attrs;
     }
 
