@@ -631,13 +631,9 @@ class AcolheSUS {
                 $html = $this->wrap_plano_trabalho_html($result, $_POST['report_type']);
                 break;
             case 'relatorio_oficina':
-                $html = $this->wrap_relatorio_oficina_html($result);
-                break;
             case 'memoria_reuniao': //Vídeo conferência
-
-                break;
             case 'atividades_dispersao': //Memória de Reunião/Atividades de Dispersão
-
+                $html = $this->wrap_relatorio_mem_atividades_html($result);
                 break;
         }
 
@@ -1014,7 +1010,7 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
-    public function wrap_relatorio_oficina_html($result)
+    public function wrap_relatorio_mem_atividades_html($result)
     {
         ob_start();
         $start_date = array_shift($result)['value'];
@@ -1028,7 +1024,7 @@ class AcolheSUS {
             <?php
             foreach ($result as $r)
             {
-                echo "<h4>".$r['title']."</h4>";
+                echo "<h3>".$r['title']."</h3>";
                 echo "<p>".$r['value']."</p><br>";
             }
             ?>
@@ -1036,16 +1032,6 @@ class AcolheSUS {
         <?php
 
         return ob_get_clean();
-    }
-
-    public function wrap_memoria_reuniao_html()
-    {
-
-    }
-
-    public function wrap_atividades_dispersao_html()
-    {
-
     }
 
     private function prepare_plano_trabalho($data)
