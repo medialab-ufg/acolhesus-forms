@@ -30,7 +30,22 @@ if (current_user_can('administrator')) {
                         <input type="submit" class="btn btn-info filter-forms hidden-print" value="Gerar Relatório"/>
 
                         <?php
-                        if($form === 'avaliacao_grupos' || $form === 'avaliacao_oficina' || $form === 'matriz_cenario')
+                        $both_charts = [
+                            'avaliacao_grupos',
+                            'avaliacao_oficina'
+                        ];
+
+                        $bar_chart = [
+                            'relatorio_oficina',
+                            'memoria_reuniao', //Vídeo conferência
+                            'atividades_dipersao'//Memória de Reunião/Atividades de Dispersão
+                        ];
+
+                        $pie_chart = [
+                            'matriz_cenario'
+                        ];
+
+                        if(in_array($form, $both_charts) || in_array($form, $bar_chart))
                         {
                             ?>
                             <div class="btn-group">
@@ -39,22 +54,25 @@ if (current_user_can('administrator')) {
                                     <span class="caret"></span> <span class="sr-only">Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
+
+                                    <!--PIE CHART-->
+                                    <?php if(in_array($form, $both_charts) || in_array($form, $pie_chart)){ ?>
                                     <li class="chart_type" data-value="pie"><a href="javascript:void (0);" > <i class="fa fa-pie-chart" aria-hidden="true"></i>
                                             Pizza
                                         </a>
                                     </li>
-                                    <?php
-                                    if($form !== 'matriz_cenario') {
-                                        ?>
+                                    <?php } ?>
+
+                                    <!--BAR CHART-->
+                                    <?php if(in_array($form, $both_charts) || in_array($form, $bar_chart)) { ?>
                                         <li class="chart_type" data-value="bar">
                                             <a href="javascript:void (0);">
                                                 <i class="fa fa-bar-chart" aria-hidden="true"></i>
                                                 Barras
                                             </a>
                                         </li>
-                                        <?php
-                                    }
-                                    ?>
+                                    <?php } ?>
+
                                 </ul>
                             </div>
                             <?php

@@ -438,13 +438,17 @@ class AcolheSUS {
         $phase = $_POST['phase'];
         $state = $_POST['field'];
 
-        $acholheSUSReports = new AcolheSUSReports(); $result = [];
+        $result = [];
+        $acholheSUSReports = new AcolheSUSReports();
         $fields = $acholheSUSReports->getFormFields($formType);
 
         $forms_to_chart = [
             'avaliacao_oficina',
             'avaliacao_grupos',
-            'matriz_cenario'
+            'matriz_cenario',
+            'relatorio_oficina',
+            'memoria_reuniao', //Vídeo conferência
+            'atividades_dipersao'//Memória de Reunião/Atividades de Dispersão
         ];
 
         if(in_array($formType, $forms_to_chart))
@@ -473,9 +477,9 @@ class AcolheSUS {
                     $result[$switch_index][$campo['label']]['Não'] = intval($acholheSUSReports->getTotal($id, $tipo,"Não"));
                 }
             }
-        }
 
-        $this->get_percent($result, $formType, $chart_type);
+            $this->get_percent($result, $formType, $chart_type);
+        }
 
         echo json_encode($result);
         wp_die();
