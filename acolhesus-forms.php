@@ -454,6 +454,7 @@ class AcolheSUS {
         if(in_array($formType, $forms_to_chart))
         {
             $index = 'total'; $switch_index = '';
+
             foreach ($fields as $id => $campo) {
                 $tipo = $campo["type"];
                 if (in_array($tipo, $acholheSUSReports->report_fields))
@@ -549,7 +550,10 @@ class AcolheSUS {
         $forms_to_report = [
             'matriz_p_criticos',
             'matriz_cenario',
-            'plano_trabalho'
+            'plano_trabalho',
+            'relatorio_oficina',
+            'memoria_reuniao', //Vídeo conferência
+            'atividades_dispersao'//Memória de Reunião/Atividades de Dispersão
         ];
 
         if(in_array($formType, $forms_to_report))
@@ -603,6 +607,7 @@ class AcolheSUS {
 
     function wrap_in_html($form_type, $result, $post_id)
     {
+        //print_r($result);
         $html = '';
         switch ($form_type)
         {
@@ -622,6 +627,15 @@ class AcolheSUS {
                 break;
             case 'plano_trabalho':
                 $html = $this->wrap_plano_trabalho_html($result, $_POST['report_type']);
+                break;
+            case 'relatorio_oficina':
+
+                break;
+            case 'memoria_reuniao': //Vídeo conferência
+
+                break;
+            case 'atividades_dispersao': //Memória de Reunião/Atividades de Dispersão
+
                 break;
         }
 
@@ -996,6 +1010,21 @@ class AcolheSUS {
         }
 
         return ob_get_clean();
+    }
+
+    public function wrap_relatorio_oficina_html()
+    {
+
+    }
+
+    public function wrap_memoria_reuniao_html()
+    {
+
+    }
+
+    public function wrap_atividades_dispersao_html()
+    {
+
     }
 
     private function prepare_plano_trabalho($data)

@@ -12,7 +12,10 @@ $is_new_form = get_post_meta($post_id, 'new_form', true);
 $forms_to_report = [
     'matriz_p_criticos',
     'matriz_cenario',
-    'plano_trabalho'
+    'plano_trabalho',
+    'relatorio_oficina',
+    'memoria_reuniao', //Vídeo conferência
+    'atividades_dispersao'//Memória de Reunião/Atividades de Dispersão
 ];
 
 $forms_chart = [

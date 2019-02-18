@@ -35,17 +35,11 @@ if (current_user_can('administrator')) {
                             'avaliacao_oficina'
                         ];
 
-                        $bar_chart = [
-                            'relatorio_oficina',
-                            'memoria_reuniao', //Vídeo conferência
-                            'atividades_dipersao'//Memória de Reunião/Atividades de Dispersão
-                        ];
-
                         $pie_chart = [
                             'matriz_cenario'
                         ];
 
-                        if(in_array($form, $both_charts) || in_array($form, $bar_chart))
+                        if(in_array($form, $both_charts) || in_array($form, $pie_chart))
                         {
                             ?>
                             <div class="btn-group">
@@ -64,7 +58,7 @@ if (current_user_can('administrator')) {
                                     <?php } ?>
 
                                     <!--BAR CHART-->
-                                    <?php if(in_array($form, $both_charts) || in_array($form, $bar_chart)) { ?>
+                                    <?php if(in_array($form, $both_charts)) { ?>
                                         <li class="chart_type" data-value="bar">
                                             <a href="javascript:void (0);">
                                                 <i class="fa fa-bar-chart" aria-hidden="true"></i>
