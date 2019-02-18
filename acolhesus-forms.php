@@ -590,6 +590,8 @@ class AcolheSUS {
                         $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox' || $tipo === 'radio')
                     {
                         $label = explode(' ', $campo['label'])[0];
+                        if(strlen($label) == 1)
+                            $label = $campo['label'];
                     }
                     elseif ($tipo == 'date_picker' || $tipo == 'dropdown')
                     {
@@ -629,7 +631,7 @@ class AcolheSUS {
                 $html = $this->wrap_plano_trabalho_html($result, $_POST['report_type']);
                 break;
             case 'relatorio_oficina':
-
+                $html = $this->wrap_relatorio_oficina_html($result);
                 break;
             case 'memoria_reuniao': //Vídeo conferência
 
@@ -1012,9 +1014,28 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
-    public function wrap_relatorio_oficina_html()
+    public function wrap_relatorio_oficina_html($result)
     {
+        ob_start();
+        $start_date = array_shift($result)['value'];
+        $start_date = date("d/m/Y", strtotime($start_date));
+        $end_date = array_shift($result)['value'];
+        $end_date = date("d/m/Y", strtotime($end_date));
 
+        ?>
+        <div>
+            <h4>Realização de <strong><?php echo $start_date; ?></strong> até <strong><?php echo $end_date;?></strong> no período da <strong><?php echo strtolower(array_shift($result)['value']);?></strong></h4><br>
+            <?php
+            foreach ($result as $r)
+            {
+                echo "<h4>".$r['title']."</h4>";
+                echo "<p>".$r['value']."</p><br>";
+            }
+            ?>
+        </div>
+        <?php
+
+        return ob_get_clean();
     }
 
     public function wrap_memoria_reuniao_html()
