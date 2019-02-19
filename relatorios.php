@@ -39,7 +39,14 @@ if (current_user_can('administrator')) {
                             'matriz_cenario'
                         ];
 
-                        if(in_array($form, $both_charts) || in_array($form, $pie_chart))
+                        $line_chart = [
+                            'ind_materno_infantil',
+                            'indicadores_caps',
+                            'indicadores',//Indicadores Hospital Geral
+                            'indicadores_basica'
+                        ];
+
+                        if(in_array($form, $both_charts) || in_array($form, $pie_chart) || in_array($form, $line_chart))
                         {
                             ?>
                             <div class="btn-group">
@@ -63,6 +70,16 @@ if (current_user_can('administrator')) {
                                             <a href="javascript:void (0);">
                                                 <i class="fa fa-bar-chart" aria-hidden="true"></i>
                                                 Barras
+                                            </a>
+                                        </li>
+                                    <?php } ?>
+
+                                    <!--Line chart-->
+                                    <?php if(in_array($form, $line_chart)) { ?>
+                                        <li class="chart_type" data-value="line">
+                                            <a href="javascript:void (0);">
+                                                <i class="fa fa-bar-line" aria-hidden="true"></i>
+                                                Linhas
                                             </a>
                                         </li>
                                     <?php } ?>
