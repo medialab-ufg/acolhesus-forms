@@ -1,10 +1,6 @@
 jQuery( function($) {
-    if($(".chart_type").length > 1)
-    {
-        $("#chart_type").val('pie');
-    }else {
-        $("#chart_type").val($(".chart_type").data('value'));
-    }
+    //Defines chart type
+    $("#chart_type").val($(".chart_type").first().data('value'));
 
     $(".chart_type").click(function () {
         $("#chart_type").val($(this).data('value'));
@@ -67,6 +63,7 @@ jQuery( function($) {
             }
 
             var data = JSON.parse(r);
+            //console.log(data);
 
             var divs_count = 1;
             if(form === 'matriz_cenario'){

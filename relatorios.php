@@ -78,7 +78,7 @@ if (current_user_can('administrator')) {
                                     <?php if(in_array($form, $line_chart)) { ?>
                                         <li class="chart_type" data-value="line">
                                             <a href="javascript:void (0);">
-                                                <i class="fa fa-bar-line" aria-hidden="true"></i>
+                                                <i class="fa fa-line-chart" aria-hidden="true"></i>
                                                 Linhas
                                             </a>
                                         </li>

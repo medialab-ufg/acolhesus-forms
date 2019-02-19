@@ -446,9 +446,10 @@ class AcolheSUS {
             'avaliacao_oficina',
             'avaliacao_grupos',
             'matriz_cenario',
-            'relatorio_oficina',
-            'memoria_reuniao', //Vídeo conferência
-            'atividades_dipersao'//Memória de Reunião/Atividades de Dispersão
+            'ind_materno_infantil',
+            'indicadores_caps',
+            'indicadores',//Indicadores Hospital Geral
+            'indicadores_basica'
         ];
 
         if(in_array($formType, $forms_to_chart))
