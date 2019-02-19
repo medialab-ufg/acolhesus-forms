@@ -334,7 +334,7 @@ class AcolheSUS {
                 switch ($estado)
                 {
                     case 'AC':
-                        $email = ["janarcardoso@gmail.com", "gilbertoscarazatti7@gmail.com"];
+                        $email = ["gilbertoscarazatti7@gmail.com"];
                         break;
                     case 'AL':
                         $email = ["danyelle.cavalcante@saude.gov.br", "drricardovolpe@globo.com"];
@@ -355,7 +355,7 @@ class AcolheSUS {
                         $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
                         break;
                     case 'MA':
-                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com"];
+                        $email = ["drricardovolpe@globo.com"];
                         break;
                     case 'MG':
                         $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com"];
@@ -364,7 +364,7 @@ class AcolheSUS {
                         $email = ["danyelle.cavalcante@saude.gov.br", "gilbertoscarazatti7@gmail.com"];
                         break;
                     case 'MT':
-                        $email = ["dorigica@gmail.com", "drricardovolpe@globo.com"];
+                        $email = ["drricardovolpe@globo.com"];
                         break;
                     case 'PA':
                         $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com"];
@@ -376,13 +376,13 @@ class AcolheSUS {
                         $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
                         break;
                     case 'SC':
-                        $email = ["mariliabpalacio@gmail.com", "flaviaborgesleite@gmail.com"];
+                        $email = ["flaviaborgesleite@gmail.com"];
                         break;
                     case 'RN':
-                        $email = ["mariliabpalacio@gmail.com", "gilbertoscarazatti7@gmail.com"];
+                        $email = ["gilbertoscarazatti7@gmail.com"];
                         break;
                     case 'TO':
-                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com"];
+                        $email = ["drricardovolpe@globo.com"];
                         break;
                 }
             }
@@ -391,22 +391,17 @@ class AcolheSUS {
             $ailana   = ['AL', 'MA', 'PI', 'RN'];
             $diego    = ['AL', 'AM', 'BA'];
             $danyelle = ['AC', 'TO', 'SC'];
-            $janaina  = ['DF'];
+            // $janaina  = ['DF'];
             // $hiojuma  = ['CE', 'PB']; // Saiu do projeto. Ver quem assumiu esses UFs
-            $marilia  = ['MT', 'PA'];
+            // $marilia  = ['MT', 'PA'];
             $julimar = ['MG'];
 
-            // TODO: refatorar esse tanto de if
             if (in_array($estado, $ailana)) {
                 $email[] = 'ailana.lira@saude.gov.br';
             } else if(in_array($estado, $diego)) {
                 $email[] = 'dpscarao@hotmail.com';
             } else if(in_array($estado, $danyelle)) {
                 $email[] = 'danyelle.cavalcante@saude.gov.br';
-            } else if(in_array($estado, $marilia)) {
-                $email[] = 'mariliabpalacio@gmail.com';
-            } else if (in_array($estado, $janaina)) {
-                $email[] = 'janarcardoso@gmail.com';
             } else if (in_array($estado,$julimar)) {
                 $email[] = 'julimar.barros@saude.gov.br';
             }
