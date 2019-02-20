@@ -1596,7 +1596,7 @@ class AcolheSUS {
             $form = "<br>";
 
             $this->lock_form($_post_id, $formType);
-            $this->limit_paragraphs($formType);
+            // $this->limit_paragraphs($formType);
 
             $form .= $this->render_fixed_meta($_post_id, $formType);
 
