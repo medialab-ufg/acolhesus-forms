@@ -1604,7 +1604,7 @@ class AcolheSUS {
             $created_form = $this->get_entry_form($_post_id, $formType);
             $form .= $created_form;
 
-            if (!empty($created_form) && $this->can_save_incomplete($formType)) {
+            if (!$this->is_entry_locked($_post_id) && !empty($created_form) && $this->can_save_incomplete($formType)) {
                 $permissions = get_user_meta(get_current_user_id(), 'acolhesus_form_perms');
                 if(in_array("editar_".$formType, $permissions))
                 {
