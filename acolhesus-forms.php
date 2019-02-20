@@ -437,17 +437,20 @@ class AcolheSUS {
         $acholheSUSReports = new AcolheSUSReports();
         $fields = $acholheSUSReports->getFormFields($formType);
 
-        $forms_to_chart = [
+        $pie_bar = [
             'avaliacao_oficina',
             'avaliacao_grupos',
-            'matriz_cenario',
+            'matriz_cenario'
+        ];
+
+        $line = [
             'ind_materno_infantil',
             'indicadores_caps',
             'indicadores',//Indicadores Hospital Geral
             'indicadores_basica'
         ];
 
-        if(in_array($formType, $forms_to_chart))
+        if(in_array($formType, $pie_bar))
         {
             $index = 'total'; $switch_index = '';
 
@@ -476,6 +479,25 @@ class AcolheSUS {
             }
 
             $this->get_percent($result, $formType, $chart_type);
+        }
+        else if(in_array($formType, $line))
+        {
+            global $wpdb;
+            $sql = 'SELECT ID FROM '.$wpdb->posts.' where post_type="'.$formType.'"';
+            $ids = $wpdb->get_results($sql, ARRAY_A);
+
+            foreach ($ids as $id)
+            {
+                $id = $id['ID'];
+
+                $sql = 'SELECT meta_value FROM '.$wpdb->postmeta . ' WHERE post_id='.$id.' AND meta_key = "acolhesus_campo"';
+                $estado = $wpdb->get_results($sql, ARRAY_A);
+
+                if(!empty($estado))
+                {
+                    $result[$estado[0]['meta_value']][] = $this->get_specific_form_data($formType, $id);
+                }
+            }
         }
 
         echo json_encode($result);
@@ -543,60 +565,48 @@ class AcolheSUS {
         $acholheSUSReports = new AcolheSUSReports(); $result = [];
         $fields = $acholheSUSReports->getFormFields($formType);
 
-        $forms_to_report = [
-            'matriz_p_criticos',
-            'matriz_cenario',
-            'plano_trabalho',
-            'relatorio_oficina',
-            'memoria_reuniao', //Vídeo conferência
-            'atividades_dispersao'//Memória de Reunião/Atividades de Dispersão
+        $index = '';
+        $types = [
+            'toggle_switch',
+            'text',
+            'number',
+            'date_picker',
+            'dropdown',
+            'paragraph',
+            'checkbox',
+            'radio'
         ];
-
-        if(in_array($formType, $forms_to_report))
-        {
-            $index = '';
-            $types = [
-                'toggle_switch',
-                'text',
-                'number',
-                'date_picker',
-                'dropdown',
-                'paragraph',
-                'checkbox',
-                'radio'
-            ];
-            foreach ($fields as $field_id => $campo) {
-                $tipo = $campo["type"];
-                if ($tipo === "wysiwyg") {
-                    preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
-                    $index = $index[0];
-                    if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
-                    {
-                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($field_id,$post_id);
-                    }else
-                    {
-                        $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
-                        if(!empty($index))
-                            $result[$index][] = $data;
-                        else $result[] = $data;
-                    }
-                }else if(in_array($tipo, $types))
+        foreach ($fields as $field_id => $campo) {
+            $tipo = $campo["type"];
+            if ($tipo === "wysiwyg") {
+                preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
+                $index = $index[0];
+                if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
                 {
-                    if($tipo === 'toggle_switch' || $tipo === 'text' ||
-                        $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox' || $tipo === 'radio')
-                    {
-                        $label = explode(' ', $campo['label'])[0];
-                        if(strlen($label) == 1)
-                            $label = $campo['label'];
-                    }
-                    elseif ($tipo == 'date_picker' || $tipo == 'dropdown')
-                    {
-                        $label = $campo['label'];
-                    }
-
-                    $data = ['title' => $label, 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
-                    $result[] = $data;
+                    $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($field_id,$post_id);
+                }else
+                {
+                    $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
+                    if(!empty($index))
+                        $result[$index][] = $data;
+                    else $result[] = $data;
                 }
+            }else if(in_array($tipo, $types))
+            {
+                if($tipo === 'toggle_switch' || $tipo === 'text' ||
+                    $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox' || $tipo === 'radio')
+                {
+                    $label = explode(' ', $campo['label'])[0];
+                    if(strlen($label) == 1)
+                        $label = $campo['label'];
+                }
+                elseif ($tipo == 'date_picker' || $tipo == 'dropdown')
+                {
+                    $label = $campo['label'];
+                }
+
+                $data = ['title' => $label, 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
+                $result[] = $data;
             }
         }
 
