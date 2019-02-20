@@ -1560,6 +1560,7 @@ class AcolheSUS {
 
     }
 
+    /*
     function limit_paragraphs_input($attrs) {
         $attrs[ 'maxlength' ] = 6000;
         return $attrs;
@@ -1570,7 +1571,7 @@ class AcolheSUS {
         if (in_array($formType, $limit_paragraph)) {
             add_filter('caldera_forms_field_attributes-paragraph', array(&$this, 'limit_paragraphs_input'));
         }
-    }
+    } */
 
     function filter_the_content($content) {
         global $post;

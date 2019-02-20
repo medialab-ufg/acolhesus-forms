@@ -54,7 +54,6 @@ class AcolheSUSView extends AcolheSUS {
         echo '<div class="welcome hidden-print">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
     }
 
-
     public function renderFilters($showForms = true, $showAxis = true, $showPhase = true) {
         $filtros = $this->filtros;
         if (!$showForms) {
