@@ -495,7 +495,7 @@ class AcolheSUS {
 
                 if(!empty($estado))
                 {
-                    $result[$estado[0]['meta_value']][] = $this->get_specific_form_data($formType, $id);
+                    $result[$estado[0]['meta_value']][] = $this->get_specific_form_data($formType, $id, true);
                 }
             }
         }
@@ -560,7 +560,7 @@ class AcolheSUS {
         wp_die();
     }
 
-    function get_specific_form_data($formType, $post_id)
+    function get_specific_form_data($formType, $post_id, $keep_title = false)
     {
         $acholheSUSReports = new AcolheSUSReports(); $result = [];
         $fields = $acholheSUSReports->getFormFields($formType);
@@ -597,7 +597,7 @@ class AcolheSUS {
                     $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox' || $tipo === 'radio')
                 {
                     $label = explode(' ', $campo['label'])[0];
-                    if(strlen($label) == 1)
+                    if(strlen($label) == 1 || $keep_title)
                         $label = $campo['label'];
                 }
                 elseif ($tipo == 'date_picker' || $tipo == 'dropdown')

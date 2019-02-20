@@ -138,6 +138,50 @@ jQuery( function($) {
         });
     }
 
+    function prepare_data(data, chart_type, form_type) {
+        var info = [], titles = [], lines = [];
+        if(chart_type === 'bar')
+        {
+            info.push(["Avaliação", "Total", "Porcentagem"] );
+            for(var index in data)
+            {
+                info.push([index, data[index].total, data[index].percent]);
+            }
+        }else if(chart_type === 'pie')
+        {
+            info.push(["Classificação", "Porcentagem"]);
+            if(form_type === 'matriz_cenario')
+            {
+                for(var index in data)
+                {
+                    info.push([index, data[index]]);
+                }
+            }
+            else {
+                for(var index in data)
+                {
+                    info.push([index, data[index].percent]);
+                }
+            }
+        }else if(chart_type === 'line')
+        {
+            var indexes = [];
+            indexes.push("Data");
+            for(var index in data[0])
+            {
+                indexes.push(data[0][index].title);
+            }
+            info.push(indexes);
+
+            for(var index in data)
+            {
+                //console.log(data[index]);
+            }
+        }
+
+        return google.visualization.arrayToDataTable(info);
+    }
+
     function drawChart(info, where, chart_type, data_table, options) {
         var chart;
 
@@ -188,36 +232,6 @@ jQuery( function($) {
         }
 
         return title+tail;
-    }
-
-    function prepare_data(data, chart_type, form_type) {
-        var info = [], titles = [], lines = [];
-        if(chart_type === 'bar')
-        {
-            info.push(["Avaliação", "Total", "Porcentagem"] );
-            for(var index in data)
-            {
-                info.push([index, data[index].total, data[index].percent]);
-            }
-        }else if(chart_type === 'pie')
-        {
-            info.push(["Classificação", "Porcentagem"]);
-            if(form_type === 'matriz_cenario')
-            {
-                for(var index in data)
-                {
-                    info.push([index, data[index]]);
-                }
-            }
-            else {
-                for(var index in data)
-                {
-                    info.push([index, data[index].percent]);
-                }
-            }
-        }
-
-        return google.visualization.arrayToDataTable(info);
     }
 
     function set_options(chart_type, title) {
