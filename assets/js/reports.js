@@ -179,6 +179,38 @@ jQuery( function($) {
 
             for(var i in data)
             {
+                data.sort(function (a, b) {
+                    var year_a = parseInt(a[1].value), year_b = parseInt(b[1].value);
+
+                    if(year_a < year_b) return -1;
+                    else if(year_b < year_a) return 1;
+                    else {
+                        var months = {
+                            "Janeiro": 1,
+                            "Fevereiro": 2,
+                            "Março": 3,
+                            "Abril": 4,
+                            "Maio": 5,
+                            "Junho": 6,
+                            "Julho": 7,
+                            "Agosto": 8,
+                            "Setembro": 9,
+                            "Outubro": 10,
+                            "Novembro": 11,
+                            "Dezembro": 12
+                        };
+
+                        var mes_a = a[0].value, mes_b = b[0].value;
+
+                        mes_a = months[mes_a];
+                        mes_b = months[mes_b];
+
+                        if(mes_a < mes_b) return -1;
+                        else if(mes_b < mes_a) return 1
+                        else return 0;
+                    }
+                });
+
                 var mes, line = [];
                 for(var j in data[i])
                 {
@@ -283,6 +315,8 @@ jQuery( function($) {
             options = {
                 title: title,
                 curveType: 'function',
+                width: 1100,
+                height: 500,
                 legend: { position: 'bottom' }
             };
         }
