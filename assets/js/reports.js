@@ -166,19 +166,38 @@ jQuery( function($) {
         }else if(chart_type === 'line')
         {
             var indexes = [];
+
             indexes.push("Data");
             for(var index in data[0])
             {
-                indexes.push(data[0][index].title);
+                if(index > 1)
+                {
+                    indexes.push(data[0][index].title);
+                }
             }
             info.push(indexes);
 
-            for(var index in data)
+            for(var i in data)
             {
-                //console.log(data[index]);
+                var mes, line = [];
+                for(var j in data[i])
+                {
+                    if(j == 0)
+                    {
+                        mes = data[i][j].value;
+                    }else if(j == 1)
+                    {
+                        line.push(mes + "/"+ data[i][j].value);
+                    }else {
+                        line.push(parseInt(data[i][j].value));
+                    }
+                }
+
+                info.push(line);
             }
         }
 
+        console.log(info);
         return google.visualization.arrayToDataTable(info);
     }
 
@@ -216,6 +235,11 @@ jQuery( function($) {
         }else if(chart_type === 'pie')
         {
             chart = new google.visualization.PieChart(document.getElementById(where));
+            chart.draw(info, options);
+        }else if(chart_type === 'line')
+        {
+            chart = new google.visualization.LineChart(document.getElementById(where));
+
             chart.draw(info, options);
         }
     }
@@ -255,8 +279,14 @@ jQuery( function($) {
                 is3D: true,
                 colors: ['#00b4b4', '#134074', 'green', 'red', 'gold']
             };
+        }else if(chart_type === 'line')
+        {
+            options = {
+                title: title,
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
         }
-
 
         return options;
     }
