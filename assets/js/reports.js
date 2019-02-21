@@ -197,7 +197,6 @@ jQuery( function($) {
             }
         }
 
-        console.log(info);
         return google.visualization.arrayToDataTable(info);
     }
 
