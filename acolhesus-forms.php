@@ -188,13 +188,18 @@ class AcolheSUS {
         ],
     ];
 
+    private $caldera_forms;
+    private $caldera_entries;
+
     const CAMPO_META = 'acolhesus_campo';
-
     const CGPNH = 'acolhesus_cgpnh';
-
     const ANSWER_ID = '_cf_cr_pst';
 
     function __construct() {
+        global $wpdb;
+        $this->caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+        $this->caldera_forms = $wpdb->prefix . 'cf_forms';
+
         add_action('init', [&$this, 'register_post_types']);
 
         add_action('init', [&$this, 'init_default_data']);
@@ -1090,7 +1095,7 @@ class AcolheSUS {
         $sql = "
         SELECT mesano.*, state.estado from
             (SELECT entry_a.entry_id, entry_a.value mes, entry_b.value ano
-                FROM ".$wpdb->prefix."cf_form_entry_values as entry_a join ".$wpdb->prefix."cf_form_entry_values as entry_b
+                FROM ".$this->caldera_entries." as entry_a join ".$this->caldera_entries." as entry_b
                 where entry_a.field_id='".$month_id."' AND entry_b.field_id='".$year_id."' AND entry_a.entry_id=entry_b.entry_id
             )
             as mesano
@@ -1156,8 +1161,7 @@ class AcolheSUS {
             update_option('rhs_temp_slug', $slug);
 
             global $wpdb;
-            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
-            $sql_delete = "DELETE FROM " . $caldera_entries . " WHERE entry_id = '$entry_id' AND slug = '$slug'";
+            $sql_delete = "DELETE FROM " . $this->caldera_entries . " WHERE entry_id = '$entry_id' AND slug = '$slug'";
 
             $wpdb->query($sql_delete);
         }else{
@@ -1181,7 +1185,7 @@ class AcolheSUS {
                         $entry = get_post_meta($form_id, '_entry_id', true);
                         if ($entry) {
                             global $wpdb;
-                            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                            $caldera_entries = $this->caldera_entries;
                             $slug = get_option('rhs_temp_slug');
 
                             if(!empty($slug))
@@ -1225,10 +1229,10 @@ class AcolheSUS {
         }
 
         $formId = $_POST['formId'];
-        $sql_form_info = "SELECT config from ".$wpdb->prefix."cf_forms WHERE form_id='".$formId."' and type='primary'";
+        $sql_form_info = "SELECT config from ".$this->caldera_forms." WHERE form_id='".$formId."' and type='primary'";
         $fields = unserialize($wpdb->get_results($sql_form_info, 'ARRAY_A')[0]['config'])['fields'];
 
-        $sql_current_values = "SELECT field_id, value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."'";
+        $sql_current_values = "SELECT field_id, value FROM ". $this->caldera_entries . " WHERE entry_id='".$_entry_id."'";
         $current_values = $wpdb->get_results($sql_current_values, 'ARRAY_A');
 
         $msg = "";
@@ -1237,7 +1241,7 @@ class AcolheSUS {
             $old_value = '';
             if(strpos($index, 'fld_') !== false)
             {
-                $sql_exists = "SELECT count(field_id) AS count FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='$index' AND entry_id=$_entry_id";
+                $sql_exists = "SELECT count(field_id) AS count FROM ".$this->caldera_entries." WHERE field_id='$index' AND entry_id=$_entry_id";
                 $count = $wpdb->get_results($sql_exists, 'ARRAY_A')[0]['count'];
                 if($count > 0)
                 {//Exists
@@ -1269,13 +1273,14 @@ class AcolheSUS {
                                     $value = "'".$value."'";
                                 }
 
-                                $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
+                                $sql = "UPDATE ".$this->caldera_entries." SET value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
 
                                 $wpdb->query($sql);
                             }
                         }
-                    }else{//Checkbox
-                        $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+                    } else {
+                        //Checkbox
+                        $delete_sql = "DELETE FROM ".$this->caldera_entries." WHERE field_id='".$index."'";
                         $wpdb->query($delete_sql);
 
                         $return = $this->search_in_array($current_values, $index);
@@ -1303,7 +1308,7 @@ class AcolheSUS {
                         foreach($value as $v)
                         {
                             $v = "'".$v."'";
-                            $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
+                            $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
                             $wpdb->query($sql);
                         }
                     }
@@ -1329,14 +1334,14 @@ class AcolheSUS {
                                         $alt_val = "'".$alt_val."'";
                                     }
 
-                                    $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                    $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) 
                                     VALUES ($_entry_id, $index, $slug, $alt_val)";
                                     $wpdb->query($sql);
                                 }
-                            }else{
+                            } else {
                                 $value = "'".$value."'";
 
-                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) 
                                 VALUES ($_entry_id, $index, $slug, $value)";
                                 $wpdb->query($sql);
                             }
@@ -1346,7 +1351,7 @@ class AcolheSUS {
                             {
                                 $msg .= "$v<br>";
                                 $v = "'".$v."'";
-                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) 
                                 VALUES ($_entry_id, $index, $slug, $v)";
                                 $wpdb->query($sql);
                             }
@@ -1377,7 +1382,7 @@ class AcolheSUS {
 
                     if(file_put_contents($path, $file_content))
                     {
-                        $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                        $caldera_entries = $this->caldera_entries;
                         $file_input_id = $_POST['file_input_id'];
                         $slug = "'".$fields[$file_input_id]['slug']."'";
                         if(!empty($slug))
@@ -1415,7 +1420,7 @@ class AcolheSUS {
             $old_value .= implode(", ", $alt_vals);
             $msg .= $fields[$index]['label'].": $old_value <br/>";
 
-            $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+            $delete_sql = "DELETE FROM ".$this->caldera_entries." WHERE field_id='".$index."'";
             $wpdb->query($delete_sql);
 
             foreach ($alt_vals as $alt_val){
@@ -1425,7 +1430,7 @@ class AcolheSUS {
                 }
 
                 $slug = "'".$fields[$index]['slug']."'";
-                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, '".$index."', $slug, $alt_val)";
+                $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) VALUES ($_entry_id, '".$index."', $slug, $alt_val)";
                 $wpdb->query($sql);
             }
         }
@@ -1459,7 +1464,7 @@ class AcolheSUS {
     function delete_form_attachment() {
         if (is_user_logged_in() && isset($_POST['attach']) && isset($_POST['entry'])) {
             global $wpdb;
-            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+            $caldera_entries = $this->caldera_entries;
 
             $id = $_POST['attach'];
             $entry = $_POST['entry'];
@@ -1473,7 +1478,7 @@ class AcolheSUS {
             $entry = get_post_meta($form_id, '_entry_id', true);
             if ($entry) {
                 global $wpdb;
-                $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                $caldera_entries = $this->caldera_entries;
                 $atts = $wpdb->get_results("SELECT id, value FROM " . $caldera_entries . " WHERE field_id = '$field_id' AND entry_id = '$entry'", ARRAY_A);
 
                 return $atts;
@@ -2305,7 +2310,7 @@ class AcolheSUS {
         {
             $entry_id = $result[0]->entry_id;
             $sql = "SELECT entry_a.entry_id, entry_a.value mes, entry_b.value ano
-                    FROM ".$wpdb->prefix."cf_form_entry_values as entry_a join ".$wpdb->prefix."cf_form_entry_values as entry_b
+                    FROM ".$this->caldera_entries." as entry_a join ".$this->caldera_entries." as entry_b
                     where entry_a.slug='mes' AND entry_b.slug='ano' AND entry_a.entry_id=entry_b.entry_id AND entry_a.entry_id='".$entry_id."'";
 
             $data = $wpdb->get_results($sql);
