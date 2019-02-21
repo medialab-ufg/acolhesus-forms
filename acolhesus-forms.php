@@ -870,9 +870,13 @@ class AcolheSUS {
                 <div class="box-details">
                     <?php
                     $diretrizes = $this->get_info_in_result($ponto_critico_info, "Diretrizes do ".$ponto_critico_name)[0];
+                    if (is_null($diretrizes) && isset($ponto_critico_info["value"])) {
+                        $diretrizes = $ponto_critico_info["value"];
+                    }
+
                     if(!empty($diretrizes))
                         echo $diretrizes;
-                    else echo "<i>Diretrizes/dispositivos não cadastradas</i>";
+                    else echo "<i>Diretrizes/dispositivos não cadastrados</i>";
                     ?>
                 </div>
             </div>
