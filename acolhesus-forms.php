@@ -336,62 +336,8 @@ class AcolheSUS {
             $sql = "SELECT * FROM $wpdb->posts WHERE post_type='poster' and ID=$form_id;";
             $poster = $wpdb->get_results($sql);
 
-            if(!empty($poster))
-            {
-                switch ($estado)
-                {
-                    case 'AC':
-                        $email = [$this->get_email_by_responsible('gilberto')];
-                        break;
-                    case 'AL':
-                        $email = [$this->get_email_by_responsible('danyelle'), $this->get_email_by_responsible('ricardo')];
-                        break;
-                    case 'AM':
-                        $email = [$this->get_email_by_responsible('ailana'), $this->get_email_by_responsible('flavia')];
-                        break;
-                    case 'AP':
-                        $email = [$this->get_email_by_responsible('gilberto')];
-                        break;
-                    case 'BA':
-                        $email = [$this->get_email_by_responsible('julimar'), $this->get_email_by_responsible('ricardo')];
-                        break;
-                    case 'CE':
-                        $email = [$this->get_email_by_responsible('diego'), $this->get_email_by_responsible('flavia')];
-                        break;
-                    case 'DF':
-                        $email = [$this->get_email_by_responsible('thania'), $this->get_email_by_responsible('gilberto')];
-                        break;
-                    case 'MA':
-                        $email = [$this->get_email_by_responsible('ricardo')];
-                        break;
-                    case 'MG':
-                        $email = [$this->get_email_by_responsible('ailana'), $this->get_email_by_responsible('flavia')];
-                        break;
-                    case 'MS':
-                        $email = [$this->get_email_by_responsible('danyelle'), $this->get_email_by_responsible('gilberto')];
-                        break;
-                    case 'MT':
-                        $email = [$this->get_email_by_responsible('ricardo')];
-                        break;
-                    case 'PA':
-                        $email = [$this->get_email_by_responsible('diego'), $this->get_email_by_responsible('flavia')];
-                        break;
-                    case 'PB':
-                        $email = [$this->get_email_by_responsible('julimar'), $this->get_email_by_responsible('ricardo')];
-                        break;
-                    case 'PI':
-                        $email = [$this->get_email_by_responsible('thania'), $this->get_email_by_responsible('gilberto')];
-                        break;
-                    case 'SC':
-                        $email = [$this->get_email_by_responsible('flavia')];
-                        break;
-                    case 'RN':
-                        $email = [$this->get_email_by_responsible('gilberto')];
-                        break;
-                    case 'TO':
-                        $email = [$this->get_email_by_responsible('ricardo')];
-                        break;
-                }
+            if(!empty($poster)) {
+                $email = $this->get_forward_mail_by_state($estado);
             }
 
             $ailana   = ['AL', 'MA', 'PI', 'RN'];
@@ -425,7 +371,67 @@ class AcolheSUS {
             'thania'   => 'thania.arruda@hotmail.com'
         ];
 
-        return ( in_array($name, $state_responsibles) ? $state_responsibles[$name] : '' );
+        return (in_array($name, $state_responsibles) ? $state_responsibles[$name] : '');
+    }
+
+    function get_forward_mail_by_state($state) {
+        $email = [];
+        switch ($state)
+        {
+            case 'AC':
+                $email = [$this->get_email_by_responsible('gilberto')];
+                break;
+            case 'AL':
+                $email = [$this->get_email_by_responsible('danyelle'), $this->get_email_by_responsible('ricardo')];
+                break;
+            case 'AM':
+                $email = [$this->get_email_by_responsible('ailana'), $this->get_email_by_responsible('flavia')];
+                break;
+            case 'AP':
+                $email = [$this->get_email_by_responsible('gilberto')];
+                break;
+            case 'BA':
+                $email = [$this->get_email_by_responsible('julimar'), $this->get_email_by_responsible('ricardo')];
+                break;
+            case 'CE':
+                $email = [$this->get_email_by_responsible('diego'), $this->get_email_by_responsible('flavia')];
+                break;
+            case 'DF':
+                $email = [$this->get_email_by_responsible('thania'), $this->get_email_by_responsible('gilberto')];
+                break;
+            case 'MA':
+                $email = [$this->get_email_by_responsible('ricardo')];
+                break;
+            case 'MG':
+                $email = [$this->get_email_by_responsible('ailana'), $this->get_email_by_responsible('flavia')];
+                break;
+            case 'MS':
+                $email = [$this->get_email_by_responsible('danyelle'), $this->get_email_by_responsible('gilberto')];
+                break;
+            case 'MT':
+                $email = [$this->get_email_by_responsible('ricardo')];
+                break;
+            case 'PA':
+                $email = [$this->get_email_by_responsible('diego'), $this->get_email_by_responsible('flavia')];
+                break;
+            case 'PB':
+                $email = [$this->get_email_by_responsible('julimar'), $this->get_email_by_responsible('ricardo')];
+                break;
+            case 'PI':
+                $email = [$this->get_email_by_responsible('thania'), $this->get_email_by_responsible('gilberto')];
+                break;
+            case 'SC':
+                $email = [$this->get_email_by_responsible('flavia')];
+                break;
+            case 'RN':
+                $email = [$this->get_email_by_responsible('gilberto')];
+                break;
+            case 'TO':
+                $email = [$this->get_email_by_responsible('ricardo')];
+                break;
+        }
+
+        return $email;
     }
 
     function filter_users_cgpnh(){
