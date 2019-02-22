@@ -58,9 +58,7 @@ trait AcolheSUSCommon {
         'TO'
     ];
 
-    // Estados que não participam por enquanto do AcolheSUS
-    // Deixar aqui a título de conhecimento
-    private $estados_fora = [
+    private $campos_fora = [
         'ES' => 'ES',
         'PE' => 'PE',
         'PR' => 'PR',

@@ -195,6 +195,8 @@ class AcolheSUS {
     const CGPNH = 'acolhesus_cgpnh';
     const ANSWER_ID = '_cf_cr_pst';
 
+    private $responsibles;
+
     function __construct() {
         global $wpdb;
         $this->caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
@@ -339,93 +341,104 @@ class AcolheSUS {
                 switch ($estado)
                 {
                     case 'AC':
-                        $email = ["gilbertoscarazatti7@gmail.com"];
+                        $email = [$this->get_email_by_responsible('gilberto')];
                         break;
                     case 'AL':
-                        $email = ["danyelle.cavalcante@saude.gov.br", "drricardovolpe@globo.com"];
+                        $email = [$this->get_email_by_responsible('danyelle'), $this->get_email_by_responsible('ricardo')];
                         break;
                     case 'AM':
-                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        $email = [$this->get_email_by_responsible('ailana'), $this->get_email_by_responsible('flavia')];
                         break;
                     case 'AP':
-                        $email = ["dorigica@gmail.com", "gilbertoscarazatti7@gmail.com"];
+                        $email = [$this->get_email_by_responsible('gilberto')];
                         break;
                     case 'BA':
-                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com"];
+                        $email = [$this->get_email_by_responsible('julimar'), $this->get_email_by_responsible('ricardo')];
                         break;
                     case 'CE':
-                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        $email = [$this->get_email_by_responsible('diego'), $this->get_email_by_responsible('flavia')];
                         break;
                     case 'DF':
-                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
+                        $email = [$this->get_email_by_responsible('thania'), $this->get_email_by_responsible('gilberto')];
                         break;
                     case 'MA':
-                        $email = ["drricardovolpe@globo.com"];
+                        $email = [$this->get_email_by_responsible('ricardo')];
                         break;
                     case 'MG':
-                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        $email = [$this->get_email_by_responsible('ailana'), $this->get_email_by_responsible('flavia')];
                         break;
                     case 'MS':
-                        $email = ["danyelle.cavalcante@saude.gov.br", "gilbertoscarazatti7@gmail.com"];
+                        $email = [$this->get_email_by_responsible('danyelle'), $this->get_email_by_responsible('gilberto')];
                         break;
                     case 'MT':
-                        $email = ["drricardovolpe@globo.com"];
+                        $email = [$this->get_email_by_responsible('ricardo')];
                         break;
                     case 'PA':
-                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com"];
+                        $email = [$this->get_email_by_responsible('diego'), $this->get_email_by_responsible('flavia')];
                         break;
                     case 'PB':
-                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com"];
+                        $email = [$this->get_email_by_responsible('julimar'), $this->get_email_by_responsible('ricardo')];
                         break;
                     case 'PI':
-                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
+                        $email = [$this->get_email_by_responsible('thania'), $this->get_email_by_responsible('gilberto')];
                         break;
                     case 'SC':
-                        $email = ["flaviaborgesleite@gmail.com"];
+                        $email = [$this->get_email_by_responsible('flavia')];
                         break;
                     case 'RN':
-                        $email = ["gilbertoscarazatti7@gmail.com"];
+                        $email = [$this->get_email_by_responsible('gilberto')];
                         break;
                     case 'TO':
-                        $email = ["drricardovolpe@globo.com"];
+                        $email = [$this->get_email_by_responsible('ricardo')];
                         break;
                 }
             }
 
-            // Membros CGPNH do MS
             $ailana   = ['AL', 'MA', 'PI', 'RN'];
             $diego    = ['AL', 'AM', 'BA'];
             $danyelle = ['AC', 'TO', 'SC'];
-            // $janaina  = ['DF'];
-            // $hiojuma  = ['CE', 'PB']; // Saiu do projeto. Ver quem assumiu esses UFs
-            // $marilia  = ['MT', 'PA'];
             $julimar = ['MG'];
 
             if (in_array($estado, $ailana)) {
-                $email[] = 'ailana.lira@saude.gov.br';
+                $email[] = $this->get_email_by_responsible('ailana');
             } else if(in_array($estado, $diego)) {
-                $email[] = 'dpscarao@hotmail.com';
+                $email[] = $this->get_email_by_responsible('diego');
             } else if(in_array($estado, $danyelle)) {
-                $email[] = 'danyelle.cavalcante@saude.gov.br';
+                $email[] = $this->get_email_by_responsible('danyelle');
             } else if (in_array($estado,$julimar)) {
-                $email[] = 'julimar.barros@saude.gov.br';
+                $email[] = $this->get_email_by_responsible('julimar');
             }
         }
 
         return $email;
     }
 
+    function get_email_by_responsible($name) {
+        $state_responsibles = [
+            'ailana'   => 'ailana.lira@saude.gov.br',
+            'danyelle' => 'danyelle.cavalcante@saude.gov.br',
+            'diego'    => 'diegop.santos@saude.gov.br',
+            'flavia'   => 'flaviaborgesleite@gmail.com',
+            'gilberto' => 'gilbertoscarazatti7@gmail.com',
+            'julimar'  => 'julimar.barros@saude.gov.br',
+            'ricardo'  => 'drricardovolpe@globo.com',
+            'thania'   => 'thania.arruda@hotmail.com'
+        ];
+
+        return ( in_array($name, $state_responsibles) ? $state_responsibles[$name] : '' );
+    }
+
     function filter_users_cgpnh(){
         global $pagenow;
 
-        if( is_admin() && $pagenow == 'users.php') {
-            print "<button style='margin-left: 5px' class='button'>
-                    <a style='color: #555; text-decoration: none' href='users.php?role=acolhesus_cgpnh'>CGPNH</a>
-                </button>";
+        if (is_admin() && $pagenow == 'users.php') {
+            print "<button style='margin: 1px 5px 0 5px' class='button'>
+                    <a style='color: #555; text-decoration: none' href='users.php?role=acolhesus_cgpnh'> CGPNH </a>
+                  </button>";
 
-            print "<button style='margin-left: 5px' class='button'>
-                    <a style='color: #555; text-decoration: none' href='users.php?role=view_acolhesus'>GEL/GEE</a>
-                </button>";
+            print "<button style='margin-top: 1px' class='button'>
+                    <a style='color: #555; text-decoration: none' href='users.php?role=view_acolhesus'> GEL/GEE </a>
+                  </button>";
         }
     }
 
@@ -550,7 +563,6 @@ class AcolheSUS {
             }
         }
     }
-
 
     /*Reports especifics*/
     function ajax_callback_report_one()
