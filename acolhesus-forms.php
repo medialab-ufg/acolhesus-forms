@@ -638,7 +638,6 @@ class AcolheSUS {
 
     function wrap_in_html($form_type, $result, $post_id)
     {
-        //print_r($result);
         $html = '';
         switch ($form_type)
         {
