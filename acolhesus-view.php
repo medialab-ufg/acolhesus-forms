@@ -12,7 +12,6 @@ class AcolheSUSView extends AcolheSUS {
         'form'  => ['plural' => 'Todos os formulários', 'singular' => 'Formulário']
     ];
 
-
     function __construct()
     {
         // Construtor vazio para evitar repetir as operações da classe pai
@@ -55,7 +54,6 @@ class AcolheSUSView extends AcolheSUS {
         echo '<div class="welcome hidden-print">' . $_header . 'Utilize os filtros abaixo para acessar os formulários</div>';
     }
 
-
     public function renderFilters($showForms = true, $showAxis = true, $showPhase = true) {
         $filtros = $this->filtros;
         if (!$showForms) {
@@ -71,7 +69,6 @@ class AcolheSUSView extends AcolheSUS {
         }
 
         foreach ($filtros as $filtro => $props) {
-
             // Manter assim apenas até deliberar sobre layout dos relatórios
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $opt = (isset($_POST[$filtro]) ) ? $_POST[$filtro] : '';
@@ -203,4 +200,18 @@ class AcolheSUSView extends AcolheSUS {
         }
     }
 
+    private function useAlias($form_slug) {
+        $_big_titles = ["memoria_reuniao", "atividades_dispersao"];
+
+        return in_array($form_slug, $_big_titles);
+    }
+
+    public function getFormLinkText($form_slug, $attributes) {
+        $title = $attributes['labels']['name'];
+        if ($this->useAlias($form_slug) && isset($attributes['labels']['alias'])) {
+            $title = $attributes['labels']['alias'];
+        }
+
+        return "Ver todas as respostas de $title";
+    }
 }

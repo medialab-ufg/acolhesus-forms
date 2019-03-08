@@ -163,7 +163,8 @@ class AcolheSUS {
         'memoria_reuniao' => [
             'labels' => [
                 'name' => 'Videoconferências/Reunião da Gestão ou da Coordenação',
-                'singular_name' => 'Videoconferências/Reunião da Gestão ou da Coordenação'
+                'singular_name' => 'Videoconferências/Reunião da Gestão ou da Coordenação',
+                'alias' => 'Videoconferências'
             ],
             'slug' => 'memoria_reuniao',
             'uma_entrada_por_campo' => false,
@@ -175,7 +176,8 @@ class AcolheSUS {
         'atividades_dispersao' => [
             'labels' => [
                 'name' => 'Memória de Reunião/Atividades de Dispersão',
-                'singular_name' => 'Memória de Reunião/Atividades de Dispersão'
+                'singular_name' => 'Memória de Reunião/Atividades de Dispersão',
+                'alias' => 'Memória de Reunião'
             ],
             'slug' => 'atividades_dispersao',
             'uma_entrada_por_campo' => false,
@@ -186,13 +188,20 @@ class AcolheSUS {
         ],
     ];
 
+    private $caldera_forms;
+    private $caldera_entries;
+
     const CAMPO_META = 'acolhesus_campo';
-
     const CGPNH = 'acolhesus_cgpnh';
-
     const ANSWER_ID = '_cf_cr_pst';
 
+    private $responsibles;
+
     function __construct() {
+        global $wpdb;
+        $this->caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+        $this->caldera_forms = $wpdb->prefix . 'cf_forms';
+
         add_action('init', [&$this, 'register_post_types']);
 
         add_action('init', [&$this, 'init_default_data']);
@@ -327,87 +336,99 @@ class AcolheSUS {
             $sql = "SELECT * FROM $wpdb->posts WHERE post_type='poster' and ID=$form_id;";
             $poster = $wpdb->get_results($sql);
 
-            if(!empty($poster))
-            {
-                switch ($estado)
-                {
-                    case 'AC':
-                        $email = ["janarcardoso@gmail.com", "gilbertoscarazatti7@gmail.com"];
-                        break;
-                    case 'AL':
-                        $email = ["danyelle.cavalcante@saude.gov.br", "drricardovolpe@globo.com"];
-                        break;
-                    case 'AM':
-                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com"];
-                        break;
-                    case 'AP':
-                        $email = ["dorigica@gmail.com", "gilbertoscarazatti7@gmail.com"];
-                        break;
-                    case 'BA':
-                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com"];
-                        break;
-                    case 'CE':
-                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com"];
-                        break;
-                    case 'DF':
-                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
-                        break;
-                    case 'MA':
-                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com"];
-                        break;
-                    case 'MG':
-                        $email = ["ailana.lira@saude.gov.br", "flaviaborgesleite@gmail.com"];
-                        break;
-                    case 'MS':
-                        $email = ["danyelle.cavalcante@saude.gov.br", "gilbertoscarazatti7@gmail.com"];
-                        break;
-                    case 'MT':
-                        $email = ["dorigica@gmail.com", "drricardovolpe@globo.com"];
-                        break;
-                    case 'PA':
-                        $email = ["diegop.santos@saude.gov.br", "flaviaborgesleite@gmail.com"];
-                        break;
-                    case 'PB':
-                        $email = ["julimar.barros@saude.gov.br", "drricardovolpe@globo.com"];
-                        break;
-                    case 'PI':
-                        $email = ["thania.arruda@hotmail.com", "gilbertoscarazatti7@gmail.com"];
-                        break;
-                    case 'SC':
-                        $email = ["mariliabpalacio@gmail.com", "flaviaborgesleite@gmail.com"];
-                        break;
-                    case 'RN':
-                        $email = ["mariliabpalacio@gmail.com", "gilbertoscarazatti7@gmail.com"];
-                        break;
-                    case 'TO':
-                        $email = ["janarcardoso@gmail.com", "drricardovolpe@globo.com"];
-                        break;
-                }
+            if(!empty($poster)) {
+                $email = $this->get_forward_mail_by_state($estado);
             }
 
-            // Membros CGPNH do MS
             $ailana   = ['AL', 'MA', 'PI', 'RN'];
             $diego    = ['AL', 'AM', 'BA'];
             $danyelle = ['AC', 'TO', 'SC'];
-            $janaina  = ['DF'];
-            // $hiojuma  = ['CE', 'PB']; // Saiu do projeto. Ver quem assumiu esses UFs
-            $marilia  = ['MT', 'PA'];
             $julimar = ['MG'];
 
-            // TODO: refatorar esse tanto de if
             if (in_array($estado, $ailana)) {
-                $email[] = 'ailana.lira@saude.gov.br';
+                $email[] = $this->get_email_by_responsible('ailana');
             } else if(in_array($estado, $diego)) {
-                $email[] = 'dpscarao@hotmail.com';
+                $email[] = $this->get_email_by_responsible('diego');
             } else if(in_array($estado, $danyelle)) {
-                $email[] = 'danyelle.cavalcante@saude.gov.br';
-            } else if(in_array($estado, $marilia)) {
-                $email[] = 'mariliabpalacio@gmail.com';
-            } else if (in_array($estado, $janaina)) {
-                $email[] = 'janarcardoso@gmail.com';
+                $email[] = $this->get_email_by_responsible('danyelle');
             } else if (in_array($estado,$julimar)) {
-                $email[] = 'julimar.barros@saude.gov.br';
+                $email[] = $this->get_email_by_responsible('julimar');
             }
+        }
+
+        return $email;
+    }
+
+    function get_email_by_responsible($name) {
+        $state_responsibles = [
+            'ailana'   => 'ailana.lira@saude.gov.br',
+            'danyelle' => 'danyelle.cavalcante@saude.gov.br',
+            'diego'    => 'diegop.santos@saude.gov.br',
+            'flavia'   => 'flaviaborgesleite@gmail.com',
+            'gilberto' => 'gilbertoscarazatti7@gmail.com',
+            'julimar'  => 'julimar.barros@saude.gov.br',
+            'ricardo'  => 'drricardovolpe@globo.com',
+            'thania'   => 'thania.arruda@hotmail.com'
+        ];
+
+        return (in_array($name, $state_responsibles) ? $state_responsibles[$name] : '');
+    }
+
+    function get_forward_mail_by_state($state) {
+        $email = [];
+        switch ($state)
+        {
+            case 'AC':
+                $email = [$this->get_email_by_responsible('gilberto')];
+                break;
+            case 'AL':
+                $email = [$this->get_email_by_responsible('danyelle'), $this->get_email_by_responsible('ricardo')];
+                break;
+            case 'AM':
+                $email = [$this->get_email_by_responsible('ailana'), $this->get_email_by_responsible('flavia')];
+                break;
+            case 'AP':
+                $email = [$this->get_email_by_responsible('gilberto')];
+                break;
+            case 'BA':
+                $email = [$this->get_email_by_responsible('julimar'), $this->get_email_by_responsible('ricardo')];
+                break;
+            case 'CE':
+                $email = [$this->get_email_by_responsible('diego'), $this->get_email_by_responsible('flavia')];
+                break;
+            case 'DF':
+                $email = [$this->get_email_by_responsible('thania'), $this->get_email_by_responsible('gilberto')];
+                break;
+            case 'MA':
+                $email = [$this->get_email_by_responsible('ricardo')];
+                break;
+            case 'MG':
+                $email = [$this->get_email_by_responsible('ailana'), $this->get_email_by_responsible('flavia')];
+                break;
+            case 'MS':
+                $email = [$this->get_email_by_responsible('danyelle'), $this->get_email_by_responsible('gilberto')];
+                break;
+            case 'MT':
+                $email = [$this->get_email_by_responsible('ricardo')];
+                break;
+            case 'PA':
+                $email = [$this->get_email_by_responsible('diego'), $this->get_email_by_responsible('flavia')];
+                break;
+            case 'PB':
+                $email = [$this->get_email_by_responsible('julimar'), $this->get_email_by_responsible('ricardo')];
+                break;
+            case 'PI':
+                $email = [$this->get_email_by_responsible('thania'), $this->get_email_by_responsible('gilberto')];
+                break;
+            case 'SC':
+                $email = [$this->get_email_by_responsible('flavia')];
+                break;
+            case 'RN':
+                $email = [$this->get_email_by_responsible('gilberto')];
+                break;
+            case 'TO':
+                $email = [$this->get_email_by_responsible('ricardo')];
+                break;
         }
 
         return $email;
@@ -416,14 +437,14 @@ class AcolheSUS {
     function filter_users_cgpnh(){
         global $pagenow;
 
-        if( is_admin() && $pagenow == 'users.php') {
-            print "<button style='margin-left: 5px' class='button'>
-                    <a style='color: #555; text-decoration: none' href='users.php?role=acolhesus_cgpnh'>CGPNH</a>
-                </button>";
+        if (is_admin() && $pagenow == 'users.php') {
+            print "<button style='margin: 1px 5px 0 5px' class='button'>
+                    <a style='color: #555; text-decoration: none' href='users.php?role=acolhesus_cgpnh'> CGPNH </a>
+                  </button>";
 
-            print "<button style='margin-left: 5px' class='button'>
-                    <a style='color: #555; text-decoration: none' href='users.php?role=view_acolhesus'>GEL/GEE</a>
-                </button>";
+            print "<button style='margin-top: 1px' class='button'>
+                    <a style='color: #555; text-decoration: none' href='users.php?role=view_acolhesus'> GEL/GEE </a>
+                  </button>";
         }
     }
 
@@ -436,18 +457,27 @@ class AcolheSUS {
         $phase = $_POST['phase'];
         $state = $_POST['field'];
 
-        $acholheSUSReports = new AcolheSUSReports(); $result = [];
+        $result = [];
+        $acholheSUSReports = new AcolheSUSReports();
         $fields = $acholheSUSReports->getFormFields($formType);
 
-        $forms_to_chart = [
-            'avalicao_oficina',
+        $pie_bar = [
+            'avaliacao_oficina',
             'avaliacao_grupos',
             'matriz_cenario'
         ];
 
-        if(in_array($formType, $forms_to_chart))
+        $line = [
+            'ind_materno_infantil',
+            'indicadores_caps',
+            'indicadores',//Indicadores Hospital Geral
+            'indicadores_basica'
+        ];
+
+        if(in_array($formType, $pie_bar))
         {
             $index = 'total'; $switch_index = '';
+
             foreach ($fields as $id => $campo) {
                 $tipo = $campo["type"];
                 if (in_array($tipo, $acholheSUSReports->report_fields))
@@ -471,9 +501,28 @@ class AcolheSUS {
                     $result[$switch_index][$campo['label']]['Não'] = intval($acholheSUSReports->getTotal($id, $tipo,"Não"));
                 }
             }
-        }
 
-        $this->get_percent($result, $formType, $chart_type);
+            $this->get_percent($result, $formType, $chart_type);
+        }
+        else if(in_array($formType, $line))
+        {
+            global $wpdb;
+            $sql = 'SELECT ID FROM '.$wpdb->posts.' where post_type="'.$formType.'"';
+            $ids = $wpdb->get_results($sql, ARRAY_A);
+
+            foreach ($ids as $id)
+            {
+                $id = $id['ID'];
+
+                $sql = 'SELECT meta_value FROM '.$wpdb->postmeta . ' WHERE post_id='.$id.' AND meta_key = "acolhesus_campo"';
+                $estado = $wpdb->get_results($sql, ARRAY_A);
+
+                if(!empty($estado))
+                {
+                    $result[$estado[0]['meta_value']][] = $this->get_specific_form_data($formType, $id, true);
+                }
+            }
+        }
 
         echo json_encode($result);
         wp_die();
@@ -521,7 +570,6 @@ class AcolheSUS {
         }
     }
 
-
     /*Reports especifics*/
     function ajax_callback_report_one()
     {
@@ -535,60 +583,53 @@ class AcolheSUS {
         wp_die();
     }
 
-    function get_specific_form_data($formType, $post_id)
+    function get_specific_form_data($formType, $post_id, $keep_title = false)
     {
         $acholheSUSReports = new AcolheSUSReports(); $result = [];
         $fields = $acholheSUSReports->getFormFields($formType);
 
-        $forms_to_report = [
-            'matriz_p_criticos',
-            'matriz_cenario',
-            'plano_trabalho'
+        $index = '';
+        $types = [
+            'toggle_switch',
+            'text',
+            'number',
+            'date_picker',
+            'dropdown',
+            'paragraph',
+            'checkbox',
+            'radio'
         ];
-
-        if(in_array($formType, $forms_to_report))
-        {
-            $index = '';
-            $types = [
-                'toggle_switch',
-                'text',
-                'number',
-                'date_picker',
-                'dropdown',
-                'paragraph',
-                'checkbox',
-                'radio'
-            ];
-            foreach ($fields as $field_id => $campo) {
-                $tipo = $campo["type"];
-                if ($tipo === "wysiwyg") {
-                    preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
-                    $index = $index[0];
-                    if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
-                    {
-                        $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($field_id,$post_id);
-                    }else
-                    {
-                        $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
-                        if(!empty($index))
-                            $result[$index][] = $data;
-                        else $result[] = $data;
-                    }
-                }else if(in_array($tipo, $types))
+        foreach ($fields as $field_id => $campo) {
+            $tipo = $campo["type"];
+            if ($tipo === "wysiwyg") {
+                preg_match("/(Ponto Crítico )[0-9]+/", $campo['label'], $index);
+                $index = $index[0];
+                if(strpos($campo['label'], 'Ponto Crítico') === 0 && strlen($campo['label']) <= 16)
                 {
-                    if($tipo === 'toggle_switch' || $tipo === 'text' ||
-                        $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox' || $tipo === 'radio')
-                    {
-                        $label = explode(' ', $campo['label'])[0];
-                    }
-                    elseif ($tipo == 'date_picker' || $tipo == 'dropdown')
-                    {
-                        $label = $campo['label'];
-                    }
-
-                    $data = ['title' => $label, 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
-                    $result[] = $data;
+                    $result[$index]['name'] = $acholheSUSReports->getAnswerToEspecific($field_id,$post_id);
+                }else
+                {
+                    $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
+                    if(!empty($index))
+                        $result[$index][] = $data;
+                    else $result[] = $data;
                 }
+            }else if(in_array($tipo, $types))
+            {
+                if($tipo === 'toggle_switch' || $tipo === 'text' ||
+                    $tipo === 'number' || $tipo === 'paragraph' || $tipo === 'checkbox' || $tipo === 'radio')
+                {
+                    $label = explode(' ', $campo['label'])[0];
+                    if(strlen($label) == 1 || $keep_title)
+                        $label = $campo['label'];
+                }
+                elseif ($tipo == 'date_picker' || $tipo == 'dropdown')
+                {
+                    $label = $campo['label'];
+                }
+
+                $data = ['title' => $label, 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
+                $result[] = $data;
             }
         }
 
@@ -616,6 +657,11 @@ class AcolheSUS {
                 break;
             case 'plano_trabalho':
                 $html = $this->wrap_plano_trabalho_html($result, $_POST['report_type']);
+                break;
+            case 'relatorio_oficina':
+            case 'memoria_reuniao': //Vídeo conferência
+            case 'atividades_dispersao': //Memória de Reunião/Atividades de Dispersão
+                $html = $this->wrap_relatorio_mem_atividades_html($result);
                 break;
         }
 
@@ -846,9 +892,13 @@ class AcolheSUS {
                 <div class="box-details">
                     <?php
                     $diretrizes = $this->get_info_in_result($ponto_critico_info, "Diretrizes do ".$ponto_critico_name)[0];
+                    if (is_null($diretrizes) && isset($ponto_critico_info["value"])) {
+                        $diretrizes = $ponto_critico_info["value"];
+                    }
+
                     if(!empty($diretrizes))
                         echo $diretrizes;
-                    else echo "<i>Diretrizes/dispositivos não cadastradas</i>";
+                    else echo "<i>Diretrizes/dispositivos não cadastrados</i>";
                     ?>
                 </div>
             </div>
@@ -866,7 +916,7 @@ class AcolheSUS {
                             ?>
                             <?php echo $cause; ?>
                             <?php
-                        }else echo "<i>Sem causas cadastradas</i>";
+                        } else echo "";
                         echo '</div>';
                     }
                     ?>
@@ -992,6 +1042,30 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
+    public function wrap_relatorio_mem_atividades_html($result)
+    {
+        ob_start();
+        $start_date = array_shift($result)['value'];
+        $start_date = date("d/m/Y", strtotime($start_date));
+        $end_date = array_shift($result)['value'];
+        $end_date = date("d/m/Y", strtotime($end_date));
+
+        ?>
+        <div>
+            <h4>Realização de <strong><?php echo $start_date; ?></strong> até <strong><?php echo $end_date;?></strong> no período da <strong><?php echo strtolower(array_shift($result)['value']);?></strong></h4><br>
+            <?php
+            foreach ($result as $r)
+            {
+                echo "<h3>".$r['title']."</h3>";
+                echo "<p>".$r['value']."</p><br>";
+            }
+            ?>
+        </div>
+        <?php
+
+        return ob_get_clean();
+    }
+
     private function prepare_plano_trabalho($data)
     {
         $result = [];
@@ -1038,7 +1112,7 @@ class AcolheSUS {
         $sql = "
         SELECT mesano.*, state.estado from
             (SELECT entry_a.entry_id, entry_a.value mes, entry_b.value ano
-                FROM ".$wpdb->prefix."cf_form_entry_values as entry_a join ".$wpdb->prefix."cf_form_entry_values as entry_b
+                FROM ".$this->caldera_entries." as entry_a join ".$this->caldera_entries." as entry_b
                 where entry_a.field_id='".$month_id."' AND entry_b.field_id='".$year_id."' AND entry_a.entry_id=entry_b.entry_id
             )
             as mesano
@@ -1104,8 +1178,7 @@ class AcolheSUS {
             update_option('rhs_temp_slug', $slug);
 
             global $wpdb;
-            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
-            $sql_delete = "DELETE FROM " . $caldera_entries . " WHERE entry_id = '$entry_id' AND slug = '$slug'";
+            $sql_delete = "DELETE FROM " . $this->caldera_entries . " WHERE entry_id = '$entry_id' AND slug = '$slug'";
 
             $wpdb->query($sql_delete);
         }else{
@@ -1129,7 +1202,7 @@ class AcolheSUS {
                         $entry = get_post_meta($form_id, '_entry_id', true);
                         if ($entry) {
                             global $wpdb;
-                            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                            $caldera_entries = $this->caldera_entries;
                             $slug = get_option('rhs_temp_slug');
 
                             if(!empty($slug))
@@ -1173,10 +1246,10 @@ class AcolheSUS {
         }
 
         $formId = $_POST['formId'];
-        $sql_form_info = "SELECT config from ".$wpdb->prefix."cf_forms WHERE form_id='".$formId."' and type='primary'";
+        $sql_form_info = "SELECT config from ".$this->caldera_forms." WHERE form_id='".$formId."' and type='primary'";
         $fields = unserialize($wpdb->get_results($sql_form_info, 'ARRAY_A')[0]['config'])['fields'];
 
-        $sql_current_values = "SELECT field_id, value FROM ".$wpdb->prefix."cf_form_entry_values WHERE entry_id='".$_entry_id."'";
+        $sql_current_values = "SELECT field_id, value FROM ". $this->caldera_entries . " WHERE entry_id='".$_entry_id."'";
         $current_values = $wpdb->get_results($sql_current_values, 'ARRAY_A');
 
         $msg = "";
@@ -1185,7 +1258,7 @@ class AcolheSUS {
             $old_value = '';
             if(strpos($index, 'fld_') !== false)
             {
-                $sql_exists = "SELECT count(field_id) AS count FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='$index' AND entry_id=$_entry_id";
+                $sql_exists = "SELECT count(field_id) AS count FROM ".$this->caldera_entries." WHERE field_id='$index' AND entry_id=$_entry_id";
                 $count = $wpdb->get_results($sql_exists, 'ARRAY_A')[0]['count'];
                 if($count > 0)
                 {//Exists
@@ -1217,13 +1290,14 @@ class AcolheSUS {
                                     $value = "'".$value."'";
                                 }
 
-                                $sql = "update ".$wpdb->prefix."cf_form_entry_values set value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
+                                $sql = "UPDATE ".$this->caldera_entries." SET value=".$value." where entry_id=".$_entry_id." and field_id='".$index."'";
 
                                 $wpdb->query($sql);
                             }
                         }
-                    }else{//Checkbox
-                        $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+                    } else {
+                        //Checkbox
+                        $delete_sql = "DELETE FROM ".$this->caldera_entries." WHERE field_id='".$index."'";
                         $wpdb->query($delete_sql);
 
                         $return = $this->search_in_array($current_values, $index);
@@ -1251,7 +1325,7 @@ class AcolheSUS {
                         foreach($value as $v)
                         {
                             $v = "'".$v."'";
-                            $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
+                            $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) VALUES ($_entry_id, $index, $slug, $v)";
                             $wpdb->query($sql);
                         }
                     }
@@ -1277,14 +1351,14 @@ class AcolheSUS {
                                         $alt_val = "'".$alt_val."'";
                                     }
 
-                                    $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                    $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) 
                                     VALUES ($_entry_id, $index, $slug, $alt_val)";
                                     $wpdb->query($sql);
                                 }
-                            }else{
+                            } else {
                                 $value = "'".$value."'";
 
-                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) 
                                 VALUES ($_entry_id, $index, $slug, $value)";
                                 $wpdb->query($sql);
                             }
@@ -1294,7 +1368,7 @@ class AcolheSUS {
                             {
                                 $msg .= "$v<br>";
                                 $v = "'".$v."'";
-                                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) 
+                                $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) 
                                 VALUES ($_entry_id, $index, $slug, $v)";
                                 $wpdb->query($sql);
                             }
@@ -1325,7 +1399,7 @@ class AcolheSUS {
 
                     if(file_put_contents($path, $file_content))
                     {
-                        $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                        $caldera_entries = $this->caldera_entries;
                         $file_input_id = $_POST['file_input_id'];
                         $slug = "'".$fields[$file_input_id]['slug']."'";
                         if(!empty($slug))
@@ -1363,7 +1437,7 @@ class AcolheSUS {
             $old_value .= implode(", ", $alt_vals);
             $msg .= $fields[$index]['label'].": $old_value <br/>";
 
-            $delete_sql = "DELETE FROM ".$wpdb->prefix."cf_form_entry_values WHERE field_id='".$index."'";
+            $delete_sql = "DELETE FROM ".$this->caldera_entries." WHERE field_id='".$index."'";
             $wpdb->query($delete_sql);
 
             foreach ($alt_vals as $alt_val){
@@ -1373,7 +1447,7 @@ class AcolheSUS {
                 }
 
                 $slug = "'".$fields[$index]['slug']."'";
-                $sql = "INSERT INTO ".$wpdb->prefix."cf_form_entry_values (entry_id, field_id, slug, value) VALUES ($_entry_id, '".$index."', $slug, $alt_val)";
+                $sql = "INSERT INTO ".$this->caldera_entries." (entry_id, field_id, slug, value) VALUES ($_entry_id, '".$index."', $slug, $alt_val)";
                 $wpdb->query($sql);
             }
         }
@@ -1407,7 +1481,7 @@ class AcolheSUS {
     function delete_form_attachment() {
         if (is_user_logged_in() && isset($_POST['attach']) && isset($_POST['entry'])) {
             global $wpdb;
-            $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+            $caldera_entries = $this->caldera_entries;
 
             $id = $_POST['attach'];
             $entry = $_POST['entry'];
@@ -1421,7 +1495,7 @@ class AcolheSUS {
             $entry = get_post_meta($form_id, '_entry_id', true);
             if ($entry) {
                 global $wpdb;
-                $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
+                $caldera_entries = $this->caldera_entries;
                 $atts = $wpdb->get_results("SELECT id, value FROM " . $caldera_entries . " WHERE field_id = '$field_id' AND entry_id = '$entry'", ARRAY_A);
 
                 return $atts;
@@ -1522,8 +1596,9 @@ class AcolheSUS {
 
     }
 
+    /*
     function limit_paragraphs_input($attrs) {
-        $attrs[ 'maxlength' ] = 500;
+        $attrs[ 'maxlength' ] = 6000;
         return $attrs;
     }
 
@@ -1532,7 +1607,7 @@ class AcolheSUS {
         if (in_array($formType, $limit_paragraph)) {
             add_filter('caldera_forms_field_attributes-paragraph', array(&$this, 'limit_paragraphs_input'));
         }
-    }
+    } */
 
     function filter_the_content($content) {
         global $post;
@@ -1547,7 +1622,7 @@ class AcolheSUS {
             $form = "<br>";
 
             $this->lock_form($_post_id, $formType);
-            $this->limit_paragraphs($formType);
+            // $this->limit_paragraphs($formType);
 
             $form .= $this->render_fixed_meta($_post_id, $formType);
 
@@ -1555,7 +1630,7 @@ class AcolheSUS {
             $created_form = $this->get_entry_form($_post_id, $formType);
             $form .= $created_form;
 
-            if (!empty($created_form) && $this->can_save_incomplete($formType)) {
+            if (!$this->is_entry_locked($_post_id) && !empty($created_form) && $this->can_save_incomplete($formType)) {
                 $permissions = get_user_meta(get_current_user_id(), 'acolhesus_form_perms');
                 if(in_array("editar_".$formType, $permissions))
                 {
@@ -1767,6 +1842,7 @@ class AcolheSUS {
         $options = '';
         foreach ($this->forms as $_f) {
             $slug = $_f['slug'];
+            if($slug === 'poster') continue;
             if ($this->can_user_see($slug)) {
                 $nome = $_f['labels']['name'];
                 $options .= "<option value='$slug'";
@@ -2251,7 +2327,7 @@ class AcolheSUS {
         {
             $entry_id = $result[0]->entry_id;
             $sql = "SELECT entry_a.entry_id, entry_a.value mes, entry_b.value ano
-                    FROM ".$wpdb->prefix."cf_form_entry_values as entry_a join ".$wpdb->prefix."cf_form_entry_values as entry_b
+                    FROM ".$this->caldera_entries." as entry_a join ".$this->caldera_entries." as entry_b
                     where entry_a.slug='mes' AND entry_b.slug='ano' AND entry_a.entry_id=entry_b.entry_id AND entry_a.entry_id='".$entry_id."'";
 
             $data = $wpdb->get_results($sql);

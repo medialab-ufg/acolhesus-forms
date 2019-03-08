@@ -38,6 +38,7 @@
     color: $light_green;
   }
   .add-entry {
+    display: inline-block;
 
     .add_acolhesus_entry {
       background: $dark-green;
@@ -59,7 +60,6 @@
   margin-right: 10px;
   min-width: 50%;
 }
-
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
   background-color: $dark_green !important;
@@ -136,9 +136,7 @@
     }
 
     .ver-todos {
-      margin-bottom: 20px;
-      float: left;
-      width: 100%;
+      display: inline;
       border-bottom: 1px solid $light_gray;
       padding-bottom: 20px;
 
@@ -155,7 +153,10 @@
     }
 
     .entry-status { color: white; }
-  }
+
+    .clear { margin-bottom: 20px; }
+
+  } // .acolhesus-forms-list, .acolhesus-filtros
 
   .logo-container {
     margin: 10px auto;
@@ -168,8 +169,7 @@
         opacity: 0.8;
       }
     }
-
-  }
+  } // .logo-container
 
   .acolhesus_filter_forms {
     margin-top: 5px;

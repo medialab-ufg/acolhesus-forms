@@ -7,7 +7,7 @@ Para utilizar este plugin, basta adicioná-lo na pasta padrão de plugins do Wor
 Certifique-se de que tenha o plugin [Caldera-Forms](https://wordpress.org/plugins/caldera-forms/) instalado corretamente.
 
 ### Ambiente de desenvolvimento (estilo CSS)
-A partir da raiz do plugin, navegar para a seguinte pasta: `cd assets/saas/`.
+A partir da raiz do plugin, navegar para a seguinte pasta: `cd assets/sass/`.
 
 Depois, basta deixar o [SASS](https://sass-lang.com/) observando as alterações no código fonte: 
 

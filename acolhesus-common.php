@@ -24,17 +24,13 @@ trait AcolheSUSCommon {
         'BA' => 'BA - Salvador - Hospital Geral do Estado',
         'CE' => 'CE - Fortaleza - Hospital São José',
         'DF' => 'DF - Brasília - Regional Macro Centro-Norte - APS',
-        'GO' => 'GO - Cristalina - Hospital Municipal de Cristalina Chaud Salles',
         'MA' => 'MA - São Luís - UPA Itaqui Bacana',
         'MG' => 'MG - Juiz de Fora - Hospital Regional Dr. João Penido',
         'MS' => 'MS - Campo Grande - Hospital Regional de Mato Grosso do Sul',
         'MT' => 'MT - Várzea Grande - Hospital e Pronto Socorro Municipal de Várzea Grande',
-        'PA' => 'PA - Belém - CAPS Renascer',
         'PB' => 'PB - João Pessoa - Maternidade Frei Damião',
         'PI' => 'PI - Parnaíba - Hospital Estadual Dirceu Arcoverde',
-        'RJ' => 'RJ - Duque de Caxias - Hospital Estadual Adão Pereira Nunes',
         'RN' => 'RN - Natal - Hospital José Pedro Bezerra',
-        'RR' => 'RR - Boa Vista - Pronto Atendimento Airton Rocha',
         'SC' => 'SC - São José - Hospital Regional de São José Dr. Homero Miranda',
         'TO' => 'TO - Palmas - Hospital Geral de Palmas'
     ];
@@ -62,16 +58,18 @@ trait AcolheSUSCommon {
         'TO'
     ];
 
-    // Estados que não participam por enquanto do AcolheSUS
-    // Deixar aqui a título de conhecimento
-    private $estados_fora = [
+    private $campos_fora = [
         'ES' => 'ES',
         'PE' => 'PE',
         'PR' => 'PR',
         'RO' => 'RO',
         'RS' => 'RS',
         'SE' => 'SE',
-        'SP' => 'SP'
+        'SP' => 'SP',
+        'GO' => 'GO',
+        'PA' => 'PA',
+        'RJ' => 'RJ',
+        'RR' => 'RR',
     ];
 
     protected function get_title()

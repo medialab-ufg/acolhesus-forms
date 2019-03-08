@@ -12,7 +12,10 @@ $is_new_form = get_post_meta($post_id, 'new_form', true);
 $forms_to_report = [
     'matriz_p_criticos',
     'matriz_cenario',
-    'plano_trabalho'
+    'plano_trabalho',
+    'relatorio_oficina',
+    'memoria_reuniao', //Vídeo conferência
+    'atividades_dispersao'//Memória de Reunião/Atividades de Dispersão
 ];
 
 $forms_chart = [
@@ -31,6 +34,11 @@ if ($is_new_form) {
         <a href="<?php echo $formView->getBackButtonURL($post_type); ?>" class="btn btn-default voltar-home">
             VOLTAR PARA TELA INICIAL
         </a>
+
+        <a id="back" href="#" class="btn btn-default voltar-home">
+            VOLTAR
+        </a>
+
 
         <?php if ($formView->canUserSeeAllStateLink($post_type)): ?>
             <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>

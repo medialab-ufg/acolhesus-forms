@@ -1,4 +1,7 @@
 jQuery( function($) {
+    //Defines chart type
+    $("#chart_type").val($(".chart_type").first().data('value'));
+
     $(".chart_type").click(function () {
         $("#chart_type").val($(this).data('value'));
         $("#gen_charts").click();
@@ -60,6 +63,7 @@ jQuery( function($) {
             }
 
             var data = JSON.parse(r);
+            //console.log(data);
 
             var divs_count = 1;
             if(form === 'matriz_cenario'){
@@ -134,6 +138,100 @@ jQuery( function($) {
         });
     }
 
+    function prepare_data(data, chart_type, form_type) {
+        var info = [], titles = [], lines = [];
+        if(chart_type === 'bar')
+        {
+            info.push(["Avaliação", "Total", "Porcentagem"] );
+            for(var index in data)
+            {
+                info.push([index, data[index].total, data[index].percent]);
+            }
+        }else if(chart_type === 'pie')
+        {
+            info.push(["Classificação", "Porcentagem"]);
+            if(form_type === 'matriz_cenario')
+            {
+                for(var index in data)
+                {
+                    info.push([index, data[index]]);
+                }
+            }
+            else {
+                for(var index in data)
+                {
+                    info.push([index, data[index].percent]);
+                }
+            }
+        }else if(chart_type === 'line')
+        {
+            var indexes = [];
+
+            indexes.push("Data");
+            for(var index in data[0])
+            {
+                if(index > 1)
+                {
+                    indexes.push(data[0][index].title);
+                }
+            }
+            info.push(indexes);
+
+            for(var i in data)
+            {
+                data.sort(function (a, b) {
+                    var year_a = parseInt(a[1].value), year_b = parseInt(b[1].value);
+
+                    if(year_a < year_b) return -1;
+                    else if(year_b < year_a) return 1;
+                    else {
+                        var months = {
+                            "Janeiro": 1,
+                            "Fevereiro": 2,
+                            "Março": 3,
+                            "Abril": 4,
+                            "Maio": 5,
+                            "Junho": 6,
+                            "Julho": 7,
+                            "Agosto": 8,
+                            "Setembro": 9,
+                            "Outubro": 10,
+                            "Novembro": 11,
+                            "Dezembro": 12
+                        };
+
+                        var mes_a = a[0].value, mes_b = b[0].value;
+
+                        mes_a = months[mes_a];
+                        mes_b = months[mes_b];
+
+                        if(mes_a < mes_b) return -1;
+                        else if(mes_b < mes_a) return 1
+                        else return 0;
+                    }
+                });
+
+                var mes, line = [];
+                for(var j in data[i])
+                {
+                    if(j == 0)
+                    {
+                        mes = data[i][j].value;
+                    }else if(j == 1)
+                    {
+                        line.push(mes + "/"+ data[i][j].value);
+                    }else {
+                        line.push(parseInt(data[i][j].value));
+                    }
+                }
+
+                info.push(line);
+            }
+        }
+
+        return google.visualization.arrayToDataTable(info);
+    }
+
     function drawChart(info, where, chart_type, data_table, options) {
         var chart;
 
@@ -169,6 +267,11 @@ jQuery( function($) {
         {
             chart = new google.visualization.PieChart(document.getElementById(where));
             chart.draw(info, options);
+        }else if(chart_type === 'line')
+        {
+            chart = new google.visualization.LineChart(document.getElementById(where));
+
+            chart.draw(info, options);
         }
     }
 
@@ -184,36 +287,6 @@ jQuery( function($) {
         }
 
         return title+tail;
-    }
-
-    function prepare_data(data, chart_type, form_type) {
-        var info = [], titles = [], lines = [];
-        if(chart_type === 'bar')
-        {
-            info.push(["Avaliação", "Total", "Porcentagem"] );
-            for(var index in data)
-            {
-                info.push([index, data[index].total, data[index].percent]);
-            }
-        }else if(chart_type === 'pie')
-        {
-            info.push(["Classificação", "Porcentagem"]);
-            if(form_type === 'matriz_cenario')
-            {
-                for(var index in data)
-                {
-                    info.push([index, data[index]]);
-                }
-            }
-            else {
-                for(var index in data)
-                {
-                    info.push([index, data[index].percent]);
-                }
-            }
-        }
-
-        return google.visualization.arrayToDataTable(info);
     }
 
     function set_options(chart_type, title) {
@@ -237,8 +310,16 @@ jQuery( function($) {
                 is3D: true,
                 colors: ['#00b4b4', '#134074', 'green', 'red', 'gold']
             };
+        }else if(chart_type === 'line')
+        {
+            options = {
+                title: title,
+                curveType: 'function',
+                width: 1100,
+                height: 500,
+                legend: { position: 'bottom' }
+            };
         }
-
 
         return options;
     }
