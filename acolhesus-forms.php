@@ -360,7 +360,12 @@ class AcolheSUS {
     }
 
     function get_email_by_responsible($name) {
-        $state_responsibles = [
+        $state_responsibles = $this->get_responsibles();
+        return (array_key_exists($name, $state_responsibles) ? $state_responsibles[$name] : '');
+    }
+
+    function get_responsibles() {
+        return [
             'ailana'   => 'ailana.lira@saude.gov.br',
             'danyelle' => 'danyelle.cavalcante@saude.gov.br',
             'diego'    => 'diegop.santos@saude.gov.br',
@@ -370,8 +375,6 @@ class AcolheSUS {
             'ricardo'  => 'drricardovolpe@globo.com',
             'thania'   => 'thania.arruda@hotmail.com'
         ];
-
-        return (in_array($name, $state_responsibles) ? $state_responsibles[$name] : '');
     }
 
     function get_forward_mail_by_state($state) {
@@ -2358,4 +2361,3 @@ include('logger.php');
 global $AcolheSUS;
 $AcolheSUS = new AcolheSUS();
 $formView = new AcolheSUSView();
-
