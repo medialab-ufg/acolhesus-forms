@@ -195,8 +195,6 @@ class AcolheSUS {
     const CGPNH = 'acolhesus_cgpnh';
     const ANSWER_ID = '_cf_cr_pst';
 
-    private $responsibles;
-
     function __construct() {
         global $wpdb;
         $this->caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
