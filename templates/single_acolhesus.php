@@ -150,4 +150,10 @@ if ($is_new_form) {
 
 </div>
 
+<div class="smoothscroll-top">
+    <span class="scroll-top-inner">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </span>
+</div>
+
 <?php include_once( get_theme_file_path('footer-full.php') ); ?>
