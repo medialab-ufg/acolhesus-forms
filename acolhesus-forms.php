@@ -613,7 +613,11 @@ class AcolheSUS {
                     $data = ['title' => $campo['label'], 'value' => $acholheSUSReports->getAnswerToEspecific($field_id,$post_id)];
                     if(!empty($index))
                         $result[$index][] = $data;
-                    else $result[] = $data;
+                    else {
+                        $index = key($result);
+                        next($result);
+                        $result[$index][] = $data;
+                    }
                 }
             }else if(in_array($tipo, $types))
             {
@@ -892,7 +896,7 @@ class AcolheSUS {
                 <h3 class="text-center">Diretrizes/dispositivos</h3>
                 <div class="box-details">
                     <?php
-                    $diretrizes = $this->get_info_in_result($ponto_critico_info, "Diretrizes do ".$ponto_critico_name)[0];
+                    $diretrizes = $this->get_info_in_result($ponto_critico_info, "Diretrizes e/ou dispositivos PNH; ferramentas de gestão da clínica e/ou eixos do projeto")[0];
                     if (is_null($diretrizes) && isset($ponto_critico_info["value"])) {
                         $diretrizes = $ponto_critico_info["value"];
                     }
@@ -917,7 +921,7 @@ class AcolheSUS {
                             ?>
                             <?php echo $cause; ?>
                             <?php
-                        } else echo "";
+                        } else echo "<i>Causas não cadastradas</i>";
                         echo '</div>';
                     }
                     ?>
