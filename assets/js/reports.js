@@ -337,7 +337,9 @@ jQuery( function($) {
                 width: 1100,
                 height: 500,
                 legend: { position: 'bottom' },
-                vAxis: {format: '0'}
+                vAxis: {
+                    format: '0'
+                }
             };
         }
 
