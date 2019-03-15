@@ -508,8 +508,9 @@ class AcolheSUS {
         else if(in_array($formType, $line))
         {
             global $wpdb;
-            $sql = 'SELECT ID FROM '.$wpdb->posts.' where post_type="'.$formType.'"';
+            $sql = 'SELECT ID FROM '.$wpdb->posts.' where post_type="'.$formType.'" and post_status="publish"';
             $ids = $wpdb->get_results($sql, ARRAY_A);
+
 
             foreach ($ids as $id)
             {
@@ -518,7 +519,7 @@ class AcolheSUS {
                 $sql = 'SELECT meta_value FROM '.$wpdb->postmeta . ' WHERE post_id='.$id.' AND meta_key = "acolhesus_campo"';
                 $estado = $wpdb->get_results($sql, ARRAY_A);
 
-                if(!empty($estado))
+                if(!empty($estado) && !empty($estado[0]['meta_value']))
                 {
                     $result[$estado[0]['meta_value']][] = $this->get_specific_form_data($formType, $id, true);
                 }
