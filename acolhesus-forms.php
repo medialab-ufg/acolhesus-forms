@@ -1063,7 +1063,7 @@ class AcolheSUS {
             foreach ($result as $r)
             {
                 echo "<h3>".$r['title']."</h3>";
-                echo "<p>".$r['value']."</p><br>";
+                echo "<p class='text-justify'>".$r['value']."</p><br>";
             }
             ?>
         </div>
