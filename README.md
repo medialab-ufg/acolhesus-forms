@@ -19,4 +19,7 @@ Depois, basta deixar o [SASS](https://sass-lang.com/) observando as alterações
 Opcionalmente, execute o arquivo `scripts/compile-sass.sh` para compilar o sass de uma única vez.
 
 ### Execução de testes unitários
-Garanta que tenha o [phpunit](https://phpunit.de/) instalado em seu ambiente local, e execute-o na raiz do projeto.
+Antes de rodar pela primeira vez, é preciso configurar o ambiente. Isso é feito simplesmente executando o script `bin/install-wp-tests.sh`, passando como parâmetro suas credenciais do banco de dados. 
+Execute o script sem parâmetros para conferir a ordem dos mesmos.
+
+Depois garanta que tenha o [phpunit](https://phpunit.de/) instalado em seu ambiente local, e execute-o na raiz do projeto.
