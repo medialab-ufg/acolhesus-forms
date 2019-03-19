@@ -184,7 +184,7 @@ class AcolheSUSView extends AcolheSUS {
 	}
 	
 	public function canUserSeeAllStateLink($form) {
-		return current_user_can('acolhesus_cgpnh') && ("poster" != $form);
+		return $this->isCGPNH() && ("poster" != $form);
 	}
 	
     private function attach_style($id,$url) {

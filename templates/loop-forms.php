@@ -27,13 +27,13 @@
         <?php if ($AcolheSUS->has_validations($current_acolhesus_formtype)): ?>
 
             <th> Status </th>
-            <?php if (current_user_can('acolhesus_cgpnh')) { ?>
+            <?php if ($AcolheSUS->isCGPNH()) { ?>
                 <th> Ação </th>
             <?php } ?>
 
         <?php endif; ?>
 
-        <?php if (current_user_can('acolhesus_cgpnh') && $AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+        <?php if ($AcolheSUS->isCGPNH() && $AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
             <th> Excluir </th>
         <?php endif; ?>
     </tr>
@@ -79,13 +79,13 @@
                 <?php if ($AcolheSUS->has_validations($current_acolhesus_formtype)): ?>
                     <td> <?php $AcolheSUS->render_entry_status($entry_id); ?> </td>
 
-                    <?php if (current_user_can('acolhesus_cgpnh')) { ?>
+                    <?php if ($AcolheSUS->isCGPNH()) { ?>
                         <td> <?php $AcolheSUS->render_entry_action($entry_id, get_the_title()); ?> </td>
                     <?php } ?>
 
                 <?php endif; ?>
 
-                <?php if (current_user_can('acolhesus_cgpnh') && $AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
+                <?php if ($AcolheSUS->isCGPNH() && $AcolheSUS->can_add_entry($current_acolhesus_formtype)): ?>
                     <td> <?php echo $AcolheSUS->remove_entry($entry_id, get_the_title()); ?> </td>
                 <?php endif; ?>
             </tr>

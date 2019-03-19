@@ -1,8 +1,9 @@
 <?php
 include_once (get_theme_file_path('header-full.php'));
 
-if (current_user_can('administrator')) {
-    global $AcolheSUS;
+global $AcolheSUS;
+
+if ($AcolheSUS->isCGPNH()) {
     if ($AcolheSUS->can_user_edit($form)):
         $report = new AcolheSUSReports();
         $view = new AcolheSUSView();
@@ -117,7 +118,7 @@ if (current_user_can('administrator')) {
 <?php
     endif;
 } else {
-    echo "<p class='text-center'>Página não encontrada</p>";
+    echo "<p class='text-center'> Relatório indisponível!</p>";
 }
 
 include_once (get_theme_file_path('footer-full.php'));
