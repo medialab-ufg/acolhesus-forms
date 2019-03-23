@@ -12,7 +12,7 @@ if ($AcolheSUS->can_user_see($current_acolhesus_formtype)): ?>
         <h1 class="acolhesus-archive-title">
             <?php echo post_type_archive_title('Formulário: '); ?>
 
-            <?php if ((current_user_can('administrator') || current_user_can('editor')) && $AcolheSUS->can_user_edit($current_acolhesus_formtype)) { ?>
+            <?php if ($AcolheSUS->isAdmin() && $AcolheSUS->can_user_edit($current_acolhesus_formtype)) { ?>
                 <a href="relatorio" class="btn btn-default btn-info abrir-relatorios"> Ver Relatórios </a>
             <?php }?>
         </h1>

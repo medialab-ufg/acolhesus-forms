@@ -192,7 +192,8 @@ class AcolheSUS {
     private $caldera_entries;
 
     const CAMPO_META = 'acolhesus_campo';
-    const CGPNH = 'acolhesus_cgpnh';
+    const CGPNH = 'acolhesus_cgpnh'; // 'maiores' permissoes
+    const RESPONDENT = 'view_acolhesus'; // 'maiores' permissoes
     const ANSWER_ID = '_cf_cr_pst';
 
     function __construct() {
@@ -508,8 +509,9 @@ class AcolheSUS {
         else if(in_array($formType, $line))
         {
             global $wpdb;
-            $sql = 'SELECT ID FROM '.$wpdb->posts.' where post_type="'.$formType.'"';
+            $sql = 'SELECT ID FROM '.$wpdb->posts.' where post_type="'.$formType.'" and post_status="publish"';
             $ids = $wpdb->get_results($sql, ARRAY_A);
+
 
             foreach ($ids as $id)
             {
@@ -518,7 +520,7 @@ class AcolheSUS {
                 $sql = 'SELECT meta_value FROM '.$wpdb->postmeta . ' WHERE post_id='.$id.' AND meta_key = "acolhesus_campo"';
                 $estado = $wpdb->get_results($sql, ARRAY_A);
 
-                if(!empty($estado))
+                if(!empty($estado) && !empty($estado[0]['meta_value']))
                 {
                     $result[$estado[0]['meta_value']][] = $this->get_specific_form_data($formType, $id, true);
                 }
@@ -1062,7 +1064,7 @@ class AcolheSUS {
             foreach ($result as $r)
             {
                 echo "<h3>".$r['title']."</h3>";
-                echo "<p>".$r['value']."</p><br>";
+                echo "<p class='text-justify'>".$r['value']."</p><br>";
             }
             ?>
         </div>
@@ -1803,7 +1805,7 @@ class AcolheSUS {
     }
 
     function remove_form_entry() {
-        if (current_user_can(self::CGPNH) && isset($_POST['id'])) {
+        if ($this->isCGPNH() && isset($_POST['id'])) {
             $r = wp_delete_post(sanitize_text_field($_POST['id']));
 
             if ($r) {
@@ -2009,7 +2011,7 @@ class AcolheSUS {
     }
 
     function ajax_callback_lock_form() {
-        if (current_user_can(self::CGPNH)) {
+        if ($this->isCGPNH()) {
             $key = 'acolhesus_' . sanitize_text_field($_POST['type']);
             update_option($key, 'locked');
             do_action('acolhesus_lock_form', $key);
@@ -2180,7 +2182,7 @@ class AcolheSUS {
 
     function can_user_view_form() {
         if ($this->isAcolheSusPage()) {
-            if (current_user_can('view_acolhesus')) {
+            if ($this->isRespondent()) {
                 if (is_single()) {
                     return $this->can_user_see(get_post_type());
                 }
@@ -2352,6 +2354,18 @@ class AcolheSUS {
         if ($type) {
             return (isset($this->forms[$type]) && $this->forms[$type]['eixo']);
         }
+    }
+
+    public function isAdmin() {
+        return (current_user_can('administrator') || current_user_can('editor'));
+    }
+
+    public function isCGPNH() {
+        return current_user_can(self::CGPNH);
+    }
+
+    public function isRespondent() {
+        return current_user_can(self::RESPONDENT);
     }
 
 } // class

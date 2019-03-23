@@ -1,10 +1,11 @@
 <?php
 include_once( get_theme_file_path('header-full.php') );
+global $AcolheSUS;
 
-if (!current_user_can('view_acolhesus')):
+if (!$AcolheSUS->isRespondent()):
     $formView->renderFormsDenied();
 else:
-    global $AcolheSUS, $wp_query;
+    global $wp_query;
 	$forms = $AcolheSUS->forms;
 	$user = wp_get_current_user()->display_name;
     ?>

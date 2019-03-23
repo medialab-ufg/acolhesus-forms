@@ -63,7 +63,6 @@ jQuery( function($) {
             }
 
             var data = JSON.parse(r);
-            //console.log(data);
 
             var divs_count = 1;
             if(form === 'matriz_cenario'){
@@ -337,7 +336,10 @@ jQuery( function($) {
                 curveType: 'function',
                 width: 1100,
                 height: 500,
-                legend: { position: 'bottom' }
+                legend: { position: 'bottom' },
+                vAxis: {
+                    format: '0'
+                }
             };
         }
 
