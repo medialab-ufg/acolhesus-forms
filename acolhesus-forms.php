@@ -2368,6 +2368,12 @@ class AcolheSUS {
         return current_user_can(self::RESPONDENT);
     }
 
+    public function showMonthYear($formSlug) {
+        $showableForms = ["indicadores", "relatorio_oficina", "avaliacao_oficina", "avaliacao_grupos", "memoria_reuniao","atividades_dispersao"];
+
+        return in_array($formSlug, $showableForms);
+    }
+
 } // class
 
 include('acolhesus-view.php');

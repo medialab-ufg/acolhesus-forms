@@ -13,7 +13,7 @@
 
         <?php endif; ?>
 
-        <?php if ("indicadores" === $current_acolhesus_formtype): ?>
+        <?php if ($AcolheSUS->showMonthYear($current_acolhesus_formtype)): ?>
             <th> Mês/Ano de ocorrência </th>
         <?php endif; ?>
 
@@ -59,7 +59,7 @@
 
                 <?php endif; ?>
 
-                <?php if ("indicadores" === $current_acolhesus_formtype): ?>
+                <?php if ($AcolheSUS->showMonthYear($current_acolhesus_formtype)): ?>
                     <td>
                         <?php echo $AcolheSUS->get_entry_date($entry_id); ?>
                     </td>
