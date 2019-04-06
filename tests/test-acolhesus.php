@@ -38,4 +38,8 @@ class AcolheSUSTest extends WP_UnitTestCase {
         $this->assertContains(self::EMAIL_AILANA, $this->acolhe->get_forward_mail_by_state('AM'));
         $this->assertContains(self::EMAIL_DANYELLE, $this->acolhe->get_forward_mail_by_state('MS'));
     }
+
+    public function test_nine_forms_has_monthYear_ocurrence() {
+        $this->assertCount(9, count($this->acolhe->getOcurrenceForms()));
+    }
 }

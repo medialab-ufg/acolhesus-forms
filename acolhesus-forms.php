@@ -2369,9 +2369,13 @@ class AcolheSUS {
     }
 
     public function showMonthYear($formSlug) {
-        $showableForms = ["indicadores", "relatorio_oficina", "avaliacao_oficina", "avaliacao_grupos", "memoria_reuniao","atividades_dispersao"];
+        $showableForms = $this->getOcurrenceForms();
 
         return in_array($formSlug, $showableForms);
+    }
+
+    public function getOcurrenceForms() {
+        return ["indicadores", "indicadores_caps", "ind_materno_infantil", "indicadores_basica", "relatorio_oficina", "avaliacao_oficina", "avaliacao_grupos", "memoria_reuniao","atividades_dispersao"];
     }
 
 } // class
