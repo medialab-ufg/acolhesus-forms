@@ -903,7 +903,7 @@ class AcolheSUS {
                         $diretrizes = $ponto_critico_info["value"];
                     }
 
-                    if(!empty($diretrizes))
+                    if (!empty($diretrizes))
                         echo $diretrizes;
                     else echo "<i>Diretrizes/dispositivos não cadastrados</i>";
                     ?>
@@ -914,19 +914,14 @@ class AcolheSUS {
                 <h3 class="text-center">Causas</h3>
                 <div class="box-details">
                     <?php
+                    $cat = 0;
                     $result = $this->get_info_in_result($ponto_critico_info, "Causas do ".$ponto_critico_name);
-                    foreach ($result as $cause)
-                    {
-                        echo '<div class="cause">';
-                        if(!empty($cause))
-                        {
-                            ?>
-                            <?php echo $cause; ?>
-                            <?php
-                        } else echo "<i>Causas não cadastradas</i>";
-                        echo '</div>';
-                    }
-                    ?>
+                    foreach ($result as $cause): ?>
+                    
+                        <h3> <?php echo $this->categorias_pontos_criticos[$cat]; ?></h3>
+                        <div class="cause"> <?php echo (empty($cause) ? "<p> ---- </p>" : $cause); ?> </div>
+
+                    <?php $cat++; endforeach; ?>
                 </div>
             </div>
         </div>

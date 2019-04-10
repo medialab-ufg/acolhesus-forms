@@ -76,4 +76,13 @@ trait AcolheSUSCommon {
     {
         return 'Plataforma de Gestão AcolheSUS';
     }
+
+    // Categorias fixas da matriz de pontos criticos
+    public $categorias_pontos_criticos = [
+        "Gestão de Pessoas e Qualificação Profissional",
+        "Gestão de Materiais e insumos",
+        "Gestão da Clínica",
+        "Gestão de Infraestrutura e Ambiência",
+        "Outras Causas"
+    ];
 }
