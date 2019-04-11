@@ -1051,9 +1051,14 @@ class AcolheSUS {
         $start_date = date("d/m/Y", strtotime($start_date));
         $end_date = array_shift($result)['value'];
         $end_date = date("d/m/Y", strtotime($end_date));
+        $_headers = "";
 
+        if (isset($_POST["meta"])) {
+         $_headers = AcolheSUSReports::getStatePhaseHeaders($_POST["meta"]);
+        }
         ?>
         <div>
+            <p> <?php echo $_headers ?> </p>
             <h4>Realização de <strong><?php echo $start_date; ?></strong> até <strong><?php echo $end_date;?></strong> no período da <strong><?php echo strtolower(array_shift($result)['value']);?></strong></h4><br>
             <?php
             foreach ($result as $r)

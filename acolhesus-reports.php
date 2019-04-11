@@ -559,7 +559,6 @@ class AcolheSUSReports
         }
     }
 
-
     public function getAnswerToEspecific($field_id, $post_id)
     {
         global $wpdb;
@@ -643,6 +642,18 @@ class AcolheSUSReports
         if(!empty($state_ids))
             return $state_ids[0]->ID;
         else return false;
+    }
+
+    public static function getStatePhaseHeaders($data) {
+        $_headers = "";
+
+        if (isset($data["campo"]))
+            $_headers .= "<strong>Campo de atuação: </strong>" . sanitize_text_field($data["campo"]);
+
+        if (isset($data["fase"]))
+            $_headers .= "<br> <strong> Fase: </strong> " . sanitize_text_field($data["fase"]) . "<hr>";
+
+        return $_headers;
     }
 
     private function getFilterFor($type, $formType, $field_id, $value) {

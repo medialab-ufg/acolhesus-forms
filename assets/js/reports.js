@@ -15,8 +15,9 @@ jQuery( function($) {
     $("#gen_report").click(function (event) {
         var post_id = $("input[name=_cf_cr_pst]").val();
         var state = $("#form-title").text().match(/\((.*)\)/);
-        if (state)
-        {
+        var campo = $("#acolhesus_campo_selector option:selected").text();
+        var fase = $("#acolhesus_fase_selector option:selected").text();
+        if (state) {
             state = state[1];
         }
 
@@ -25,7 +26,8 @@ jQuery( function($) {
             form: $("#form_type").val(),
             post_id: post_id,
             report_type: $("#report_type").val(),
-            state: state
+            state: state,
+            meta: {campo: campo, fase: fase}
         }).success(function (r) {
             $("#the_content").hide();
             $("#show_form").toggle();
