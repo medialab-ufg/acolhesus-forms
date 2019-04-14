@@ -12,7 +12,7 @@ jQuery( function($) {
 
         for(j; j < board.totalCriticalPoints; j++) {
             var pc = $(".ponto-critico-" + j + " .trumbowyg-editor").text();
-            $(baseDiv + " .pc" + j).html("<span>Ponto Critico: </span>" + pc);
+            $(baseDiv + " .pc" + j).html("<span>Ponto Crítico: </span>" + pc);
         }
 
         for (i; i < board.totalActivities; i++) {
@@ -51,7 +51,10 @@ jQuery( function($) {
             $('.atividade'+index).parent('tr').addClass('status-' + cor);
         }
 
-        return `<div> ${init} / ${final} </div>`;
+        if (init.length < 1 || final.length < 1)
+            return "";
+
+        return `<div> <i>${init}</i> <br> <strong>até</strong> <br> <i>${final}</i></div>`;
     }
 
     function cronMarkupTemplate(index, identifier) {
@@ -79,10 +82,9 @@ class StatusBoard {
             let color = "ok";
             let today = new Date();
             let dateDiff = this.daysBetween(today, limitDate);
-
-            if (dateDiff < 0) {
+            if (dateDiff > 0) {
                 color = "danger";
-            } else if (dateDiff > 0 && dateDiff <= 7) {
+            } else if (dateDiff < 0 && dateDiff >= -7) {
                 color = "warning";
             }
 
