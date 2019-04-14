@@ -216,32 +216,7 @@ class AcolheSUSView extends AcolheSUS {
     }
 
     public function getStatusBoardTemplate($formType) {
-        if ("plano_trabalho" === $formType): ?>
-            <div id="status_board">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead class="reports-header">
-                        <tr>
-                            <th> Ponto Crítico </th>
-                            <th> Atividade </th>
-                            <th> Cronograma </th>
-                            <th> Status </th>
-                            <th> Situação </th>
-                        </tr>
-                        <tr>
-                            <td class="pc1"></td>
-                            <td class="atividade1"></td>
-                            <td class="at1-cronograma"></td>
-                            <td class="at1-status"></td>
-                            <td class="at1-situacao"></td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        <?php
-        endif;
+        if ("plano_trabalho" === $formType)
+            include(plugin_dir_path(__FILE__) . "templates/reports/boards.php");
     }
 }
