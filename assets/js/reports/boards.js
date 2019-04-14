@@ -1,4 +1,5 @@
 jQuery( function($) {
+    var totalPC = 5;
     var totalActivities = 10;
 
     $("#show_status_board").click(function () {
@@ -7,9 +8,14 @@ jQuery( function($) {
 
     function monitoramentoPlanoTrabalho() {
         var baseDiv = "#status_board";
-        var pc1 = $(".ponto-critico-1 .trumbowyg-editor").text();
-        $(baseDiv + " .pc1").html(pc1);
-        var i = 1;
+        var i = 1,
+            j = 1;
+
+        for(j; j < totalPC; j++) {
+            var pc = $(".ponto-critico-" + j + " .trumbowyg-editor").text();
+            $(baseDiv + " .pc" + j).html(pc);
+        }
+
         for (i; i < totalActivities; i++) {
             var atv = ".atividade" + i;
             var atividade = $(atv + " .trumbowyg-editor").text();
