@@ -214,4 +214,9 @@ class AcolheSUSView extends AcolheSUS {
 
         return "Ver todas as respostas de $title";
     }
+
+    public function getStatusBoardTemplate($formType) {
+        if ("plano_trabalho" === $formType)
+            include(plugin_dir_path(__FILE__) . "templates/reports/boards.php");
+    }
 }

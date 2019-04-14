@@ -1,8 +1,8 @@
 #!/bin/bash
 
 cd ../assets/sass
+echo "Compilando saas do plugin AcolheSUS a partir de:"
 pwd
-echo "Compilando SASS do plugin AcolheSUS ..."
 
 if [ "$1" == "w" ]
 then
