@@ -7,9 +7,20 @@ jQuery( function($) {
         $("#gen_charts").click();
     });
 
-    $(".report_type").click(function () {
-        $("#report_type").val($(this).data('value'));
-        $("#gen_report").click();
+    $("#show_status_board").click(function () {
+        var pc1 = $(".ponto-critico-1 .trumbowyg-editor").text();
+        var atividade1 = $(".atividade-1 .trumbowyg-editor").text();
+        var situacao1 = $(".at1-situacao .trumbowyg-editor").text();
+        var cronograma1 = $('.at1-inicio input').val() + ' até ' + $('.at1-fim input').val();
+        var at1_status = $('.at1-status select').val();
+
+        $("#status_board").toggle();
+        $("#the_content").toggle();
+        $("#status_board .pc1").html(pc1);
+        $("#status_board .atividade1").html(atividade1);
+        $("#status_board .at1-cronograma").html(cronograma1);
+        $("#status_board .at1-status").html(at1_status);
+        $("#status_board .at1-situacao").html(situacao1);
     });
 
     $("#gen_report").click(function (event) {
@@ -25,7 +36,6 @@ jQuery( function($) {
             action: 'acolhesus_report_one',
             form: $("#form_type").val(),
             post_id: post_id,
-            report_type: $("#report_type").val(),
             state: state,
             meta: {campo: campo, fase: fase}
         }).success(function (r) {
@@ -296,8 +306,7 @@ jQuery( function($) {
         }
     }
 
-    function create_title(form_name)
-    {
+    function create_title(form_name) {
         var title = "Gráfico de ", tail = '';
         if(form_name = 'avalicao_oficina')
         {

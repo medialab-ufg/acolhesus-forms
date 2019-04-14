@@ -160,19 +160,21 @@
     border-radius: 10px;
   }
 
-  .options{
+  .options {
     margin-top: 25px;
+    a { margin-bottom: 10px; }
   }
 
-  .options a{
-    margin-bottom: 10px;
-  }
-
-  @media print{
-    a[href]:after{
+  @media print {
+    a[href]:after {
       content:none
     }
   }
+
+  #status_board {
+    display: none;
+  }
+
 } // .acolhesus-form-container
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
