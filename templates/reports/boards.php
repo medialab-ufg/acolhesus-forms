@@ -4,17 +4,21 @@
             <thead class="reports-header">
             <tr>
                 <th> Ponto Crítico </th>
-                <th> Atividade </th>
+            </tr>
+            <tr>
+                <td class="pc1"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th> Atividades </th>
                 <th> Cronograma </th>
                 <th> Status </th>
                 <th> Situação </th>
             </tr>
-            <tr>
-                <td class="pc1"></td>
-            </tr>
             <?php for ($i = 1; $i < 10; $i++): ?>
                 <tr>
-                    <td></td>
                     <td class="atividade<?= $i ?>"></td>
                     <td class="at<?= $i ?>-cronograma"></td>
                     <td class="at<?= $i ?>-status"></td>
