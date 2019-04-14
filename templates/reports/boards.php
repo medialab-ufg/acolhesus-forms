@@ -11,11 +11,16 @@
             </tr>
             <tr>
                 <td class="pc1"></td>
-                <td class="atividade1"></td>
-                <td class="at1-cronograma"></td>
-                <td class="at1-status"></td>
-                <td class="at1-situacao"></td>
             </tr>
+            <?php for ($i = 1; $i < 10; $i++): ?>
+                <tr>
+                    <td></td>
+                    <td class="atividade<?= $i ?>"></td>
+                    <td class="at<?= $i ?>-cronograma"></td>
+                    <td class="at<?= $i ?>-status"></td>
+                    <td class="at<?= $i ?>-situacao"></td>
+                </tr>
+            <?php endfor; ?>
             </thead>
             <tbody>
             </tbody>

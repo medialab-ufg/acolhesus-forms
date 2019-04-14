@@ -1,22 +1,55 @@
 jQuery( function($) {
+    var totalActivities = 10;
 
     $("#show_status_board").click(function () {
         monitoramentoPlanoTrabalho();
     });
 
     function monitoramentoPlanoTrabalho() {
+        var baseDiv = "#status_board";
         var pc1 = $(".ponto-critico-1 .trumbowyg-editor").text();
-        var atividade1 = $(".atividade-1 .trumbowyg-editor").text();
-        var situacao1 = $(".at1-situacao .trumbowyg-editor").text();
-        var cronograma1 = $('.at1-inicio input').val() + ' até ' + $('.at1-fim input').val();
-        var at1_status = $('.at1-status select').val();
+        $(baseDiv + " .pc1").html(pc1);
+        var i = 1;
+        for (i; i < totalActivities; i++) {
+            var atv = ".atividade" + i;
+            var atividade = $(atv + " .trumbowyg-editor").text();
+            $(baseDiv + " " + atv).html(atividade);
 
+            var cronograma = ".at" + i + "-cronograma";
+            var cron = getCronString(i);
+            $(baseDiv + " " + cronograma).html(cron);
+
+            var stat = ".at" + i + "-status";
+            var status = $(stat + " select").val();
+            $(baseDiv + " " + stat).html(status);
+
+            var sit = ".at" + i + "-situacao";
+            var situacao = $(sit + " .trumbowyg-editor").text();
+            $(baseDiv + " " + sit).html(situacao);
+        }
+
+        formInteractions();
+    }
+
+    function getCronString(index) {
+        var init = "";
+        var final = "";
+
+        if ( $('.at' + index + '-inicio input').val() != undefined )
+            init = $('.at' + index + '-inicio input').val();
+
+        if ( $('.at' + index + '-fim input').val() != undefined )
+            final = $('.at' + index + '-fim input').val();
+
+        return init + " - " + final;
+    }
+
+    function cronMarkupTemplate(index, identifier) {
+        return ".at" + index + "-" + identifier + " input";
+    }
+
+    function formInteractions() {
         $("#status_board").toggle();
         $("#the_content").toggle();
-        $("#status_board .pc1").html(pc1);
-        $("#status_board .atividade1").html(atividade1);
-        $("#status_board .at1-cronograma").html(cronograma1);
-        $("#status_board .at1-status").html(at1_status);
-        $("#status_board .at1-situacao").html(situacao1);
     }
 });
