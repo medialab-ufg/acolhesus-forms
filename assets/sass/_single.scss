@@ -177,6 +177,10 @@
     .board-header {
       background: #0a686b;
       color: yellowgreen;
+      span {
+        font-weight: bolder;
+        color: white;
+      }
     }
   }
 

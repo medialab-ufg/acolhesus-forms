@@ -1,22 +1,21 @@
 jQuery( function($) {
-    var totalPC = 5;
-    var totalActivities = 10;
+    let board = new StatusBoard();
 
     $("#show_status_board").click(function () {
-        monitoramentoPlanoTrabalho();
+        renderStatusBoard();
     });
 
-    function monitoramentoPlanoTrabalho() {
+    function renderStatusBoard() {
         var baseDiv = "#status_board";
         var i = 1,
             j = 1;
 
-        for(j; j < totalPC; j++) {
+        for(j; j < board.totalCriticalPoints; j++) {
             var pc = $(".ponto-critico-" + j + " .trumbowyg-editor").text();
-            $(baseDiv + " .pc" + j).html(pc);
+            $(baseDiv + " .pc" + j).html("<span>Ponto Critico: </span>" + pc);
         }
 
-        for (i; i < totalActivities; i++) {
+        for (i; i < board.totalActivities; i++) {
             var atv = ".atividade" + i;
             var atividade = $(atv + " .trumbowyg-editor").text();
             $(baseDiv + " " + atv).html(atividade);
@@ -59,3 +58,46 @@ jQuery( function($) {
         $("#the_content").toggle();
     }
 });
+
+class StatusBoard {
+    // Numero total de Pontos Criticos acordados
+    totalCriticalPoints = 5;
+
+    // Numero total de atividades acordadas
+    totalActivities = 10;
+
+    // milisegundos de um dia
+    aDay = 60*60*24;
+
+    getColor = (cronDate) => {
+        if (cronDate instanceof Date) {
+            let today = new Date();
+            let hoje = today.getUTCDate();
+            let data = cronDate.getUTCDate();
+            let dateDiff = this.daysBetween(today, cronDate);
+
+            let color = "green";
+
+            if (dateDiff < 0) {
+                color = "red";
+            } else if (dateDiff > 0 && dateDiff <= 7) {
+                color = "yellow";
+            }
+
+            return color;
+        }
+    };
+
+    daysBetween = (currentDate, limitDate) => {
+        // console.log(limitDate > currentDate)
+        // console.log(currentDate > limitDate)
+        if ( (currentDate - limitDate) < 0 ) {
+            return currentDate.getUTCDate() - limitDate.getUTCDate();
+        }
+
+        var r = Math.abs(currentDate - limitDate) / 1000;
+        var dias = Math.floor(r/ this.aDay);
+
+        return dias;
+    }
+}
