@@ -2,10 +2,7 @@
     <div class="table-responsive">
         <table class="table table-striped">
             <thead class="reports-header">
-            <tr>
-                <th> Ponto Crítico </th>
-            </tr>
-            <tr>
+            <tr class="board-header">
                 <td class="pc1"></td>
                 <td></td>
                 <td></td>

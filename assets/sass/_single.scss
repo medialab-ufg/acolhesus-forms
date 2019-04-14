@@ -173,6 +173,11 @@
 
   #status_board {
     display: none;
+
+    .board-header {
+      background: #0a686b;
+      color: yellowgreen;
+    }
   }
 
 } // .acolhesus-form-container
