@@ -39,14 +39,19 @@ jQuery( function($) {
     function getCronString(index) {
         var init = "";
         var final = "";
+        var cor = "black";
 
         if ( $('.at' + index + '-inicio input').val() != undefined )
             init = $('.at' + index + '-inicio input').val();
 
-        if ( $('.at' + index + '-fim input').val() != undefined )
+        if ($('.at' + index + '-fim input').val() != undefined) {
             final = $('.at' + index + '-fim input').val();
+            cor = board.getColorByDate(new Date(final));
 
-        return init + " - " + final;
+            $('.atividade'+index).parent('tr').addClass('status-' + cor);
+        }
+
+        return `<div> ${init} / ${final} </div>`;
     }
 
     function cronMarkupTemplate(index, identifier) {
@@ -69,19 +74,16 @@ class StatusBoard {
     // milisegundos de um dia
     aDay = 60*60*24;
 
-    getColor = (cronDate) => {
-        if (cronDate instanceof Date) {
+    getColorByDate = (limitDate) => {
+        if (limitDate instanceof Date) {
+            let color = "ok";
             let today = new Date();
-            let hoje = today.getUTCDate();
-            let data = cronDate.getUTCDate();
-            let dateDiff = this.daysBetween(today, cronDate);
-
-            let color = "green";
+            let dateDiff = this.daysBetween(today, limitDate);
 
             if (dateDiff < 0) {
-                color = "red";
+                color = "danger";
             } else if (dateDiff > 0 && dateDiff <= 7) {
-                color = "yellow";
+                color = "warning";
             }
 
             return color;
@@ -89,15 +91,11 @@ class StatusBoard {
     };
 
     daysBetween = (currentDate, limitDate) => {
-        // console.log(limitDate > currentDate)
-        // console.log(currentDate > limitDate)
-        if ( (currentDate - limitDate) < 0 ) {
+        if ((currentDate - limitDate) < 0) {
             return currentDate.getUTCDate() - limitDate.getUTCDate();
         }
+        let res = Math.abs(currentDate - limitDate) / 1000;
+        return Math.floor(res/ this.aDay);
+    };
 
-        var r = Math.abs(currentDate - limitDate) / 1000;
-        var dias = Math.floor(r/ this.aDay);
-
-        return dias;
-    }
-}
+} // StatusBoard
