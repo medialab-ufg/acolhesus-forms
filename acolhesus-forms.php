@@ -1962,6 +1962,7 @@ class AcolheSUS {
 
         if ($this->is_report_page() || $this->isAcolheSusPage()) {
             wp_enqueue_script( 'rhs-acolhesus-reports', plugin_dir_url( __FILE__ ) . 'assets/js/reports.js',array('jquery'));
+            wp_enqueue_script( 'rhs-acolhesus-boards',  plugin_dir_url( __FILE__ ) . 'assets/js/reports/boards.js',array('jquery'));
             wp_enqueue_script('google_charts', 'https://www.gstatic.com/charts/loader.js');
             wp_localize_script('rhs-acolhesus-reports', 'acolhesus', [
                 'ajax_url' => admin_url('admin-ajax.php')
