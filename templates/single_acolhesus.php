@@ -59,7 +59,9 @@ if ($is_new_form) {
                 if ($post_type == 'plano_trabalho') { ?>
                     <div class="btn-group gen-report">
                         <button id="show_status_board" class="btn btn-primary" type="button">
-                            <i class="fa fa-file-text-o" aria-hidden="true"></i> Acompanhamento
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i> 
+                            <span class="board">Acompanhamento</span>
+                            <span class="form">Formulário</span>
                         </button>
                     </div>
                     <?php

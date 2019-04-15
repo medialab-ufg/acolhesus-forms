@@ -64,6 +64,8 @@ jQuery( function($) {
     function formInteractions() {
         $("#status_board").toggle();
         $("#the_content").toggle();
+        $("#show_status_board .form").toggle();
+        $("#show_status_board .board").toggle();
     }
 });
 
