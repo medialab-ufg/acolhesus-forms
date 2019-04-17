@@ -1,12 +1,12 @@
 jQuery( function($) {
     let board = new StatusBoard();
+    let baseDiv = "#status_board";
 
     $("#show_status_board").click(function () {
         renderStatusBoard();
     });
 
-    function renderStatusBoard() {
-        var baseDiv = "#status_board";
+    function renderStatusBoard() {        
         var i = 1,
             j = 1;
 
@@ -24,13 +24,7 @@ jQuery( function($) {
             var cron = getCronString(i);
             $(baseDiv + " " + cronograma).html(cron);
 
-            var stat = ".at" + i + "-status";
-            var status = $(stat + " select").val();
-            $(baseDiv + " " + stat).html(status);
-
-            var sit = ".at" + i + "-situacao";
-            var situacao = $(sit + " .trumbowyg-editor").text();
-            $(baseDiv + " " + sit).html(situacao);
+            appendStatusText(i);
         }
 
         formInteractions();
@@ -55,6 +49,15 @@ jQuery( function($) {
             return "";
 
         return `<div> <i>${init}</i> <br> <strong>até</strong> <br> <i>${final}</i></div>`;
+    }
+
+    function appendStatusText(index) {
+        var stat = ".at" + index + "-status";
+        var status = $(stat + " select").val();    
+        var sit = ".at" + index + "-situacao";     
+        var situacao = $(sit + " .trumbowyg-editor").text();
+
+        $(baseDiv + " " + stat).html(`<strong>${status} </strong><br> ${situacao}`); 
     }
 
     function cronMarkupTemplate(index, identifier) {

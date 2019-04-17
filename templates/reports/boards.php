@@ -8,20 +8,17 @@
                     <td class="pc<?= $i ?>" width="60%"></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                 </tr>
                 <tr>
                     <th> Atividades </th>
                     <th> Cronograma </th>
-                    <th> Status </th>
-                    <th> Situação </th>
+                    <th> Status / Situação</th>
                 </tr>
                 <?php for ($j = 1; $j < 10; $j++): ?>
                     <tr>
                         <td class="atividade<?= $j ?>"></td>
                         <td class="at<?= $j ?>-cronograma"></td>
                         <td class="at<?= $j ?>-status"></td>
-                        <td class="at<?= $j ?>-situacao"></td>
                     </tr>
                 <?php endfor; ?>
             <?php endfor; ?>
