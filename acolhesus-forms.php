@@ -662,9 +662,6 @@ class AcolheSUS {
                 }
                 $html = $this->wrap_matriz_cenario_html($new_result, $post_id);
                 break;
-            case 'plano_trabalho':
-                $html = $this->wrap_plano_trabalho_html($result, $_POST['report_type']);
-                break;
             case 'relatorio_oficina':
             case 'memoria_reuniao': //Vídeo conferência
             case 'atividades_dispersao': //Memória de Reunião/Atividades de Dispersão
@@ -930,120 +927,6 @@ class AcolheSUS {
         return ob_get_clean();
     }
 
-    public function wrap_plano_trabalho_html($data, $report_type)
-    {
-        $data = $this->prepare_plano_trabalho($data);
-        ob_start();
-        if($report_type === 'complete'){
-            ?>
-            <div>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead class="reports-header">
-                        <tr>
-                            <th> Atividades </th>
-                            <th> Responsavel </th>
-                            <th> Cronograma </th>
-                            <th> Situação </th>
-                            <th> Status </th>
-                            <th> Desempenho </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        foreach ($data as $goal_name => $goal)
-                        {
-                            foreach ($goal as $activity_name => $activity)
-                            {
-                                ?>
-                                <tr>
-                                    <td><?php echo $activity_name;?></td>
-                                    <td><?php echo $activity['Responsável'];?></td>
-                                    <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
-                                    <td><?php echo $activity['Situação'];?></td>
-                                    <td><?php echo $activity['Status'];?></td>
-                                    <td>
-                                        <?php
-                                        $date_now = date("Y-m-d");
-                                        if ($date_now > $activity['Data final']) {
-                                            echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
-                                        }else{
-                                            echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
-                                        }
-                                        ?>
-                                    </td>
-                                </tr>
-                                <?php
-                            }
-                        }
-                        ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <?php
-        }else {
-            ?>
-            <div>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead class="reports-header">
-                        <tr>
-                            <th> Objetivo </th>
-                            <th> Atividades </th>
-                            <th> Responsavel </th>
-                            <th> Cronograma </th>
-                            <th> Situação </th>
-                            <th> Status </th>
-                            <th> Desempenho </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        foreach ($data as $goal_name => $goal)
-                        {
-                            ?>
-                            <tr>
-                                <td rowspan="<?php echo count($goal);?>"><?php echo $goal_name;?></td>
-                            <?php
-                            $showtr = false;
-                            foreach ($goal as $activity_name => $activity)
-                            {
-                                if($showtr)
-                                {
-                                    echo "<tr>";
-                                }else $showtr = true;
-                                ?>
-                                    <td><?php echo $activity_name;?></td>
-                                    <td><?php echo $activity['Responsável'];?></td>
-                                    <td><strong><?php echo $activity['Data inicial']; ?></strong> até <strong><?php echo $activity['Data final'];?></strong></td>
-                                    <td><?php echo $activity['Situação'];?></td>
-                                    <td><?php echo $activity['Status'];?></td>
-                                    <td>
-                                        <?php
-                                        $date_now = date("Y-m-d");
-                                        if ($date_now > $activity['Data final']) {
-                                            echo '<i class="fa fa-times" aria-hidden="true"></i> Atrasado';
-                                        }else{
-                                            echo '<i class="fa fa-hourglass-half" aria-hidden="true"></i> A tempo';
-                                        }
-                                        ?>
-                                    </td>
-                                </tr>
-                                <?php
-                            }
-                        }
-                        ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <?php
-        }
-
-        return ob_get_clean();
-    }
-
     public function wrap_relatorio_mem_atividades_html($result)
     {
         ob_start();
@@ -1071,27 +954,6 @@ class AcolheSUS {
         <?php
 
         return ob_get_clean();
-    }
-
-    private function prepare_plano_trabalho($data)
-    {
-        $result = [];
-        $goal = $activity = false;
-        foreach ($data as $statement)
-        {
-            if(preg_match("/Objetivo/", $statement['title']))
-            {
-                $goal = $statement['value'];
-            }else if(preg_match("/Atividade/", $statement['title']))
-            {
-                $activity = $statement['value'];
-            }else if($goal && $activity)
-            {
-                $result[$goal][$activity][$statement['title']] = $statement['value'];
-            }
-        }
-
-        return $result;
     }
 
     function get_info_in_result($result, $needle)
@@ -1502,7 +1364,7 @@ class AcolheSUS {
             $entry = get_post_meta($form_id, '_entry_id', true);
             if ($entry) {
                 global $wpdb;
-                $caldera_entries = $this->caldera_entries;
+                $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
                 $atts = $wpdb->get_results("SELECT id, value FROM " . $caldera_entries . " WHERE field_id = '$field_id' AND entry_id = '$entry'", ARRAY_A);
 
                 return $atts;
@@ -2100,6 +1962,7 @@ class AcolheSUS {
 
         if ($this->is_report_page() || $this->isAcolheSusPage()) {
             wp_enqueue_script( 'rhs-acolhesus-reports', plugin_dir_url( __FILE__ ) . 'assets/js/reports.js',array('jquery'));
+            wp_enqueue_script( 'rhs-acolhesus-boards',  plugin_dir_url( __FILE__ ) . 'assets/js/reports/boards.js',array('jquery'));
             wp_enqueue_script('google_charts', 'https://www.gstatic.com/charts/loader.js');
             wp_localize_script('rhs-acolhesus-reports', 'acolhesus', [
                 'ajax_url' => admin_url('admin-ajax.php')

@@ -39,7 +39,6 @@ if ($is_new_form) {
             VOLTAR
         </a>
 
-
         <?php if ($formView->canUserSeeAllStateLink($post_type)): ?>
             <a class="btn btn-default list-entries" href="<?php echo get_post_type_archive_link($post_type); ?>"> VER TODOS ESTADOS </a>
         <?php endif; ?>
@@ -56,35 +55,17 @@ if ($is_new_form) {
                     Gerar gráfico
                 </button>
                 <?php
-            } else if(in_array($post_type, $forms_to_report))
-            {
-                if($post_type == 'plano_trabalho')
-                {
-                    ?>
+            } else if(in_array($post_type, $forms_to_report)) {
+                if ($post_type == 'plano_trabalho') { ?>
                     <div class="btn-group gen-report">
-                        <button id="gen_report" class="btn btn-primary" type="button"><i class="fa fa-file-text-o" aria-hidden="true"></i>
-                            Gerar relatório
+                        <button id="show_status_board" class="btn btn-primary" type="button">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i> 
+                            <span class="board">Acompanhamento</span>
+                            <span class="form">Formulário</span>
                         </button>
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="caret"></span> <span class="sr-only">Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li class="report_type" data-value="complete">
-                                <a href="javascript:void (0);" >
-                                    <i class="fa fa-file-text" aria-hidden="true"></i>
-                                    Completo
-                                </a>
-                            </li>
-                            <li class="report_type" data-value="compact">
-                                <a href="javascript:void (0);">
-                                    <i class="fa fa-file-o" aria-hidden="true"></i>
-                                    Compacto
-                                </a>
-                            </li>
-                        </ul>
                     </div>
                     <?php
-                }else {
+                } else {
                     ?>
                     <button id="gen_report" class="btn btn-primary" type="button"><i class="fa fa-file-text-o" aria-hidden="true"></i>
                         Gerar relatório
@@ -103,11 +84,15 @@ if ($is_new_form) {
         <?php endif; ?>
     </h3>
 
-    <?php $formView->get_entry_attachments(); ?>
+    <?php
+    $formView->getStatusBoardTemplate($post_type);
+    $formView->get_entry_attachments();
+    ?>
 
     <div id="the_content">
         <?php the_content(); ?>
     </div>
+
     <div id="charts_set">
         <input id="report_type" type="hidden" value="complete">
         <div id="chart"></div>
