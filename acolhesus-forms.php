@@ -1364,7 +1364,7 @@ class AcolheSUS {
             $entry = get_post_meta($form_id, '_entry_id', true);
             if ($entry) {
                 global $wpdb;
-                $caldera_entries = $this->caldera_entries;
+                $caldera_entries = $wpdb->prefix . 'cf_form_entry_values';
                 $atts = $wpdb->get_results("SELECT id, value FROM " . $caldera_entries . " WHERE field_id = '$field_id' AND entry_id = '$entry'", ARRAY_A);
 
                 return $atts;
