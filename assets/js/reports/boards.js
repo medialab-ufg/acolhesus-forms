@@ -77,7 +77,7 @@ class StatusBoard {
     totalCriticalPoints = 5;
 
     // Numero total de atividades acordadas
-    totalActivities = 10;
+    totalActivities = 5;
 
     // milisegundos de um dia
     aDay = 60*60*24;
