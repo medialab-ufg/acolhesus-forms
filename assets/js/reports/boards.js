@@ -6,7 +6,7 @@ jQuery( function($) {
         renderStatusBoard();
     });
 
-    function renderStatusBoard() {        
+    function renderStatusBoard() {
         var i = 1,
             j = 1;
 
@@ -35,12 +35,15 @@ jQuery( function($) {
         var final = "";
         var cor = "black";
 
+        var stat = ".at" + index + "-status";
+        var status = $(stat + " select").val();
+
         if ( $('.at' + index + '-inicio input').val() != undefined )
             init = $('.at' + index + '-inicio input').val();
 
         if ($('.at' + index + '-fim input').val() != undefined) {
             final = $('.at' + index + '-fim input').val();
-            cor = board.getColorByDate(new Date(final));
+            cor = board.getColorByDate(new Date(final), status);
 
             $('.atividade'+index).parent('tr').addClass('status-' + cor);
         }
@@ -53,7 +56,7 @@ jQuery( function($) {
 
     function appendStatusText(index) {
         var stat = ".at" + index + "-status";
-        var status = $(stat + " select").val();    
+        var status = $(stat + " select").val(); 
         var sit = ".at" + index + "-situacao";     
         var situacao = $(sit + " .trumbowyg-editor").text();
 
@@ -82,15 +85,20 @@ class StatusBoard {
     // milisegundos de um dia
     aDay = 60*60*24;
 
-    getColorByDate = (limitDate) => {
+    alertableStatus = ["A iniciar","Em andamento"];
+
+    getColorByDate = (limitDate, currentStatus) => {
         if (limitDate instanceof Date) {
             let color = "ok";
-            let today = new Date();
-            let dateDiff = this.daysBetween(today, limitDate);
-            if (dateDiff > 0) {
-                color = "danger";
-            } else if (dateDiff < 0 && dateDiff >= -7) {
-                color = "warning";
+
+            if (this.alertableStatus.includes(currentStatus)) {
+               let today = new Date();
+                let dateDiff = this.daysBetween(today, limitDate);
+                if (dateDiff > 0) {
+                    color = "danger";
+                } else if (dateDiff < 0 && dateDiff >= -7) {
+                    color = "warning";
+                } 
             }
 
             return color;
