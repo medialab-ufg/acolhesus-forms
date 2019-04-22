@@ -42,12 +42,15 @@ jQuery( function($) {
         var final = "";
         var cor = "black";
 
-        if ( $('.at' + index + '-inicio input').val() != undefined )
+        if ( $('.at' + index + '-inicio input').val() !== undefined ) {
             init = $('.at' + index + '-inicio input').val();
+            init = new Date(init).toLocaleDateString("pt-br");
+        }
 
-        if ($('.at' + index + '-fim input').val() != undefined) {
+        if ($('.at' + index + '-fim input').val() !== undefined) {
             final = $('.at' + index + '-fim input').val();
             cor = board.getColorByDate(new Date(final), status);
+            final = new Date(final).toLocaleDateString("pt-br");
 
             $('.atividade'+index).parent('tr').addClass('status-' + cor);
         }
