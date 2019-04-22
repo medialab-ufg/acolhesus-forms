@@ -15,28 +15,32 @@ jQuery( function($) {
             $(baseDiv + " .pc" + j).html("<span>Ponto Crítico: </span>" + pc);
         }
 
-        for (i; i < board.totalActivities; i++) {
+        for (i; i <= board.totalActivities; i++) {
             var atv = ".atividade" + i;
             var atividade = $(atv + " .trumbowyg-editor").text();
             $(baseDiv + " " + atv).html(atividade);
-
+            var status = getStatus(i);
             var cronograma = ".at" + i + "-cronograma";
-            var cron = getCronString(i);
+            var cron = getSchedule(i, status);
             $(baseDiv + " " + cronograma).html(cron);
 
-            appendStatusText(i);
+            appendStatusText(i, status);
         }
 
         formInteractions();
     }
 
-    function getCronString(index) {
+    function getStatus(index) {
+        var stat = ".at" + index + "-status";
+        var status = $(stat + " select").val(); 
+
+        return status;
+    }
+
+    function getSchedule(index, status) {
         var init = "";
         var final = "";
         var cor = "black";
-
-        var stat = ".at" + index + "-status";
-        var status = $(stat + " select").val();
 
         if ( $('.at' + index + '-inicio input').val() != undefined )
             init = $('.at' + index + '-inicio input').val();
@@ -54,13 +58,11 @@ jQuery( function($) {
         return `<div> <i>${init}</i> <br> <strong>até</strong> <br> <i>${final}</i></div>`;
     }
 
-    function appendStatusText(index) {
-        var stat = ".at" + index + "-status";
-        var status = $(stat + " select").val(); 
+    function appendStatusText(index, status) {
         var sit = ".at" + index + "-situacao";     
         var situacao = $(sit + " .trumbowyg-editor").text();
 
-        $(baseDiv + " " + stat).html(`<strong>${status} </strong><br> ${situacao}`); 
+        $(baseDiv + " .at" + index + "-status").html(`<strong>${status} </strong><br> ${situacao}`); 
     }
 
     function cronMarkupTemplate(index, identifier) {
@@ -83,7 +85,7 @@ class StatusBoard {
     totalActivities = 5;
 
     // milisegundos de um dia
-    aDay = 60*60*24;
+    aDay = 1000*60*60*24;
 
     alertableStatus = ["A iniciar","Em andamento"];
 
@@ -93,12 +95,13 @@ class StatusBoard {
 
             if (this.alertableStatus.includes(currentStatus)) {
                let today = new Date();
-                let dateDiff = this.daysBetween(today, limitDate);
-                if (dateDiff > 0) {
-                    color = "danger";
-                } else if (dateDiff < 0 && dateDiff >= -7) {
-                    color = "warning";
-                } 
+               let dateDiff = this.daysBetween(today, limitDate);
+
+               if (dateDiff < 0) {
+                   color = "danger";
+               } else if (dateDiff > 0 && dateDiff <= 7) {
+                   color = "warning";
+               }
             }
 
             return color;
@@ -106,11 +109,9 @@ class StatusBoard {
     };
 
     daysBetween = (currentDate, limitDate) => {
-        if ((currentDate - limitDate) < 0) {
-            return currentDate.getUTCDate() - limitDate.getUTCDate();
-        }
-        let res = Math.abs(currentDate - limitDate) / 1000;
-        return Math.floor(res/ this.aDay);
+        let diff = limitDate.getTime() - currentDate.getTime();
+
+        return Math.ceil(diff / this.aDay);
     };
 
 } // StatusBoard

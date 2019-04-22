@@ -16,7 +16,7 @@
                     <th> Cronograma </th>
                     <th> Status / Situação</th>
                 </tr>
-                <?php for ($j = 1; $j < $totalActivities; $j++): ?>
+                <?php for ($j = 1; $j <= $totalActivities; $j++): ?>
                     <tr>
                         <td class="atividade<?= $j ?>"></td>
                         <td class="at<?= $j ?>-cronograma"></td>
