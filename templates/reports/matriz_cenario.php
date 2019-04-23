@@ -2,7 +2,7 @@
     <p> A referência técnica da CGPNH/SAS/MS para este campo é
         <strong><?php echo $data['A Referência estadual da CGPNH/SAS/MS']; ?></strong>.
         O campo de atuação atinge um total de <strong><?php echo $count_cities; ?> municípios</strong>, que, em conjunto, representam uma população de <strong><?php echo $populacao; ?> habitantes</strong>.
-        <?php echo $data['C'] ;?> profissionais estão alocados neste serviço.</p>
+        <?php echo $data['C Quantos profissionais estão alocados no serviço'] ;?> profissionais estão alocados neste serviço.</p>
 
     <h3 class="text-center">1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h3>
     <h4>1.1 Acolhimento</h4>
