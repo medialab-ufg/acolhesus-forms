@@ -6,7 +6,7 @@ jQuery( function($) {
         renderStatusBoard();
     });
 
-    function renderStatusBoard() {        
+    function renderStatusBoard() {
         var i = 1,
             j = 1;
 
@@ -15,32 +15,42 @@ jQuery( function($) {
             $(baseDiv + " .pc" + j).html("<span>Ponto Crítico: </span>" + pc);
         }
 
-        for (i; i < board.totalActivities; i++) {
+        for (i; i <= board.totalActivities; i++) {
             var atv = ".atividade" + i;
             var atividade = $(atv + " .trumbowyg-editor").text();
             $(baseDiv + " " + atv).html(atividade);
-
+            var status = getStatus(i);
             var cronograma = ".at" + i + "-cronograma";
-            var cron = getCronString(i);
+            var cron = getSchedule(i, status);
             $(baseDiv + " " + cronograma).html(cron);
 
-            appendStatusText(i);
+            appendStatusText(i, status);
         }
 
         formInteractions();
     }
 
-    function getCronString(index) {
+    function getStatus(index) {
+        var stat = ".at" + index + "-status";
+        var status = $(stat + " select").val(); 
+
+        return status;
+    }
+
+    function getSchedule(index, status) {
         var init = "";
         var final = "";
         var cor = "black";
 
-        if ( $('.at' + index + '-inicio input').val() != undefined )
+        if ( $('.at' + index + '-inicio input').val() !== undefined ) {
             init = $('.at' + index + '-inicio input').val();
+            init = new Date(init).toLocaleDateString("pt-br");
+        }
 
-        if ($('.at' + index + '-fim input').val() != undefined) {
+        if ($('.at' + index + '-fim input').val() !== undefined) {
             final = $('.at' + index + '-fim input').val();
-            cor = board.getColorByDate(new Date(final));
+            cor = board.getColorByDate(new Date(final), status);
+            final = new Date(final).toLocaleDateString("pt-br");
 
             $('.atividade'+index).parent('tr').addClass('status-' + cor);
         }
@@ -51,13 +61,11 @@ jQuery( function($) {
         return `<div> <i>${init}</i> <br> <strong>até</strong> <br> <i>${final}</i></div>`;
     }
 
-    function appendStatusText(index) {
-        var stat = ".at" + index + "-status";
-        var status = $(stat + " select").val();    
+    function appendStatusText(index, status) {
         var sit = ".at" + index + "-situacao";     
         var situacao = $(sit + " .trumbowyg-editor").text();
 
-        $(baseDiv + " " + stat).html(`<strong>${status} </strong><br> ${situacao}`); 
+        $(baseDiv + " .at" + index + "-status").html(`<strong>${status} </strong><br> ${situacao}`); 
     }
 
     function cronMarkupTemplate(index, identifier) {
@@ -77,20 +85,26 @@ class StatusBoard {
     totalCriticalPoints = 5;
 
     // Numero total de atividades acordadas
-    totalActivities = 10;
+    totalActivities = 5;
 
     // milisegundos de um dia
-    aDay = 60*60*24;
+    aDay = 1000*60*60*24;
 
-    getColorByDate = (limitDate) => {
+    alertableStatus = ["A iniciar","Em andamento"];
+
+    getColorByDate = (limitDate, currentStatus) => {
         if (limitDate instanceof Date) {
             let color = "ok";
-            let today = new Date();
-            let dateDiff = this.daysBetween(today, limitDate);
-            if (dateDiff > 0) {
-                color = "danger";
-            } else if (dateDiff < 0 && dateDiff >= -7) {
-                color = "warning";
+
+            if (this.alertableStatus.includes(currentStatus)) {
+               let today = new Date();
+               let dateDiff = this.daysBetween(today, limitDate);
+
+               if (dateDiff < 0) {
+                   color = "danger";
+               } else if (dateDiff > 0 && dateDiff <= 7) {
+                   color = "warning";
+               }
             }
 
             return color;
@@ -98,11 +112,9 @@ class StatusBoard {
     };
 
     daysBetween = (currentDate, limitDate) => {
-        if ((currentDate - limitDate) < 0) {
-            return currentDate.getUTCDate() - limitDate.getUTCDate();
-        }
-        let res = Math.abs(currentDate - limitDate) / 1000;
-        return Math.floor(res/ this.aDay);
+        let diff = limitDate.getTime() - currentDate.getTime();
+
+        return Math.ceil(diff / this.aDay);
     };
 
 } // StatusBoard
