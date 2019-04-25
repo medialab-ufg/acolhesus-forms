@@ -7,9 +7,9 @@
 
             <?php for ($i = 1; $i < 2; $i++): ?>
                 <tr class="board-header">
-                    <td class="pc<?= $i ?>" width="60%"></td>
+                    <td class="pc<?= $i ?>" width="40%"></td>
                     <td></td>
-                    <td></td>
+                    <td width="40%"></td>
                 </tr>
                 <tr>
                     <th> Atividades </th>
