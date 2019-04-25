@@ -678,6 +678,8 @@ class AcolheSUS {
             $count_cities = $this->getCitiesCount($form_id);
         }
 
+        $num_profissionais = 'C Quantos profissionais estão alocados no serviço';
+
         ob_start();
 
         include_once(dirname(__FILE__) . '/templates/reports/matriz_cenario.php');
