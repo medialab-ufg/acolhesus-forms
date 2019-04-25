@@ -44,21 +44,32 @@ jQuery( function($) {
 
         if ( $('.at' + index + '-inicio input').val() !== undefined ) {
             init = $('.at' + index + '-inicio input').val();
-            init = new Date(init).toLocaleDateString("pt-br");
+
+            if (init.length < 10) {
+                init = null;
+            } else {
+                init = new Date(init).toLocaleDateString("pt-br");    
+            }        
         }
 
         if ($('.at' + index + '-fim input').val() !== undefined) {
             final = $('.at' + index + '-fim input').val();
-            cor = board.getColorByDate(new Date(final), status);
-            final = new Date(final).toLocaleDateString("pt-br");
-
+            
+            if (final.length < 10) {
+                final = null;
+            } else {
+                cor = board.getColorByDate(new Date(final), status);
+                final = new Date(final).toLocaleDateString("pt-br");
+            }
+            
             $('.atividade'+index).parent('tr').addClass('status-' + cor);
         }
 
-        if (init.length < 1 || final.length < 1)
-            return "";
+        if (init && final) {
+            return `<div> <i>${init}</i> <strong>até</strong> <i>${final}</i></div>`;            
+        }
 
-        return `<div> <i>${init}</i> <br> <strong>até</strong> <br> <i>${final}</i></div>`;
+        return "";
     }
 
     function appendStatusText(index, status) {
