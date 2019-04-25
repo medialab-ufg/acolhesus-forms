@@ -2,14 +2,18 @@
     <p> A referência técnica da CGPNH/SAS/MS para este campo é
         <strong><?php echo $data['A Referência estadual da CGPNH/SAS/MS']; ?></strong>.
         O campo de atuação atinge um total de <strong><?php echo $count_cities; ?> municípios</strong>, que, em conjunto, representam uma população de <strong><?php echo $populacao; ?> habitantes</strong>.
-        <?php echo $data['C Quantos profissionais estão alocados no serviço'] ;?> profissionais estão alocados neste serviço.</p>
+
+        <?php if ($data[$num_profissionais]): ?>
+            <strong> <?php echo $data[$num_profissionais] ;?> </strong> profissionais estão alocados neste serviço.
+        <?php endif; ?>
+     </p>
 
     <h3>1 Eixo 1: Acolhimento e Classificação/Avaliação de risco e vulnerabilidade</h3>
     <h4>1.1 Acolhimento</h4>
 
     <?php if($data['1.1.1'] == 'Sim'){?>
-        <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no Estado.
-            A referência é <strong><?php echo $data['1.1.1.1'];?></strong>.</p>
+        <p>Existe uma referência técnica ou grupo responsável para o processo de Acolhimento no estado.
+            A referência é: <strong><?php echo $data['1.1.1.1'];?></strong>.</p>
     <?php } ?>
 
     <?php if($data['1.1.2'] == 'Sim'){?>
@@ -28,10 +32,12 @@
     <?php } ?>
 
     <p>
-        <?php if($data['1.1.3'] == 'Sim') { ?>O usuário foi incluído no processo de implantação/implementação do Acolhimento. <?php } ?>
+        <?php if($data['1.1.3'] == 'Sim') { ?> O usuário foi incluído no processo de implantação/implementação do Acolhimento. <?php } ?>
         <?php if($data['1.1.4'] == "Sim"){ ?>
         Existe avaliação de satisfação do usuário a partir das ações de Acolhimento implantadas.
-        Observações pertinentes:  <?php echo $data['1.1.4.1']; ?>.</p>
+        <br> Observações pertinentes:  <?php echo $data['1.1.4.1']; ?>.
+    </p>
+
 <?php } ?>
 
     <?php if($data['1.1.5'] != 'Não'){?>
