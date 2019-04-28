@@ -3,7 +3,11 @@ define('ACOLHESUS_URL', plugin_dir_url(__FILE__));
 
 include "acolhesus-reports.php";
 
+require_once "traits/workplan.php";
+
 class AcolheSUSView extends AcolheSUS {
+
+    use WorkPlan;
 
     public $filtros = [
         'campo' => ['plural' => 'Todos os campos',      'singular' => 'Campo de Atuação'],

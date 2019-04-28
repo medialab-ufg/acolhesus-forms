@@ -7,12 +7,13 @@ jQuery( function($) {
     });
 
     function renderStatusBoard() {
-        var i = 1,
+        let i = 1,
             j = 1;
+        let _total;
 
-        for(j; j < board.totalCriticalPoints; j++) {
-            var pc = $(".ponto-critico-" + j + " .trumbowyg-editor").text();
-            $(baseDiv + " .pc" + j).html("<span>Ponto Crítico: </span>" + pc);
+        for (_total = j * i; ( _total <= board.totalCriticalPoints); _total++) {
+            var pc = $(".ponto-critico-" + _total + " .trumbowyg-editor").text();
+            $(baseDiv + " .pc" + _total).html("<span>Ponto Crítico: </span>" + pc);
         }
 
         for (i; i <= board.totalActivities; i++) {
@@ -76,7 +77,7 @@ jQuery( function($) {
         var sit = ".at" + index + "-situacao";     
         var situacao = $(sit + " .trumbowyg-editor").text();
 
-        $(baseDiv + " .at" + index + "-status").html(`<strong>${status} </strong><br> ${situacao}`); 
+        $(baseDiv + " .at" + index + "-status").html(`<strong> ${status} </strong><br> ${situacao}`); 
     }
 
     function cronMarkupTemplate(index, identifier) {
@@ -93,7 +94,10 @@ jQuery( function($) {
 
 class StatusBoard {
     // Numero total de Pontos Criticos acordados
-    totalCriticalPoints = 5;
+    totalCriticalPoints = 3;
+
+    // Numero total de Objetivos acordados
+    totalObjectives = 5;
 
     // Numero total de atividades acordadas
     totalActivities = 5;
@@ -101,6 +105,7 @@ class StatusBoard {
     // milisegundos de um dia
     aDay = 1000*60*60*24;
 
+    // O outro utilizado eh "Concluido"
     alertableStatus = ["A iniciar","Em andamento"];
 
     getColorByDate = (limitDate, currentStatus) => {
