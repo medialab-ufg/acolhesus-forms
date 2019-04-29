@@ -11,12 +11,12 @@ jQuery( function($) {
             j = 1;
         let _total;
 
-        for (_total = j * i; ( _total <= board.totalCriticalPoints); _total++) {
+        for (_total = j * i;_total <= board.totalCriticalPoints; _total++) {
             var pc = $(".ponto-critico-" + _total + " .trumbowyg-editor").text();
             $(baseDiv + " .pc" + _total).html("<span>Ponto Crítico: </span>" + pc);
         }
 
-        for (i; i <= board.totalActivities; i++) {
+        for (i; i <= board.totalRows; i++) {
             var atv = ".atividade" + i;
             var atividade = $(atv + " .trumbowyg-editor").text();
             $(baseDiv + " " + atv).html(atividade);
@@ -101,6 +101,8 @@ class StatusBoard {
 
     // Numero total de atividades acordadas
     totalActivities = 5;
+
+    totalRows = this.totalCriticalPoints * this.totalActivities * this.totalActivities;
 
     // milisegundos de um dia
     aDay = 1000*60*60*24;
