@@ -35,7 +35,7 @@ jQuery( function($) {
         var stat = ".at" + index + "-status";
         var status = $(stat + " select").val(); 
 
-        return status;
+        return status || "";
     }
 
     function getSchedule(index, status) {
