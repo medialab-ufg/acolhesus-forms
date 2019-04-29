@@ -1,11 +1,9 @@
-<?php $totalActivities= 5; ?>
-
 <div id="status_board">
     <div class="table-responsive">
         <table class="table table-striped">
             <thead class="reports-header">
 
-            <?php for ($i = 1; $i < 2; $i++): ?>
+            <?php for ($i = 1; $i <= WorkPlan::$totalCriticalPoints; $i++): ?>
                 <tr class="board-header">
                     <td class="pc<?= $i ?>" width="40%"></td>
                     <td></td>
@@ -16,7 +14,7 @@
                     <th> Cronograma </th>
                     <th> Status / Situação</th>
                 </tr>
-                <?php for ($j = 1; $j <= $totalActivities; $j++): ?>
+                <?php for ($j = 1 * $i; ($j * $i) <= $this->totalActivityRows(); $j++): ?>
                     <tr>
                         <td class="atividade<?= $j ?>"></td>
                         <td class="at<?= $j ?>-cronograma"></td>
