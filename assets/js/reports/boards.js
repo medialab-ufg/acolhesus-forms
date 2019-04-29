@@ -118,7 +118,7 @@ class StatusBoard {
 
                if (dateDiff < 0) {
                    color = "danger";
-               } else if (dateDiff > 0 && dateDiff <= 7) {
+               } else if (dateDiff >= 0 && dateDiff <= 7) {
                    color = "warning";
                }
             }
